@@ -84,6 +84,7 @@ public class SecurityConfig {
 
 					// Can access from ADMIN
 					.requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "DEVELOPER")
+					.requestMatchers("/admin/**").hasAnyRole("ADMIN", "DEVELOPER")
 
 					/**
 					 * Need To Activate DEVELOPER on DEPLOY SETTING
@@ -95,7 +96,6 @@ public class SecurityConfig {
 
 					// Can access form Authenticated
 					.requestMatchers(HttpMethod.POST, "/api/user/logout").authenticated()
-
 
 					.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
 					.anyRequest().permitAll();
