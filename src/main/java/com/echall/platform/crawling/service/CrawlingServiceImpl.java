@@ -9,10 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.echall.platform.script.domain.entity.Script;
-import com.echall.platform.script.domain.entity.YoutubeScript;
-import com.echall.platform.script.domain.entity.CNNScript;
-import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -34,12 +30,16 @@ import org.springframework.web.client.RestTemplate;
 
 import com.echall.platform.crawling.domain.dto.CrawlingResponseDto;
 import com.echall.platform.message.error.exception.CommonException;
+import com.echall.platform.script.domain.entity.CNNScript;
+import com.echall.platform.script.domain.entity.Script;
+import com.echall.platform.script.domain.entity.YoutubeScript;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -141,7 +141,7 @@ public class CrawlingServiceImpl implements CrawlingService {
 			imgUrl,
 			category,
 			sentences.stream()
-				.map(sentence -> (Script) CNNScript.of(
+				.map(sentence -> (Script)CNNScript.of(
 						sentence, translateService.translate(sentence, "en", "ko")
 					)
 				).toList()
@@ -152,7 +152,6 @@ public class CrawlingServiceImpl implements CrawlingService {
 	public List<Script> getYoutubeScript(String youtubeInfo, double seconds) {
 		// 운영체제 감지
 		String os = System.getProperty("os.name").toLowerCase();
-		System.out.println("Operating System: " + os);
 
 		// 공통 옵션 설정
 		ChromeOptions options = new ChromeOptions();
@@ -196,6 +195,8 @@ public class CrawlingServiceImpl implements CrawlingService {
 			log.info("SELENIUM : SELENIUM DRIVER SET SUCCESS");
 			transcriptLines = runSelenium(driver, youtubeInfo, seconds);
 			log.info("SELENIUM : SELENIUM END");
+		} catch (IOException | IllegalStateException e) {
+			throw new CommonException(CRAWLING_TRANSLATE_FAILURE);
 		} catch (Exception e) {
 			throw new CommonException(SELENIUM_RUNTIME_ERROR);
 		} finally {
@@ -303,8 +304,7 @@ public class CrawlingServiceImpl implements CrawlingService {
 		return "Unknown Category";
 	}
 
-	private void setUpSelenium(WebDriver driver)
-		throws InterruptedException {
+	private void setUpSelenium(WebDriver driver) throws InterruptedException {
 		log.info("SELENIUM : SETUP SELENIUM START");
 
 		// Initial setting
@@ -321,7 +321,8 @@ public class CrawlingServiceImpl implements CrawlingService {
 		log.info("SELENIUM : ZOOMOUT SUCESS");
 
 		// Click the "expand" button to expand
-		List<WebElement> expandButton = driver.findElements(By.xpath("//tp-yt-paper-button[@id='expand']"));
+		List<WebElement> expandButton
+			= driver.findElements(By.xpath("//tp-yt-paper-button[@id='expand']"));
 		log.info("SELENIUM : FIND EXPAND BUTTON : {} ", expandButton);
 		for (WebElement button : expandButton) {
 			log.info("SELENIUM : FIND BUTTON : {} ", button.getText());
