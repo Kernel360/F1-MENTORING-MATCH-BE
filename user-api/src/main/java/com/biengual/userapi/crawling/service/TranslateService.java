@@ -56,8 +56,11 @@ public class TranslateService {
 	// This function performs a POST request.
 	private String Post(String text, String from, String to) {
 		MediaType mediaType = MediaType.parse("application/json");
+		String t = """
+			[{"Text": "%s"}]
+			""".formatted(text);
 		RequestBody body
-			= RequestBody.create(mediaType, "[{\"Text\": \"" + escapeProblematicCharacters(text) + "\"}]");
+			= RequestBody.create(mediaType, t);
 		Request request = new Request.Builder()
 			.url(endpoint + "&from=" + from + "&to=" + to)
 			.post(body)
