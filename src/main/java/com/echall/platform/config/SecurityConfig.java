@@ -1,11 +1,9 @@
 package com.echall.platform.config;
 
-import com.echall.platform.oauth2.OAuth2FailureHandler;
-import com.echall.platform.oauth2.OAuth2SuccessHandler;
-import com.echall.platform.oauth2.TokenProvider;
-import com.echall.platform.oauth2.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
-import com.echall.platform.oauth2.service.OAuth2UserCustomService;
-import lombok.RequiredArgsConstructor;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,9 +23,13 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.CorsUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import com.echall.platform.oauth2.OAuth2FailureHandler;
+import com.echall.platform.oauth2.OAuth2SuccessHandler;
+import com.echall.platform.oauth2.TokenProvider;
+import com.echall.platform.oauth2.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
+import com.echall.platform.oauth2.service.OAuth2UserCustomService;
+
+import lombok.RequiredArgsConstructor;
 
 @EnableWebSecurity
 @Configuration
@@ -53,8 +55,7 @@ public class SecurityConfig {
 			.httpBasic(HttpBasicConfigurer::disable)
 			.csrf(AbstractHttpConfigurer::disable)
 			.cors(cors -> cors.configurationSource(corsConfigurationSource()))
-			;
-
+		;
 
 		http
 			.sessionManagement((session) -> session
@@ -83,6 +84,7 @@ public class SecurityConfig {
 
 					// Can access from ADMIN
 					.requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "DEVELOPER")
+					.requestMatchers("/admin/**").hasAnyRole("ADMIN", "DEVELOPER")
 
 					/**
 					 * Need To Activate DEVELOPER on DEPLOY SETTING
@@ -94,7 +96,6 @@ public class SecurityConfig {
 
 					// Can access form Authenticated
 					.requestMatchers(HttpMethod.POST, "/api/user/logout").authenticated()
-
 
 					.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
 					.anyRequest().permitAll();
