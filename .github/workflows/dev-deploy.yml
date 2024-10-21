@@ -25,8 +25,8 @@ jobs:
 
       - name: Set environment values
         run: |
-          mkdir -p ./src/main/resources
-          echo "${{ secrets.ENV }}" > ./src/main/resources/.env
+          mkdir -p ./user-api/src/main/resources
+          echo "${{ secrets.ENV }}" > ./user-api/src/main/resources/.env
         shell: bash
 
       - name: Build with Gradle
@@ -41,7 +41,7 @@ jobs:
       - name: Build and push Docker image
         run: |
           # Build the Docker image with the 'latest' tag
-          docker build --build-arg PROFILES=dev -t ${{ secrets.DOCKERHUB_USERNAME }}/english-challenge-dev .
+          docker build --build-arg PROFILES=dev -t ${{ secrets.DOCKERHUB_USERNAME }}/english-challenge-dev ./user-api
 
           # Push the Docker image to Docker Hub
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/english-challenge-dev:latest
@@ -78,7 +78,7 @@ jobs:
             sudo docker rm ${{ secrets.DOCKERHUB_CONTAINERNAME }} || true
             
             sudo docker run -d \
-              -v ./biengual/logs:/biengual/logs \
+              -v ./biengual/user/logs:/biengual/logs \
               -e PROFILES=dev \
               -p 8080:8080 \
               --name ${{ secrets.DOCKERHUB_CONTAINERNAME }} \
