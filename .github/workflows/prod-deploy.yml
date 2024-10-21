@@ -81,6 +81,7 @@ jobs:
             sudo docker rm ${{ secrets.DOCKERHUB_CONTAINERNAME }} || true
             
             sudo docker run -d \
+              -v ./biengual/user/logs:/biengual/logs \
               -e PROFILES=prod \
               -p 8080:8080 \
               --name ${{ secrets.DOCKERHUB_CONTAINERNAME }} \
