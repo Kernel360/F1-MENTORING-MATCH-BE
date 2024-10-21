@@ -55,15 +55,9 @@ public class TranslateService {
 
 	// This function performs a POST request.
 	private String Post(String text, String from, String to) {
-		log.info("TRANSLATE");
-
 		MediaType mediaType = MediaType.parse("application/json");
-		String t = """
-			[{"Text": "%s"}]
-			""".formatted(text);
-
 		RequestBody body
-			= RequestBody.create(mediaType, t);
+			= RequestBody.create(mediaType, "[{\"Text\": \"" + escapeProblematicCharacters(text) + "\"}]");
 		Request request = new Request.Builder()
 			.url(endpoint + "&from=" + from + "&to=" + to)
 			.post(body)
@@ -73,8 +67,6 @@ public class TranslateService {
 			.build();
 		try {
 			Response response = client.newCall(request).execute();
-			log.info("log code: {}", response.code());
-			log.info("log body: {}", Objects.requireNonNull(response.body()).string());
 			if (response.code() != 200) { // Bad Request
 				log.error("AZURE JSON TYPE ERROR : {}", text);
 				return text;
