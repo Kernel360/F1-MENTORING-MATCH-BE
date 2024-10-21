@@ -56,10 +56,12 @@ public class TranslateService {
 	// This function performs a POST request.
 	private String Post(String text, String from, String to) {
 		log.info("TRANSLATE");
+
 		MediaType mediaType = MediaType.parse("application/json");
 		String t = """
 			[{"Text": "%s"}]
 			""".formatted(text);
+
 		RequestBody body
 			= RequestBody.create(mediaType, t);
 		Request request = new Request.Builder()
