@@ -1,6 +1,5 @@
 package com.biengual.userapi.user.controller;
 
-import com.biengual.userapi.message.ApiCustomResponse;
 import com.biengual.userapi.message.ResponseEntityFactory;
 import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
 import com.biengual.userapi.swagger.SwaggerBooleanReturn;
@@ -9,7 +8,6 @@ import com.biengual.userapi.swagger.user.SwaggerUserMyPage;
 import com.biengual.userapi.swagger.user.SwaggerUserMyTime;
 import com.biengual.userapi.swagger.user.SwaggerUserUpdate;
 import com.biengual.userapi.user.domain.dto.UserRequestDto;
-import com.biengual.userapi.user.domain.dto.UserResponseDto;
 import com.biengual.userapi.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -21,7 +19,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,24 +33,6 @@ public class UserApiController {
 
 	private final UserService userService;
 
-	@PostMapping("/input-info")
-	@Operation(summary = "소셜 회원가입 후 정보 입력", description = "회원 가입 시 정보 입력 할 때 사용하는 API")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "요청에 성공하였습니다.", content = {
-			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerUserUpdate.class))}
-		),
-		@ApiResponse(responseCode = "202", description = "이미 가입된 계정입니다.", content = @Content(mediaType = "application/json")),
-		@ApiResponse(responseCode = "404", description = "데이터베이스 연결에 실패하였습니다.", content = @Content(mediaType = "application/json")),
-	})
-	public ResponseEntity<Object> setNewUserInfo(
-		@RequestBody UserRequestDto.UserUpdateRequest userUpdateRequest,
-		Authentication authentication
-	) {
-
-		return ResponseEntityFactory
-			.toResponseEntity(USER_INPUT_INFO, userService.updateUserInfo(userUpdateRequest, authentication.getName()));
-	}
-
 	@GetMapping("/me")
 	@Operation(summary = "회원 정보 조회", description = "유저가 본인의 정보를 조회합니다.")
 	@ApiResponses(value = {
@@ -63,10 +42,11 @@ public class UserApiController {
 		@ApiResponse(responseCode = "404", description = "데이터베이스 연결에 실패하였습니다.", content = @Content(mediaType = "application/json"))
 	})
 	public ResponseEntity<Object> getMyPage(
-		Authentication authentication) {
-
+		@AuthenticationPrincipal
+		OAuth2UserPrincipal principal
+	) {
 		return ResponseEntityFactory
-			.toResponseEntity(USER_GET_INFO, userService.getMyPage(authentication.getName()));
+			.toResponseEntity(USER_GET_INFO, userService.getMyPage(principal.getEmail()));
 	}
 
 	@PutMapping("/me")
@@ -78,13 +58,14 @@ public class UserApiController {
 		@ApiResponse(responseCode = "404", description = "데이터베이스 연결에 실패하였습니다.", content = @Content(mediaType = "application/json"))
 	})
 	public ResponseEntity<Object> updateExistedUserInfo(
-		@RequestBody UserRequestDto.UserUpdateRequest userUpdateRequest,
-		Authentication authentication
+		@AuthenticationPrincipal
+		OAuth2UserPrincipal principal,
+		@RequestBody
+		UserRequestDto.Update request
 	) {
-
 		return ResponseEntityFactory
 			.toResponseEntity(
-				USER_UPDATE_INFO, userService.updateUserInfo(userUpdateRequest, authentication.getName())
+				USER_UPDATE_INFO, userService.updateUserInfo(request, principal.getEmail())
 			);
 	}
 
@@ -97,10 +78,11 @@ public class UserApiController {
 		@ApiResponse(responseCode = "404", description = "데이터베이스 연결에 실패하였습니다.", content = @Content(mediaType = "application/json"))
 	})
 	public ResponseEntity<Object> getMySignUpTime(
-		@AuthenticationPrincipal OAuth2UserPrincipal oAuth2UserPrincipal) {
-
+		@AuthenticationPrincipal
+		OAuth2UserPrincipal principal
+	) {
 		return ResponseEntityFactory
-			.toResponseEntity(USER_GET_INFO, userService.getMySignUpTime(oAuth2UserPrincipal.getId()));
+			.toResponseEntity(USER_GET_INFO, userService.getMySignUpTime(principal.getId()));
 	}
 
 	@PostMapping("/logout")
@@ -114,9 +96,10 @@ public class UserApiController {
 	public ResponseEntity<Object> logout(
 		HttpServletRequest request,
 		HttpServletResponse response,
-		@AuthenticationPrincipal OAuth2UserPrincipal oAuth2UserPrincipal
+		@AuthenticationPrincipal
+		OAuth2UserPrincipal principal
 	) {
-		userService.logout(request, response, oAuth2UserPrincipal.getId());
+		userService.logout(request, response, principal.getId());
 
 		return ResponseEntityFactory.toResponseEntity(USER_LOGOUT_SUCCESS);
 	}

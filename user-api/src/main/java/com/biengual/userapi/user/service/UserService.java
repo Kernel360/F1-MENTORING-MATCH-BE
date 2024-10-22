@@ -28,17 +28,17 @@ public class UserService {
 
 	@Transactional
 	public UserResponseDto.UserUpdateResponse updateUserInfo(
-		UserRequestDto.UserUpdateRequest userUpdateRequest, String email
+		UserRequestDto.Update request, String email
 	) {
 		UserEntity user = this.getUserByEmail(email);
 		AssertThat_UserAccountIsAppropriate(user);
 
 		// set additional info when user created
 		if (user.getUserStatus() == UserStatus.USER_STATUS_CREATED) {
-			user.setUserInitialInfo(userUpdateRequest);
+			user.setUserInitialInfo(request);
 		}
 		// update user info
-		user.updateUserInfo(userUpdateRequest);
+		user.updateUserInfo(request);
 
 		return UserResponseDto.UserUpdateResponse.of(user);
 	}

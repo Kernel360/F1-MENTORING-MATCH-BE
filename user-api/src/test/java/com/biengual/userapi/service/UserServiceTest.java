@@ -53,7 +53,7 @@ class UserServiceTest {
 	@DisplayName("User 정보 업데이트 테스트")
 	void update_user_info_test() {
 		// Given
-		UserRequestDto.UserUpdateRequest request = mock(UserRequestDto.UserUpdateRequest.class);
+		UserRequestDto.Update request = mock(UserRequestDto.Update.class);
 
 		// When
 		when(userEntity.getUserStatus()).thenReturn(UserStatus.USER_STATUS_CREATED);

@@ -115,20 +115,20 @@ public class UserEntity extends BaseEntity {
 			.build();
 	}
 
-	public void setUserInitialInfo(UserRequestDto.UserUpdateRequest userUpdateRequest) {
-		this.username = userUpdateRequest.username();
-		this.nickname = userUpdateRequest.nickname();
-		this.phoneNumber = userUpdateRequest.phoneNumber();
-		this.birth = userUpdateRequest.birth();
-		this.gender = userUpdateRequest.gender();
+	public void setUserInitialInfo(UserRequestDto.Update request) {
+		this.username = request.username();
+		this.nickname = request.nickname();
+		this.phoneNumber = request.phoneNumber();
+		this.birth = request.birth();
+		this.gender = request.gender();
 		this.userStatus = UserStatus.USER_STATUS_ACTIVATE;
 	}
 
-	public void updateUserInfo(UserRequestDto.UserUpdateRequest userUpdateRequest) {
-		this.username = userUpdateRequest.username() == null ? this.username : userUpdateRequest.username();
-		this.nickname = userUpdateRequest.nickname() == null ? this.nickname : userUpdateRequest.nickname();
-		this.phoneNumber = userUpdateRequest.phoneNumber() == null ? this.phoneNumber : userUpdateRequest.phoneNumber();
-		this.birth = userUpdateRequest.birth() == null ? this.birth : userUpdateRequest.birth();
+	public void updateUserInfo(UserRequestDto.Update request) {
+		this.username = request.username() == null ? this.username : request.username();
+		this.nickname = request.nickname() == null ? this.nickname : request.nickname();
+		this.phoneNumber = request.phoneNumber() == null ? this.phoneNumber : request.phoneNumber();
+		this.birth = request.birth() == null ? this.birth : request.birth();
 	}
 
 	public void updateUserBookmark(BookmarkEntity bookmark) {
