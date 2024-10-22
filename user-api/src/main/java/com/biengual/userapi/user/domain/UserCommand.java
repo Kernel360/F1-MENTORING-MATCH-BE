@@ -1,4 +1,4 @@
-package com.biengual.userapi.user.application;
+package com.biengual.userapi.user.domain;
 
 import com.biengual.userapi.user.domain.enums.Gender;
 
