@@ -1,19 +1,21 @@
 package com.biengual.userapi;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-
 import java.util.TimeZone;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+
+@EnableJpaAuditing
 @SpringBootApplication(scanBasePackages = {
-    "com.biengual.userapi"
+	"com.biengual.userapi"
 })
 public class UserApiApplication {
 
-    public static void main(String[] args) {
-        TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
+	public static void main(String[] args) {
+		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
 
-        SpringApplication.run(UserApiApplication.class, args);
-    }
+		SpringApplication.run(UserApiApplication.class, args);
+	}
 
 }
