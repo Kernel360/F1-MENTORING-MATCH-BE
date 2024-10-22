@@ -1,4 +1,4 @@
-package com.biengual.userapi.user.controller;
+package com.biengual.userapi.user.presentation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

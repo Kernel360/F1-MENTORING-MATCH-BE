@@ -1,4 +1,4 @@
-package com.biengual.userapi.user.controller;
+package com.biengual.userapi.user.presentation;
 
 import com.biengual.userapi.message.ResponseEntityFactory;
 import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
