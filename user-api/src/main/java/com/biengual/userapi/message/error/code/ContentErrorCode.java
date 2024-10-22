@@ -12,7 +12,7 @@ public enum ContentErrorCode implements ErrorCode {
 	CONTENT_NOT_FOUND(HttpStatus.NOT_FOUND, ContentServiceStatus.CONTENT_NOT_FOUND, "컨텐츠 조회 실패"),
 
 	CONTENT_SORT_COL_NOT_FOUND(
-		HttpStatus.NOT_FOUND, ContentServiceStatus.CONTENT_SORT_COL_NOT_FOUND, "컨텐츠 정렬 조건 오류"
+		HttpStatus.NOT_FOUND, ContentServiceStatus.CONTENT_SORT_COL_NOT_FOUND, "컨텐츠 정렬 조건 입력 오류"
 	),
 	CONTENT_SEARCH_WORD_NOT_FOUND(
 		HttpStatus.NOT_FOUND, ContentServiceStatus.CONTENT_SEARCH_WORD_NOT_FOUND, "컨텐츠 검색어 입력 오류"

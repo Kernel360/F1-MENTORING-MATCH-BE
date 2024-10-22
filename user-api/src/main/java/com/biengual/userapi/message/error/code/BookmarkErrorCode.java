@@ -12,9 +12,6 @@ public enum BookmarkErrorCode implements ErrorCode {
 	BOOKMARK_NOT_FOUND(
 		HttpStatus.NOT_FOUND, BookmarkServiceStatus.BOOKMARK_NOT_FOUND, "북마크 조회 실패"
 	),
-	BOOKMARK_DESCRIPTION_SAME(
-		HttpStatus.BAD_REQUEST, BookmarkServiceStatus.BOOKMARK_DESCRIPTION_SAME, "북마크 설명 필요"
-	),
 	BOOKMARK_ALREADY_EXISTS(
 		HttpStatus.BAD_REQUEST, BookmarkServiceStatus.BOOKMARK_ALREADY_EXISTS, "북마크 중복"
 	);
