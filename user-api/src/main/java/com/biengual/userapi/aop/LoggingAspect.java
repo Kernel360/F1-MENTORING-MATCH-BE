@@ -42,13 +42,14 @@ public class LoggingAspect {
         if (result instanceof ResponseEntity<?> responseEntity) {
             Object body = responseEntity.getBody();
 
-            ApiCustomResponse apiResponse = (ApiCustomResponse) body;
-            String customCode = apiResponse.code();
+            if (body instanceof ApiCustomResponse apiResponse) {
+                String customCode = apiResponse.code();
 
-            String user = getUserIdentifier();
+                String user = getUserIdentifier();
 
-            log.info("server: {}, user: {}, controller: {}, responseTime: {}ms, code: {}",
-                activeProfile, user, methodName, executionTime, customCode);
+                log.info("server: {}, user: {}, controller: {}, responseTime: {}ms, code: {}",
+                    activeProfile, user, methodName, executionTime, customCode);
+            }
         }
         return result;
     }
