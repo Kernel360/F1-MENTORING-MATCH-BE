@@ -46,7 +46,7 @@ public class QuestionPublicController {
 		@ApiResponse(responseCode = "403", description = "접근 권한이 없습니다.", content = @Content(mediaType = "application/json")),
 		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content(mediaType = "application/json"))
 	})
-	public ResponseEntity<ApiCustomResponse<Map<String, List<QuestionResponseDto.QuestionViewResponseDto>>>> getQuestion(
+	public ResponseEntity<Object> getQuestion(
 		@PathVariable Long contentId
 	) {
 		Map<String, List<QuestionResponseDto.QuestionViewResponseDto>> data = new HashMap<>();

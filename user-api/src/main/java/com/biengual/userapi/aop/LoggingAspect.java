@@ -39,11 +39,10 @@ public class LoggingAspect {
         Object result = joinPoint.proceed(joinPoint.getArgs());
         long executionTime = System.currentTimeMillis() - startTime;
 
-        if (result instanceof ResponseEntity<?>) {
-            ResponseEntity<?> responseEntity = (ResponseEntity<?>) result;
+        if (result instanceof ResponseEntity<?> responseEntity) {
             Object body = responseEntity.getBody();
 
-            ApiCustomResponse<?> apiResponse = (ApiCustomResponse<?>) body;
+            ApiCustomResponse apiResponse = (ApiCustomResponse) body;
             String customCode = apiResponse.code();
 
             String user = getUserIdentifier();
@@ -60,15 +59,15 @@ public class LoggingAspect {
         if (authentication != null && authentication.getPrincipal() != null) {
             Object principal = authentication.getPrincipal();
 
-            if (principal instanceof OAuth2UserPrincipal) {
-                return ((OAuth2UserPrincipal) principal).getEmail();
+            if (principal instanceof OAuth2UserPrincipal oAuth2UserPrincipal) {
+                return oAuth2UserPrincipal.getEmail();
             }
         }
 
         return "guest";
     }
 
-    @After(value = "login() && args(request, response, authentication)")
+    @After(value = "login() && args(request, response, authentication)", argNames = "request, response, authentication")
     public void logLoginAfter(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         OAuth2UserPrincipal principal = (OAuth2UserPrincipal) authentication.getPrincipal();
         String email = principal.getEmail();

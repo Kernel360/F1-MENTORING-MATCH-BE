@@ -11,7 +11,7 @@ import com.biengual.userapi.message.error.exception.CommonException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 	@ExceptionHandler(CommonException.class)
-	public ResponseEntity<ApiCustomResponse<Void>> commonException(CommonException e) {
+	public ResponseEntity<Object> commonException(CommonException e) {
 		return ResponseEntityFactory.toResponseEntity(e.getErrorCode());
 	}
 

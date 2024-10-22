@@ -45,7 +45,7 @@ public class ContentApiController {
 		@ApiResponse(responseCode = "403", description = "접근 권한이 없습니다.", content = @Content(mediaType = "application/json")),
 		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content(mediaType = "application/json"))
 	})
-	public ResponseEntity<ApiCustomResponse<ContentResponseDto.ContentCreateResponseDto>> createContent(
+	public ResponseEntity<Object> createContent(
 		Authentication authentication,
 		@RequestBody ContentRequestDto.ContentCreateRequestDto contentRequest
 	) throws Exception {
@@ -71,7 +71,7 @@ public class ContentApiController {
 		@ApiResponse(responseCode = "404", description = "컨텐츠를 찾을 수 없습니다.", content = @Content(mediaType = "application/json")),
 		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content(mediaType = "application/json"))
 	})
-	public ResponseEntity<ApiCustomResponse<ContentResponseDto.ContentUpdateResponseDto>> modifyContent(
+	public ResponseEntity<Object> modifyContent(
 		@PathVariable Long id,
 		@RequestBody ContentRequestDto.ContentUpdateRequestDto contentUpdateRequest
 	) {
@@ -94,7 +94,7 @@ public class ContentApiController {
 		@ApiResponse(responseCode = "404", description = "컨텐츠를 찾을 수 없습니다.", content = @Content(mediaType = "application/json")),
 		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content(mediaType = "application/json"))
 	})
-	public ResponseEntity<ApiCustomResponse<ContentResponseDto.ContentUpdateResponseDto>> deactivateContent(
+	public ResponseEntity<Object> deactivateContent(
 		@PathVariable Long id) {
 		ContentResponseDto.ContentUpdateResponseDto contentDeleteResponseDto = contentService.deactivateContent(id);
 

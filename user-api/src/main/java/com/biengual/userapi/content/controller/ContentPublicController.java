@@ -61,7 +61,7 @@ public class ContentPublicController {
 		@ApiResponse(responseCode = "204", description = "컨텐츠가 없습니다.", content = @Content),
 		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content)
 	})
-	public ResponseEntity<ApiCustomResponse<Map<String,List<ContentResponseDto.ContentByScrapCountDto>>>>
+	public ResponseEntity<Object>
 	getContentsByScrapCount(@RequestParam(defaultValue = "8") int num) {
 		Map<String, List<ContentResponseDto.ContentByScrapCountDto>> data = new HashMap<>();
 		data.put("contentByScrapCount", contentService.contentByScrapCount(num));
@@ -83,7 +83,7 @@ public class ContentPublicController {
 		@Parameter(name = "sort", description = "정렬 기준 (createdAt, hits) / default: createdAt", in = ParameterIn.QUERY, schema = @Schema(type = "string")),
 		@Parameter(name = "direction", description = "정렬 방법 / default: DESC / 대문자로 입력", in = ParameterIn.QUERY, schema = @Schema(type = "string"))
 	})
-	public ResponseEntity<ApiCustomResponse<PaginationDto<ContentResponseDto.ContentPreviewResponseDto>>>
+	public ResponseEntity<Object>
 	getContentsBySearch(
 		@ModelAttribute ContentRequestDto.ContentSearchDto searchDto,
 		@RequestParam(required = false, defaultValue = "createdAt") String sort,
@@ -112,7 +112,7 @@ public class ContentPublicController {
 		@Parameter(name = "direction", description = "정렬 방법 / default: DESC / 대문자로 입력", in = ParameterIn.QUERY, schema = @Schema(type = "string")),
 		@Parameter(name = "categoryId", description = "category Id (값이 없으면 전체 카테고리)", in = ParameterIn.QUERY, schema = @Schema(type = "integer"))
 	})
-	public ResponseEntity<ApiCustomResponse<PaginationDto<ContentResponseDto.ContentPreviewResponseDto>>> getReadingContents(
+	public ResponseEntity<Object> getReadingContents(
 		@RequestParam(required = false, defaultValue = "createdAt") String sort,
 		@RequestParam(required = false, defaultValue = "DESC") Sort.Direction direction,
 		@Parameter(hidden = true) @PageableDefault(page = 0, size = 10) Pageable pageable,
@@ -141,7 +141,7 @@ public class ContentPublicController {
 		@Parameter(name = "direction", description = "정렬 방법 / default: DESC / 대문자로 입력", in = ParameterIn.QUERY, schema = @Schema(type = "string")),
 		@Parameter(name = "categoryId", description = "category Id (값이 없으면 전체 카테고리)", in = ParameterIn.QUERY, schema = @Schema(type = "integer"))
 	})
-	public ResponseEntity<ApiCustomResponse<PaginationDto<ContentResponseDto.ContentPreviewResponseDto>>>
+	public ResponseEntity<Object>
 	getListeningContents(
 		@RequestParam(required = false, defaultValue = "createdAt") String sort,
 		@RequestParam(required = false, defaultValue = "DESC") Sort.Direction direction,
@@ -164,7 +164,7 @@ public class ContentPublicController {
 		@ApiResponse(responseCode = "204", description = "컨텐츠가 없습니다.", content = @Content),
 		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content)
 	})
-	public ResponseEntity<ApiCustomResponse<Map<String, List<ContentResponseDto.ContentPreviewResponseDto>>>>
+	public ResponseEntity<Object>
 	getPreviewLeadingContents(
 		@RequestParam(defaultValue = "hits") String sortBy,
 		@RequestParam(defaultValue = "8") int num
@@ -184,7 +184,7 @@ public class ContentPublicController {
 		@ApiResponse(responseCode = "204", description = "컨텐츠가 없습니다.", content = @Content),
 		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content)
 	})
-	public ResponseEntity<ApiCustomResponse<Map<String, List<ContentResponseDto.ContentPreviewResponseDto>>>>
+	public ResponseEntity<Object>
 	getPreviewListeningContents( // 최소한 list, map은 객체로 만들어야 함
 		@RequestParam(defaultValue = "hits") String sortBy,
 		@RequestParam(defaultValue = "8") int num
@@ -207,7 +207,7 @@ public class ContentPublicController {
 		@ApiResponse(responseCode = "204", description = "컨텐츠가 없습니다.", content = @Content),
 		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content)
 	})
-	public ResponseEntity<ApiCustomResponse<ContentResponseDto.ContentDetailResponseDto>> getDetailContents(
+	public ResponseEntity<Object> getDetailContents(
 		@PathVariable Long id
 	) {
 

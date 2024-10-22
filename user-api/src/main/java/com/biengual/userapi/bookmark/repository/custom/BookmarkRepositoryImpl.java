@@ -1,19 +1,17 @@
 package com.biengual.userapi.bookmark.repository.custom;
 
-import static com.biengual.userapi.bookmark.domain.entity.QBookmarkEntity.*;
-import static com.biengual.userapi.message.error.code.BookmarkErrorCode.*;
-import static com.biengual.userapi.user.domain.entity.QUserEntity.*;
+import com.biengual.userapi.bookmark.domain.dto.BookmarkRequestDto;
+import com.biengual.userapi.bookmark.domain.entity.BookmarkEntity;
+import com.biengual.userapi.message.error.exception.CommonException;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import java.util.List;
 import java.util.Optional;
 
-import com.biengual.userapi.bookmark.domain.dto.BookmarkRequestDto;
-import com.biengual.userapi.bookmark.repository.custom.BookmarkRepositoryCustom;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
-
-import com.biengual.userapi.bookmark.domain.entity.BookmarkEntity;
-import com.biengual.userapi.message.error.exception.CommonException;
+import static com.biengual.userapi.bookmark.domain.entity.QBookmarkEntity.bookmarkEntity;
+import static com.biengual.userapi.message.error.code.BookmarkErrorCode.BOOKMARK_NOT_FOUND;
+import static com.biengual.userapi.user.domain.entity.QUserEntity.userEntity;
 
 public class BookmarkRepositoryImpl extends QuerydslRepositorySupport implements BookmarkRepositoryCustom {
 

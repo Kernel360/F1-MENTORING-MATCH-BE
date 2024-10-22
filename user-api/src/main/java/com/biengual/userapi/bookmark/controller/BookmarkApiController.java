@@ -53,7 +53,7 @@ public class BookmarkApiController {
 		@ApiResponse(responseCode = "204", description = "컨텐츠가 없습니다.", content = @Content),
 		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content)
 	})
-	public ResponseEntity<ApiCustomResponse<Map<String, List<BookmarkResponseDto.BookmarkListResponseDto>>>>
+	public ResponseEntity<Object>
 	getBookmarks(@AuthenticationPrincipal OAuth2UserPrincipal oAuth2UserPrincipal, @PathVariable Long contentId) {
 		Map<String, List<BookmarkResponseDto.BookmarkListResponseDto>> data = new HashMap<>();
 		data.put("bookmarkList", bookmarkService.getBookmarks(oAuth2UserPrincipal.getEmail(), contentId));
@@ -71,7 +71,7 @@ public class BookmarkApiController {
 		@ApiResponse(responseCode = "204", description = "컨텐츠가 없습니다.", content = @Content),
 		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content)
 	})
-	public ResponseEntity<ApiCustomResponse<Map<String, List<BookmarkResponseDto.BookmarkMyListResponseDto>>>>
+	public ResponseEntity<Object>
 	getAllBookmarks(@AuthenticationPrincipal OAuth2UserPrincipal oAuth2UserPrincipal) {
 		Map<String, List<BookmarkResponseDto.BookmarkMyListResponseDto>> data = new HashMap<>();
 		data.put("bookmarkMyList", bookmarkService.getAllBookmarks(oAuth2UserPrincipal.getId()));
@@ -89,7 +89,7 @@ public class BookmarkApiController {
 		@ApiResponse(responseCode = "204", description = "컨텐츠가 없습니다.", content = @Content),
 		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content)
 	})
-	public ResponseEntity<ApiCustomResponse<BookmarkResponseDto.BookmarkCreateResponse>> createBookmark(
+	public ResponseEntity<Object> createBookmark(
 		@AuthenticationPrincipal OAuth2UserPrincipal oAuth2UserPrincipal,
 		@PathVariable Long contentId,
 		@RequestBody BookmarkRequestDto.BookmarkCreateRequest bookmarkRequestDto
@@ -111,7 +111,7 @@ public class BookmarkApiController {
 		@ApiResponse(responseCode = "204", description = "컨텐츠가 없습니다.", content = @Content),
 		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content)
 	})
-	public ResponseEntity<ApiCustomResponse<BookmarkResponseDto.BookmarkListResponseDto>> updateBookmark(
+	public ResponseEntity<Object> updateBookmark(
 		@PathVariable Long contentId,
 		@RequestBody BookmarkRequestDto.BookmarkUpdateRequest bookmarkRequestDto
 	) {
@@ -131,7 +131,7 @@ public class BookmarkApiController {
 		@ApiResponse(responseCode = "204", description = "컨텐츠가 없습니다.", content = @Content),
 		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content)
 	})
-	public ResponseEntity<ApiCustomResponse<Void>> deleteBookmark(
+	public ResponseEntity<Object> deleteBookmark(
 		@AuthenticationPrincipal OAuth2UserPrincipal oAuth2UserPrincipal,
 		@PathVariable Long bookmarkId
 	) {
