@@ -10,13 +10,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum BookmarkErrorCode implements ErrorCode {
 	BOOKMARK_NOT_FOUND(
-		HttpStatus.NOT_FOUND, BookmarkServiceStatus.BOOKMARK_NOT_FOUND, "등록된 북마크가 없습니다."
-	),
-	BOOKMARK_DESCRIPTION_SAME(
-		HttpStatus.BAD_REQUEST, BookmarkServiceStatus.BOOKMARK_DESCRIPTION_SAME, "북마크 설명이 기존과 동일합니다."
+		HttpStatus.NOT_FOUND, BookmarkServiceStatus.BOOKMARK_NOT_FOUND, "북마크 조회 실패"
 	),
 	BOOKMARK_ALREADY_EXISTS(
-		HttpStatus.BAD_REQUEST, BookmarkServiceStatus.BOOKMARK_ALREADY_EXISTS, "이미 존재하는 북마크입니다."
+		HttpStatus.BAD_REQUEST, BookmarkServiceStatus.BOOKMARK_ALREADY_EXISTS, "북마크 중복"
 	);
 
 	private final HttpStatus httpStatus;

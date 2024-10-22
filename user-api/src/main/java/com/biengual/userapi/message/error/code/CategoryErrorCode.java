@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 
 @RequiredArgsConstructor
 public enum CategoryErrorCode implements ErrorCode {
-    CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, CategoryServiceStatus.CATEGORY_NOT_FOUND, "등록된 카테고리가 없습니다.");
+    CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, CategoryServiceStatus.CATEGORY_NOT_FOUND, "카테고리 조회 실패");
 
     private final HttpStatus httpStatus;
     private final ServiceStatus serviceStatus;

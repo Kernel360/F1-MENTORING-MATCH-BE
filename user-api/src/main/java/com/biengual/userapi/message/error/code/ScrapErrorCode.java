@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum ScrapErrorCode implements ErrorCode {
-	SCRAP_NOT_FOUND(HttpStatus.NOT_FOUND, ScrapServiceStatus.SCRAP_NOT_FOUND, "등록된 스크랩 데이터 없음"),
+	SCRAP_NOT_FOUND(HttpStatus.NOT_FOUND, ScrapServiceStatus.SCRAP_NOT_FOUND, "스크랩 조회 실패"),
 	SCRAP_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, ScrapServiceStatus.SCRAP_ALREADY_EXISTS, "이미 등록된 스크랩 요청")
 	;
 
