@@ -7,7 +7,6 @@ import com.biengual.userapi.swagger.SwaggerVoidReturn;
 import com.biengual.userapi.swagger.user.SwaggerUserMyPage;
 import com.biengual.userapi.swagger.user.SwaggerUserMyTime;
 import com.biengual.userapi.swagger.user.SwaggerUserUpdate;
-import com.biengual.userapi.user.domain.dto.UserRequestDto;
 import com.biengual.userapi.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -31,6 +30,7 @@ import static com.biengual.userapi.message.response.UserResponseCode.*;
 @Tag(name = "User Public API", description = "가입된 유저 공통 API")
 public class UserPublicController {
 
+	private final UserDtoMapper userDtoMapper;
 	private final UserService userService;
 
 	@GetMapping("/me")
@@ -41,12 +41,11 @@ public class UserPublicController {
 		),
 		@ApiResponse(responseCode = "404", description = "데이터베이스 연결에 실패하였습니다.", content = @Content(mediaType = "application/json"))
 	})
-	public ResponseEntity<Object> getMyPage(
+	public ResponseEntity<Object> getMyInfo(
 		@AuthenticationPrincipal
 		OAuth2UserPrincipal principal
 	) {
-		return ResponseEntityFactory
-			.toResponseEntity(USER_GET_INFO, userService.getMyPage(principal.getEmail()));
+		return ResponseEntityFactory.toResponseEntity(USER_GET_INFO, userService.getMyPage(principal.getEmail()));
 	}
 
 	@PutMapping("/me")
@@ -57,15 +56,14 @@ public class UserPublicController {
 		),
 		@ApiResponse(responseCode = "404", description = "데이터베이스 연결에 실패하였습니다.", content = @Content(mediaType = "application/json"))
 	})
-	public ResponseEntity<Object> updateExistedUserInfo(
+	public ResponseEntity<Object> updateMyInfo(
 		@AuthenticationPrincipal
 		OAuth2UserPrincipal principal,
 		@RequestBody
-		UserRequestDto.Update request
+		UserRequestDto.UpdateMyInfo request
 	) {
-		return ResponseEntityFactory
-			.toResponseEntity(
-				USER_UPDATE_INFO, userService.updateUserInfo(request, principal.getEmail())
+		return ResponseEntityFactory.toResponseEntity(
+				USER_UPDATE_INFO, userService.updateUserInfo(userDtoMapper.of(request, principal))
 			);
 	}
 

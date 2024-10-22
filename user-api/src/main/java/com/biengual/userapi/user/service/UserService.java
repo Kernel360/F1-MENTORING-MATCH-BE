@@ -8,8 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
 import com.biengual.userapi.oauth2.repository.RefreshTokenRepository;
-import com.biengual.userapi.user.domain.dto.UserRequestDto;
-import com.biengual.userapi.user.domain.dto.UserResponseDto;
+import com.biengual.userapi.user.presentation.UserRequestDto;
+import com.biengual.userapi.user.presentation.UserResponseDto;
 import com.biengual.userapi.user.domain.entity.UserEntity;
 import com.biengual.userapi.user.domain.enums.UserStatus;
 import com.biengual.userapi.user.repository.UserRepository;
@@ -28,7 +28,7 @@ public class UserService {
 
 	@Transactional
 	public UserResponseDto.UserUpdateResponse updateUserInfo(
-		UserRequestDto.Update request, String email
+		UserRequestDto.UpdateMyInfo request, String email
 	) {
 		UserEntity user = this.getUserByEmail(email);
 		AssertThat_UserAccountIsAppropriate(user);

@@ -17,8 +17,8 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import com.biengual.userapi.exception.user.UserNotFoundException;
-import com.biengual.userapi.user.domain.dto.UserRequestDto;
-import com.biengual.userapi.user.domain.dto.UserResponseDto;
+import com.biengual.userapi.user.presentation.UserRequestDto;
+import com.biengual.userapi.user.presentation.UserResponseDto;
 import com.biengual.userapi.user.domain.entity.UserEntity;
 import com.biengual.userapi.user.domain.enums.Gender;
 import com.biengual.userapi.user.domain.enums.UserStatus;
@@ -53,7 +53,7 @@ class UserServiceTest {
 	@DisplayName("User 정보 업데이트 테스트")
 	void update_user_info_test() {
 		// Given
-		UserRequestDto.Update request = mock(UserRequestDto.Update.class);
+		UserRequestDto.UpdateMyInfo request = mock(UserRequestDto.UpdateMyInfo.class);
 
 		// When
 		when(userEntity.getUserStatus()).thenReturn(UserStatus.USER_STATUS_CREATED);

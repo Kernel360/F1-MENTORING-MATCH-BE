@@ -9,7 +9,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import com.biengual.userapi.bookmark.domain.entity.BookmarkEntity;
 import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
 import com.biengual.userapi.scrap.domain.entity.ScrapEntity;
-import com.biengual.userapi.user.domain.dto.UserRequestDto;
+import com.biengual.userapi.user.presentation.UserRequestDto;
 import com.biengual.userapi.user.domain.enums.Gender;
 import com.biengual.userapi.user.domain.enums.Role;
 import com.biengual.userapi.user.domain.enums.UserStatus;
@@ -115,7 +115,7 @@ public class UserEntity extends BaseEntity {
 			.build();
 	}
 
-	public void setUserInitialInfo(UserRequestDto.Update request) {
+	public void setUserInitialInfo(UserRequestDto.UpdateMyInfo request) {
 		this.username = request.username();
 		this.nickname = request.nickname();
 		this.phoneNumber = request.phoneNumber();
@@ -124,7 +124,7 @@ public class UserEntity extends BaseEntity {
 		this.userStatus = UserStatus.USER_STATUS_ACTIVATE;
 	}
 
-	public void updateUserInfo(UserRequestDto.Update request) {
+	public void updateUserInfo(UserRequestDto.UpdateMyInfo request) {
 		this.username = request.username() == null ? this.username : request.username();
 		this.nickname = request.nickname() == null ? this.nickname : request.nickname();
 		this.phoneNumber = request.phoneNumber() == null ? this.phoneNumber : request.phoneNumber();

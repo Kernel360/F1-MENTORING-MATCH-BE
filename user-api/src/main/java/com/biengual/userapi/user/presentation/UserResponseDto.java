@@ -1,4 +1,4 @@
-package com.biengual.userapi.user.domain.dto;
+package com.biengual.userapi.user.presentation;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
