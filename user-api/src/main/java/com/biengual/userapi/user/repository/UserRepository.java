@@ -9,4 +9,6 @@ import com.biengual.userapi.user.domain.entity.UserEntity;
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
 	Optional<UserEntity> findByEmail(String email);
+
+	Optional<UserEntity> findByIdAndEmail(Long userId, String email);
 }
