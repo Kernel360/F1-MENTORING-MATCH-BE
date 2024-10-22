@@ -44,7 +44,7 @@ public class QuestionApiController {
 		@ApiResponse(responseCode = "403", description = "접근 권한이 없습니다.", content = @Content(mediaType = "application/json")),
 		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content(mediaType = "application/json"))
 	})
-	public ResponseEntity<ApiCustomResponse<QuestionResponseDto.QuestionCreateResponseDto>> createQuestion(
+	public ResponseEntity<Object> createQuestion(
 		@PathVariable Long contentId,
 		@RequestBody QuestionRequestDto.QuestionCreateRequestDto questionCreateRequestDto
 	) {

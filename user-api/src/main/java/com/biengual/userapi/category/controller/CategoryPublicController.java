@@ -44,7 +44,7 @@ public class CategoryPublicController {
 		@ApiResponse(responseCode = "204", description = "카테고리가 없습니다.", content = @Content),
 		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content)
 	})
-	public ResponseEntity<ApiCustomResponse<Map<String, List<CategoryResponseDto>>>> findAllCategory() {
+	public ResponseEntity<Object> findAllCategory() {
 		Map<String, List<CategoryResponseDto>> response = new HashMap<>();
 		response.put("categoryList", categoryService.findAllCategory());
 

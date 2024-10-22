@@ -45,7 +45,7 @@ public class UserApiController {
 		@ApiResponse(responseCode = "202", description = "이미 가입된 계정입니다.", content = @Content(mediaType = "application/json")),
 		@ApiResponse(responseCode = "404", description = "데이터베이스 연결에 실패하였습니다.", content = @Content(mediaType = "application/json")),
 	})
-	public ResponseEntity<ApiCustomResponse<UserResponseDto.UserUpdateResponse>> setNewUserInfo(
+	public ResponseEntity<Object> setNewUserInfo(
 		@RequestBody UserRequestDto.UserUpdateRequest userUpdateRequest,
 		Authentication authentication
 	) {
@@ -62,7 +62,7 @@ public class UserApiController {
 		),
 		@ApiResponse(responseCode = "404", description = "데이터베이스 연결에 실패하였습니다.", content = @Content(mediaType = "application/json"))
 	})
-	public ResponseEntity<ApiCustomResponse<UserResponseDto.UserMyPageResponse>> getMyPage(
+	public ResponseEntity<Object> getMyPage(
 		Authentication authentication) {
 
 		return ResponseEntityFactory
@@ -77,7 +77,7 @@ public class UserApiController {
 		),
 		@ApiResponse(responseCode = "404", description = "데이터베이스 연결에 실패하였습니다.", content = @Content(mediaType = "application/json"))
 	})
-	public ResponseEntity<ApiCustomResponse<UserResponseDto.UserUpdateResponse>> updateExistedUserInfo(
+	public ResponseEntity<Object> updateExistedUserInfo(
 		@RequestBody UserRequestDto.UserUpdateRequest userUpdateRequest,
 		Authentication authentication
 	) {
@@ -96,7 +96,7 @@ public class UserApiController {
 		),
 		@ApiResponse(responseCode = "404", description = "데이터베이스 연결에 실패하였습니다.", content = @Content(mediaType = "application/json"))
 	})
-	public ResponseEntity<ApiCustomResponse<UserResponseDto.UserMyTimeResponse>> getMySignUpTime(
+	public ResponseEntity<Object> getMySignUpTime(
 		@AuthenticationPrincipal OAuth2UserPrincipal oAuth2UserPrincipal) {
 
 		return ResponseEntityFactory
@@ -111,7 +111,7 @@ public class UserApiController {
 		}),
 		@ApiResponse(responseCode = "404", description = "데이터베이스 연결에 실패하였습니다.", content = @Content(mediaType = "application/json"))
 	})
-	public ResponseEntity<ApiCustomResponse<Void>> logout(
+	public ResponseEntity<Object> logout(
 		HttpServletRequest request,
 		HttpServletResponse response,
 		@AuthenticationPrincipal OAuth2UserPrincipal oAuth2UserPrincipal
@@ -129,7 +129,7 @@ public class UserApiController {
 		),
 		@ApiResponse(responseCode = "404", description = "데이터베이스 연결에 실패하였습니다.", content = @Content(mediaType = "application/json"))
 	})
-	public ResponseEntity<ApiCustomResponse<Boolean>> getUserStatus(
+	public ResponseEntity<Object> getUserStatus(
 		HttpServletRequest request
 	) {
 

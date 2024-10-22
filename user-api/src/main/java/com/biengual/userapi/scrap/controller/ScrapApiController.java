@@ -52,7 +52,7 @@ public class ScrapApiController {
 		@ApiResponse(responseCode = "204", description = "요청한 스크랩이 없습니다.", content = @Content),
 		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content)
 	})
-	public ResponseEntity<ApiCustomResponse<Map<String, List<ScrapResponseDto.ScrapViewResponseDto>>>> getScraps(
+	public ResponseEntity<Object> getScraps(
 		@AuthenticationPrincipal OAuth2UserPrincipal oAuth2UserPrincipal
 	) {
 		Map<String, List<ScrapResponseDto.ScrapViewResponseDto>> data = new HashMap<>();
@@ -70,7 +70,7 @@ public class ScrapApiController {
 		), @ApiResponse(responseCode = "204", description = "요청한 스크랩이 없습니다.", content = @Content),
 		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content)
 	})
-	public ResponseEntity<ApiCustomResponse<Boolean>> existsScrap(
+	public ResponseEntity<Object> existsScrap(
 		@AuthenticationPrincipal OAuth2UserPrincipal oAuth2UserPrincipal,
 		@RequestParam Long contentId
 	) {
@@ -88,7 +88,7 @@ public class ScrapApiController {
 		), @ApiResponse(responseCode = "204", description = "요청한 스크랩이 없습니다.", content = @Content),
 		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content)
 	})
-	public ResponseEntity<ApiCustomResponse<ScrapResponseDto.ScrapCreateResponseDto>> createScrap(
+	public ResponseEntity<Object> createScrap(
 		@AuthenticationPrincipal OAuth2UserPrincipal oAuth2UserPrincipal,
 		@RequestBody ScrapRequestDto.ScrapCreateRequestDto requestDto
 	) {
@@ -106,7 +106,7 @@ public class ScrapApiController {
 		), @ApiResponse(responseCode = "204", description = "요청한 스크랩이 없습니다.", content = @Content),
 		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content)
 	})
-	public ResponseEntity<ApiCustomResponse<Void>> deleteScrap(
+	public ResponseEntity<Object> deleteScrap(
 		@AuthenticationPrincipal OAuth2UserPrincipal oAuth2UserPrincipal,
 		@RequestBody ScrapRequestDto.ScrapDeleteRequestDto requestDto
 	) {
