@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum CrawlingErrorCode implements ErrorCode {
 	CRAWLING_OUT_OF_BOUNDS(
-		HttpStatus.BAD_REQUEST, CrawlingServiceStatus.CRAWLING_OUT_OF_BOUNDS, "유튜브 영상 길이가 8분 이상입니다."
+		HttpStatus.BAD_REQUEST, CrawlingServiceStatus.CRAWLING_OUT_OF_BOUNDS, "유튜브 영상 길이 초과(8분)"
 	),
 	SELENIUM_RUNTIME_ERROR(
 		HttpStatus.NOT_ACCEPTABLE, CrawlingServiceStatus.CRAWLING_SELENIUM_FAILURE, "셀레니움 런타임 에러"
