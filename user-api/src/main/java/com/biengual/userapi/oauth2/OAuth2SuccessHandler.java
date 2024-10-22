@@ -14,7 +14,7 @@ import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
 import com.biengual.userapi.oauth2.service.RefreshTokenService;
 import com.biengual.userapi.user.domain.entity.UserEntity;
-import com.biengual.userapi.user.service.UserService;
+import com.biengual.userapi.user.application.UserService;
 import com.biengual.userapi.util.CookieUtil;
 import com.biengual.userapi.util.HttpServletResponseUtil;
 

@@ -7,7 +7,7 @@ import com.biengual.userapi.swagger.SwaggerVoidReturn;
 import com.biengual.userapi.swagger.user.SwaggerUserMyPage;
 import com.biengual.userapi.swagger.user.SwaggerUserMyTime;
 import com.biengual.userapi.swagger.user.SwaggerUserUpdate;
-import com.biengual.userapi.user.service.UserService;
+import com.biengual.userapi.user.application.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

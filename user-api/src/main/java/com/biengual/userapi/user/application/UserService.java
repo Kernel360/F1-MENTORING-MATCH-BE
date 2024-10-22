@@ -1,4 +1,4 @@
-package com.biengual.userapi.user.service;
+package com.biengual.userapi.user.application;
 
 import static com.biengual.userapi.message.error.code.UserErrorCode.*;
 

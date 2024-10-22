@@ -3,7 +3,7 @@ package com.biengual.userapi.oauth2;
 import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
 import com.biengual.userapi.user.domain.entity.UserEntity;
-import com.biengual.userapi.user.service.UserService;
+import com.biengual.userapi.user.application.UserService;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
