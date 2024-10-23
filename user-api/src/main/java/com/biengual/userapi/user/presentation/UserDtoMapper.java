@@ -8,10 +8,15 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 /**
-* Dto 와 Command 간의 Mapper
-*
-* @author 문찬욱
-*/
+ * 객체 간의 Mapper
+ *
+ * 접두사로 어떤 객체 간의 매핑인지 구분
+ * do~ : Command <- Request
+ * of~ : Response <- Info
+ * build~ :  Entity <-> Info, Info <-> Info
+ *
+ * @author 문찬욱
+ */
 @Mapper(
     componentModel = "spring",
     injectionStrategy = InjectionStrategy.CONSTRUCTOR,
@@ -24,5 +29,5 @@ public interface UserDtoMapper {
     @Mapping(target = "categoryIds", source = "request.categories")
     @Mapping(target = "userId", source = "principal.id")
     @Mapping(target = "email", source = "principal.email")
-    UserCommand.UpdateMyInfo of(UserRequestDto.UpdateMyInfoReq request, OAuth2UserPrincipal principal);
+    UserCommand.UpdateMyInfo doUpdateMyInfo(UserRequestDto.UpdateMyInfoReq request, OAuth2UserPrincipal principal);
 }

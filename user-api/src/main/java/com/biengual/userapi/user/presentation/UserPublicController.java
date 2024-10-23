@@ -64,7 +64,7 @@ public class UserPublicController {
 		@RequestBody
 		UserRequestDto.UpdateMyInfoReq request
 	) {
-		userFacade.updateMyInfo(userDtoMapper.of(request, principal));
+		userFacade.updateMyInfo(userDtoMapper.doUpdateMyInfo(request, principal));
 
 		return ResponseEntityFactory.toResponseEntity(USER_UPDATE_INFO);
 	}
