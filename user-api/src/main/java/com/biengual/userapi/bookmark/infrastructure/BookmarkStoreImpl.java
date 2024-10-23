@@ -29,19 +29,17 @@ public class BookmarkStoreImpl implements BookmarkStore {
 	}
 
 	@Override
-	public BookmarkInfo.Create saveBookmark(BookmarkCommand.Create command, String detail, Double startTime) {
+	public void saveBookmark(BookmarkCommand.Create command, String detail, Double startTime) {
 		UserEntity user = userRepository.findById(command.userId())
 			.orElseThrow(() -> new CommonException(USER_NOT_FOUND));
 
 		BookmarkEntity bookmark = command.toEntity(detail, startTime);
 		bookmarkRepository.save(bookmark);
 		user.updateUserBookmark(bookmark);
-
-		return BookmarkInfo.Create.of(bookmark);
 	}
 
 	@Override
-	public BookmarkInfo.Content updateBookmark(BookmarkCommand.Update command) {
+	public BookmarkInfo.Position updateBookmark(BookmarkCommand.Update command) {
 		UserEntity user = userRepository.findById(command.userId())
 			.orElseThrow(() -> new CommonException(USER_NOT_FOUND));
 
@@ -53,6 +51,6 @@ public class BookmarkStoreImpl implements BookmarkStore {
 
 		bookmark.updateDescription(command.description());
 
-		return BookmarkInfo.Content.of(bookmark);
+		return BookmarkInfo.Position.of(bookmark);
 	}
 }

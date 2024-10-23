@@ -10,7 +10,7 @@ import lombok.Builder;
 public class BookmarkInfo {
 
 	@Builder
-	public record Content(
+	public record Position(
 		Long bookmarkId,
 		Long sentenceIndex,
 		Long wordIndex,
@@ -18,8 +18,8 @@ public class BookmarkInfo {
 		Double startTimeInSecond
 	) {
 
-		public static Content of(BookmarkEntity bookmark) {
-			return Content.builder()
+		public static Position of(BookmarkEntity bookmark) {
+			return Position.builder()
 				.bookmarkId(bookmark.getId())
 				.sentenceIndex(bookmark.getSentenceIndex())
 				.wordIndex(bookmark.getWordIndex())
@@ -30,12 +30,12 @@ public class BookmarkInfo {
 	}
 
 	@Builder
-	public record ContentInfo(
-		List<Content> bookmarkList
+	public record PositionInfo(
+		List<Position> bookmarkList
 	) {
-		public static ContentInfo of(List<Content> contentInfo){
-			return ContentInfo.builder()
-				.bookmarkList(contentInfo)
+		public static PositionInfo of(List<Position> positionInfo) {
+			return PositionInfo.builder()
+				.bookmarkList(positionInfo)
 				.build();
 		}
 	}
@@ -72,27 +72,9 @@ public class BookmarkInfo {
 		List<BookmarkInfo.MyList> bookmarkMyList
 	) {
 		public static MyListInfo of(List<MyList> myListInfo) {
-			return  MyListInfo.builder()
+			return MyListInfo.builder()
 				.bookmarkMyList(myListInfo)
 				.build();
-		}
-	}
-
-	public record Create(
-		Long bookmarkId,
-		Long scriptIndex,
-		Long sentenceIndex,
-		Long wordIndex,
-		String description
-	) {
-		public static BookmarkInfo.Create of(BookmarkEntity bookmark) {
-			return new BookmarkInfo.Create(
-				bookmark.getId(),
-				bookmark.getScriptIndex(),
-				bookmark.getSentenceIndex(),
-				bookmark.getWordIndex(),
-				bookmark.getDescription()
-			);
 		}
 	}
 

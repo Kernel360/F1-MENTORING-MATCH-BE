@@ -39,12 +39,10 @@ public interface BookmarkDtoMapper {
 	BookmarkCommand.Update of(BookmarkRequestDto.UpdateReq request, OAuth2UserPrincipal principal);
 
 	// Response <-> Info
-	BookmarkResponseDto.ContentListRes of(BookmarkInfo.ContentInfo contentInfos);
+	BookmarkResponseDto.ContentListRes of(BookmarkInfo.PositionInfo positionInfos);
 
 	BookmarkResponseDto.MyListRes of(BookmarkInfo.MyListInfo myList);
 
-	BookmarkResponseDto.CreateRes of(BookmarkInfo.Create info);
-
-	BookmarkResponseDto.ContentList of(BookmarkInfo.Content info);
+	BookmarkResponseDto.ContentList of(BookmarkInfo.Position position);
 
 }

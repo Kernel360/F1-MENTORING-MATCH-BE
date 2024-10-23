@@ -101,9 +101,9 @@ public class BookmarkApiController {
 	) {
 		BookmarkCommand.Create command = bookmarkDtoMapper.of(contentId, request, principal);
 
-		BookmarkResponseDto.CreateRes response = bookmarkDtoMapper.of(bookmarkFacade.createBookmark(command));
+		bookmarkFacade.createBookmark(command);
 
-		return ResponseEntityFactory.toResponseEntity(BOOKMARK_CREATE_SUCCESS, response);
+		return ResponseEntityFactory.toResponseEntity(BOOKMARK_CREATE_SUCCESS);
 	}
 
 	@PutMapping("/update/{contentId}")

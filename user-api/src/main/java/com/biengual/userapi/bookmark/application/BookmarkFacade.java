@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 public class BookmarkFacade {
 	private final BookmarkService bookmarkService;
 
-	public BookmarkInfo.ContentInfo getBookmarks(BookmarkCommand.GetByContents command) {
+	public BookmarkInfo.PositionInfo getBookmarks(BookmarkCommand.GetByContents command) {
 		return bookmarkService.getBookmarks(command);
 	}
 
@@ -20,11 +20,11 @@ public class BookmarkFacade {
 		return bookmarkService.getAllBookmarks(userId);
 	}
 
-	public BookmarkInfo.Create createBookmark(BookmarkCommand.Create command) {
-		return bookmarkService.createBookmark(command);
+	public void createBookmark(BookmarkCommand.Create command) {
+		bookmarkService.createBookmark(command);
 	}
 
-	public BookmarkInfo.Content updateBookmark(BookmarkCommand.Update command) {
+	public BookmarkInfo.Position updateBookmark(BookmarkCommand.Update command) {
 		return bookmarkService.updateBookmark(command);
 	}
 

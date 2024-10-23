@@ -21,12 +21,12 @@ public class BookmarkReaderImpl implements BookmarkReader {
 	private final ContentRepository contentRepository;
 
 	@Override
-	public List<BookmarkInfo.Content> getContentList(UserEntity user, Long contentId) {
+	public List<BookmarkInfo.Position> getContentList(UserEntity user, Long contentId) {
 		return user.getBookmarks()
 			.stream()
 			.filter(bookmarkEntity -> bookmarkEntity.getScriptIndex().equals(contentId))
 			.sorted(Comparator.comparing(BookmarkEntity::getUpdatedAt).reversed())
-			.map(BookmarkInfo.Content::of)
+			.map(BookmarkInfo.Position::of)
 			.toList();
 	}
 

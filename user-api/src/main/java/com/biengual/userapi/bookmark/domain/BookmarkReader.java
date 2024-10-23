@@ -5,7 +5,7 @@ import java.util.List;
 import com.biengual.userapi.user.domain.entity.UserEntity;
 
 public interface BookmarkReader {
-	List<BookmarkInfo.Content> getContentList(UserEntity user, Long contentId);
+	List<BookmarkInfo.Position> getContentList(UserEntity user, Long contentId);
 
 	List<BookmarkInfo.MyList> getAllBookmarks(Long userId);
 

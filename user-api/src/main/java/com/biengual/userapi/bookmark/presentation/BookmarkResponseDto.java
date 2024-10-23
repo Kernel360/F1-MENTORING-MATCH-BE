@@ -43,13 +43,4 @@ public class BookmarkResponseDto {
 	) {
 	}
 
-	public record CreateRes(
-		Long bookmarkId,
-		Long scriptIndex,
-		Long sentenceIndex,
-		Long wordIndex,
-		String description
-	) {
-	}
-
 }

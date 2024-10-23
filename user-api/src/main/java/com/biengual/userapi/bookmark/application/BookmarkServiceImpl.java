@@ -36,10 +36,10 @@ public class BookmarkServiceImpl implements BookmarkService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public BookmarkInfo.ContentInfo getBookmarks(BookmarkCommand.GetByContents command) {
+	public BookmarkInfo.PositionInfo getBookmarks(BookmarkCommand.GetByContents command) {
 		UserEntity user = userRepository.findById(command.userId())
 			.orElseThrow(() -> new CommonException(USER_NOT_FOUND));
-		return BookmarkInfo.ContentInfo.of(bookmarkReader.getContentList(user, command.contentId()));
+		return BookmarkInfo.PositionInfo.of(bookmarkReader.getContentList(user, command.contentId()));
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class BookmarkServiceImpl implements BookmarkService {
 
 	@Override
 	@Transactional
-	public BookmarkInfo.Create createBookmark(BookmarkCommand.Create command) {
+	public void createBookmark(BookmarkCommand.Create command) {
 		// TODO: content 쪽 reader 생성 되면 수정
 		ContentDocument content = contentScriptRepository.findContentDocumentById(
 			new ObjectId(contentRepository.findMongoIdByContentId(command.contentId()))
@@ -60,12 +60,12 @@ public class BookmarkServiceImpl implements BookmarkService {
 			throw new CommonException(BOOKMARK_ALREADY_EXISTS);
 		}
 
-		return bookmarkStore.saveBookmark(command, extractDetail(command, content), extractStartTime(command, content));
+		bookmarkStore.saveBookmark(command, extractDetail(command, content), extractStartTime(command, content));
 	}
 
 	@Override
 	@Transactional
-	public BookmarkInfo.Content updateBookmark(BookmarkCommand.Update command) {
+	public BookmarkInfo.Position updateBookmark(BookmarkCommand.Update command) {
 		return bookmarkStore.updateBookmark(command);
 	}
 
