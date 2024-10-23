@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.biengual.userapi.bookmark.domain.BookmarkCommand;
 import com.biengual.userapi.bookmark.domain.BookmarkInfo;
 import com.biengual.userapi.bookmark.domain.BookmarkReader;
-import com.biengual.userapi.bookmark.domain.BookmarkRepository;
 import com.biengual.userapi.bookmark.domain.BookmarkService;
 import com.biengual.userapi.bookmark.domain.BookmarkStore;
 import com.biengual.userapi.content.domain.entity.ContentDocument;
@@ -29,7 +28,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BookmarkServiceImpl implements BookmarkService {
 	private final UserRepository userRepository;
-	private final BookmarkRepository bookmarkRepository;
 	private final ContentRepository contentRepository;
 	private final ContentScriptRepository contentScriptRepository;
 
