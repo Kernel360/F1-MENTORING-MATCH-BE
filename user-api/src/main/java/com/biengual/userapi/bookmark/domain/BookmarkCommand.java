@@ -23,15 +23,14 @@ public class BookmarkCommand {
 	) {
 		public BookmarkEntity toEntity(String detail, Double startTime) {
 			return BookmarkEntity.builder()
-				.scriptIndex(contentId)
-				.sentenceIndex(sentenceIndex)
-				.wordIndex(wordIndex)
-				.description(description)
+				.scriptIndex(this.contentId)
+				.sentenceIndex(this.sentenceIndex)
+				.wordIndex(this.wordIndex)
+				.description(this.description)
 				.detail(detail)
 				.startTimeInSecond(startTime)
 				.build();
 		}
-
 	}
 
 	public record Update(
