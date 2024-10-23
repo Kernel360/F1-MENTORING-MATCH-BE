@@ -9,7 +9,7 @@ import java.util.Optional;
 
 import static com.biengual.userapi.message.error.code.ScrapErrorCode.SCRAP_NOT_FOUND;
 import static com.biengual.userapi.scrap.domain.entity.QScrapEntity.scrapEntity;
-import static com.biengual.userapi.user.domain.entity.QUserEntity.userEntity;
+import static com.biengual.userapi.user.domain.QUserEntity.userEntity;
 
 public class ScrapRepositoryImpl extends QuerydslRepositorySupport implements ScrapRepositoryCustom {
 	public ScrapRepositoryImpl() {

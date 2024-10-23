@@ -11,7 +11,7 @@ import java.util.Optional;
 
 import static com.biengual.userapi.bookmark.domain.entity.QBookmarkEntity.bookmarkEntity;
 import static com.biengual.userapi.message.error.code.BookmarkErrorCode.BOOKMARK_NOT_FOUND;
-import static com.biengual.userapi.user.domain.entity.QUserEntity.userEntity;
+import static com.biengual.userapi.user.domain.QUserEntity.userEntity;
 
 public class BookmarkRepositoryImpl extends QuerydslRepositorySupport implements BookmarkRepositoryCustom {
 
