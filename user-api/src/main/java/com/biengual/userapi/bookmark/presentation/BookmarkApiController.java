@@ -18,7 +18,6 @@ import com.biengual.userapi.bookmark.domain.BookmarkCommand;
 import com.biengual.userapi.message.ResponseEntityFactory;
 import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
 import com.biengual.userapi.swagger.SwaggerVoidReturn;
-import com.biengual.userapi.swagger.bookmark.SwaggerBookmarkCreate;
 import com.biengual.userapi.swagger.bookmark.SwaggerBookmarkList;
 import com.biengual.userapi.swagger.bookmark.SwaggerBookmarkMyList;
 
@@ -86,7 +85,7 @@ public class BookmarkApiController {
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "201", description = "북마크 생성 성공",
 			content = {
-				@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerBookmarkCreate.class))
+				@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerVoidReturn.class))
 			}),
 		@ApiResponse(responseCode = "404", description = "유저 혹은 컨텐츠 조회 실패", content = @Content),
 		@ApiResponse(responseCode = "500", description = "서버 에러", content = @Content)
