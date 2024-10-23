@@ -5,7 +5,7 @@ import com.biengual.userapi.content.domain.dto.ContentRequestDto;
 import com.biengual.userapi.content.domain.enums.ContentStatus;
 import com.biengual.userapi.content.domain.enums.ContentType;
 import com.biengual.userapi.script.domain.entity.Script;
-import com.biengual.userapi.user.domain.entity.BaseEntity;
+import com.biengual.userapi.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;

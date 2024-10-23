@@ -1,7 +1,7 @@
 package com.biengual.userapi.bookmark.domain.entity;
 
 import com.biengual.userapi.bookmark.domain.dto.BookmarkRequestDto;
-import com.biengual.userapi.user.domain.entity.BaseEntity;
+import com.biengual.userapi.common.entity.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

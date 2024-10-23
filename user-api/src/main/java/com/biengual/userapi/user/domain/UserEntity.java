@@ -1,9 +1,9 @@
-package com.biengual.userapi.user.domain.entity;
+package com.biengual.userapi.user.domain;
 
 import com.biengual.userapi.bookmark.domain.entity.BookmarkEntity;
+import com.biengual.userapi.common.entity.BaseEntity;
 import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
 import com.biengual.userapi.scrap.domain.entity.ScrapEntity;
-import com.biengual.userapi.user.domain.UserCommand;
 import com.biengual.userapi.user.domain.enums.Gender;
 import com.biengual.userapi.user.domain.enums.Role;
 import com.biengual.userapi.user.domain.enums.UserStatus;

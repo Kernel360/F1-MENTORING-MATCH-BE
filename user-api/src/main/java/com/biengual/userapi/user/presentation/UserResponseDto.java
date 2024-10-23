@@ -3,7 +3,7 @@ package com.biengual.userapi.user.presentation;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import com.biengual.userapi.user.domain.entity.UserEntity;
+import com.biengual.userapi.user.domain.UserEntity;
 import com.biengual.userapi.user.domain.enums.Gender;
 
 public class UserResponseDto {

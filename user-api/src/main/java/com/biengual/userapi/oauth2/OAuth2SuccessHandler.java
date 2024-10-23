@@ -6,7 +6,7 @@ import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
 import com.biengual.userapi.oauth2.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import com.biengual.userapi.oauth2.service.RefreshTokenService;
 import com.biengual.userapi.user.domain.UserService;
-import com.biengual.userapi.user.domain.entity.UserEntity;
+import com.biengual.userapi.user.domain.UserEntity;
 import com.biengual.userapi.util.CookieUtil;
 import com.biengual.userapi.util.HttpServletResponseUtil;
 import jakarta.servlet.http.Cookie;

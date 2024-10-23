@@ -21,7 +21,7 @@ import com.biengual.userapi.content.repository.ContentRepository;
 import com.biengual.userapi.content.repository.ContentScriptRepository;
 import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.script.domain.entity.YoutubeScript;
-import com.biengual.userapi.user.domain.entity.UserEntity;
+import com.biengual.userapi.user.domain.UserEntity;
 import com.biengual.userapi.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;

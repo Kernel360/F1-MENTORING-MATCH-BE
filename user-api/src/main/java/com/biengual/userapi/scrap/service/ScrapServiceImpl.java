@@ -15,7 +15,7 @@ import com.biengual.userapi.scrap.domain.dto.ScrapRequestDto;
 import com.biengual.userapi.scrap.domain.dto.ScrapResponseDto;
 import com.biengual.userapi.scrap.domain.entity.ScrapEntity;
 import com.biengual.userapi.scrap.repository.ScrapRepository;
-import com.biengual.userapi.user.domain.entity.UserEntity;
+import com.biengual.userapi.user.domain.UserEntity;
 import com.biengual.userapi.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;

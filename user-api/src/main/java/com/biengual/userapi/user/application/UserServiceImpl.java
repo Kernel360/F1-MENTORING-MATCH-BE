@@ -6,7 +6,7 @@ import com.biengual.userapi.oauth2.repository.RefreshTokenRepository;
 import com.biengual.userapi.user.domain.UserCommand;
 import com.biengual.userapi.user.domain.UserService;
 import com.biengual.userapi.user.domain.UserStore;
-import com.biengual.userapi.user.domain.entity.UserEntity;
+import com.biengual.userapi.user.domain.UserEntity;
 import com.biengual.userapi.user.presentation.UserResponseDto;
 import com.biengual.userapi.user.repository.UserRepository;
 import com.biengual.userapi.util.CookieUtil;

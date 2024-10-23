@@ -2,7 +2,7 @@ package com.biengual.userapi.oauth2.service;
 
 import com.biengual.userapi.oauth2.TokenProvider;
 import com.biengual.userapi.user.domain.UserService;
-import com.biengual.userapi.user.domain.entity.UserEntity;
+import com.biengual.userapi.user.domain.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

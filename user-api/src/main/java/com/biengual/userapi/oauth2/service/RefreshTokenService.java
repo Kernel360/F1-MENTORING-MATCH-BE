@@ -3,7 +3,7 @@ package com.biengual.userapi.oauth2.service;
 import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.oauth2.domain.entity.RefreshToken;
 import com.biengual.userapi.oauth2.repository.RefreshTokenRepository;
-import com.biengual.userapi.user.domain.entity.UserEntity;
+import com.biengual.userapi.user.domain.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
