@@ -25,7 +25,7 @@ public interface BookmarkDtoMapper {
 
 	// Request <-> Info
 	@Mapping(target = "userId", source = "principal.id")
-	BookmarkCommand.GetByContents doGetByContents(BookmarkRequestDto.ViewReq request, OAuth2UserPrincipal principal);
+	BookmarkCommand.GetByContents doGetByContents(Long contentId, OAuth2UserPrincipal principal);
 
 	@Mapping(target = "userId", source = "principal.id")
 	BookmarkCommand.Create doCreate(Long contentId, BookmarkRequestDto.CreateReq request,
@@ -35,7 +35,9 @@ public interface BookmarkDtoMapper {
 	BookmarkCommand.Delete doDelete(Long bookmarkId, OAuth2UserPrincipal principal);
 
 	@Mapping(target = "userId", source = "principal.id")
-	BookmarkCommand.Update doUpdate(BookmarkRequestDto.UpdateReq request, OAuth2UserPrincipal principal);
+	BookmarkCommand.Update doUpdate(
+		Long contentId, BookmarkRequestDto.UpdateReq request, OAuth2UserPrincipal principal
+	);
 
 	// Response <-> Info
 	BookmarkResponseDto.ContentListRes doContentListRes(BookmarkInfo.PositionInfo positionInfos);
