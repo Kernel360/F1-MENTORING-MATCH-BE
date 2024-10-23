@@ -82,6 +82,7 @@ public class TokenProvider {
 			.getBody();
 	}
 
+	// 서비스를 사용할 수 있는 사용자인지 검증
 	private void validateUserStatus(UserEntity user) {
 		if (user.getUserStatus().equals(UserStatus.USER_STATUS_DEACTIVATED)) {
 			throw new CommonException(USER_FAIL_DEACTIVATE);

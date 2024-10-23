@@ -6,6 +6,7 @@ import java.time.LocalDate;
 
 public class UserCommand {
 
+    // 본인 정보 수정
     public record UpdateMyInfo(
         String username,
         String nickname,

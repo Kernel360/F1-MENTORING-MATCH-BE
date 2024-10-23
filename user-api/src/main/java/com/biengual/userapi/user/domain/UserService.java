@@ -5,6 +5,11 @@ import com.biengual.userapi.user.presentation.UserResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+/*
+ * User 도메인의 Service 계층의 인터페이스
+ *
+ * @author 김영래
+ */
 public interface UserService {
     void updateMyInfo(UserCommand.UpdateMyInfo command);
 

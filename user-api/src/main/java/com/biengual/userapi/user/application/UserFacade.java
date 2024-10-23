@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 public class UserFacade {
     private final UserService userService;
 
+    // 본인 정보 수정
     public void updateMyInfo(UserCommand.UpdateMyInfo command) {
         userService.updateMyInfo(command);
     }

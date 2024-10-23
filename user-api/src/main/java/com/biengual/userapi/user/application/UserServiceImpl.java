@@ -26,6 +26,7 @@ public class UserServiceImpl implements UserService {
 	private final RefreshTokenRepository refreshTokenRepository;
 	private final UserStore userStore;
 
+	// 본인 정보 수정
 	@Override
 	@Transactional
 	public void updateMyInfo(UserCommand.UpdateMyInfo command) {

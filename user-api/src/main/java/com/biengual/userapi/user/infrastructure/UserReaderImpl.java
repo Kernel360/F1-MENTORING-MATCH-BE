@@ -14,6 +14,7 @@ import static com.biengual.userapi.message.error.code.UserErrorCode.USER_NOT_FOU
 public class UserReaderImpl implements UserReader {
     private final UserRepository userRepository;
 
+    // userId와 email로 UserEntity 조회
     @Override
     public UserEntity findUser(Long userId, String email) {
         return userRepository.findByIdAndEmail(userId, email)

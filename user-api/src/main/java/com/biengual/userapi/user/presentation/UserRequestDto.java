@@ -6,6 +6,7 @@ import com.biengual.userapi.user.domain.enums.Gender;
 
 public class UserRequestDto {
 
+	// 본인 정보 수정
 	public record UpdateMyInfoReq(
 		String username,
 		String nickname,
