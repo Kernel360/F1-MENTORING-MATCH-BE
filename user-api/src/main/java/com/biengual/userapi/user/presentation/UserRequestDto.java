@@ -1,6 +1,7 @@
 package com.biengual.userapi.user.presentation;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import com.biengual.userapi.user.domain.enums.Gender;
 
@@ -12,7 +13,8 @@ public class UserRequestDto {
 		String nickname,
 		String phoneNumber,
 		LocalDate birth,
-		Gender gender
+		Gender gender,
+		List<Long> categories
 	) {
 
 	}

@@ -21,6 +21,7 @@ public interface UserDtoMapper {
 
     // 본인 정보 수정 Command 매핑
     @Mapping(target = "username", source = "request.username")
+    @Mapping(target = "categoryIds", source = "request.categories")
     @Mapping(target = "userId", source = "principal.id")
     @Mapping(target = "email", source = "principal.email")
     UserCommand.UpdateMyInfo of(UserRequestDto.UpdateMyInfoReq request, OAuth2UserPrincipal principal);
