@@ -57,8 +57,8 @@ public class BookmarkServiceImpl implements BookmarkService {
 
 	@Override
 	@Transactional
-	public void deleteBookmark(Long userId, Long bookmarkId) {
-		bookmarkStore.deleteBookmark(userId, bookmarkId);
+	public void deleteBookmark(BookmarkCommand.Delete command) {
+		bookmarkStore.deleteBookmark(command);
 	}
 
 }

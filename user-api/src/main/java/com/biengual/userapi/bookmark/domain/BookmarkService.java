@@ -9,5 +9,5 @@ public interface BookmarkService {
 
 	void createBookmark(BookmarkCommand.Create command);
 
-	void deleteBookmark(Long userId, Long bookmarkId);
+	void deleteBookmark(BookmarkCommand.Delete command);
 }

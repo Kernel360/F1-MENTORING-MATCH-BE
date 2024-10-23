@@ -29,6 +29,6 @@ public class BookmarkFacade {
 	}
 
 	public void deleteBookmark(BookmarkCommand.Delete command) {
-		bookmarkService.deleteBookmark(command.userId(), command.bookmarkId());
+		bookmarkService.deleteBookmark(command);
 	}
 }

@@ -34,8 +34,8 @@ public class BookmarkStoreImpl implements BookmarkStore {
 	private final ContentScriptRepository contentScriptRepository;
 
 	@Override
-	public void deleteBookmark(Long userId, Long bookmarkId) {
-		bookmarkRepository.deleteBookmark(userId, bookmarkId);
+	public void deleteBookmark(BookmarkCommand.Delete command) {
+		bookmarkRepository.deleteBookmark(command.userId(), command.bookmarkId());
 	}
 
 	@Override
