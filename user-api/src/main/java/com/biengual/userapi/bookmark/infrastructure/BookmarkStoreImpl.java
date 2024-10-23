@@ -5,8 +5,7 @@ import static com.biengual.userapi.message.error.code.UserErrorCode.*;
 
 import java.util.Objects;
 
-import org.springframework.stereotype.Component;
-
+import com.biengual.userapi.annotation.DataProvider;
 import com.biengual.userapi.bookmark.domain.BookmarkCommand;
 import com.biengual.userapi.bookmark.domain.BookmarkEntity;
 import com.biengual.userapi.bookmark.domain.BookmarkInfo;
@@ -18,7 +17,7 @@ import com.biengual.userapi.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
-@Component
+@DataProvider
 @RequiredArgsConstructor
 public class BookmarkStoreImpl implements BookmarkStore {
 	private final BookmarkRepository bookmarkRepository;

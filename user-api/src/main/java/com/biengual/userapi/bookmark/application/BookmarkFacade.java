@@ -1,14 +1,13 @@
 package com.biengual.userapi.bookmark.application;
 
-import org.springframework.stereotype.Component;
-
+import com.biengual.userapi.annotation.Facade;
 import com.biengual.userapi.bookmark.domain.BookmarkCommand;
 import com.biengual.userapi.bookmark.domain.BookmarkInfo;
 import com.biengual.userapi.bookmark.domain.BookmarkService;
 
 import lombok.RequiredArgsConstructor;
 
-@Component
+@Facade
 @RequiredArgsConstructor
 public class BookmarkFacade {
 	private final BookmarkService bookmarkService;
@@ -21,7 +20,7 @@ public class BookmarkFacade {
 		return bookmarkService.getAllBookmarks(userId);
 	}
 
-	public BookmarkInfo.Create createBookmark(BookmarkCommand.Create command){
+	public BookmarkInfo.Create createBookmark(BookmarkCommand.Create command) {
 		return bookmarkService.createBookmark(command);
 	}
 
