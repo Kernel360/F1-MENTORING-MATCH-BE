@@ -6,6 +6,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.biengual.userapi.user.domain.UserEntity;
 
+/**
+ * UserEntity의 Repository 계층의 인터페이스
+ *
+ * @author 김영래
+ */
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
 	Optional<UserEntity> findByEmail(String email);
