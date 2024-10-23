@@ -12,6 +12,7 @@ public class UserCommand {
         String phoneNumber,
         LocalDate birth,
         Gender gender,
+        Long userId,
         String email
     ) {
     }
