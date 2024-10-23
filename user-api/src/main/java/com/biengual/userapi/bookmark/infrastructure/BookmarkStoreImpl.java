@@ -14,6 +14,7 @@ import com.biengual.userapi.bookmark.domain.BookmarkEntity;
 import com.biengual.userapi.bookmark.domain.BookmarkInfo;
 import com.biengual.userapi.bookmark.domain.BookmarkRepository;
 import com.biengual.userapi.bookmark.domain.BookmarkStore;
+import com.biengual.userapi.bookmark.presentation.BookmarkDtoMapper;
 import com.biengual.userapi.content.domain.entity.ContentDocument;
 import com.biengual.userapi.content.domain.enums.ContentType;
 import com.biengual.userapi.content.repository.ContentRepository;
@@ -32,6 +33,7 @@ public class BookmarkStoreImpl implements BookmarkStore {
 	private final UserRepository userRepository;
 	private final ContentRepository contentRepository;
 	private final ContentScriptRepository contentScriptRepository;
+	private final BookmarkDtoMapper bookmarkDtoMapper;
 
 	@Override
 	public void deleteBookmark(BookmarkCommand.Delete command) {
@@ -68,7 +70,7 @@ public class BookmarkStoreImpl implements BookmarkStore {
 
 		bookmark.updateDescription(command.description());
 
-		return BookmarkInfo.Position.of(bookmark);
+		return bookmarkDtoMapper.doPosition(bookmark);
 	}
 
 	// Internal Methods ------------------------------------------------------------------------------------------------

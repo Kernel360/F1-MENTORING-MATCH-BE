@@ -17,16 +17,6 @@ public class BookmarkInfo {
 		String description,
 		Double startTimeInSecond
 	) {
-
-		public static Position of(BookmarkEntity bookmark) {
-			return Position.builder()
-				.bookmarkId(bookmark.getId())
-				.sentenceIndex(bookmark.getSentenceIndex())
-				.wordIndex(bookmark.getWordIndex())
-				.description(bookmark.getDescription())
-				.startTimeInSecond(bookmark.getStartTimeInSecond())
-				.build();
-		}
 	}
 
 	@Builder
@@ -51,20 +41,6 @@ public class BookmarkInfo {
 		LocalDateTime createdAt,
 		LocalDateTime updatedAt
 	) {
-		public static BookmarkInfo.MyList of(
-			BookmarkEntity bookmark, ContentType contentType, String title
-		) {
-			return MyList.builder()
-				.bookmarkId(bookmark.getId())
-				.contentType(contentType)
-				.bookmarkDetail(bookmark.getDetail())
-				.description(bookmark.getDescription())
-				.contentId(bookmark.getScriptIndex())
-				.contentTitle(title)
-				.createdAt(bookmark.getCreatedAt())
-				.updatedAt(bookmark.getUpdatedAt())
-				.build();
-		}
 	}
 
 	@Builder

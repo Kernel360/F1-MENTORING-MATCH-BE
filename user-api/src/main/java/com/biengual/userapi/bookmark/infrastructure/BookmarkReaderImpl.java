@@ -9,6 +9,7 @@ import com.biengual.userapi.bookmark.domain.BookmarkEntity;
 import com.biengual.userapi.bookmark.domain.BookmarkInfo;
 import com.biengual.userapi.bookmark.domain.BookmarkReader;
 import com.biengual.userapi.bookmark.domain.BookmarkRepository;
+import com.biengual.userapi.bookmark.presentation.BookmarkDtoMapper;
 import com.biengual.userapi.content.repository.ContentRepository;
 import com.biengual.userapi.user.domain.entity.UserEntity;
 
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class BookmarkReaderImpl implements BookmarkReader {
 	private final BookmarkRepository bookmarkRepository;
 	private final ContentRepository contentRepository;
+	private final BookmarkDtoMapper bookmarkDtoMapper;
 
 	@Override
 	public List<BookmarkInfo.Position> getContentList(UserEntity user, Long contentId) {
@@ -26,7 +28,7 @@ public class BookmarkReaderImpl implements BookmarkReader {
 			.stream()
 			.filter(bookmarkEntity -> bookmarkEntity.getScriptIndex().equals(contentId))
 			.sorted(Comparator.comparing(BookmarkEntity::getUpdatedAt).reversed())
-			.map(BookmarkInfo.Position::of)
+			.map(bookmarkDtoMapper::doPosition)
 			.toList();
 	}
 
@@ -34,7 +36,7 @@ public class BookmarkReaderImpl implements BookmarkReader {
 	public List<BookmarkInfo.MyList> getAllBookmarks(Long userId) {
 		List<BookmarkEntity> bookmarks = bookmarkRepository.getAllBookmarks(userId);
 		return bookmarks.stream()
-			.map(bookmark -> BookmarkInfo.MyList.of(
+			.map(bookmark -> bookmarkDtoMapper.doMyList(
 				bookmark,
 				contentRepository.findContentTypeById(bookmark.getScriptIndex()),
 				contentRepository.findTitleById(bookmark.getScriptIndex())

@@ -53,10 +53,10 @@ public class BookmarkApiController {
 		@ModelAttribute
 		BookmarkRequestDto.ViewReq request
 	) {
-		BookmarkCommand.GetByContents command = bookmarkDtoMapper.of(request, principal);
+		BookmarkCommand.GetByContents command = bookmarkDtoMapper.doGetByContents(request, principal);
 
 		BookmarkResponseDto.ContentListRes contentListRes
-			= bookmarkDtoMapper.of(bookmarkFacade.getBookmarks(command));
+			= bookmarkDtoMapper.doContentListRes(bookmarkFacade.getBookmarks(command));
 
 		return ResponseEntityFactory.toResponseEntity(BOOKMARK_VIEW_SUCCESS, contentListRes);
 	}
@@ -75,7 +75,7 @@ public class BookmarkApiController {
 		OAuth2UserPrincipal principal
 	) {
 		BookmarkResponseDto.MyListRes myListRes
-			= bookmarkDtoMapper.of(bookmarkFacade.getAllBookmarks(principal.getId()));
+			= bookmarkDtoMapper.doMyListRes(bookmarkFacade.getAllBookmarks(principal.getId()));
 
 		return ResponseEntityFactory.toResponseEntity(BOOKMARK_VIEW_SUCCESS, myListRes);
 	}
@@ -98,7 +98,7 @@ public class BookmarkApiController {
 		@ModelAttribute
 		BookmarkRequestDto.CreateReq request
 	) {
-		BookmarkCommand.Create command = bookmarkDtoMapper.of(contentId, request, principal);
+		BookmarkCommand.Create command = bookmarkDtoMapper.doCreate(contentId, request, principal);
 
 		bookmarkFacade.createBookmark(command);
 
@@ -121,9 +121,10 @@ public class BookmarkApiController {
 		@ModelAttribute
 		BookmarkRequestDto.UpdateReq request
 	) {
-		BookmarkCommand.Update command = bookmarkDtoMapper.of(request, principal);
+		BookmarkCommand.Update command = bookmarkDtoMapper.doUpdate(request, principal);
 
-		BookmarkResponseDto.ContentList response = bookmarkDtoMapper.of(bookmarkFacade.updateBookmark(command));
+		BookmarkResponseDto.ContentList response = bookmarkDtoMapper.doContentList(
+			bookmarkFacade.updateBookmark(command));
 
 		return ResponseEntityFactory.toResponseEntity(BOOKMARK_UPDATE_SUCCESS, response);
 	}
@@ -144,7 +145,7 @@ public class BookmarkApiController {
 		@PathVariable
 		Long bookmarkId
 	) {
-		BookmarkCommand.Delete command = bookmarkDtoMapper.of(bookmarkId, principal);
+		BookmarkCommand.Delete command = bookmarkDtoMapper.doDelete(bookmarkId, principal);
 		bookmarkFacade.deleteBookmark(command);
 
 		return ResponseEntityFactory.toResponseEntity(BOOKMARK_DELETE_SUCCESS);
