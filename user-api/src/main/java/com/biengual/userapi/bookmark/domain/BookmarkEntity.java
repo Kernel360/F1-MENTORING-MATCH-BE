@@ -1,6 +1,5 @@
-package com.biengual.userapi.bookmark.domain.entity;
+package com.biengual.userapi.bookmark.domain;
 
-import com.biengual.userapi.bookmark.domain.dto.BookmarkRequestDto;
 import com.biengual.userapi.user.domain.entity.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -58,7 +57,7 @@ public class BookmarkEntity extends BaseEntity {
 		this.startTimeInSecond = startTimeInSecond;
 	}
 
-	public void updateDescription(BookmarkRequestDto.BookmarkUpdateRequest bookmarkRequestDto) {
-		this.description = bookmarkRequestDto.description();
+	public void updateDescription(String description) {
+		this.description = description;
 	}
 }

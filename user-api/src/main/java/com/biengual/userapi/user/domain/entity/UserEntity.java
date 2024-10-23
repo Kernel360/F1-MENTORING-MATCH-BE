@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.hibernate.annotations.DynamicUpdate;
 
-import com.biengual.userapi.bookmark.domain.entity.BookmarkEntity;
+import com.biengual.userapi.bookmark.domain.BookmarkEntity;
 import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
 import com.biengual.userapi.scrap.domain.entity.ScrapEntity;
 import com.biengual.userapi.user.domain.dto.UserRequestDto;

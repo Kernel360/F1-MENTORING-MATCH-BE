@@ -11,7 +11,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
-import com.biengual.userapi.content.repository.custom.ContentRepositoryCustom;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
