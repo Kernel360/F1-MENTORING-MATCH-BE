@@ -7,7 +7,8 @@ import com.biengual.userapi.swagger.SwaggerVoidReturn;
 import com.biengual.userapi.swagger.user.SwaggerUserMyPage;
 import com.biengual.userapi.swagger.user.SwaggerUserMyTime;
 import com.biengual.userapi.swagger.user.SwaggerUserUpdate;
-import com.biengual.userapi.user.application.UserService;
+import com.biengual.userapi.user.application.UserFacade;
+import com.biengual.userapi.user.domain.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -31,6 +32,7 @@ import static com.biengual.userapi.message.response.UserResponseCode.*;
 public class UserPublicController {
 
 	private final UserDtoMapper userDtoMapper;
+	private final UserFacade userFacade;
 	private final UserService userService;
 
 	@GetMapping("/me")
@@ -62,9 +64,9 @@ public class UserPublicController {
 		@RequestBody
 		UserRequestDto.UpdateMyInfo request
 	) {
-		return ResponseEntityFactory.toResponseEntity(
-				USER_UPDATE_INFO, userService.updateUserInfo(userDtoMapper.of(request, principal))
-			);
+		userFacade.updateMyInfo(userDtoMapper.of(request, principal));
+
+		return ResponseEntityFactory.toResponseEntity(USER_UPDATE_INFO);
 	}
 
 	@GetMapping("/time")
@@ -117,23 +119,4 @@ public class UserPublicController {
 		return ResponseEntityFactory
 			.toResponseEntity(USER_STATUS_INFO, userService.getUserStatus(request));
 	}
-
-/*
-	// TODO: 챌린지 추가 하면 주석 해제 및 스웨거 추가, 이후에도 챌린지 추가되지 않으면 USER_GET_CHALLENGE 삭제 필요
-	@GetMapping("/me/challenge")
-	@Operation(summary = "회원 챌린지 조회", description = "유저가 본인의 챌린지를 조회합니다.")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "요청에 성공하였습니다.", content = {
-			@Content(mediaType = "application/json", schema = @Schema(implementation = .class))}
-		),
-		@ApiResponse(responseCode = "404", description = "데이터베이스 연결에 실패하였습니다.", content = @Content(mediaType = "application/json"))
-	})
-	public ResponseEntity<ApiCustomResponse<UserResponseDto.UserChallengeResponse>> userChallenge(
-		Authentication authentication
-	) {
-		return ResponseEntityFactory
-			.toResponseEntity(USER_GET_CHALLENGE, userService.getMyChallenge(authentication.getName()));
-	}
-*/
-
 }
