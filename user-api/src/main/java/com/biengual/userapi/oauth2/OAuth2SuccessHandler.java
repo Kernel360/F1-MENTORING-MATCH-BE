@@ -1,28 +1,26 @@
 package com.biengual.userapi.oauth2;
 
-import java.io.IOException;
-
-import com.biengual.userapi.oauth2.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
-import jakarta.servlet.http.Cookie;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.stereotype.Component;
-
 import com.biengual.userapi.annotation.LoginLogging;
 import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
+import com.biengual.userapi.oauth2.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import com.biengual.userapi.oauth2.service.RefreshTokenService;
+import com.biengual.userapi.user.domain.UserService;
 import com.biengual.userapi.user.domain.entity.UserEntity;
-import com.biengual.userapi.user.application.UserService;
 import com.biengual.userapi.util.CookieUtil;
 import com.biengual.userapi.util.HttpServletResponseUtil;
-
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
+
+import java.io.IOException;
 
 @Slf4j
 @Component
