@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 import static com.biengual.userapi.message.status.UserServiceStatus.USER_LOGIN_SUCCESS;
 
-/*
+/**
  * 로그 남기는 것을 AOP로 관리하기 위한 클래스
  *
  * 현재 이 클래스에서 관리하는 로그

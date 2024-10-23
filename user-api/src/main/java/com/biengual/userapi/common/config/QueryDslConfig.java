@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/*
+/**
 * QueryDsl을 사용하는 Repository에서 JPAQueryFactory를 주입받기 위한 Configuration
 *
 * @author 문찬욱
