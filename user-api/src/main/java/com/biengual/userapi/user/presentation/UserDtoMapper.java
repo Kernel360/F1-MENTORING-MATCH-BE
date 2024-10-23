@@ -23,5 +23,5 @@ public interface UserDtoMapper {
     @Mapping(target = "username", source = "request.username")
     @Mapping(target = "userId", source = "principal.id")
     @Mapping(target = "email", source = "principal.email")
-    UserCommand.UpdateMyInfo of(UserRequestDto.UpdateMyInfo request, OAuth2UserPrincipal principal);
+    UserCommand.UpdateMyInfo of(UserRequestDto.UpdateMyInfoReq request, OAuth2UserPrincipal principal);
 }

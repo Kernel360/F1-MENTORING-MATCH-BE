@@ -62,7 +62,7 @@ public class UserPublicController {
 		@AuthenticationPrincipal
 		OAuth2UserPrincipal principal,
 		@RequestBody
-		UserRequestDto.UpdateMyInfo request
+		UserRequestDto.UpdateMyInfoReq request
 	) {
 		userFacade.updateMyInfo(userDtoMapper.of(request, principal));
 
