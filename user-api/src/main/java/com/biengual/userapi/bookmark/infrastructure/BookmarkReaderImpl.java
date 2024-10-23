@@ -28,7 +28,7 @@ public class BookmarkReaderImpl implements BookmarkReader {
 			.stream()
 			.filter(bookmarkEntity -> bookmarkEntity.getScriptIndex().equals(contentId))
 			.sorted(Comparator.comparing(BookmarkEntity::getUpdatedAt).reversed())
-			.map(bookmarkDtoMapper::doPosition)
+			.map(bookmarkDtoMapper::buildPosition)
 			.toList();
 	}
 
@@ -36,7 +36,7 @@ public class BookmarkReaderImpl implements BookmarkReader {
 	public List<BookmarkInfo.MyList> getAllBookmarks(Long userId) {
 		List<BookmarkEntity> bookmarks = bookmarkRepository.getAllBookmarks(userId);
 		return bookmarks.stream()
-			.map(bookmark -> bookmarkDtoMapper.doMyList(
+			.map(bookmark -> bookmarkDtoMapper.buildMyList(
 				bookmark,
 				contentRepository.findContentTypeById(bookmark.getScriptIndex()),
 				contentRepository.findTitleById(bookmark.getScriptIndex())

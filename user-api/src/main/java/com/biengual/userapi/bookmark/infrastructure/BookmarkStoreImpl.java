@@ -70,7 +70,7 @@ public class BookmarkStoreImpl implements BookmarkStore {
 
 		bookmark.updateDescription(command.description());
 
-		return bookmarkDtoMapper.doPosition(bookmark);
+		return bookmarkDtoMapper.buildPosition(bookmark);
 	}
 
 	// Internal Methods ------------------------------------------------------------------------------------------------

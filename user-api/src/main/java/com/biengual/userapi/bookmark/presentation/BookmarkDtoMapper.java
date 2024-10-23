@@ -12,6 +12,10 @@ import com.biengual.userapi.content.domain.enums.ContentType;
 import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
 
 /**
+ * do~ : Command <- Request
+ * of~ : Response <- Info
+ * build~ :  Entity <-> Info, Info <-> Info
+ *
  * BookmarkDto 와 Info 간의 Mapper
  *
  * @author 김영래
@@ -23,7 +27,7 @@ import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
 )
 public interface BookmarkDtoMapper {
 
-	// Request <-> Info
+	// Command <- Request
 	@Mapping(target = "userId", source = "principal.id")
 	BookmarkCommand.GetByContents doGetByContents(Long contentId, OAuth2UserPrincipal principal);
 
@@ -39,21 +43,21 @@ public interface BookmarkDtoMapper {
 		Long contentId, BookmarkRequestDto.UpdateReq request, OAuth2UserPrincipal principal
 	);
 
-	// Response <-> Info
-	BookmarkResponseDto.ContentListRes doContentListRes(BookmarkInfo.PositionInfo positionInfos);
+	// Response <- Info
+	BookmarkResponseDto.ContentListRes ofContentListRes(BookmarkInfo.PositionInfo positionInfos);
 
-	BookmarkResponseDto.MyListRes doMyListRes(BookmarkInfo.MyListInfo myList);
+	BookmarkResponseDto.MyListRes ofMyListRes(BookmarkInfo.MyListInfo myList);
 
-	BookmarkResponseDto.ContentList doContentList(BookmarkInfo.Position position);
+	BookmarkResponseDto.ContentList ofContentList(BookmarkInfo.Position position);
 
-	// Entity <-> Info
+	// Entity <-> Info, Info <-> Info
 	@Mapping(target = "bookmarkId", source = "id")
-	BookmarkInfo.Position doPosition(BookmarkEntity bookmark);
+	BookmarkInfo.Position buildPosition(BookmarkEntity bookmark);
 
 	@Mapping(target = "bookmarkId", source = "bookmark.id")
 	@Mapping(target = "bookmarkDetail", source = "bookmark.detail")
 	@Mapping(target = "contentId", source = "bookmark.scriptIndex")
 	@Mapping(target = "contentTitle", source = "title")
-	BookmarkInfo.MyList doMyList(BookmarkEntity bookmark, ContentType contentType, String title);
+	BookmarkInfo.MyList buildMyList(BookmarkEntity bookmark, ContentType contentType, String title);
 
 }

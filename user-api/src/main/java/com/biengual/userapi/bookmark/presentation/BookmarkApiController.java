@@ -56,7 +56,7 @@ public class BookmarkApiController {
 		BookmarkCommand.GetByContents command = bookmarkDtoMapper.doGetByContents(contentId, principal);
 
 		BookmarkResponseDto.ContentListRes contentListRes
-			= bookmarkDtoMapper.doContentListRes(bookmarkFacade.getBookmarks(command));
+			= bookmarkDtoMapper.ofContentListRes(bookmarkFacade.getBookmarks(command));
 
 		return ResponseEntityFactory.toResponseEntity(BOOKMARK_VIEW_SUCCESS, contentListRes);
 	}
@@ -75,7 +75,7 @@ public class BookmarkApiController {
 		OAuth2UserPrincipal principal
 	) {
 		BookmarkResponseDto.MyListRes myListRes
-			= bookmarkDtoMapper.doMyListRes(bookmarkFacade.getAllBookmarks(principal.getId()));
+			= bookmarkDtoMapper.ofMyListRes(bookmarkFacade.getAllBookmarks(principal.getId()));
 
 		return ResponseEntityFactory.toResponseEntity(BOOKMARK_VIEW_SUCCESS, myListRes);
 	}
@@ -125,7 +125,7 @@ public class BookmarkApiController {
 	) {
 		BookmarkCommand.Update command = bookmarkDtoMapper.doUpdate(contentId, request, principal);
 
-		BookmarkResponseDto.ContentList response = bookmarkDtoMapper.doContentList(
+		BookmarkResponseDto.ContentList response = bookmarkDtoMapper.ofContentList(
 			bookmarkFacade.updateBookmark(command));
 
 		return ResponseEntityFactory.toResponseEntity(BOOKMARK_UPDATE_SUCCESS, response);
