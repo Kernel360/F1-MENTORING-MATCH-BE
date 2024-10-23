@@ -23,13 +23,9 @@ public interface BookmarkDtoMapper {
 
 	// Request <-> Info
 	@Mapping(target = "userId", source = "principal.id")
-	@Mapping(target = "contentId", source = "request.contentId")
 	BookmarkCommand.GetByContents of(BookmarkRequestDto.ViewReq request, OAuth2UserPrincipal principal);
 
 	@Mapping(target = "userId", source = "principal.id")
-	@Mapping(target = "sentenceIndex", source = "request.sentenceIndex")
-	@Mapping(target = "wordIndex", source = "request.wordIndex")
-	@Mapping(target = "description", source = "request.description")
 	BookmarkCommand.Create of(Long contentId, BookmarkRequestDto.CreateReq request, OAuth2UserPrincipal principal);
 
 	@Mapping(target = "userId", source = "principal.id")
