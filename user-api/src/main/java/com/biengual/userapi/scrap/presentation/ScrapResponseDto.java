@@ -9,7 +9,7 @@ import lombok.Builder;
 
 public class ScrapResponseDto {
 
-	public record ViewRes(
+	public record View(
 		Long scrapId,
 		Long contentId,
 		String title,
@@ -22,7 +22,7 @@ public class ScrapResponseDto {
 
 	@Builder
 	public record ViewListRes(
-		List<ViewRes> scrapList
+		List<View> scrapList
 	) {
 	}
 

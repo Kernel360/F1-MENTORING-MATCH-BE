@@ -21,8 +21,7 @@ public class ScrapReaderImpl implements ScrapReader {
 	@Override
 	public List<ScrapInfo.View> findAllByUserId(Long userId) {
 		List<ScrapEntity> scraps = scrapRepository.findAllByUserId(userId);
-		return scraps
-			.stream()
+		return scraps.stream()
 			.map(scrapDtoMapper::buildView)
 			.toList();
 	}

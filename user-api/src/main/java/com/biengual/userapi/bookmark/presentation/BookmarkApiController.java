@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.biengual.userapi.bookmark.application.BookmarkFacade;
 import com.biengual.userapi.bookmark.domain.BookmarkCommand;
+import com.biengual.userapi.bookmark.domain.BookmarkInfo;
 import com.biengual.userapi.message.ResponseEntityFactory;
 import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
 import com.biengual.userapi.swagger.SwaggerVoidReturn;
@@ -73,8 +74,9 @@ public class BookmarkApiController {
 		@AuthenticationPrincipal
 		OAuth2UserPrincipal principal
 	) {
+		BookmarkInfo.MyListInfo info = bookmarkFacade.getAllBookmarks(principal.getId());
 		BookmarkResponseDto.MyListRes response
-			= bookmarkDtoMapper.ofMyListRes(bookmarkFacade.getAllBookmarks(principal.getId()));
+			= bookmarkDtoMapper.ofMyListRes(info);
 
 		return ResponseEntityFactory.toResponseEntity(BOOKMARK_VIEW_SUCCESS, response);
 	}

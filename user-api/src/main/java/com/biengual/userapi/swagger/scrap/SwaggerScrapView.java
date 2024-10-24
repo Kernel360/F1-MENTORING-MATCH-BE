@@ -7,5 +7,5 @@ import com.biengual.userapi.scrap.presentation.ScrapResponseDto;
 import com.biengual.userapi.swagger.SwaggerReturnInterface;
 
 public class SwaggerScrapView
-extends SwaggerReturnInterface<Map<String, List<ScrapResponseDto.ViewRes>>> {
+extends SwaggerReturnInterface<Map<String, List<ScrapResponseDto.View>>> {
 }
