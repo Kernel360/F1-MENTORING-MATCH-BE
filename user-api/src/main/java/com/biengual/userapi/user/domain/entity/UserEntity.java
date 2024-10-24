@@ -8,7 +8,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import com.biengual.userapi.bookmark.domain.BookmarkEntity;
 import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
-import com.biengual.userapi.scrap.domain.entity.ScrapEntity;
+import com.biengual.userapi.scrap.domain.ScrapEntity;
 import com.biengual.userapi.user.domain.dto.UserRequestDto;
 import com.biengual.userapi.user.domain.enums.Gender;
 import com.biengual.userapi.user.domain.enums.Role;

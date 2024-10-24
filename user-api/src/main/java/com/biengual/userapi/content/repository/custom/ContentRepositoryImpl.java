@@ -2,7 +2,7 @@ package com.biengual.userapi.content.repository.custom;
 
 import static com.biengual.userapi.content.domain.entity.QContentEntity.*;
 import static com.biengual.userapi.message.error.code.ContentErrorCode.*;
-import static com.biengual.userapi.scrap.domain.entity.QScrapEntity.*;
+import static com.biengual.userapi.scrap.domain.QScrapEntity.*;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

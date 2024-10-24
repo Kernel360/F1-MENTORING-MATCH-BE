@@ -1,8 +1,6 @@
-package com.biengual.userapi.scrap.repository.custom;
+package com.biengual.userapi.scrap.domain;
 
 import java.util.List;
-
-import com.biengual.userapi.scrap.domain.entity.ScrapEntity;
 
 public interface ScrapRepositoryCustom {
 	List<ScrapEntity> findAllByUserId(Long userId);
