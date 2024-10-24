@@ -10,7 +10,9 @@ import org.mapstruct.ReportingPolicy;
 /**
  * 객체 간의 Mapper
  *
- * 접두사로 어떤 객체 간의 매핑인지 구분
+ * 메서드 네이밍은 prefix + target (inner)class name
+ *
+ * prefix로 어떤 객체 간의 매핑인지 구분
  * do~ : Command <- Request
  * of~ : Response <- Info
  * build~ :  Entity <-> Info, Info <-> Info
