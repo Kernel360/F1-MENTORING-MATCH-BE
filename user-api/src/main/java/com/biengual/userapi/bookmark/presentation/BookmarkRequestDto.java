@@ -7,7 +7,6 @@ public class BookmarkRequestDto {
 	public record CreateReq(
 		@NotNull
 		Long sentenceIndex,
-		Long wordIndex,
 		String description
 	) {
 	}
@@ -18,5 +17,4 @@ public class BookmarkRequestDto {
 		String description
 	) {
 	}
-
 }

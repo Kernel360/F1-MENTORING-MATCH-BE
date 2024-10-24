@@ -32,9 +32,6 @@ public class BookmarkEntity extends BaseEntity {
 	@Column(columnDefinition = "bigint")
 	private Long sentenceIndex;
 
-	@Column(columnDefinition = "bigint")
-	private Long wordIndex;
-
 	@Column(columnDefinition = "varchar(512)")
 	private String detail;
 
@@ -46,12 +43,11 @@ public class BookmarkEntity extends BaseEntity {
 
 	@Builder
 	public BookmarkEntity(
-		@NotNull Long scriptIndex, Long sentenceIndex, Long wordIndex,
+		@NotNull Long scriptIndex, Long sentenceIndex,
 		String detail, String description, Double startTimeInSecond
 	) {
 		this.scriptIndex = scriptIndex;
 		this.sentenceIndex = sentenceIndex;
-		this.wordIndex = wordIndex;
 		this.detail = detail;
 		this.description = description;
 		this.startTimeInSecond = startTimeInSecond;
