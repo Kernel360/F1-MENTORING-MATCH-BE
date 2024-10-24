@@ -1,16 +1,5 @@
 package com.biengual.userapi.content.controller;
 
-import static com.biengual.userapi.message.response.ContentResponseCode.*;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.biengual.userapi.content.domain.dto.ContentRequestDto;
 import com.biengual.userapi.content.domain.dto.ContentResponseDto;
 import com.biengual.userapi.content.service.ContentService;
@@ -18,7 +7,6 @@ import com.biengual.userapi.message.ApiCustomResponse;
 import com.biengual.userapi.message.ResponseEntityFactory;
 import com.biengual.userapi.swagger.content.SwaggerContentCreate;
 import com.biengual.userapi.swagger.content.SwaggerContentUpdate;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -26,6 +14,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
+
+import static com.biengual.userapi.message.response.ContentResponseCode.*;
 
 /**
  * admin, 회원 전용 컨텐츠 controller
@@ -52,7 +45,7 @@ public class ContentApiController {
 		@ApiResponse(responseCode = "403", description = "접근 권한이 없습니다.", content = @Content(mediaType = "application/json")),
 		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content(mediaType = "application/json"))
 	})
-	public ResponseEntity<ApiCustomResponse<ContentResponseDto.ContentCreateResponseDto>> createContent(
+	public ResponseEntity<Object> createContent(
 		Authentication authentication,
 		@RequestBody ContentRequestDto.ContentCreateRequestDto contentRequest
 	) throws Exception {
@@ -65,7 +58,7 @@ public class ContentApiController {
 	/**
 	 * 컨텐츠 수정
 	 */
-	@PatchMapping("/modify/{id}")
+	@PutMapping("/modify/{id}")
 	@Operation(summary = "어드민 - 컨텐츠 수정", description = "어드민 회원이 컨텐츠를 수정합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "컨텐츠가 성공적으로 수정되었습니다.",
@@ -78,7 +71,7 @@ public class ContentApiController {
 		@ApiResponse(responseCode = "404", description = "컨텐츠를 찾을 수 없습니다.", content = @Content(mediaType = "application/json")),
 		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content(mediaType = "application/json"))
 	})
-	public ResponseEntity<ApiCustomResponse<ContentResponseDto.ContentUpdateResponseDto>> modifyContent(
+	public ResponseEntity<Object> modifyContent(
 		@PathVariable Long id,
 		@RequestBody ContentRequestDto.ContentUpdateRequestDto contentUpdateRequest
 	) {
@@ -91,7 +84,7 @@ public class ContentApiController {
 	/**
 	 * 컨텐츠 비활성화
 	 */
-	@PatchMapping("/deactivate/{id}")
+	@PutMapping("/deactivate/{id}")
 	@Operation(summary = "어드민 - 컨텐츠 비활성화", description = "어드민 회원이 컨텐츠를 비활성화합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "컨텐츠가 성공적으로 비활성화되었습니다.",
@@ -101,7 +94,7 @@ public class ContentApiController {
 		@ApiResponse(responseCode = "404", description = "컨텐츠를 찾을 수 없습니다.", content = @Content(mediaType = "application/json")),
 		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content(mediaType = "application/json"))
 	})
-	public ResponseEntity<ApiCustomResponse<ContentResponseDto.ContentUpdateResponseDto>> deactivateContent(
+	public ResponseEntity<Object> deactivateContent(
 		@PathVariable Long id) {
 		ContentResponseDto.ContentUpdateResponseDto contentDeleteResponseDto = contentService.deactivateContent(id);
 

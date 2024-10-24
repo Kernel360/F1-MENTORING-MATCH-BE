@@ -1,15 +1,16 @@
 package com.biengual.userapi.scrap.repository.custom;
 
-import com.biengual.userapi.message.error.exception.CommonException;
-import com.biengual.userapi.scrap.domain.entity.ScrapEntity;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import static com.biengual.userapi.message.error.code.ScrapErrorCode.*;
+import static com.biengual.userapi.scrap.domain.entity.QScrapEntity.*;
+import static com.biengual.userapi.user.domain.entity.QUserEntity.*;
 
 import java.util.List;
 import java.util.Optional;
 
-import static com.biengual.userapi.message.error.code.ScrapErrorCode.SCRAP_NOT_FOUND;
-import static com.biengual.userapi.scrap.domain.entity.QScrapEntity.scrapEntity;
-import static com.biengual.userapi.user.domain.entity.QUserEntity.userEntity;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+
+import com.biengual.userapi.message.error.exception.CommonException;
+import com.biengual.userapi.scrap.domain.entity.ScrapEntity;
 
 public class ScrapRepositoryImpl extends QuerydslRepositorySupport implements ScrapRepositoryCustom {
 	public ScrapRepositoryImpl() {
@@ -26,7 +27,6 @@ public class ScrapRepositoryImpl extends QuerydslRepositorySupport implements Sc
 			.fetch();
 	}
 
-	
 	@Override
 	public void deleteScrap(Long userId, Long contentId) {
 		Optional.ofNullable(from(userEntity)

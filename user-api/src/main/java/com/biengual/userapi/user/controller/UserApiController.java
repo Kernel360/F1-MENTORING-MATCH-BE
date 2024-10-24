@@ -1,19 +1,5 @@
 package com.biengual.userapi.user.controller;
 
-import static com.biengual.userapi.message.response.UserResponseCode.*;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.biengual.userapi.message.ApiCustomResponse;
 import com.biengual.userapi.message.ResponseEntityFactory;
 import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
@@ -25,7 +11,6 @@ import com.biengual.userapi.swagger.user.SwaggerUserUpdate;
 import com.biengual.userapi.user.domain.dto.UserRequestDto;
 import com.biengual.userapi.user.domain.dto.UserResponseDto;
 import com.biengual.userapi.user.service.UserService;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -35,6 +20,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+
+import static com.biengual.userapi.message.response.UserResponseCode.*;
 
 @RestController
 @RequestMapping("/api/user")
@@ -54,7 +45,7 @@ public class UserApiController {
 		@ApiResponse(responseCode = "202", description = "이미 가입된 계정입니다.", content = @Content(mediaType = "application/json")),
 		@ApiResponse(responseCode = "404", description = "데이터베이스 연결에 실패하였습니다.", content = @Content(mediaType = "application/json")),
 	})
-	public ResponseEntity<ApiCustomResponse<UserResponseDto.UserUpdateResponse>> setNewUserInfo(
+	public ResponseEntity<Object> setNewUserInfo(
 		@RequestBody UserRequestDto.UserUpdateRequest userUpdateRequest,
 		Authentication authentication
 	) {
@@ -71,14 +62,14 @@ public class UserApiController {
 		),
 		@ApiResponse(responseCode = "404", description = "데이터베이스 연결에 실패하였습니다.", content = @Content(mediaType = "application/json"))
 	})
-	public ResponseEntity<ApiCustomResponse<UserResponseDto.UserMyPageResponse>> getMyPage(
+	public ResponseEntity<Object> getMyPage(
 		Authentication authentication) {
 
 		return ResponseEntityFactory
 			.toResponseEntity(USER_GET_INFO, userService.getMyPage(authentication.getName()));
 	}
 
-	@PatchMapping("/me")
+	@PutMapping("/me")
 	@Operation(summary = "회원 정보 수정", description = "유저가 본인의 정보를 수정합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "요청에 성공하였습니다.", content = {
@@ -86,7 +77,7 @@ public class UserApiController {
 		),
 		@ApiResponse(responseCode = "404", description = "데이터베이스 연결에 실패하였습니다.", content = @Content(mediaType = "application/json"))
 	})
-	public ResponseEntity<ApiCustomResponse<UserResponseDto.UserUpdateResponse>> updateExistedUserInfo(
+	public ResponseEntity<Object> updateExistedUserInfo(
 		@RequestBody UserRequestDto.UserUpdateRequest userUpdateRequest,
 		Authentication authentication
 	) {
@@ -105,7 +96,7 @@ public class UserApiController {
 		),
 		@ApiResponse(responseCode = "404", description = "데이터베이스 연결에 실패하였습니다.", content = @Content(mediaType = "application/json"))
 	})
-	public ResponseEntity<ApiCustomResponse<UserResponseDto.UserMyTimeResponse>> getMySignUpTime(
+	public ResponseEntity<Object> getMySignUpTime(
 		@AuthenticationPrincipal OAuth2UserPrincipal oAuth2UserPrincipal) {
 
 		return ResponseEntityFactory
@@ -120,7 +111,7 @@ public class UserApiController {
 		}),
 		@ApiResponse(responseCode = "404", description = "데이터베이스 연결에 실패하였습니다.", content = @Content(mediaType = "application/json"))
 	})
-	public ResponseEntity<ApiCustomResponse<Void>> logout(
+	public ResponseEntity<Object> logout(
 		HttpServletRequest request,
 		HttpServletResponse response,
 		@AuthenticationPrincipal OAuth2UserPrincipal oAuth2UserPrincipal
@@ -138,7 +129,7 @@ public class UserApiController {
 		),
 		@ApiResponse(responseCode = "404", description = "데이터베이스 연결에 실패하였습니다.", content = @Content(mediaType = "application/json"))
 	})
-	public ResponseEntity<ApiCustomResponse<Boolean>> getUserStatus(
+	public ResponseEntity<Object> getUserStatus(
 		HttpServletRequest request
 	) {
 

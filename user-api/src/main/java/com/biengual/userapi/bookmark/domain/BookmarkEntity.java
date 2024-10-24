@@ -1,6 +1,5 @@
-package com.biengual.userapi.bookmark.domain.entity;
+package com.biengual.userapi.bookmark.domain;
 
-import com.biengual.userapi.bookmark.domain.dto.BookmarkRequestDto;
 import com.biengual.userapi.user.domain.entity.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -33,9 +32,6 @@ public class BookmarkEntity extends BaseEntity {
 	@Column(columnDefinition = "bigint")
 	private Long sentenceIndex;
 
-	@Column(columnDefinition = "bigint")
-	private Long wordIndex;
-
 	@Column(columnDefinition = "varchar(512)")
 	private String detail;
 
@@ -47,18 +43,17 @@ public class BookmarkEntity extends BaseEntity {
 
 	@Builder
 	public BookmarkEntity(
-		@NotNull Long scriptIndex, Long sentenceIndex, Long wordIndex,
+		@NotNull Long scriptIndex, Long sentenceIndex,
 		String detail, String description, Double startTimeInSecond
 	) {
 		this.scriptIndex = scriptIndex;
 		this.sentenceIndex = sentenceIndex;
-		this.wordIndex = wordIndex;
 		this.detail = detail;
 		this.description = description;
 		this.startTimeInSecond = startTimeInSecond;
 	}
 
-	public void updateDescription(BookmarkRequestDto.BookmarkUpdateRequest bookmarkRequestDto) {
-		this.description = bookmarkRequestDto.description();
+	public void updateDescription(String description) {
+		this.description = description;
 	}
 }
