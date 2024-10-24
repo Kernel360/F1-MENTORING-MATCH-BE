@@ -1,36 +1,23 @@
-package com.biengual.userapi.user.domain.entity;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.hibernate.annotations.DynamicUpdate;
+package com.biengual.userapi.user.domain;
 
 import com.biengual.userapi.bookmark.domain.BookmarkEntity;
+import com.biengual.userapi.common.entity.BaseEntity;
 import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
 import com.biengual.userapi.scrap.domain.ScrapEntity;
-import com.biengual.userapi.user.domain.dto.UserRequestDto;
 import com.biengual.userapi.user.domain.enums.Gender;
 import com.biengual.userapi.user.domain.enums.Role;
 import com.biengual.userapi.user.domain.enums.UserStatus;
 import com.biengual.userapi.util.RandomNicknameGenerator;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.ConstraintMode;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Entity
@@ -115,20 +102,13 @@ public class UserEntity extends BaseEntity {
 			.build();
 	}
 
-	public void setUserInitialInfo(UserRequestDto.UserUpdateRequest userUpdateRequest) {
-		this.username = userUpdateRequest.username();
-		this.nickname = userUpdateRequest.nickname();
-		this.phoneNumber = userUpdateRequest.phoneNumber();
-		this.birth = userUpdateRequest.birth();
-		this.gender = userUpdateRequest.gender();
-		this.userStatus = UserStatus.USER_STATUS_ACTIVATE;
-	}
-
-	public void updateUserInfo(UserRequestDto.UserUpdateRequest userUpdateRequest) {
-		this.username = userUpdateRequest.username() == null ? this.username : userUpdateRequest.username();
-		this.nickname = userUpdateRequest.nickname() == null ? this.nickname : userUpdateRequest.nickname();
-		this.phoneNumber = userUpdateRequest.phoneNumber() == null ? this.phoneNumber : userUpdateRequest.phoneNumber();
-		this.birth = userUpdateRequest.birth() == null ? this.birth : userUpdateRequest.birth();
+	// 본인 정보 수정
+	public void updateMyInfo(UserCommand.UpdateMyInfo command) {
+		this.username = command.username() == null ? this.username : command.username();
+		this.nickname = command.nickname() == null ? this.nickname : command.nickname();
+		this.phoneNumber = command.phoneNumber() == null ? this.phoneNumber : command.phoneNumber();
+		this.birth = command.birth() == null ? this.birth : command.birth();
+		this.gender = command.gender() == null ? this.gender : command.gender();
 	}
 
 	public void updateUserBookmark(BookmarkEntity bookmark) {

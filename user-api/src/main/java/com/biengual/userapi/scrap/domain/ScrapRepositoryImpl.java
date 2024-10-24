@@ -1,15 +1,14 @@
 package com.biengual.userapi.scrap.domain;
 
-import static com.biengual.userapi.message.error.code.ScrapErrorCode.*;
-import static com.biengual.userapi.scrap.domain.QScrapEntity.*;
-import static com.biengual.userapi.user.domain.entity.QUserEntity.*;
+import com.biengual.userapi.message.error.exception.CommonException;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
-
-import com.biengual.userapi.message.error.exception.CommonException;
+import static com.biengual.userapi.message.error.code.ScrapErrorCode.SCRAP_NOT_FOUND;
+import static com.biengual.userapi.scrap.domain.QScrapEntity.scrapEntity;
+import static com.biengual.userapi.user.domain.QUserEntity.userEntity;
 
 public class ScrapRepositoryImpl extends QuerydslRepositorySupport implements ScrapRepositoryCustom {
 	public ScrapRepositoryImpl() {

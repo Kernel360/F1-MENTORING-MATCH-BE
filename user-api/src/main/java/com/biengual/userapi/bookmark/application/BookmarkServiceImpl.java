@@ -1,21 +1,15 @@
 package com.biengual.userapi.bookmark.application;
 
-import static com.biengual.userapi.message.error.code.BookmarkErrorCode.*;
-import static com.biengual.userapi.message.error.code.UserErrorCode.*;
-
+import com.biengual.userapi.bookmark.domain.*;
+import com.biengual.userapi.message.error.exception.CommonException;
+import com.biengual.userapi.user.domain.UserEntity;
+import com.biengual.userapi.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.biengual.userapi.bookmark.domain.BookmarkCommand;
-import com.biengual.userapi.bookmark.domain.BookmarkInfo;
-import com.biengual.userapi.bookmark.domain.BookmarkReader;
-import com.biengual.userapi.bookmark.domain.BookmarkService;
-import com.biengual.userapi.bookmark.domain.BookmarkStore;
-import com.biengual.userapi.message.error.exception.CommonException;
-import com.biengual.userapi.user.domain.entity.UserEntity;
-import com.biengual.userapi.user.repository.UserRepository;
-
-import lombok.RequiredArgsConstructor;
+import static com.biengual.userapi.message.error.code.BookmarkErrorCode.BOOKMARK_ALREADY_EXISTS;
+import static com.biengual.userapi.message.error.code.UserErrorCode.USER_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor

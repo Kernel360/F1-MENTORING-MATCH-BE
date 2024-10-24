@@ -1,4 +1,4 @@
-package com.biengual.userapi.user.domain.entity;
+package com.biengual.userapi.common.entity;
 
 
 import java.time.LocalDateTime;
