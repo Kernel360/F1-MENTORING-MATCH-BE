@@ -18,14 +18,12 @@ public class BookmarkCommand {
 		Long userId,
 		Long contentId,
 		Long sentenceIndex,
-		Long wordIndex,
 		String description
 	) {
 		public BookmarkEntity toEntity(String detail, Double startTime) {
 			return BookmarkEntity.builder()
 				.scriptIndex(this.contentId)
 				.sentenceIndex(this.sentenceIndex)
-				.wordIndex(this.wordIndex)
 				.description(this.description)
 				.detail(detail)
 				.startTimeInSecond(startTime)

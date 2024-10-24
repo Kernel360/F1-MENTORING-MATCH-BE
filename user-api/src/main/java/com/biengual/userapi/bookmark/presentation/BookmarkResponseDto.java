@@ -12,7 +12,6 @@ public class BookmarkResponseDto {
 	public record ContentList(
 		Long bookmarkId,
 		Long sentenceIndex,
-		Long wordIndex,
 		String description,
 		@JsonInclude(JsonInclude.Include.NON_NULL)
 		Double startTimeInSecond
@@ -42,5 +41,4 @@ public class BookmarkResponseDto {
 		List<MyList> bookmarkMyList
 	) {
 	}
-
 }

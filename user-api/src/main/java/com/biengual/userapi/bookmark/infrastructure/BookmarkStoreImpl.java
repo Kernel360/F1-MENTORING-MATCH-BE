@@ -76,11 +76,9 @@ public class BookmarkStoreImpl implements BookmarkStore {
 	// Internal Methods ------------------------------------------------------------------------------------------------
 
 	private String extractDetail(BookmarkCommand.Create command, ContentDocument content) {
-		return truncate(command.wordIndex() == null ?
-				content.getScripts().get(Math.toIntExact(command.sentenceIndex())).getEnScript() :
-				content.getScripts().get(Math.toIntExact(command.sentenceIndex())).getEnScript()
-					.split(" ")[Math.toIntExact(command.wordIndex())],
-			255);
+		return truncate(
+			content.getScripts().get(Math.toIntExact(command.sentenceIndex())).getEnScript(), 255
+		);
 	}
 
 	private Double extractStartTime(BookmarkCommand.Create command, ContentDocument content) {

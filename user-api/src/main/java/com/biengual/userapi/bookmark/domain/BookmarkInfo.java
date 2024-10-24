@@ -13,7 +13,6 @@ public class BookmarkInfo {
 	public record Position(
 		Long bookmarkId,
 		Long sentenceIndex,
-		Long wordIndex,
 		String description,
 		Double startTimeInSecond
 	) {

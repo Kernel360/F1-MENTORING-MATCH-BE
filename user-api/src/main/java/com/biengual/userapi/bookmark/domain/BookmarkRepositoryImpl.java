@@ -52,14 +52,8 @@ public class BookmarkRepositoryImpl extends QuerydslRepositorySupport implements
 	}
 
 	private BooleanExpression bookmarkBooleanExpression(BookmarkCommand.Create command) {
-		BooleanExpression wordIndexExpression = bookmarkEntity.wordIndex.isNull();
-		if (command.wordIndex() != null) {
-			wordIndexExpression = bookmarkEntity.wordIndex.eq(command.wordIndex());
-		}
-
 		return userEntity.id.eq(command.userId())
 			.and(bookmarkEntity.scriptIndex.eq(command.contentId()))
-			.and(bookmarkEntity.sentenceIndex.eq(command.sentenceIndex()))
-			.and(wordIndexExpression);
+			.and(bookmarkEntity.sentenceIndex.eq(command.sentenceIndex()));
 	}
 }
