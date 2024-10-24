@@ -67,6 +67,7 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
+	// 유저 로그아웃
 	@Override
 	@Transactional
 	public void logout(HttpServletRequest request, HttpServletResponse response, Long userId) {
@@ -77,6 +78,7 @@ public class UserServiceImpl implements UserService {
 		refreshTokenStore.delete(userId);
 	}
 
+	// 유저 로그인 상태 확인
 	@Override
 	public Boolean getLoginStatus(OAuth2UserPrincipal principal) {
 		return principal != null;
