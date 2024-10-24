@@ -7,6 +7,7 @@ import com.biengual.userapi.oauth2.repository.OAuth2AuthorizationRequestBasedOnC
 import com.biengual.userapi.oauth2.service.RefreshTokenService;
 import com.biengual.userapi.user.domain.UserService;
 import com.biengual.userapi.user.domain.UserEntity;
+import com.biengual.userapi.user.domain.enums.UserStatus;
 import com.biengual.userapi.util.CookieUtil;
 import com.biengual.userapi.util.HttpServletResponseUtil;
 import jakarta.servlet.http.Cookie;
@@ -35,6 +36,8 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 	@Value("${spring.security.oauth2.success.redirect-uri}")
 	public String oAuth2SuccessRedirectBaseUri;
 
+	private static final String FIRST_LOGIN_REDIRECT_URL = "/login/add";
+
 	@Override
 	@LoginLogging
 	public void onAuthenticationSuccess(
@@ -53,15 +56,12 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
 			refreshTokenService.saveRefreshToken(user, refreshToken);
 
+			// OAtuh 인증 서버에서 발급받은 access token과 return url 정보 쿠키에서 삭제
 			oAuth2AuthorizationRequestBasedOnCookieRepository.removeCookies(request, response);
 
-			Cookie cookie = WebUtils.getCookie(request, CookieUtil.RETURN_URL_NAME);
-			if (cookie != null) {
-				response.sendRedirect(oAuth2SuccessRedirectBaseUri + cookie.getValue());
-			} else {
-				response.sendRedirect(oAuth2SuccessRedirectBaseUri);
-			}
+			Cookie returnUrlCookie = WebUtils.getCookie(request, CookieUtil.RETURN_URL_NAME);
 
+			response.sendRedirect(getRedirectUrlWithReturnUrlCookie(user, returnUrlCookie));
 
 		} catch (CommonException e) {
 			log.error(e.getErrorCode().getCode() + " : " + e.getErrorCode().getMessage());
@@ -70,5 +70,28 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 		}
 
 		// TODO: 나머지 Exception에 대한 응답 컨벤션에 따라 추가될 수 있음 ex) Server Internal Error
+	}
+
+	// Internal Methods=================================================================================================
+
+	// 최종 리다이렉트 URL 구하는 메서드
+	private String getRedirectUrlWithReturnUrlCookie(UserEntity user, Cookie cookie) {
+		String redirectUrl = oAuth2SuccessRedirectBaseUri;
+
+		// 첫 로그인 시 추가되는 기본 URL
+		if (user.getUserStatus() == UserStatus.USER_STATUS_CREATED) {
+			redirectUrl += FIRST_LOGIN_REDIRECT_URL;
+		}
+
+		// returnUrl 쿠키가 존재할 때 추가되는 URL
+		if (cookie != null) {
+			String additionalUrl = user.getUserStatus() == UserStatus.USER_STATUS_CREATED
+				? "?" + cookie.getName() + "=" + cookie.getValue()
+				: cookie.getValue();
+
+			redirectUrl += additionalUrl;
+		}
+
+		return redirectUrl;
 	}
 }

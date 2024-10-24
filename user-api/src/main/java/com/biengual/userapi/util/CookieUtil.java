@@ -22,8 +22,7 @@ public class CookieUtil {
 	public static final String ACCESS_TOKEN_NAME = "access_token";
 	public static final String REFRESH_TOKEN_NAME = "refresh_token";
 	public static final String OAUTH2_AUTHORIZATION_REQUEST_NAME = "oauth2_authorization_request";
-	public static final String RETURN_URL_NAME = "return_url";
-	public static final String RETURN_URL_REQUEST_PARAMETER = "returnUrl";
+	public static final String RETURN_URL_NAME = "returnUrl";
 	public static final Duration ACCESS_TOKEN_COOKIE_EXPIRE = Duration.ofDays(1);
 	public static final Duration REFRESH_TOKEN_COOKIE_EXPIRE = Duration.ofDays(7);
 	public static final Duration OAUTH2_AUTHORIZATION_REQUEST_COOKIE_EXPIRE = Duration.ofMinutes(3);
@@ -55,7 +54,7 @@ public class CookieUtil {
 
 	public void addReturnUrlCookie(HttpServletRequest request, HttpServletResponse response) {
 		removeCookie(request, response, RETURN_URL_NAME);
-		addCookie(response, RETURN_URL_NAME, request.getParameter(RETURN_URL_REQUEST_PARAMETER),
+		addCookie(response, RETURN_URL_NAME, request.getParameter(RETURN_URL_NAME),
 			(int) RETURN_URL_NAME_COOKIE_EXPIRE.toSeconds());
 	}
 
