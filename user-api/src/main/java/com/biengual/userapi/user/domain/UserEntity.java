@@ -109,6 +109,8 @@ public class UserEntity extends BaseEntity {
 		this.phoneNumber = command.phoneNumber() == null ? this.phoneNumber : command.phoneNumber();
 		this.birth = command.birth() == null ? this.birth : command.birth();
 		this.gender = command.gender() == null ? this.gender : command.gender();
+		this.userStatus = this.userStatus ==
+			UserStatus.USER_STATUS_CREATED ? UserStatus.USER_STATUS_ACTIVATE : this.userStatus;
 	}
 
 	public void updateUserBookmark(BookmarkEntity bookmark) {
