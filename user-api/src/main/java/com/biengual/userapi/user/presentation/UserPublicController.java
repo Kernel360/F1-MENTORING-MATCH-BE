@@ -9,7 +9,6 @@ import com.biengual.userapi.swagger.user.SwaggerUserMyTime;
 import com.biengual.userapi.user.application.UserFacade;
 import com.biengual.userapi.user.domain.UserCommand;
 import com.biengual.userapi.user.domain.UserInfo;
-import com.biengual.userapi.user.domain.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -35,7 +34,6 @@ public class UserPublicController {
 
 	private final UserDtoMapper userDtoMapper;
 	private final UserFacade userFacade;
-	private final UserService userService;
 
 	@GetMapping("/me")
 	@Operation(summary = "본인 정보 조회", description = "유저가 본인의 정보를 조회합니다.")
@@ -118,19 +116,22 @@ public class UserPublicController {
 		return ResponseEntityFactory.toResponseEntity(USER_LOGOUT_SUCCESS);
 	}
 
+	// TODO: 컨트롤러에서 바로 반환할 수 있는데 UserService 까지 들어가는 것이 맞는가에 대해 생각해볼 것
 	@GetMapping("/status")
 	@Operation(summary = "회원 로그인 상태 조회", description = "회원 로그인 상태를 조회합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "요청에 성공하였습니다.", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerBooleanReturn.class))}
 		),
-		@ApiResponse(responseCode = "404", description = "데이터베이스 연결에 실패하였습니다.", content = @Content(mediaType = "application/json"))
+		@ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
+		@ApiResponse(responseCode = "500", description = "서버 에러", content = @Content(mediaType = "application/json"))
 	})
-	public ResponseEntity<Object> getUserStatus(
-		HttpServletRequest request
+	public ResponseEntity<Object> getLoginStatus(
+		@AuthenticationPrincipal
+		OAuth2UserPrincipal principal
 	) {
+		boolean response = userFacade.getLoginStatus(principal);
 
-		return ResponseEntityFactory
-			.toResponseEntity(USER_STATUS_INFO, userService.getUserStatus(request));
+		return ResponseEntityFactory.toResponseEntity(USER_STATUS_INFO, response);
 	}
 }
