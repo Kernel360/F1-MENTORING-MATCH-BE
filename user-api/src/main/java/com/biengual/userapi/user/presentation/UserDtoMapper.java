@@ -8,7 +8,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 /**
- * 객체 간의 Mapper
+ * 객체 간의 Mapper를 정의
  *
  * 메서드 네이밍은 prefix + target (inner)class name
  *
