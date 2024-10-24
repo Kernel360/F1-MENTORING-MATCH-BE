@@ -1,4 +1,4 @@
-package com.biengual.userapi.scrap.domain.entity;
+package com.biengual.userapi.scrap.domain;
 
 import com.biengual.userapi.content.domain.entity.ContentEntity;
 import com.biengual.userapi.common.entity.BaseEntity;
@@ -31,12 +31,6 @@ public class ScrapEntity extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "content_id", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
 	private ContentEntity content;
-
-	@Builder
-	public ScrapEntity(Long id, ContentEntity content) {
-		this.id = id;
-		this.content = content;
-	}
 
 	@Builder
 	public ScrapEntity(ContentEntity content) {
