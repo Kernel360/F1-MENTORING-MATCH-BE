@@ -16,6 +16,7 @@ import com.biengual.userapi.message.ResponseEntityFactory;
 import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
 import com.biengual.userapi.scrap.application.ScrapFacade;
 import com.biengual.userapi.scrap.domain.ScrapCommand;
+import com.biengual.userapi.scrap.domain.ScrapInfo;
 import com.biengual.userapi.swagger.SwaggerBooleanReturn;
 import com.biengual.userapi.swagger.SwaggerVoidReturn;
 import com.biengual.userapi.swagger.scrap.SwaggerScrapView;
@@ -50,9 +51,10 @@ public class ScrapApiController {
 		@AuthenticationPrincipal
 		OAuth2UserPrincipal principal
 	) {
-		ScrapResponseDto.ViewListRes viewRes = scrapDtoMapper.ofViewRes(scrapFacade.getAllScraps(principal.getId()));
+		ScrapInfo.ViewInfo info = scrapFacade.getAllScraps(principal.getId());
+		ScrapResponseDto.ViewListRes response = scrapDtoMapper.ofViewRes(info);
 
-		return ResponseEntityFactory.toResponseEntity(SCRAP_VIEW_SUCCESS, viewRes);
+		return ResponseEntityFactory.toResponseEntity(SCRAP_VIEW_SUCCESS, response);
 	}
 
 	@GetMapping("/check")
@@ -72,8 +74,9 @@ public class ScrapApiController {
 		Long contentId
 	) {
 		ScrapCommand.GetByContents command = scrapDtoMapper.doGetByContents(contentId, principal);
+		boolean response = scrapFacade.existsScrap(command);
 
-		return ResponseEntityFactory.toResponseEntity(SCRAP_CHECK_SUCCESS, scrapFacade.existsScrap(command));
+		return ResponseEntityFactory.toResponseEntity(SCRAP_CHECK_SUCCESS, response);
 	}
 
 	@PostMapping("/create")
