@@ -4,6 +4,8 @@ import com.biengual.userapi.annotation.Facade;
 import com.biengual.userapi.user.domain.UserCommand;
 import com.biengual.userapi.user.domain.UserInfo;
 import com.biengual.userapi.user.domain.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @Facade
@@ -24,5 +26,10 @@ public class UserFacade {
     // 본인 회원가입 날짜 조회
     public UserInfo.MySignUpTime getMySignUpTime(Long userId) {
         return userService.getMySignUpTime(userId);
+    }
+
+    // 로그아웃
+    public void logout(HttpServletRequest request, HttpServletResponse response, Long userId) {
+        userService.logout(request, response, userId);
     }
 }
