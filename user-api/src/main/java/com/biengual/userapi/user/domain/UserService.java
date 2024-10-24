@@ -11,9 +11,9 @@ import jakarta.servlet.http.HttpServletResponse;
  * @author 김영래
  */
 public interface UserService {
-    void updateMyInfo(UserCommand.UpdateMyInfo command);
+    UserInfo.MyInfo getMyInfo(Long userId);
 
-    UserResponseDto.UserMyPageResponse getMyPage(String email);
+    void updateMyInfo(UserCommand.UpdateMyInfo command);
 
     UserResponseDto.UserMyTimeResponse getMySignUpTime(Long userId);
 

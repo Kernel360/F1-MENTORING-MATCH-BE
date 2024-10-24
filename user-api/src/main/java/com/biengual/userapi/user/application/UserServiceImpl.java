@@ -3,10 +3,7 @@ package com.biengual.userapi.user.application;
 import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
 import com.biengual.userapi.oauth2.repository.RefreshTokenRepository;
-import com.biengual.userapi.user.domain.UserCommand;
-import com.biengual.userapi.user.domain.UserService;
-import com.biengual.userapi.user.domain.UserStore;
-import com.biengual.userapi.user.domain.UserEntity;
+import com.biengual.userapi.user.domain.*;
 import com.biengual.userapi.user.presentation.UserResponseDto;
 import com.biengual.userapi.user.repository.UserRepository;
 import com.biengual.userapi.util.CookieUtil;
@@ -24,21 +21,21 @@ public class UserServiceImpl implements UserService {
 	private final CookieUtil cookieUtil;
 	private final UserRepository userRepository;
 	private final RefreshTokenRepository refreshTokenRepository;
+	private final UserReader userReader;
 	private final UserStore userStore;
+
+	// 본인 정보 조회
+	@Override
+	@Transactional(readOnly = true)
+	public UserInfo.MyInfo getMyInfo(Long userId) {
+		return userReader.findMyInfo(userId);
+	}
 
 	// 본인 정보 수정
 	@Override
 	@Transactional
 	public void updateMyInfo(UserCommand.UpdateMyInfo command) {
 		userStore.updateMyInfo(command);
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public UserResponseDto.UserMyPageResponse getMyPage(String email) {
-		UserEntity user = this.getUserByEmail(email);
-
-		return UserResponseDto.UserMyPageResponse.of(user);
 	}
 
 	@Override
@@ -86,12 +83,5 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Boolean getUserStatus(HttpServletRequest request) {
 		return cookieUtil.verifyAccessTokenCookie(request.getCookies());
-	}
-
-	// Internal Methods=================================================================================================
-
-	public UserEntity getUserByEmail(String email) {
-		return userRepository.findByEmail(email)
-			.orElseThrow(() -> new CommonException(USER_NOT_FOUND));
 	}
 }
