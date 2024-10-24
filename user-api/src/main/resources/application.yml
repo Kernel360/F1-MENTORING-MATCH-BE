@@ -14,9 +14,14 @@ spring:
     active: local
   jackson:
     time-zone: Asia/Seoul
+  flyway:
+    enabled: true
+    validate-migration-naming: true
+    create-schemas: true
+    baseline-on-migrate: true
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     properties:
       hibernate:
         flushMode: MANUAL
