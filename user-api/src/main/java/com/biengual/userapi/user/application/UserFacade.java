@@ -20,4 +20,9 @@ public class UserFacade {
     public void updateMyInfo(UserCommand.UpdateMyInfo command) {
         userService.updateMyInfo(command);
     }
+
+    // 본인 회원가입 날짜 조회
+    public UserInfo.MySignUpTime getMySignUpTime(Long userId) {
+        return userService.getMySignUpTime(userId);
+    }
 }
