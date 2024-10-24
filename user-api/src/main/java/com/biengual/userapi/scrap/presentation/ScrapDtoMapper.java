@@ -32,10 +32,10 @@ public interface ScrapDtoMapper {
 	ScrapCommand.GetByContents doGetByContents(Long contentId, OAuth2UserPrincipal principal);
 
 	@Mapping(target = "userId", source = "principal.id")
-	ScrapCommand.Create doCreate(ScrapRequestDto.CreateReq request, OAuth2UserPrincipal principal);
+	ScrapCommand.Create doCreate(Long contentId, OAuth2UserPrincipal principal);
 
 	@Mapping(target = "userId", source = "principal.id")
-	ScrapCommand.Delete doDelete(ScrapRequestDto.DeleteReq request, OAuth2UserPrincipal principal);
+	ScrapCommand.Delete doDelete(Long contentId, OAuth2UserPrincipal principal);
 
 	// Response <- Info
 	ScrapResponseDto.ViewListRes ofViewRes(ScrapInfo.ViewInfo allScraps);
