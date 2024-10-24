@@ -4,7 +4,6 @@ import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
 import com.biengual.userapi.oauth2.repository.RefreshTokenRepository;
 import com.biengual.userapi.user.domain.*;
-import com.biengual.userapi.user.presentation.UserResponseDto;
 import com.biengual.userapi.user.repository.UserRepository;
 import com.biengual.userapi.util.CookieUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.biengual.userapi.message.error.code.UserErrorCode.*;
+import static com.biengual.userapi.message.error.code.UserErrorCode.USER_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -38,12 +37,11 @@ public class UserServiceImpl implements UserService {
 		userStore.updateMyInfo(command);
 	}
 
+	// 본인 회원 가입 날짜 조회
 	@Override
 	@Transactional(readOnly = true)
-	public UserResponseDto.UserMyTimeResponse getMySignUpTime(Long userId) {
-		UserEntity user = this.getUserById(userId);
-
-		return UserResponseDto.UserMyTimeResponse.of(user);
+	public UserInfo.MySignUpTime getMySignUpTime(Long userId) {
+		return userReader.findMySignUpTime(userId);
 	}
 
 	@Override
