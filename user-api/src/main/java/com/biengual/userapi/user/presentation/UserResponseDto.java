@@ -1,6 +1,5 @@
 package com.biengual.userapi.user.presentation;
 
-import com.biengual.userapi.user.domain.UserEntity;
 import com.biengual.userapi.user.domain.enums.Gender;
 import lombok.Builder;
 
@@ -29,27 +28,9 @@ public class UserResponseDto {
 	) {
 	}
 
-	public record UserUpdateResponse(
-		Long userId
-	) {
-		public static UserUpdateResponse of(UserEntity user) {
-			return new UserUpdateResponse(
-				user.getId()
-			);
-		}
-
-	}
-
-	public record UserMyTimeResponse(
+	public record MySignUpTimeRes(
 		LocalDateTime createdAt,
 		LocalDateTime updatedAt
 	) {
-		public static UserMyTimeResponse of(UserEntity user) {
-			return new UserMyTimeResponse(
-				user.getCreatedAt(),
-				user.getUpdatedAt()
-			);
-		}
-
 	}
 }

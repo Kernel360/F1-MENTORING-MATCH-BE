@@ -28,24 +28,23 @@ import java.util.List;
     unmappedTargetPolicy = ReportingPolicy.ERROR
 )
 public interface UserDtoMapper {
+    // 본인 정보 조회 매핑
+    UserResponseDto.MyInfoRes ofMyInfoRes(UserInfo.MyInfo myInfo);
 
-    // Command <- Request
-    // 본인 정보 수정 Command 매핑
+    UserResponseDto.MyCategory ofMyCategory(UserInfo.MyCategory myCategory);
+
+    UserInfo.MyInfo buildMyInfo(
+        UserInfo.MyInfoExceptMyCategories myInfoExceptMyCategories, List<UserInfo.MyCategory> myCategories
+    );
+
+    // 본인 정보 수정 매핑
     @Mapping(target = "username", source = "request.username")
     @Mapping(target = "categoryIds", source = "request.categories")
     @Mapping(target = "userId", source = "principal.id")
     @Mapping(target = "email", source = "principal.email")
     UserCommand.UpdateMyInfo doUpdateMyInfo(UserRequestDto.UpdateMyInfoReq request, OAuth2UserPrincipal principal);
 
-    // Response <- Info
-    // 본인 정보 조회 ResponseDto 매핑
-    UserResponseDto.MyInfoRes ofMyInfoRes(UserInfo.MyInfo myInfo);
+    // 본인 회원 날짜 조회 매핑
+    UserResponseDto.MySignUpTimeRes ofMySignUpTimeRes(UserInfo.MySignUpTime mySignUpTime);
 
-    UserResponseDto.MyCategory ofMyCategory(UserInfo.MyCategory myCategory);
-
-    // Entity <-> Info, Info <-> Info
-    // 본인 정보 조회 Info 매핑
-    UserInfo.MyInfo buildMyInfo(
-        UserInfo.MyInfoExceptMyCategories myInfoExceptMyCategories, List<UserInfo.MyCategory> myCategories
-    );
 }

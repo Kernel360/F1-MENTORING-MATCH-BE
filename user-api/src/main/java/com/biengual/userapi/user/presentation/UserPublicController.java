@@ -6,7 +6,6 @@ import com.biengual.userapi.swagger.SwaggerBooleanReturn;
 import com.biengual.userapi.swagger.SwaggerVoidReturn;
 import com.biengual.userapi.swagger.user.SwaggerUserMyPage;
 import com.biengual.userapi.swagger.user.SwaggerUserMyTime;
-import com.biengual.userapi.swagger.user.SwaggerUserUpdate;
 import com.biengual.userapi.user.application.UserFacade;
 import com.biengual.userapi.user.domain.UserCommand;
 import com.biengual.userapi.user.domain.UserInfo;
@@ -61,7 +60,7 @@ public class UserPublicController {
 	@Operation(summary = "본인 정보 수정", description = "유저가 본인의 정보를 수정합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "본인 정보 수정 성공", content = {
-			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerUserUpdate.class))}
+			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerVoidReturn.class))}
 		),
 		@ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
 		@ApiResponse(responseCode = "500", description = "서버 에러", content = @Content(mediaType = "application/json"))
@@ -81,17 +80,19 @@ public class UserPublicController {
 	@GetMapping("/time")
 	@Operation(summary = "회원 가입 날짜 조회", description = "유저가 회원 가입 날짜를 조회합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "요청에 성공하였습니다.", content = {
+		@ApiResponse(responseCode = "200", description = "회원 가입 날짜 조회 성공", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerUserMyTime.class))}
 		),
-		@ApiResponse(responseCode = "404", description = "데이터베이스 연결에 실패하였습니다.", content = @Content(mediaType = "application/json"))
+		@ApiResponse(responseCode = "500", description = "서버 에러", content = @Content(mediaType = "application/json"))
 	})
 	public ResponseEntity<Object> getMySignUpTime(
 		@AuthenticationPrincipal
 		OAuth2UserPrincipal principal
 	) {
-		return ResponseEntityFactory
-			.toResponseEntity(USER_GET_INFO, userService.getMySignUpTime(principal.getId()));
+		UserInfo.MySignUpTime info = userFacade.getMySignUpTime(principal.getId());
+		UserResponseDto.MySignUpTimeRes response = userDtoMapper.ofMySignUpTimeRes(info);
+
+		return ResponseEntityFactory.toResponseEntity(USER_GET_INFO, response);
 	}
 
 	@PostMapping("/logout")

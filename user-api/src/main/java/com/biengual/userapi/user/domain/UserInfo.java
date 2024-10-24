@@ -4,6 +4,7 @@ import com.biengual.userapi.user.domain.enums.Gender;
 import lombok.Builder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class UserInfo {
@@ -32,6 +33,12 @@ public class UserInfo {
         String phoneNumber,
         LocalDate birth,
         Gender gender
+    ) {
+    }
+
+    public record MySignUpTime(
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
     ) {
     }
 }
