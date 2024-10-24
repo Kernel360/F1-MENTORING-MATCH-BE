@@ -41,4 +41,10 @@ public class UserReaderImpl implements UserReader {
 
         return userDtoMapper.buildMyInfo(myInfoExceptMyCategories, myCategories);
     }
+
+    @Override
+    public UserInfo.MySignUpTime findMySignUpTime(Long userId) {
+        return userCustomRepository.findMySignUpTime(userId)
+            .orElseThrow(() -> new CommonException(USER_NOT_FOUND));
+    }
 }
