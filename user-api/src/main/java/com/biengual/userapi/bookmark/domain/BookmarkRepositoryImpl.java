@@ -1,7 +1,5 @@
-package com.biengual.userapi.bookmark.repository.custom;
+package com.biengual.userapi.bookmark.domain;
 
-import com.biengual.userapi.bookmark.domain.dto.BookmarkRequestDto;
-import com.biengual.userapi.bookmark.domain.entity.BookmarkEntity;
 import com.biengual.userapi.message.error.exception.CommonException;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
@@ -9,7 +7,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import java.util.List;
 import java.util.Optional;
 
-import static com.biengual.userapi.bookmark.domain.entity.QBookmarkEntity.bookmarkEntity;
+import static com.biengual.userapi.bookmark.domain.QBookmarkEntity.bookmarkEntity;
 import static com.biengual.userapi.message.error.code.BookmarkErrorCode.BOOKMARK_NOT_FOUND;
 import static com.biengual.userapi.user.domain.QUserEntity.userEntity;
 
@@ -20,8 +18,8 @@ public class BookmarkRepositoryImpl extends QuerydslRepositorySupport implements
 	}
 
 	@Override
-	public Long deleteBookmark(Long userId, Long bookmarkId) {
-		BookmarkEntity bookmark = Optional.ofNullable(from(userEntity)
+	public void deleteBookmark(Long userId, Long bookmarkId) {
+		Optional.ofNullable(from(userEntity)
 				.join(userEntity.bookmarks, bookmarkEntity)
 				.select(bookmarkEntity)
 				.where(userEntity.id.eq(userId))
@@ -32,8 +30,6 @@ public class BookmarkRepositoryImpl extends QuerydslRepositorySupport implements
 		delete(bookmarkEntity)
 			.where(bookmarkEntity.id.eq(bookmarkId))
 			.execute();
-
-		return bookmark.getId();
 	}
 
 	@Override
@@ -47,26 +43,16 @@ public class BookmarkRepositoryImpl extends QuerydslRepositorySupport implements
 	}
 
 	@Override
-	public boolean isBookmarkAlreadyPresent(Long scriptIndex, BookmarkRequestDto.BookmarkCreateRequest request, Long userId) {
+	public boolean isBookmarkAlreadyPresent(BookmarkCommand.Create command) {
 		return from(userEntity)
 			.leftJoin(userEntity.bookmarks, bookmarkEntity)
-			.fetchJoin()
-			.where(bookmarkBooleanExpression(scriptIndex, request, userId))
+			.where(bookmarkBooleanExpression(command))
 			.fetchFirst() != null;
-
 	}
 
-	private BooleanExpression bookmarkBooleanExpression(
-		Long scriptIndex, BookmarkRequestDto.BookmarkCreateRequest request, Long userId
-	) {
-		BooleanExpression booleanExpression = userEntity.id.eq(userId)
-			.and(bookmarkEntity.scriptIndex.eq(scriptIndex))
-			.and(bookmarkEntity.sentenceIndex.eq(request.sentenceIndex()));
-
-		if (request.wordIndex() != null) {
-			booleanExpression.and(bookmarkEntity.wordIndex.eq(request.wordIndex()));
-		}
-
-		return booleanExpression;
+	private BooleanExpression bookmarkBooleanExpression(BookmarkCommand.Create command) {
+		return userEntity.id.eq(command.userId())
+			.and(bookmarkEntity.scriptIndex.eq(command.contentId()))
+			.and(bookmarkEntity.sentenceIndex.eq(command.sentenceIndex()));
 	}
 }
