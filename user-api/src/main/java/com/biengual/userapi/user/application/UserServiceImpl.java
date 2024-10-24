@@ -78,7 +78,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Boolean getUserStatus(HttpServletRequest request) {
-		return cookieUtil.verifyAccessTokenCookie(request.getCookies());
+	public Boolean getLoginStatus(OAuth2UserPrincipal principal) {
+		return principal != null;
 	}
 }

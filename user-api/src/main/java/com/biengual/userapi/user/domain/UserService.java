@@ -22,5 +22,5 @@ public interface UserService {
 
     void logout(HttpServletRequest request, HttpServletResponse response, Long userId);
 
-    Boolean getUserStatus(HttpServletRequest request);
+    Boolean getLoginStatus(OAuth2UserPrincipal principal);
 }
