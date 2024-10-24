@@ -85,6 +85,7 @@ public class UserPublicController {
 		@ApiResponse(responseCode = "200", description = "회원 가입 날짜 조회 성공", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerUserMyTime.class))}
 		),
+		@ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
 		@ApiResponse(responseCode = "500", description = "서버 에러", content = @Content(mediaType = "application/json"))
 	})
 	public ResponseEntity<Object> getMySignUpTime(
@@ -100,10 +101,11 @@ public class UserPublicController {
 	@PostMapping("/logout")
 	@Operation(summary = "회원 로그아웃", description = "유저가 로그아웃합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "로그아웃에 성공하였습니다.", content = {
+		@ApiResponse(responseCode = "200", description = "회원 로그아웃 성공", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerVoidReturn.class))
 		}),
-		@ApiResponse(responseCode = "404", description = "데이터베이스 연결에 실패하였습니다.", content = @Content(mediaType = "application/json"))
+		@ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
+		@ApiResponse(responseCode = "500", description = "서버 에러", content = @Content(mediaType = "application/json"))
 	})
 	public ResponseEntity<Object> logout(
 		HttpServletRequest request,
@@ -111,7 +113,7 @@ public class UserPublicController {
 		@AuthenticationPrincipal
 		OAuth2UserPrincipal principal
 	) {
-		userService.logout(request, response, principal.getId());
+		userFacade.logout(request, response, principal.getId());
 
 		return ResponseEntityFactory.toResponseEntity(USER_LOGOUT_SUCCESS);
 	}
