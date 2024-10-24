@@ -2,7 +2,6 @@ package com.biengual.userapi.user.application;
 
 import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
-import com.biengual.userapi.oauth2.repository.RefreshTokenRepository;
 import com.biengual.userapi.user.domain.*;
 import com.biengual.userapi.user.repository.UserRepository;
 import com.biengual.userapi.util.CookieUtil;
@@ -19,9 +18,9 @@ import static com.biengual.userapi.message.error.code.UserErrorCode.USER_NOT_FOU
 public class UserServiceImpl implements UserService {
 	private final CookieUtil cookieUtil;
 	private final UserRepository userRepository;
-	private final RefreshTokenRepository refreshTokenRepository;
 	private final UserReader userReader;
 	private final UserStore userStore;
+	private final RefreshTokenStore refreshTokenStore;
 
 	// 본인 정보 조회
 	@Override
@@ -75,7 +74,7 @@ public class UserServiceImpl implements UserService {
 
 		cookieUtil.removeRefreshTokenCookie(request, response);
 
-		refreshTokenRepository.deleteByUserId(userId);
+		refreshTokenStore.delete(userId);
 	}
 
 	@Override
