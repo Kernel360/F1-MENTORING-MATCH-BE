@@ -52,7 +52,7 @@ public class UserPublicController {
 		OAuth2UserPrincipal principal
 	) {
 		UserInfo.MyInfo info = userFacade.getMyInfo(principal.getId());
-		UserResponseDto.MyInfoRes response = userDtoMapper.ofGetMyInfo(info);
+		UserResponseDto.MyInfoRes response = userDtoMapper.ofMyInfoRes(info);
 
 		return ResponseEntityFactory.toResponseEntity(USER_GET_INFO, response);
 	}

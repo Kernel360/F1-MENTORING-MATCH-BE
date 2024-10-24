@@ -39,7 +39,7 @@ public interface UserDtoMapper {
 
     // Response <- Info
     // 본인 정보 조회 ResponseDto 매핑
-    UserResponseDto.MyInfoRes ofGetMyInfo(UserInfo.MyInfo myInfo);
+    UserResponseDto.MyInfoRes ofMyInfoRes(UserInfo.MyInfo myInfo);
 
     UserResponseDto.MyCategory ofMyCategory(UserInfo.MyCategory myCategory);
 
