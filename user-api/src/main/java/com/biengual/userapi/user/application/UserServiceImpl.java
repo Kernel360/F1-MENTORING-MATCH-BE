@@ -52,19 +52,11 @@ public class UserServiceImpl implements UserService {
 		return user;
 	}
 
+	// OAuth 유저 회원가입 및 로그인 처리
 	@Override
 	@Transactional
-	public UserEntity getUserByOAuthUser(OAuth2UserPrincipal oAuthUser) {
-		UserEntity user = userRepository.findByEmail(oAuthUser.getEmail())
-			.orElseGet(() -> {
-				UserEntity newUser = UserEntity.createByOAuthUser(oAuthUser);
-
-				return userRepository.save(newUser);
-			});
-
-		user.updateAfterOAuth2Login(oAuthUser);
-
-		return user;
+	public UserEntity getUserByOAuthUser(OAuth2UserPrincipal principal) {
+		return userReader.findUser(principal);
 	}
 
 	// 유저 로그아웃

@@ -2,6 +2,7 @@ package com.biengual.userapi.user.infrastructure;
 
 import com.biengual.userapi.annotation.DataProvider;
 import com.biengual.userapi.message.error.exception.CommonException;
+import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
 import com.biengual.userapi.user.domain.UserInfo;
 import com.biengual.userapi.user.domain.UserReader;
 import com.biengual.userapi.user.domain.UserEntity;
@@ -30,6 +31,21 @@ public class UserReaderImpl implements UserReader {
             .orElseThrow(() -> new CommonException(USER_NOT_FOUND));
     }
 
+    // OAuth2UserPrincipal을 이용한 회원가입 및 로그인 처리와 함께 UserEntity 조회
+    @Override
+    public UserEntity findUser(OAuth2UserPrincipal principal) {
+        UserEntity user = userRepository.findById(principal.getId())
+            .orElseGet(() -> {
+                UserEntity newUser = UserEntity.createByOAuthUser(principal);
+
+                return userRepository.save(newUser);
+            });
+
+        user.updateAfterOAuth2Login(principal);
+
+        return user;
+    }
+
     // userId로 유저 정보 조회
     @Override
     public UserInfo.MyInfo findMyInfo(Long userId) {
@@ -42,6 +58,7 @@ public class UserReaderImpl implements UserReader {
         return userDtoMapper.buildMyInfo(myInfoExceptMyCategories, myCategories);
     }
 
+    // userId로 유저 회원가입 날짜 조회
     @Override
     public UserInfo.MySignUpTime findMySignUpTime(Long userId) {
         return userCustomRepository.findMySignUpTime(userId)
