@@ -8,6 +8,7 @@ import com.biengual.userapi.swagger.user.SwaggerUserMyPage;
 import com.biengual.userapi.swagger.user.SwaggerUserMyTime;
 import com.biengual.userapi.swagger.user.SwaggerUserUpdate;
 import com.biengual.userapi.user.application.UserFacade;
+import com.biengual.userapi.user.domain.UserCommand;
 import com.biengual.userapi.user.domain.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -66,7 +67,8 @@ public class UserPublicController {
 		@Valid @RequestBody
 		UserRequestDto.UpdateMyInfoReq request
 	) {
-		userFacade.updateMyInfo(userDtoMapper.doUpdateMyInfo(request, principal));
+		UserCommand.UpdateMyInfo command = userDtoMapper.doUpdateMyInfo(request, principal);
+		userFacade.updateMyInfo(command);
 
 		return ResponseEntityFactory.toResponseEntity(USER_UPDATE_INFO);
 	}
