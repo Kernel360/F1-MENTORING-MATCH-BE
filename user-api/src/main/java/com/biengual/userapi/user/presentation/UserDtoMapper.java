@@ -8,6 +8,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
+import java.util.List;
+
 /**
  * 객체 간의 Mapper를 정의
  *
@@ -40,4 +42,10 @@ public interface UserDtoMapper {
     UserResponseDto.MyInfoRes ofGetMyInfo(UserInfo.MyInfo myInfo);
 
     UserResponseDto.MyCategory ofMyCategory(UserInfo.MyCategory myCategory);
+
+    // Entity <-> Info, Info <-> Info
+    // 본인 정보 조회 Info 매핑
+    UserInfo.MyInfo buildMyInfo(
+        UserInfo.MyInfoExceptMyCategories myInfoExceptMyCategories, List<UserInfo.MyCategory> myCategories
+    );
 }

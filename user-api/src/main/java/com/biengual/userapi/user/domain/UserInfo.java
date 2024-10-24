@@ -1,6 +1,7 @@
 package com.biengual.userapi.user.domain;
 
 import com.biengual.userapi.user.domain.enums.Gender;
+import lombok.Builder;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -12,6 +13,7 @@ public class UserInfo {
     ) {
     }
 
+    @Builder
     public record MyInfo(
         String username,
         String nickname,
@@ -20,6 +22,16 @@ public class UserInfo {
         LocalDate birth,
         Gender gender,
         List<MyCategory> myCategories
+    ) {
+    }
+
+    public record MyInfoExceptMyCategories(
+        String username,
+        String nickname,
+        String email,
+        String phoneNumber,
+        LocalDate birth,
+        Gender gender
     ) {
     }
 }

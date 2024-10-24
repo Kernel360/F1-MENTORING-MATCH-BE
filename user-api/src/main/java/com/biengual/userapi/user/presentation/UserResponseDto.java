@@ -1,21 +1,23 @@
 package com.biengual.userapi.user.presentation;
 
+import com.biengual.userapi.user.domain.UserEntity;
+import com.biengual.userapi.user.domain.enums.Gender;
+import lombok.Builder;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.biengual.userapi.user.domain.UserEntity;
-import com.biengual.userapi.user.domain.UserInfo;
-import com.biengual.userapi.user.domain.enums.Gender;
-
 public class UserResponseDto {
 
+	@Builder
 	public record MyCategory(
 		Long id,
 		String name
 	) {
 	}
 
+	@Builder
 	public record MyInfoRes(
 		String username,
 		String nickname,
@@ -69,14 +71,5 @@ public class UserResponseDto {
 			);
 		}
 
-	}
-
-	public record UserChallengeResponse(
-		// TODO: challenge 완성되면 수정 필요, 아마 querydsl 사용해야 할 수도
-		String challenge
-	) {
-		public static UserChallengeResponse toDto(UserEntity user) {
-			return new UserChallengeResponse("user's challenge");
-		}
 	}
 }
