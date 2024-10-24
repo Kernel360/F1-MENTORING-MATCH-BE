@@ -16,9 +16,8 @@ spring:
     time-zone: Asia/Seoul
   flyway:
     enabled: true
-    validate-migration-naming: true
-    create-schemas: true
     baseline-on-migrate: true
+    out-of-order: true
   jpa:
     hibernate:
       ddl-auto: validate
