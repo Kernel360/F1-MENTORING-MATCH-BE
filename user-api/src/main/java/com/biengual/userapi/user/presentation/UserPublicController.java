@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -62,7 +63,7 @@ public class UserPublicController {
 	public ResponseEntity<Object> updateMyInfo(
 		@AuthenticationPrincipal
 		OAuth2UserPrincipal principal,
-		@RequestBody
+		@Valid @RequestBody
 		UserRequestDto.UpdateMyInfoReq request
 	) {
 		userFacade.updateMyInfo(userDtoMapper.doUpdateMyInfo(request, principal));
