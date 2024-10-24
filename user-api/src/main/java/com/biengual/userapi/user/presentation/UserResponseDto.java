@@ -40,26 +40,6 @@ public class UserResponseDto {
 
 	}
 
-	public record UserMyPageResponse(
-		String username,
-		String nickname,
-		String email,
-		String phoneNumber,
-		LocalDate birth,
-		Gender gender
-	) {
-		public static UserMyPageResponse of(UserEntity user) {
-			return new UserMyPageResponse(
-				user.getUsername(),
-				user.getNickname(),
-				user.getEmail(),
-				user.getPhoneNumber(),
-				user.getBirth(),
-				user.getGender()
-			);
-		}
-	}
-
 	public record UserMyTimeResponse(
 		LocalDateTime createdAt,
 		LocalDateTime updatedAt
