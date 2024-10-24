@@ -1,22 +1,5 @@
 package com.biengual.userapi.content.repository.custom;
 
-import static com.biengual.userapi.content.domain.entity.QContentEntity.*;
-import static com.biengual.userapi.message.error.code.ContentErrorCode.*;
-import static com.biengual.userapi.scrap.domain.entity.QScrapEntity.*;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
-
-import com.biengual.userapi.content.repository.custom.ContentRepositoryCustom;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
-import org.springframework.data.support.PageableExecutionUtils;
-
 import com.biengual.userapi.content.domain.dto.ContentRequestDto;
 import com.biengual.userapi.content.domain.dto.ContentResponseDto;
 import com.biengual.userapi.content.domain.entity.ContentEntity;
@@ -30,6 +13,17 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPQLQuery;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import org.springframework.data.support.PageableExecutionUtils;
+
+import java.lang.reflect.Field;
+import java.util.*;
+
+import static com.biengual.userapi.content.domain.entity.QContentEntity.contentEntity;
+import static com.biengual.userapi.message.error.code.ContentErrorCode.CONTENT_SORT_COL_NOT_FOUND;
+import static com.biengual.userapi.scrap.domain.entity.QScrapEntity.scrapEntity;
 
 public class ContentRepositoryImpl extends QuerydslRepositorySupport implements ContentRepositoryCustom {
 
