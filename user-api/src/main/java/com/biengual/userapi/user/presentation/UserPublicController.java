@@ -77,6 +77,8 @@ public class UserPublicController {
 		return ResponseEntityFactory.toResponseEntity(USER_UPDATE_INFO);
 	}
 
+
+	// TODO: 나중에 누적 학습일자 정책이 바뀌어 필요없어지면 삭제할 것
 	@GetMapping("/time")
 	@Operation(summary = "회원 가입 날짜 조회", description = "유저가 회원 가입 날짜를 조회합니다.")
 	@ApiResponses(value = {
