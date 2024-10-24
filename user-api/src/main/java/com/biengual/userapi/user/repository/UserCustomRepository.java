@@ -40,4 +40,22 @@ public class UserCustomRepository {
 
         return Optional.ofNullable(myInfoExceptMyCategories);
     }
+
+    // user의 생성 날짜 및 수정 날짜를 조회하는 쿼리
+    public Optional<UserInfo.MySignUpTime> findMySignUpTime(Long userId) {
+        QUserEntity userEntity = QUserEntity.userEntity;
+
+        UserInfo.MySignUpTime mySignUpTime = queryFactory.select(
+                Projections.constructor(
+                    UserInfo.MySignUpTime.class,
+                    userEntity.createdAt,
+                    userEntity.updatedAt
+                )
+            )
+            .from(userEntity)
+            .where(userEntity.id.eq(userId))
+            .fetchOne();
+
+        return Optional.ofNullable(mySignUpTime);
+    }
 }
