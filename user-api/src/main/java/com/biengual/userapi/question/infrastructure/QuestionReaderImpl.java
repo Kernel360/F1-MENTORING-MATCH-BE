@@ -55,7 +55,6 @@ public class QuestionReaderImpl implements QuestionReader {
 	private ContentDocument getContentDocument(Long contentId) {
 		ContentEntity content = contentRepository.findById(contentId)
 			.orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
-		content.updateStatus(ContentStatus.ACTIVATED);
 
 		return contentScriptRepository.findById(new ObjectId(content.getMongoContentId()))
 			.orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
