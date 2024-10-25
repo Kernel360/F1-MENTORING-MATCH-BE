@@ -50,5 +50,5 @@ public interface ScrapDtoMapper {
 	ScrapInfo.View buildView(ScrapEntity scrap);
 
 	@Mapping(target = "content", source = "content")
-	ScrapEntity buildEntity(ContentEntity content);
+	ScrapEntity buildEntity(Long userId, ContentEntity content);
 }
