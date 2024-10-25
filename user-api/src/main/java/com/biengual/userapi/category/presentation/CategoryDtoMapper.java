@@ -3,6 +3,7 @@ package com.biengual.userapi.category.presentation;
 import com.biengual.userapi.category.domain.CategoryInfo;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 /**
@@ -24,5 +25,6 @@ import org.mapstruct.ReportingPolicy;
 )
 public interface CategoryDtoMapper {
     // 모든 카테고리 조회 매핑
+    @Mapping(target = "categoryList", source = "categories")
     CategoryResponseDto.AllCategoriesRes ofAllCategoriesRes(CategoryInfo.AllCategories allCategories);
 }
