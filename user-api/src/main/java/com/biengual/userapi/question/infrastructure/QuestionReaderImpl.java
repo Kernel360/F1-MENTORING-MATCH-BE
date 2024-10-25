@@ -9,11 +9,10 @@ import java.util.List;
 import org.bson.types.ObjectId;
 
 import com.biengual.userapi.annotation.DataProvider;
-import com.biengual.userapi.content.domain.entity.ContentDocument;
-import com.biengual.userapi.content.domain.entity.ContentEntity;
-import com.biengual.userapi.content.domain.enums.ContentStatus;
-import com.biengual.userapi.content.repository.ContentRepository;
-import com.biengual.userapi.content.repository.ContentScriptRepository;
+import com.biengual.userapi.content.domain.ContentDocument;
+import com.biengual.userapi.content.domain.ContentEntity;
+import com.biengual.userapi.content.domain.ContentRepository;
+import com.biengual.userapi.content.domain.ContentScriptRepository;
 import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.question.domain.QuestionDocument;
 import com.biengual.userapi.question.domain.QuestionInfo;

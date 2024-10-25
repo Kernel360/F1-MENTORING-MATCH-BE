@@ -8,9 +8,8 @@ import com.biengual.userapi.bookmark.domain.BookmarkCustomRepository;
 import com.biengual.userapi.bookmark.domain.BookmarkEntity;
 import com.biengual.userapi.bookmark.domain.BookmarkInfo;
 import com.biengual.userapi.bookmark.domain.BookmarkReader;
-import com.biengual.userapi.bookmark.domain.BookmarkRepository;
 import com.biengual.userapi.bookmark.presentation.BookmarkDtoMapper;
-import com.biengual.userapi.content.repository.ContentRepository;
+import com.biengual.userapi.content.domain.ContentRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -20,7 +19,6 @@ public class BookmarkReaderImpl implements BookmarkReader {
 	private final BookmarkCustomRepository bookmarkCustomRepository;
 	private final ContentRepository contentRepository;
 	private final BookmarkDtoMapper bookmarkDtoMapper;
-	private final BookmarkRepository bookmarkRepository;
 
 	@Override
 	public List<BookmarkInfo.Position> getContentList(BookmarkCommand.GetByContents command) {
