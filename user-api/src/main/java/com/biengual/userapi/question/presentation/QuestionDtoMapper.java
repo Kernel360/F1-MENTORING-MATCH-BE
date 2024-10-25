@@ -26,7 +26,7 @@ public interface QuestionDtoMapper {
 	QuestionCommand.Create doCreate(Long contentId, QuestionRequestDto.CreateReq request);
 
 	// Response <- Info
-	QuestionResponseDto.ViewListRes ofViewRes(QuestionInfo.DetailInfo info);
+	QuestionResponseDto.ViewListRes ofViewListRes(QuestionInfo.DetailInfo info);
 
 	// Entity <-> Info, Info <-> Info
 

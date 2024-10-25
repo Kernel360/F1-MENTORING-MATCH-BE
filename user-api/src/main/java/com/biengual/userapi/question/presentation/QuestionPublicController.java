@@ -45,7 +45,7 @@ public class QuestionPublicController {
 		Long contentId
 	) {
 		QuestionInfo.DetailInfo info = questionFacade.getQuestions(contentId);
-		QuestionResponseDto.ViewListRes response = questionDtoMapper.ofViewRes(info);
+		QuestionResponseDto.ViewListRes response = questionDtoMapper.ofViewListRes(info);
 
 		return ResponseEntityFactory.toResponseEntity(QUESTION_VIEW_SUCCESS, response);
 	}
