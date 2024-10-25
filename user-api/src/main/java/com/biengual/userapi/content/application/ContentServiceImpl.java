@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentDocument;
 import com.biengual.userapi.content.domain.ContentEntity;
-import com.biengual.userapi.content.domain.ContentReader;
 import com.biengual.userapi.content.domain.ContentRepository;
 import com.biengual.userapi.content.domain.ContentScriptRepository;
 import com.biengual.userapi.content.domain.ContentService;
@@ -29,7 +28,6 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class ContentServiceImpl implements ContentService {
-	private final ContentReader contentReader;
 	private final ContentStore contentStore;
 
 	private final ContentRepository contentRepository;

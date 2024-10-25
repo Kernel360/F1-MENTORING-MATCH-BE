@@ -1,11 +1,14 @@
 package com.biengual.userapi.crawling.application;
 
+import static com.biengual.userapi.message.error.code.ContentErrorCode.*;
+
 import org.springframework.stereotype.Service;
 
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentType;
 import com.biengual.userapi.crawling.domain.CrawlingService;
 import com.biengual.userapi.crawling.domain.CrawlingStore;
+import com.biengual.userapi.message.error.exception.CommonException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,14 +21,13 @@ public class CrawlingServiceImpl implements CrawlingService {
 
 	@Override
 	public ContentCommand.Create getCrawlingDetail(ContentCommand.CrawlingContent command) {
-		ContentCommand.Create contentCommand = null;
 		if (command.contentType().equals(ContentType.LISTENING)) {
-			contentCommand = getYoutubeDetail(command);
+			return getYoutubeDetail(command);
 		}
 		if (command.contentType().equals(ContentType.READING)) {
-			contentCommand = getCNNDetail(command);
+			return getCNNDetail(command);
 		}
-		return contentCommand;
+		throw new CommonException(CONTENT_TYPE_NOT_FOUND);
 	}
 
 	@Override
