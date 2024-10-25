@@ -52,8 +52,8 @@ public class ContentStoreImpl implements ContentStore {
 	}
 
 	@Override
-	public void deactivateContent(Long id) {
-		ContentEntity content = contentRepository.findById(id)
+	public void deactivateContent(Long contentId) {
+		ContentEntity content = contentRepository.findById(contentId)
 			.orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
 
 		content.updateStatus(ContentStatus.DEACTIVATED);

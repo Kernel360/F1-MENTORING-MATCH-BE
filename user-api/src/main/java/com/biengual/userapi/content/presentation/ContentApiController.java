@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/admin/contents")
-@Tag(name = "Content - private API", description = "컨텐츠 회원전용 API")
+@Tag(name = "Content - private API", description = "컨텐츠 어드민 전용 API")
 public class ContentApiController {
 	private final ContentFacade contentFacade;
 	private final ContentDtoMapper contentDtoMapper;
