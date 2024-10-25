@@ -1,12 +1,10 @@
 package com.biengual.userapi.bookmark.domain;
 
 import static com.biengual.userapi.bookmark.domain.QBookmarkEntity.*;
-import static com.biengual.userapi.user.domain.QUserEntity.*;
 
 import java.util.List;
 
 import com.biengual.userapi.annotation.DataProvider;
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -16,39 +14,35 @@ import lombok.RequiredArgsConstructor;
 public class BookmarkCustomRepository {
 	private final JPAQueryFactory queryFactory;
 
-	public void deleteBookmark(BookmarkCommand.Delete command) {
-		queryFactory.delete(bookmarkEntity)
+	public boolean deleteBookmark(BookmarkCommand.Delete command) {
+		return queryFactory.delete(bookmarkEntity)
+			.where(bookmarkEntity.userId.eq(command.userId()))
 			.where(bookmarkEntity.id.eq(command.bookmarkId()))
-			.execute();
+			.execute() > 0;
 	}
 
-	public boolean isPresentBookmark(BookmarkCommand.Delete command) {
-		return queryFactory.from(userEntity)
-			.join(userEntity.bookmarks, bookmarkEntity)
-			.where(userEntity.id.eq(command.userId()))
-			.where(bookmarkEntity.id.eq(command.bookmarkId()))
-			.fetchFirst() != null;
-	}
-
-	public List<BookmarkEntity> getAllBookmarks(Long userId) {
+	public List<BookmarkEntity> findBookmarks(Long userId) {
 		return queryFactory.select(bookmarkEntity)
-			.from(userEntity)
-			.join(userEntity.bookmarks, bookmarkEntity)
-			.where(userEntity.id.eq(userId))
+			.from(bookmarkEntity)
+			.where(bookmarkEntity.userId.eq(userId))
 			.orderBy(bookmarkEntity.createdAt.desc())
 			.fetch();
 	}
 
-	public boolean isBookmarkAlreadyPresent(BookmarkCommand.Create command) {
-		return queryFactory.from(userEntity)
-			.leftJoin(userEntity.bookmarks, bookmarkEntity)
-			.where(bookmarkBooleanExpression(command))
-			.fetchFirst() != null;
+	public List<BookmarkEntity> findBookmarksByUserIdAndScriptIndex(Long userId, Long scriptIndex) {
+		return queryFactory.select(bookmarkEntity)
+			.from(bookmarkEntity)
+			.where(bookmarkEntity.userId.eq(userId))
+			.where(bookmarkEntity.scriptIndex.eq(scriptIndex))
+			.orderBy(bookmarkEntity.updatedAt.asc())
+			.fetch();
 	}
 
-	private BooleanExpression bookmarkBooleanExpression(BookmarkCommand.Create command) {
-		return userEntity.id.eq(command.userId())
-			.and(bookmarkEntity.scriptIndex.eq(command.contentId()))
-			.and(bookmarkEntity.sentenceIndex.eq(command.sentenceIndex()));
+	public boolean isBookmarkAlreadyPresent(BookmarkCommand.Create command) {
+		return queryFactory.from(bookmarkEntity)
+			.where(bookmarkEntity.userId.eq(command.userId()))
+			.where(bookmarkEntity.scriptIndex.eq(command.contentId()))
+			.where(bookmarkEntity.sentenceIndex.eq(command.sentenceIndex()))
+			.fetchFirst() != null;
 	}
 }
