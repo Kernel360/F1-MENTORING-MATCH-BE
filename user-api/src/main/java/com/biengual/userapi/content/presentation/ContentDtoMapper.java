@@ -1,5 +1,6 @@
 package com.biengual.userapi.content.presentation;
 
+import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentInfo;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
@@ -7,24 +8,30 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 /**
- * 객체 간의 Mapper를 정의
- *
- * 메서드 네이밍은 prefix + target (inner)class name
- *
- * prefix로 어떤 객체 간의 매핑인지 구분
  * do~ : Command <- Request
  * of~ : Response <- Info
  * build~ :  Entity <-> Info, Info <-> Info
+ * <p>
+ * ContentDto, CrawlingDto 와 Info, Command 간의 Mapper
  *
- * @author 문찬욱
+ * @author 김영래
  */
 @Mapper(
-    componentModel = "spring",
-    injectionStrategy = InjectionStrategy.CONSTRUCTOR,
-    unmappedTargetPolicy = ReportingPolicy.ERROR
+	componentModel = "spring",
+	injectionStrategy = InjectionStrategy.CONSTRUCTOR,
+	unmappedTargetPolicy = ReportingPolicy.ERROR
 )
 public interface ContentDtoMapper {
-    // 스크랩 많은 순 컨텐츠 조회 매핑
+	// Command <- Request
+	ContentCommand.CrawlingContent doCrawlingContent(ContentRequestDto.CreateReq request);
+
+	@Mapping(target = "id", source = "contentId")
+	ContentCommand.Modify doModify(Long contentId, ContentRequestDto.UpdateReq request);
+
+	// Response <- Info
     @Mapping(target = "scrapPreview", source = "previewContents")
     ContentResponseDto.ScrapPreviewContentsRes ofScrapPreviewContentsRes(ContentInfo.PreviewContents previewContents);
+
+	// Entity <-> Info, Info <-> Info
+
 }

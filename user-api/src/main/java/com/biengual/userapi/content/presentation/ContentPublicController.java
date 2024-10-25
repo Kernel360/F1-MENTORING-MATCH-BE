@@ -1,9 +1,9 @@
 package com.biengual.userapi.content.presentation;
 
 import com.biengual.userapi.content.application.ContentFacade;
-import com.biengual.userapi.content.domain.ContentService;
 import com.biengual.userapi.content.domain.ContentInfo;
-import com.biengual.userapi.content.domain.enums.ContentType;
+import com.biengual.userapi.content.domain.ContentService;
+import com.biengual.userapi.content.domain.ContentType;
 import com.biengual.userapi.message.ResponseEntityFactory;
 import com.biengual.userapi.swagger.content.SwaggerContentByScrapCount;
 import com.biengual.userapi.swagger.content.SwaggerContentDetail;
@@ -82,13 +82,13 @@ public class ContentPublicController {
 	})
 	public ResponseEntity<Object>
 	getContentsBySearch(
-		@ModelAttribute ContentRequestDto.ContentSearchDto searchDto,
+		@ModelAttribute ContentRequestDto.SearchReq searchDto,
 		@RequestParam(required = false, defaultValue = "createdAt") String sort,
 		@RequestParam(required = false, defaultValue = "DESC") Sort.Direction direction,
 		@Parameter(hidden = true) @PageableDefault(page = 0, size = 10) Pageable pageable
 	) {
 		Pageable pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), direction, sort);
-		PaginationDto<ContentResponseDto.ContentPreviewResponseDto> pageContentList
+		PaginationDto<ContentResponseDto.PreviewRes> pageContentList
 			= contentService.search(searchDto, pageRequest);
 		return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, pageContentList);
 	}
@@ -116,7 +116,7 @@ public class ContentPublicController {
 		@RequestParam(required = false) Long categoryId
 	) {
 		Pageable pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), direction, sort);
-		PaginationDto<ContentResponseDto.ContentPreviewResponseDto> pageContentList
+		PaginationDto<ContentResponseDto.PreviewRes> pageContentList
 			= contentService.getAllContents(ContentType.READING, pageRequest, categoryId);
 
 		return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, pageContentList);
@@ -146,7 +146,7 @@ public class ContentPublicController {
 		@RequestParam(required = false) Long categoryId
 	) {
 		Pageable pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), direction, sort);
-		PaginationDto<ContentResponseDto.ContentPreviewResponseDto> pageContentList
+		PaginationDto<ContentResponseDto.PreviewRes> pageContentList
 			= contentService.getAllContents(ContentType.LISTENING, pageRequest, categoryId);
 
 		return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, pageContentList);
@@ -166,7 +166,7 @@ public class ContentPublicController {
 		@RequestParam(defaultValue = "hits") String sortBy,
 		@RequestParam(defaultValue = "8") int num
 	) {
-		Map<String, List<ContentResponseDto.ContentPreviewResponseDto>> data = new HashMap<>();
+		Map<String, List<ContentResponseDto.PreviewRes>> data = new HashMap<>();
 		data.put("readingPreview", contentService.findPreviewContents(ContentType.READING, sortBy, num));
 
 		return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, data);
@@ -186,7 +186,7 @@ public class ContentPublicController {
 		@RequestParam(defaultValue = "hits") String sortBy,
 		@RequestParam(defaultValue = "8") int num
 	) {
-		Map<String, List<ContentResponseDto.ContentPreviewResponseDto>> data = new HashMap<>();
+		Map<String, List<ContentResponseDto.PreviewRes>> data = new HashMap<>();
 		data.put("listeningPreview", contentService.findPreviewContents(ContentType.LISTENING, sortBy, num));
 
 		return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, data);
@@ -208,7 +208,7 @@ public class ContentPublicController {
 		@PathVariable Long id
 	) {
 
-		ContentResponseDto.ContentDetailResponseDto scriptsOfContent = contentService.getScriptsOfContent(id);
+		ContentResponseDto.DetailRes scriptsOfContent = contentService.getScriptsOfContent(id);
 
 		return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, scriptsOfContent);
 	}

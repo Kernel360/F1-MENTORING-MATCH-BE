@@ -1,35 +1,21 @@
 package com.biengual.userapi.content.presentation;
 
-import static com.biengual.userapi.message.error.code.CategoryErrorCode.*;
-
-import java.util.List;
-
 import com.biengual.userapi.content.domain.ContentDocument;
 import com.biengual.userapi.content.domain.ContentEntity;
-import com.biengual.userapi.content.domain.enums.ContentType;
+import com.biengual.userapi.content.domain.ContentType;
 import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.script.domain.entity.Script;
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import lombok.Builder;
+
+import java.util.List;
+
+import static com.biengual.userapi.message.error.code.CategoryErrorCode.CATEGORY_NOT_FOUND;
 
 public class ContentResponseDto {
 
-	public record ContentCreateResponseDto(
-		String scriptId,
-		Long contentId
-	) {
-
-	}
-
-	public record ContentUpdateResponseDto(
-		Long contentId
-	) {
-
-	}
-
 	@Builder
-	public record ContentDetailResponseDto(
+	public record DetailRes(
 		Long contentId,
 		ContentType contentType,
 		String category,
@@ -40,8 +26,8 @@ public class ContentResponseDto {
 		Integer hits,
 		List<Script> scriptList
 	) {
-		public static ContentDetailResponseDto of(ContentEntity content, ContentDocument contentDocument) {
-			return ContentDetailResponseDto.builder()
+		public static DetailRes of(ContentEntity content, ContentDocument contentDocument) {
+			return DetailRes.builder()
 				.contentId(content.getId())
 				.contentType(content.getContentType())
 				.category(content.getCategory().getName())
@@ -66,17 +52,17 @@ public class ContentResponseDto {
 		}
 	}
 
-	public record ContentPreviewResponseDto(
+	public record PreviewRes(
 		Long contentId,
 		String title,
-		String thumbnailUrl,
+		String thumbnailUrl,	// coverImageUrl
 		ContentType contentType,
-		String preScripts,
+		String preScripts,	// description
 		String category,
 		int hits
 	) {
-		public static ContentPreviewResponseDto of(ContentEntity content) {
-			return new ContentPreviewResponseDto(
+		public static PreviewRes of(ContentEntity content) {
+			return new PreviewRes(
 				content.getId(),
 				content.getTitle(),
 				content.getThumbnailUrl(),
@@ -105,7 +91,7 @@ public class ContentResponseDto {
 	) {
 	}
 
-	public record ContentByScrapCountDto(
+	public record GetByScrapCount(
 		Long contentId,
 		String title,
 		String thumbnailUrl,
@@ -114,8 +100,8 @@ public class ContentResponseDto {
 		String category,
 		Long countScrap
 	) {
-		public static ContentByScrapCountDto of(ContentEntity content, Long count){
-			return new ContentByScrapCountDto(
+		public static GetByScrapCount of(ContentEntity content, Long count){
+			return new GetByScrapCount(
 				content.getId(),
 				content.getTitle(),
 				content.getThumbnailUrl(),

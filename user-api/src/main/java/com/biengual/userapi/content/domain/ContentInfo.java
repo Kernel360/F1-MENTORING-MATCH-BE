@@ -1,6 +1,5 @@
 package com.biengual.userapi.content.domain;
 
-import com.biengual.userapi.content.domain.enums.ContentType;
 import lombok.Builder;
 
 import java.util.List;

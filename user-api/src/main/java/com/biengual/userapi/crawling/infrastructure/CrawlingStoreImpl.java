@@ -1,4 +1,4 @@
-package com.biengual.userapi.crawling.service;
+package com.biengual.userapi.crawling.infrastructure;
 
 import static com.biengual.userapi.message.error.code.CrawlingErrorCode.*;
 
@@ -25,10 +25,16 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.biengual.userapi.crawling.domain.dto.CrawlingResponseDto;
+import com.biengual.userapi.content.domain.ContentCommand;
+import com.biengual.userapi.content.domain.ContentRepository;
+import com.biengual.userapi.content.domain.ContentType;
+import com.biengual.userapi.crawling.application.TranslateService;
+import com.biengual.userapi.crawling.domain.CrawlingStore;
+import com.biengual.userapi.crawling.presentation.CrawlingResponseDto;
 import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.script.domain.entity.CNNScript;
 import com.biengual.userapi.script.domain.entity.Script;
@@ -44,23 +50,29 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CrawlingServiceImpl implements CrawlingService {
+public class CrawlingStoreImpl implements CrawlingStore {
 	private final TranslateService translateService;
+	private final ContentRepository contentRepository;
+
 	@Value("${YOUTUBE_API_KEY}")
 	private String YOUTUBE_API_KEY;
 
 	@Override
-	public CrawlingResponseDto.CrawlingContentResponseDto getYoutubeInfo(String youtubeUrl, String credentials)
-		throws Exception {
+	public ContentCommand.Create getYoutubeDetail(ContentCommand.CrawlingContent command) {
 		// Extract the video ID from the URL
-		String videoId = extractVideoId(youtubeUrl);
+		String videoId = extractVideoId(command.url());
+
+		// Check Already Stored In DB
+		verifyCrawling(videoId);
+
 		// Create the request URL for the transcript service
 		String requestUrl = "https://www.googleapis.com/youtube/v3/videos?id=" + videoId
 			+ "&part=snippet, contentDetails" + "&key=" + YOUTUBE_API_KEY;
 
 		// Set up headers with your API key
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("Cookie", "access_token=" + credentials);
+		headers.add("Cookie", "access_token="
+			+ SecurityContextHolder.getContext().getAuthentication().getCredentials());
 
 		// Create an HTTP entity with headers
 		// Use RestTemplate to make the request
@@ -68,87 +80,50 @@ public class CrawlingServiceImpl implements CrawlingService {
 		ResponseEntity<String> response
 			= restTemplate.exchange(requestUrl, HttpMethod.GET, new HttpEntity<>(headers), String.class);
 
-		JsonNode snippetNode = getSnippetNode(response.getBody()).path("snippet");
-		JsonNode contentDetailsNode = getSnippetNode(response.getBody()).path("contentDetails");
+		JsonNode snippetNode = null;
+		JsonNode contentDetailsNode = null;
+		String category = null;
+
+		try {
+			snippetNode = getSnippetNode(response.getBody()).path("snippet");
+			contentDetailsNode = getSnippetNode(response.getBody()).path("contentDetails");
+			category = getCategoryName(snippetNode.path("categoryId").asText());
+		} catch (Exception e) {
+			throw new CommonException(CRAWLING_JSOUP_FAILURE);
+		}
 
 		Duration duration = Duration.parse(contentDetailsNode.path("duration").asText());
 		if (duration.compareTo(Duration.ofMinutes(8)) > 0) {
 			throw new CommonException(CRAWLING_OUT_OF_BOUNDS);
 		}
-
-		return new CrawlingResponseDto.CrawlingContentResponseDto(
-			youtubeUrl,
-			snippetNode.path("title").asText(),
-			getThumbnailUrl(snippetNode.path("thumbnails")),
-			getCategoryName(snippetNode.path("categoryId").asText()),
-			getYoutubeScript(youtubeUrl, Double.parseDouble(String.valueOf(duration.getSeconds())))
-		);
+		return ContentCommand.Create.builder()
+			.url(command.url())
+			.title(snippetNode.path("title").asText())
+			.imgUrl(getThumbnailUrl(snippetNode.path("thumbnails")))
+			.category(category)
+			.contentType(ContentType.LISTENING)
+			.script(getYoutubeScript(command.url(), Double.parseDouble(String.valueOf(duration.getSeconds()))))
+			.build();
 	}
 
 	@Override
-	public CrawlingResponseDto.CrawlingContentResponseDto getCNNInfo(String cnnUrl, String credentials) {
-		CrawlingResponseDto.CrawlingContentResponseDto cnnResponseDto = null;
-		try {
-			cnnResponseDto = fetchArticle(cnnUrl);
-		} catch (IOException e) {
-			throw new CommonException(CRAWLING_JSOUP_FAILURE);
-		}
-
-		return cnnResponseDto;
+	public ContentCommand.Create getCNNDetail(ContentCommand.CrawlingContent command) {
+		CrawlingResponseDto.ContentDetailRes response = fetchArticle(command.url());
+		return ContentCommand.Create.builder()
+			.url(response.url())
+			.title(response.title())
+			.imgUrl(response.imgUrl())
+			.category(response.category())
+			.contentType(ContentType.READING)
+			.script(response.script())
+			.build();
 	}
 
-	@Override
-	public CrawlingResponseDto.CrawlingContentResponseDto fetchArticle(String url) throws IOException {
-		Document doc = Jsoup.connect(url).get();
+	// Internal Methods ------------------------------------------------------------------------------------------------
 
-		// 제목 추출
-		String title = doc.select("h1.headline__text").text();
+	// LISTENING - YOUTUBE
 
-		// 카테고리 추출
-		Element categoryElement = doc.selectFirst("meta[name=meta-section]");
-		String category = categoryElement != null ? categoryElement.attr("content") : "Unknown Category";
-
-		// 이미지 URL 추출
-		Elements images = doc.select("img.image__dam-img[src]");
-		String imgUrl = "%s.jpg".formatted(
-			images.get(0).attr("src")
-				.split(".jpg")[0]
-		);
-		int preWidth = getWidthOfImage(images.get(0));
-
-		for (Element image : images) {
-			if (preWidth < getWidthOfImage(image)) {
-				imgUrl = "%s.jpg".formatted(
-					image.attr("src")
-						.split(".jpg")[0]
-				);
-				preWidth = getWidthOfImage(image);
-			}
-		}
-
-		// 본문 추출
-		Elements paragraphs = doc.select("div.article__content p");
-		StringBuilder fullText = new StringBuilder();
-		for (Element paragraph : paragraphs) {
-			fullText.append(paragraph.text()).append(" ");
-		}
-
-		// 본문을 문장 단위로 나누기
-		List<String> sentences = splitIntoSentences(fullText.toString());
-		return CrawlingResponseDto.CrawlingContentResponseDto.of(
-			url,
-			title,
-			imgUrl,
-			category,
-			sentences.stream()
-				.map(sentence -> (Script)CNNScript.of(
-						sentence, translateService.translate(sentence, "en", "ko")
-					)
-				).toList()
-		);
-	}
-
-	@Override
+	// SELENIUM
 	public List<Script> getYoutubeScript(String youtubeInfo, double seconds) {
 		// 운영체제 감지
 		String os = System.getProperty("os.name").toLowerCase();
@@ -207,7 +182,7 @@ public class CrawlingServiceImpl implements CrawlingService {
 		return transcriptLines;
 	}
 
-	@Override
+	// SELENIUM
 	public List<Script> runSelenium(WebDriver driver, String youtubeInfo, double seconds) throws Exception {
 		List<Script> scripts = new ArrayList<>();
 
@@ -252,9 +227,55 @@ public class CrawlingServiceImpl implements CrawlingService {
 		return scripts;
 	}
 
-	// Internal Methods ------------------------------------------------------------------------------------------------
+	// SELENIUM
+	private void setUpSelenium(WebDriver driver) throws InterruptedException {
+		log.info("SELENIUM : SETUP SELENIUM START");
 
-	// LISTENING - YOUTUBE
+		// Initial setting
+		driver.manage().window().maximize();
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		JavascriptExecutor js = (JavascriptExecutor)driver;
+		wait.until(webDriver -> js.executeScript("return document.readyState").equals("complete"));
+		Thread.sleep(5000);
+		log.info("SELENIUM : SETUP SUCCESS");
+
+		// Zoom out
+		js.executeScript("document.body.style.zoom='30%'");
+		Thread.sleep(5000);
+		log.info("SELENIUM : ZOOMOUT SUCESS");
+
+		// Click the "expand" button to expand
+		List<WebElement> expandButton
+			= driver.findElements(By.xpath("//tp-yt-paper-button[@id='expand']"));
+		log.info("SELENIUM : FIND EXPAND BUTTON : {} ", expandButton);
+		for (WebElement button : expandButton) {
+			log.info("SELENIUM : FIND BUTTON : {} ", button.getText());
+			if (button.getText().contains("more")) {
+				log.info("SELENIUM : FIND SUCCESS MORE BUTTON : {}", button.getText());
+				js.executeScript("arguments[0].click();", button);
+				log.info("SELENIUM : EXPAND BUTTON CLICK");
+				break;
+			}
+		}
+
+		Thread.sleep(5000);
+		// Locate and click the "Show transcript" button
+		log.info("SELENIUM : WAITING TRANSCRIPTION BUTTON FIND");
+
+		WebElement transcriptButton = driver.findElement(
+			By.xpath("//yt-button-shape//button[@aria-label='Show transcript']")
+		);
+
+		log.info("SELENIUM : FIND TRANSCRIPT BUTTON");
+		js.executeScript("arguments[0].click();", transcriptButton);
+		log.info("SELENIUM : CLICK TRANSCRIPTION");
+		Thread.sleep(5000);
+	}
+
+	// SELENIUM
+	private double getSecondsFromString(String time) {
+		return Double.parseDouble(time.split(":")[0]) * 60 + Double.parseDouble(time.split(":")[1]);
+	}
 
 	private JsonNode getSnippetNode(String body) throws JsonProcessingException {
 		ObjectMapper objectMapper = new ObjectMapper();
@@ -304,55 +325,63 @@ public class CrawlingServiceImpl implements CrawlingService {
 		return "Unknown Category";
 	}
 
-	private void setUpSelenium(WebDriver driver) throws InterruptedException {
-		log.info("SELENIUM : SETUP SELENIUM START");
+	// READING - CNN
 
-		// Initial setting
-		driver.manage().window().maximize();
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-		JavascriptExecutor js = (JavascriptExecutor)driver;
-		wait.until(webDriver -> js.executeScript("return document.readyState").equals("complete"));
-		Thread.sleep(5000);
-		log.info("SELENIUM : SETUP SUCCESS");
+	public CrawlingResponseDto.ContentDetailRes fetchArticle(String url) {
+		Document doc = null;
+		try {
+			doc = Jsoup.connect(url).get();
+		} catch (IOException e) {
+			throw new CommonException(CRAWLING_JSOUP_FAILURE);
+		}
 
-		// Zoom out
-		js.executeScript("document.body.style.zoom='30%'");
-		Thread.sleep(5000);
-		log.info("SELENIUM : ZOOMOUT SUCESS");
+		// 제목 추출
+		String title = doc.select("h1.headline__text").text();
 
-		// Click the "expand" button to expand
-		List<WebElement> expandButton
-			= driver.findElements(By.xpath("//tp-yt-paper-button[@id='expand']"));
-		log.info("SELENIUM : FIND EXPAND BUTTON : {} ", expandButton);
-		for (WebElement button : expandButton) {
-			log.info("SELENIUM : FIND BUTTON : {} ", button.getText());
-			if (button.getText().contains("more")) {
-				log.info("SELENIUM : FIND SUCCESS MORE BUTTON : {}", button.getText());
-				js.executeScript("arguments[0].click();", button);
-				log.info("SELENIUM : EXPAND BUTTON CLICK");
-				break;
+		// 카테고리 추출
+		Element categoryElement = doc.selectFirst("meta[name=meta-section]");
+		String category = categoryElement != null ? categoryElement.attr("content") : "Unknown Category";
+
+		// 이미지 URL 추출
+		Elements images = doc.select("img.image__dam-img[src]");
+		String imgUrl = "%s.jpg".formatted(
+			images.get(0).attr("src")
+				.split(".jpg")[0]
+		);
+		int preWidth = getWidthOfImage(images.get(0));
+
+		for (Element image : images) {
+			if (preWidth < getWidthOfImage(image)) {
+				imgUrl = "%s.jpg".formatted(
+					image.attr("src")
+						.split(".jpg")[0]
+				);
+				preWidth = getWidthOfImage(image);
 			}
 		}
 
-		Thread.sleep(5000);
-		// Locate and click the "Show transcript" button
-		log.info("SELENIUM : WAITING TRANSCRIPTION BUTTON FIND");
+		// 본문 추출
+		Elements paragraphs = doc.select("div.article__content p");
+		StringBuilder fullText = new StringBuilder();
+		for (Element paragraph : paragraphs) {
+			fullText.append(paragraph.text()).append(" ");
+		}
 
-		WebElement transcriptButton = driver.findElement(
-			By.xpath("//yt-button-shape//button[@aria-label='Show transcript']")
+		// 본문을 문장 단위로 나누기
+		List<String> sentences = splitIntoSentences(fullText.toString());
+		return CrawlingResponseDto.ContentDetailRes.of(
+			url,
+			title,
+			imgUrl,
+			category,
+			sentences.stream()
+				.map(sentence -> (Script)CNNScript.of(
+						sentence, translateService.translate(sentence, "en", "ko")
+					)
+				).toList()
 		);
-
-		log.info("SELENIUM : FIND TRANSCRIPT BUTTON");
-		js.executeScript("arguments[0].click();", transcriptButton);
-		log.info("SELENIUM : CLICK TRANSCRIPTION");
-		Thread.sleep(5000);
 	}
 
-	private double getSecondsFromString(String time) {
-		return Double.parseDouble(time.split(":")[0]) * 60 + Double.parseDouble(time.split(":")[1]);
-	}
-
-	// READING - CNN
 	private int getWidthOfImage(Element imginfo) {
 		return Integer.parseInt(
 			imginfo.attr("src")
@@ -374,4 +403,11 @@ public class CrawlingServiceImpl implements CrawlingService {
 		return sentences;
 	}
 
+	// COMMON
+
+	private void verifyCrawling(String url) {
+		if (contentRepository.existsByUrl(url)) {
+			throw new CommonException(CRAWLING_ALREADY_DONE);
+		}
+	}
 }

@@ -1,32 +1,16 @@
 package com.biengual.userapi.question.infrastructure;
 
-import static com.biengual.userapi.message.error.code.ContentErrorCode.*;
-import static com.biengual.userapi.question.domain.QuestionDocument.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-
+import com.biengual.userapi.annotation.DataProvider;
+import com.biengual.userapi.content.domain.*;
+import com.biengual.userapi.message.error.exception.CommonException;
+import com.biengual.userapi.question.domain.*;
+import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 
-import com.biengual.userapi.annotation.DataProvider;
-import com.biengual.userapi.content.domain.ContentDocument;
-import com.biengual.userapi.content.domain.ContentEntity;
-import com.biengual.userapi.content.domain.enums.ContentStatus;
-import com.biengual.userapi.content.repository.ContentRepository;
-import com.biengual.userapi.content.repository.ContentScriptRepository;
-import com.biengual.userapi.message.error.exception.CommonException;
-import com.biengual.userapi.question.domain.QuestionCommand;
-import com.biengual.userapi.question.domain.QuestionDocument;
-import com.biengual.userapi.question.domain.QuestionRepository;
-import com.biengual.userapi.question.domain.QuestionStore;
-import com.biengual.userapi.question.domain.QuestionType;
+import java.util.*;
 
-import lombok.RequiredArgsConstructor;
+import static com.biengual.userapi.message.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
+import static com.biengual.userapi.question.domain.QuestionDocument.of;
 
 @DataProvider
 @RequiredArgsConstructor

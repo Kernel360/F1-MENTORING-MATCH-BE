@@ -1,12 +1,9 @@
 package com.biengual.userapi.content.domain;
 
-import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.content.presentation.ContentRequestDto;
 import com.biengual.userapi.content.presentation.ContentResponseDto;
-import com.biengual.userapi.content.domain.enums.ContentType;
 import com.biengual.userapi.util.PaginationDto;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
@@ -16,30 +13,27 @@ import java.util.List;
  * @author 김영래
  */
 public interface ContentService {
-	PaginationDto<ContentResponseDto.ContentPreviewResponseDto> search(
-		ContentRequestDto.ContentSearchDto searchDto, Pageable pageable
+	PaginationDto<ContentResponseDto.PreviewRes> search(
+		ContentRequestDto.SearchReq searchDto, Pageable pageable
 	);
 
-	PaginationDto<ContentResponseDto.ContentPreviewResponseDto> getAllContents(
+	PaginationDto<ContentResponseDto.PreviewRes> getAllContents(
 		ContentType contentType, Pageable pageable, Long categoryId
 	);
 
-	ContentResponseDto.ContentDetailResponseDto getScriptsOfContent(Long id);
+	ContentResponseDto.DetailRes getScriptsOfContent(Long id);
 
-	ContentResponseDto.ContentCreateResponseDto createContent(
-		Authentication authentication, ContentRequestDto.ContentCreateRequestDto contentCreateRequestDto
-	) throws Exception;
+	void createContent(ContentCommand.Create command);
 
-	ContentResponseDto.ContentUpdateResponseDto updateContent(
-		Long id,
-		ContentRequestDto.ContentUpdateRequestDto contentUpdateRequest
-	);
+	void updateContent(ContentCommand.Modify command);
 
-	ContentResponseDto.ContentUpdateResponseDto deactivateContent(Long id);
+	void deactivateContent(Long id);
 
-	List<ContentResponseDto.ContentPreviewResponseDto> findPreviewContents(
+	List<ContentResponseDto.PreviewRes> findPreviewContents(
 		ContentType contentType, String sortBy, int num
 	);
 
-	ContentInfo.PreviewContents getContentsByScrapCount(Integer size);
+	List<ContentResponseDto.GetByScrapCount> contentByScrapCount(int num);
+
+    ContentInfo.PreviewContents getContentsByScrapCount(Integer size);
 }

@@ -1,7 +1,7 @@
 package com.biengual.userapi.content.repository;
 
 import com.biengual.userapi.content.domain.ContentInfo;
-import com.biengual.userapi.content.domain.entity.QContentEntity;
+import com.biengual.userapi.content.domain.QContentEntity;
 import com.biengual.userapi.scrap.domain.QScrapEntity;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;

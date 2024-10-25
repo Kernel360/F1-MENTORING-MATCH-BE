@@ -1,25 +1,23 @@
 package com.biengual.userapi.question.infrastructure;
 
-import static com.biengual.userapi.message.error.code.ContentErrorCode.*;
-import static com.biengual.userapi.message.error.code.QuestionErrorCode.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bson.types.ObjectId;
-
 import com.biengual.userapi.annotation.DataProvider;
 import com.biengual.userapi.content.domain.ContentDocument;
 import com.biengual.userapi.content.domain.ContentEntity;
-import com.biengual.userapi.content.repository.ContentRepository;
-import com.biengual.userapi.content.repository.ContentScriptRepository;
+import com.biengual.userapi.content.domain.ContentRepository;
+import com.biengual.userapi.content.domain.ContentScriptRepository;
 import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.question.domain.QuestionDocument;
 import com.biengual.userapi.question.domain.QuestionInfo;
 import com.biengual.userapi.question.domain.QuestionReader;
 import com.biengual.userapi.question.domain.QuestionRepository;
-
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.biengual.userapi.message.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
+import static com.biengual.userapi.message.error.code.QuestionErrorCode.QUESTION_NOT_FOUND;
 
 @DataProvider
 @RequiredArgsConstructor

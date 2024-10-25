@@ -1,12 +1,11 @@
 package com.biengual.userapi.bookmark.presentation;
 
+import com.biengual.userapi.content.domain.ContentType;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Builder;
+
 import java.time.LocalDateTime;
 import java.util.List;
-
-import com.biengual.userapi.content.domain.enums.ContentType;
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-import lombok.Builder;
 
 public class BookmarkResponseDto {
 	public record ContentList(

@@ -4,7 +4,7 @@ import static com.biengual.userapi.message.error.code.ContentErrorCode.*;
 import static com.biengual.userapi.message.error.code.ScrapErrorCode.*;
 
 import com.biengual.userapi.annotation.DataProvider;
-import com.biengual.userapi.content.repository.ContentRepository;
+import com.biengual.userapi.content.domain.ContentRepository;
 import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.scrap.domain.ScrapCommand;
 import com.biengual.userapi.scrap.domain.ScrapCustomRepository;
