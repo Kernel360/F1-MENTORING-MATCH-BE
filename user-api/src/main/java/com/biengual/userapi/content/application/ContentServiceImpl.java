@@ -1,4 +1,4 @@
-package com.biengual.userapi.content.service;
+package com.biengual.userapi.content.application;
 
 import static com.biengual.userapi.message.error.code.CategoryErrorCode.*;
 import static com.biengual.userapi.message.error.code.ContentErrorCode.*;

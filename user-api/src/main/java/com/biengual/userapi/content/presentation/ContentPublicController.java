@@ -1,34 +1,16 @@
-package com.biengual.userapi.content.controller;
+package com.biengual.userapi.content.presentation;
 
-import static com.biengual.userapi.message.response.ContentResponseCode.*;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import com.biengual.userapi.content.application.ContentFacade;
+import com.biengual.userapi.content.application.ContentService;
+import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.content.domain.dto.ContentRequestDto;
 import com.biengual.userapi.content.domain.dto.ContentResponseDto;
 import com.biengual.userapi.content.domain.enums.ContentType;
-import com.biengual.userapi.content.service.ContentService;
-import com.biengual.userapi.message.ApiCustomResponse;
 import com.biengual.userapi.message.ResponseEntityFactory;
 import com.biengual.userapi.swagger.content.SwaggerContentByScrapCount;
 import com.biengual.userapi.swagger.content.SwaggerContentDetail;
 import com.biengual.userapi.swagger.content.SwaggerContentPreview;
 import com.biengual.userapi.util.PaginationDto;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -39,6 +21,18 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.biengual.userapi.message.response.ContentResponseCode.CONTENT_VIEW_SUCCESS;
 
 @RequiredArgsConstructor
 @RestController
@@ -47,25 +41,30 @@ import lombok.RequiredArgsConstructor;
 public class ContentPublicController {
 
 	private final ContentService contentService;
+	private final ContentDtoMapper contentDtoMapper;
+	private final ContentFacade contentFacade;
 
-	/**
-	 * 컨텐츠 조회
-	 * (pageable)
-	 */
-	@GetMapping("/view/scrap-count")
-	@Operation(summary = "컨텐츠 조회", description = "정렬된 컨텐츠 목록을 조회합니다.")
+	// 메인 화면에서 사용하는 스크랩 많은 순으로 컨텐츠 조회
+	@GetMapping("/preview/scrap-count")
+	@Operation(summary = "스크랩을 많이 한 컨텐츠 조회", description = "스크랩 수가 많은 순으로 정렬된 컨텐츠 목록을 조회합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "요청에 성공하였습니다.", content = {
+		@ApiResponse(responseCode = "200", description = "스크랩을 많이 한 컨텐츠 조회 성공", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerContentByScrapCount.class))
 		}),
-		@ApiResponse(responseCode = "204", description = "컨텐츠가 없습니다.", content = @Content),
+		@ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
 		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content)
 	})
-	public ResponseEntity<Object>
-	getContentsByScrapCount(@RequestParam(defaultValue = "8") int num) {
-		Map<String, List<ContentResponseDto.ContentByScrapCountDto>> data = new HashMap<>();
-		data.put("contentByScrapCount", contentService.contentByScrapCount(num));
-		return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, data);
+	@Parameters({
+		@Parameter(name = "size", description = "컨텐츠 수 / default: 8", in = ParameterIn.QUERY, schema = @Schema(type = "integer", defaultValue = "8")),
+	})
+	public ResponseEntity<Object> getContentsByScrapCount(
+		@RequestParam(defaultValue = "8")
+		Integer size
+	) {
+		ContentInfo.PreviewContents info = contentFacade.getContentsByScrapCount(size);
+		ContentResponseDto.ScrapPreviewContentsRes response = contentDtoMapper.ofScrapPreviewContentsRes(info);
+
+		return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
 	}
 
 	@GetMapping("/search")

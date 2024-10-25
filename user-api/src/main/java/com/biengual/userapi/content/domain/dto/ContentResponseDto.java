@@ -88,6 +88,22 @@ public class ContentResponseDto {
 		}
 	}
 
+	public record PreviewContent(
+		Long contentId,
+		String title,
+		String thumbnailUrl,
+		ContentType contentType,
+		String preScripts,
+		String category,
+		Integer hits
+	) {
+	}
+
+	public record ScrapPreviewContentsRes(
+		List<PreviewContent> scrapPreview
+	) {
+	}
+
 	public record ContentByScrapCountDto(
 		Long contentId,
 		String title,
