@@ -99,6 +99,7 @@ public class ContentResponseDto {
 	) {
 	}
 
+	@Builder
 	public record ScrapPreviewContentsRes(
 		List<PreviewContent> scrapPreview
 	) {

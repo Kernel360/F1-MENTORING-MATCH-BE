@@ -4,6 +4,7 @@ import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.content.domain.dto.ContentResponseDto;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 /**
@@ -25,5 +26,6 @@ import org.mapstruct.ReportingPolicy;
 )
 public interface ContentDtoMapper {
     // 스크랩 많은 순 컨텐츠 조회 매핑
+    @Mapping(target = "scrapPreview", source = "previewContents")
     ContentResponseDto.ScrapPreviewContentsRes ofScrapPreviewContentsRes(ContentInfo.PreviewContents previewContents);
 }
