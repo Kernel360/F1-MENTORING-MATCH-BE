@@ -1,11 +1,11 @@
-package com.biengual.userapi.content.domain.dto;
+package com.biengual.userapi.content.presentation;
 
 import static com.biengual.userapi.message.error.code.CategoryErrorCode.*;
 
 import java.util.List;
 
-import com.biengual.userapi.content.domain.entity.ContentDocument;
-import com.biengual.userapi.content.domain.entity.ContentEntity;
+import com.biengual.userapi.content.domain.ContentDocument;
+import com.biengual.userapi.content.domain.ContentEntity;
 import com.biengual.userapi.content.domain.enums.ContentType;
 import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.script.domain.entity.Script;

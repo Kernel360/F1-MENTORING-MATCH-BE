@@ -1,7 +1,6 @@
 package com.biengual.userapi.content.presentation;
 
 import com.biengual.userapi.content.domain.ContentInfo;
-import com.biengual.userapi.content.domain.dto.ContentResponseDto;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

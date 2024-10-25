@@ -1,4 +1,4 @@
-package com.biengual.userapi.content.domain.dto;
+package com.biengual.userapi.content.presentation;
 
 import java.util.List;
 

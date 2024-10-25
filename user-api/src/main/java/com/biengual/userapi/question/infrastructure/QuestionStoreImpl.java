@@ -14,8 +14,8 @@ import java.util.Set;
 import org.bson.types.ObjectId;
 
 import com.biengual.userapi.annotation.DataProvider;
-import com.biengual.userapi.content.domain.entity.ContentDocument;
-import com.biengual.userapi.content.domain.entity.ContentEntity;
+import com.biengual.userapi.content.domain.ContentDocument;
+import com.biengual.userapi.content.domain.ContentEntity;
 import com.biengual.userapi.content.domain.enums.ContentStatus;
 import com.biengual.userapi.content.repository.ContentRepository;
 import com.biengual.userapi.content.repository.ContentScriptRepository;

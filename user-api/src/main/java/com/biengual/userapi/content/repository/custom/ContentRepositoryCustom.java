@@ -5,9 +5,9 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.biengual.userapi.content.domain.dto.ContentRequestDto;
-import com.biengual.userapi.content.domain.dto.ContentResponseDto;
-import com.biengual.userapi.content.domain.entity.ContentEntity;
+import com.biengual.userapi.content.presentation.ContentRequestDto;
+import com.biengual.userapi.content.presentation.ContentResponseDto;
+import com.biengual.userapi.content.domain.ContentEntity;
 import com.biengual.userapi.content.domain.enums.ContentType;
 
 public interface ContentRepositoryCustom {

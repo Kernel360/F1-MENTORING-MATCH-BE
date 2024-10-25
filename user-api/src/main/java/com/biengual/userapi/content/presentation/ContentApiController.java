@@ -1,8 +1,6 @@
 package com.biengual.userapi.content.presentation;
 
-import com.biengual.userapi.content.domain.dto.ContentRequestDto;
-import com.biengual.userapi.content.domain.dto.ContentResponseDto;
-import com.biengual.userapi.content.application.ContentService;
+import com.biengual.userapi.content.domain.ContentService;
 import com.biengual.userapi.message.ResponseEntityFactory;
 import com.biengual.userapi.swagger.content.SwaggerContentCreate;
 import com.biengual.userapi.swagger.content.SwaggerContentUpdate;

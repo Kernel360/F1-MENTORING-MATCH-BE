@@ -1,8 +1,8 @@
 package com.biengual.userapi.crawling.domain.dto;
 
 import com.biengual.userapi.category.domain.CategoryEntity;
-import com.biengual.userapi.content.domain.entity.ContentDocument;
-import com.biengual.userapi.content.domain.entity.ContentEntity;
+import com.biengual.userapi.content.domain.ContentDocument;
+import com.biengual.userapi.content.domain.ContentEntity;
 import com.biengual.userapi.content.domain.enums.ContentType;
 import com.biengual.userapi.script.domain.entity.Script;
 import org.bson.types.ObjectId;

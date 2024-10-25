@@ -1,6 +1,6 @@
 package com.biengual.userapi.content.repository;
 
-import com.biengual.userapi.content.domain.entity.ContentDocument;
+import com.biengual.userapi.content.domain.ContentDocument;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 

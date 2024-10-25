@@ -1,7 +1,7 @@
-package com.biengual.userapi.content.domain.entity;
+package com.biengual.userapi.content.domain;
 
 import com.biengual.userapi.category.domain.CategoryEntity;
-import com.biengual.userapi.content.domain.dto.ContentRequestDto;
+import com.biengual.userapi.content.presentation.ContentRequestDto;
 import com.biengual.userapi.content.domain.enums.ContentStatus;
 import com.biengual.userapi.content.domain.enums.ContentType;
 import com.biengual.userapi.script.domain.entity.Script;

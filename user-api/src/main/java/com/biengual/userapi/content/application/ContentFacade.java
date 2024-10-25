@@ -2,6 +2,7 @@ package com.biengual.userapi.content.application;
 
 import com.biengual.userapi.annotation.Facade;
 import com.biengual.userapi.content.domain.ContentInfo;
+import com.biengual.userapi.content.domain.ContentService;
 import lombok.RequiredArgsConstructor;
 
 @Facade

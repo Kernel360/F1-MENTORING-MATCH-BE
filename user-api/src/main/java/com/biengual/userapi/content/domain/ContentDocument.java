@@ -1,4 +1,4 @@
-package com.biengual.userapi.content.domain.entity;
+package com.biengual.userapi.content.domain;
 
 import java.util.ArrayList;
 import java.util.List;

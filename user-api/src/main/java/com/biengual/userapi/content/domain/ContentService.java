@@ -1,8 +1,8 @@
-package com.biengual.userapi.content.application;
+package com.biengual.userapi.content.domain;
 
 import com.biengual.userapi.content.domain.ContentInfo;
-import com.biengual.userapi.content.domain.dto.ContentRequestDto;
-import com.biengual.userapi.content.domain.dto.ContentResponseDto;
+import com.biengual.userapi.content.presentation.ContentRequestDto;
+import com.biengual.userapi.content.presentation.ContentResponseDto;
 import com.biengual.userapi.content.domain.enums.ContentType;
 import com.biengual.userapi.util.PaginationDto;
 import org.springframework.data.domain.Pageable;
