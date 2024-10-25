@@ -6,5 +6,5 @@ import java.util.Map;
 import com.biengual.userapi.category.domain.dto.CategoryResponseDto;
 import com.biengual.userapi.swagger.SwaggerReturnInterface;
 
-public class SwaggerCategory extends SwaggerReturnInterface<Map<String, List<CategoryResponseDto>>> {
+public class SwaggerCategory extends SwaggerReturnInterface<CategoryResponseDto.AllCategoriesRes> {
 }
