@@ -44,9 +44,9 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 		HttpServletRequest request, HttpServletResponse response, Authentication authentication
 	) throws IOException {
 		try {
-			OAuth2UserPrincipal oAuth2UserPrincipal = (OAuth2UserPrincipal)authentication.getPrincipal();
+			OAuth2UserPrincipal principal = (OAuth2UserPrincipal)authentication.getPrincipal();
 
-			UserEntity user = userService.getUserByOAuthUser(oAuth2UserPrincipal);
+			UserEntity user = userService.getUserByOAuthUser(principal);
 
 			String refreshToken = tokenProvider.generateRefreshToken(user);
 			cookieUtil.addRefreshTokenCookie(request, response, refreshToken);

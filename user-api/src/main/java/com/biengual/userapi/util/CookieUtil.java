@@ -13,7 +13,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.Base64;
 
 
@@ -30,10 +29,6 @@ public class CookieUtil {
 
 	@Value("${spring.profiles.active}")
 	private String activeProfile;
-
-	public boolean verifyAccessTokenCookie(Cookie[] cookies) {
-		return cookies != null && Arrays.stream(cookies).anyMatch(cookie -> cookie.getName().equals(ACCESS_TOKEN_NAME));
-	}
 
 	public void addAccessTokenCookie(HttpServletRequest request, HttpServletResponse response, String accessToken) {
 		removeCookie(request, response, ACCESS_TOKEN_NAME);

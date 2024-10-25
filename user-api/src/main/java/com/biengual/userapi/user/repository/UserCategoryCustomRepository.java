@@ -1,6 +1,8 @@
 package com.biengual.userapi.user.repository;
 
 import com.biengual.userapi.user.domain.QUserCategoryEntity;
+import com.biengual.userapi.user.domain.UserInfo;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -16,6 +18,23 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserCategoryCustomRepository {
     private final JPAQueryFactory queryFactory;
+    // user의 관심 Category 들을 조회하기 위한 쿼리
+    public List<UserInfo.MyCategory> findAllMyCategories(Long userId) {
+        QUserCategoryEntity userCategoryEntity = QUserCategoryEntity.userCategoryEntity;
+
+        return queryFactory.select(
+                Projections.constructor(
+                    UserInfo.MyCategory.class,
+                    userCategoryEntity.category.id,
+                    userCategoryEntity.category.name
+                )
+            )
+            .from(userCategoryEntity)
+            .where(userCategoryEntity.userId.eq(userId))
+            .fetch();
+
+    }
+
 
     // user가 이미 관심 등록한 Category Id들을 조회하기 위한 쿼리
     public List<Long> findAllMyRegisteredCategoryId(Long userId) {

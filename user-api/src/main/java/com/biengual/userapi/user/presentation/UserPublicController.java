@@ -6,10 +6,9 @@ import com.biengual.userapi.swagger.SwaggerBooleanReturn;
 import com.biengual.userapi.swagger.SwaggerVoidReturn;
 import com.biengual.userapi.swagger.user.SwaggerUserMyPage;
 import com.biengual.userapi.swagger.user.SwaggerUserMyTime;
-import com.biengual.userapi.swagger.user.SwaggerUserUpdate;
 import com.biengual.userapi.user.application.UserFacade;
 import com.biengual.userapi.user.domain.UserCommand;
-import com.biengual.userapi.user.domain.UserService;
+import com.biengual.userapi.user.domain.UserInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -35,28 +34,31 @@ public class UserPublicController {
 
 	private final UserDtoMapper userDtoMapper;
 	private final UserFacade userFacade;
-	private final UserService userService;
 
 	@GetMapping("/me")
-	@Operation(summary = "회원 정보 조회", description = "유저가 본인의 정보를 조회합니다.")
+	@Operation(summary = "본인 정보 조회", description = "유저가 본인의 정보를 조회합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "요청에 성공하였습니다.", content = {
+		@ApiResponse(responseCode = "200", description = "본인 정보 조회 성공", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerUserMyPage.class))}
 		),
-		@ApiResponse(responseCode = "404", description = "데이터베이스 연결에 실패하였습니다.", content = @Content(mediaType = "application/json"))
+		@ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
+		@ApiResponse(responseCode = "500", description = "서버 에러", content = @Content(mediaType = "application/json"))
 	})
 	public ResponseEntity<Object> getMyInfo(
 		@AuthenticationPrincipal
 		OAuth2UserPrincipal principal
 	) {
-		return ResponseEntityFactory.toResponseEntity(USER_GET_INFO, userService.getMyPage(principal.getEmail()));
+		UserInfo.MyInfo info = userFacade.getMyInfo(principal.getId());
+		UserResponseDto.MyInfoRes response = userDtoMapper.ofMyInfoRes(info);
+
+		return ResponseEntityFactory.toResponseEntity(USER_GET_INFO, response);
 	}
 
 	@PutMapping("/me")
-	@Operation(summary = "회원 정보 수정", description = "유저가 본인의 정보를 수정합니다.")
+	@Operation(summary = "본인 정보 수정", description = "유저가 본인의 정보를 수정합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "유저 개인 정보 수정 성공", content = {
-			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerUserUpdate.class))}
+		@ApiResponse(responseCode = "200", description = "본인 정보 수정 성공", content = {
+			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerVoidReturn.class))}
 		),
 		@ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
 		@ApiResponse(responseCode = "500", description = "서버 에러", content = @Content(mediaType = "application/json"))
@@ -73,29 +75,35 @@ public class UserPublicController {
 		return ResponseEntityFactory.toResponseEntity(USER_UPDATE_INFO);
 	}
 
+
+	// TODO: 나중에 누적 학습일자 정책이 바뀌어 필요없어지면 삭제할 것
 	@GetMapping("/time")
 	@Operation(summary = "회원 가입 날짜 조회", description = "유저가 회원 가입 날짜를 조회합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "요청에 성공하였습니다.", content = {
+		@ApiResponse(responseCode = "200", description = "회원 가입 날짜 조회 성공", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerUserMyTime.class))}
 		),
-		@ApiResponse(responseCode = "404", description = "데이터베이스 연결에 실패하였습니다.", content = @Content(mediaType = "application/json"))
+		@ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
+		@ApiResponse(responseCode = "500", description = "서버 에러", content = @Content(mediaType = "application/json"))
 	})
 	public ResponseEntity<Object> getMySignUpTime(
 		@AuthenticationPrincipal
 		OAuth2UserPrincipal principal
 	) {
-		return ResponseEntityFactory
-			.toResponseEntity(USER_GET_INFO, userService.getMySignUpTime(principal.getId()));
+		UserInfo.MySignUpTime info = userFacade.getMySignUpTime(principal.getId());
+		UserResponseDto.MySignUpTimeRes response = userDtoMapper.ofMySignUpTimeRes(info);
+
+		return ResponseEntityFactory.toResponseEntity(USER_GET_INFO, response);
 	}
 
 	@PostMapping("/logout")
 	@Operation(summary = "회원 로그아웃", description = "유저가 로그아웃합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "로그아웃에 성공하였습니다.", content = {
+		@ApiResponse(responseCode = "200", description = "회원 로그아웃 성공", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerVoidReturn.class))
 		}),
-		@ApiResponse(responseCode = "404", description = "데이터베이스 연결에 실패하였습니다.", content = @Content(mediaType = "application/json"))
+		@ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
+		@ApiResponse(responseCode = "500", description = "서버 에러", content = @Content(mediaType = "application/json"))
 	})
 	public ResponseEntity<Object> logout(
 		HttpServletRequest request,
@@ -103,24 +111,27 @@ public class UserPublicController {
 		@AuthenticationPrincipal
 		OAuth2UserPrincipal principal
 	) {
-		userService.logout(request, response, principal.getId());
+		userFacade.logout(request, response, principal.getId());
 
 		return ResponseEntityFactory.toResponseEntity(USER_LOGOUT_SUCCESS);
 	}
 
+	// TODO: 컨트롤러에서 바로 반환할 수 있는데 UserService 까지 들어가는 것이 맞는가에 대해 생각해볼 것
 	@GetMapping("/status")
 	@Operation(summary = "회원 로그인 상태 조회", description = "회원 로그인 상태를 조회합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "요청에 성공하였습니다.", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerBooleanReturn.class))}
 		),
-		@ApiResponse(responseCode = "404", description = "데이터베이스 연결에 실패하였습니다.", content = @Content(mediaType = "application/json"))
+		@ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
+		@ApiResponse(responseCode = "500", description = "서버 에러", content = @Content(mediaType = "application/json"))
 	})
-	public ResponseEntity<Object> getUserStatus(
-		HttpServletRequest request
+	public ResponseEntity<Object> getLoginStatus(
+		@AuthenticationPrincipal
+		OAuth2UserPrincipal principal
 	) {
+		boolean response = userFacade.getLoginStatus(principal);
 
-		return ResponseEntityFactory
-			.toResponseEntity(USER_STATUS_INFO, userService.getUserStatus(request));
+		return ResponseEntityFactory.toResponseEntity(USER_STATUS_INFO, response);
 	}
 }
