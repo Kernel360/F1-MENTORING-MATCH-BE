@@ -1,20 +1,20 @@
-package com.biengual.userapi.content.domain.dto;
+package com.biengual.userapi.content.presentation;
 
 import java.util.List;
 
-import com.biengual.userapi.content.domain.enums.ContentStatus;
-import com.biengual.userapi.content.domain.enums.ContentType;
+import com.biengual.userapi.content.domain.ContentStatus;
+import com.biengual.userapi.content.domain.ContentType;
 import com.biengual.userapi.script.domain.entity.Script;
 
 public class ContentRequestDto {
 
-	public record ContentCreateRequestDto(
+	public record CreateReq(
 		ContentType contentType,
 		String url
 	) {
 	}
 
-	public record ContentUpdateRequestDto(
+	public record UpdateReq(
 		String url,
 		String title,
 		List<Script> script,
@@ -23,7 +23,7 @@ public class ContentRequestDto {
 
 	}
 
-	public record ContentSearchDto(
+	public record SearchReq(
 		String searchWords
 	) {
 	}

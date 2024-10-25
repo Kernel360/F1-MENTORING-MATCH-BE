@@ -12,6 +12,7 @@ public enum CrawlingServiceStatus implements ServiceStatus {
 	CRAWLING_TRANSLATE_FAILURE("U-CR-903"),
 	CRAWLING_JSOUP_FAILURE("U-CR-904"),
 	CRAWLING_ALREADY_DONE("U-CR-905"),
+	CRAWLING_JACKSON_ERROR("U-CR-906")
 	;
 
 	private final String code;

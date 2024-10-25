@@ -1,4 +1,4 @@
-package com.biengual.userapi.content.domain.enums;
+package com.biengual.userapi.content.domain;
 
 public enum ContentStatus {
 	// 활성화된 상태, 문제 만들어 진 후

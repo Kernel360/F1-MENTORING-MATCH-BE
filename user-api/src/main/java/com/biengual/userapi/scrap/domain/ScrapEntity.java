@@ -1,6 +1,6 @@
 package com.biengual.userapi.scrap.domain;
 
-import com.biengual.userapi.content.domain.entity.ContentEntity;
+import com.biengual.userapi.content.domain.ContentEntity;
 import com.biengual.userapi.common.entity.BaseEntity;
 
 import jakarta.persistence.Column;

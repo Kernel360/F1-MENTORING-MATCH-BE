@@ -1,22 +1,20 @@
-package com.biengual.userapi.content.repository.custom;
+package com.biengual.userapi.content.domain;
 
 import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.biengual.userapi.content.domain.dto.ContentRequestDto;
-import com.biengual.userapi.content.domain.dto.ContentResponseDto;
-import com.biengual.userapi.content.domain.entity.ContentEntity;
-import com.biengual.userapi.content.domain.enums.ContentType;
+import com.biengual.userapi.content.presentation.ContentRequestDto;
+import com.biengual.userapi.content.presentation.ContentResponseDto;
 
 public interface ContentRepositoryCustom {
 
 	Page<ContentEntity> findAllBySearchCondition(
-		ContentRequestDto.ContentSearchDto searchDto, Pageable pageable
+		ContentRequestDto.SearchReq searchDto, Pageable pageable
 	);
 
-	List<ContentResponseDto.ContentPreviewResponseDto> findPreviewContents(
+	List<ContentResponseDto.PreviewRes> findPreviewContents(
 		ContentType contentType, String sortBy, int num
 	);
 
@@ -28,7 +26,7 @@ public interface ContentRepositoryCustom {
 
 	String findMongoIdByContentId(Long contentId);
 
-	List<ContentResponseDto.ContentByScrapCountDto> contentByScrapCount(int num);
+	List<ContentResponseDto.GetByScrapCount> contentByScrapCount(int num);
 
 	ContentType findContentTypeById(Long scriptIndex);
 

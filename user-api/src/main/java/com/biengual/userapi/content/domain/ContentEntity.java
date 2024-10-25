@@ -1,16 +1,29 @@
-package com.biengual.userapi.content.domain.entity;
-
-import com.biengual.userapi.category.domain.CategoryEntity;
-import com.biengual.userapi.content.domain.dto.ContentRequestDto;
-import com.biengual.userapi.content.domain.enums.ContentStatus;
-import com.biengual.userapi.content.domain.enums.ContentType;
-import com.biengual.userapi.script.domain.entity.Script;
-import com.biengual.userapi.common.entity.BaseEntity;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
-import lombok.*;
+package com.biengual.userapi.content.domain;
 
 import java.util.List;
+
+import com.biengual.userapi.category.domain.CategoryEntity;
+import com.biengual.userapi.common.entity.BaseEntity;
+import com.biengual.userapi.script.domain.entity.Script;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.ConstraintMode;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "content")
@@ -73,12 +86,12 @@ public class ContentEntity extends BaseEntity {
 		this.category = category;
 	}
 
-	public void update(ContentRequestDto.ContentUpdateRequestDto dto) {
-		this.url = dto.url();
-		this.title = dto.title();
-		this.contentStatus = dto.contentStatus() == null ? ContentStatus.ACTIVATED : dto.contentStatus();
+	public void update(ContentCommand.Modify command) {
+		this.url = command.url();
+		this.title = command.title();
+		this.contentStatus = command.contentStatus() == null ? ContentStatus.ACTIVATED : command.contentStatus();
 		this.preScripts = truncate(
-			dto.script().subList(0, Math.min(dto.script().size(), 5))
+			command.script().subList(0, Math.min(command.script().size(), 5))
 				.stream()
 				.map(Script::getEnScript)
 				.toList().toString()
@@ -90,11 +103,11 @@ public class ContentEntity extends BaseEntity {
 	}
 
 	private String truncate(String content, int maxLength) {
-		if(content.startsWith("[")){
+		if (content.startsWith("[")) {
 			content = content.substring(1);
 		}
-		if(content.endsWith("]")){
-			content = content.substring(0, content.length()-1);
+		if (content.endsWith("]")) {
+			content = content.substring(0, content.length() - 1);
 		}
 		return (content.length() > maxLength) ? content.substring(0, maxLength) : content;
 	}

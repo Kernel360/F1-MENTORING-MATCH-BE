@@ -1,4 +1,4 @@
-package com.biengual.userapi.content.domain.enums;
+package com.biengual.userapi.content.domain;
 
 public enum ContentType {
 	// YouTube

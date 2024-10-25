@@ -1,6 +1,6 @@
-package com.biengual.userapi.content.repository.custom;
+package com.biengual.userapi.content.domain;
 
-import static com.biengual.userapi.content.domain.entity.QContentEntity.*;
+import static com.biengual.userapi.content.domain.QContentEntity.*;
 import static com.biengual.userapi.message.error.code.ContentErrorCode.*;
 import static com.biengual.userapi.scrap.domain.QScrapEntity.*;
 
@@ -16,11 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.data.support.PageableExecutionUtils;
 
-import com.biengual.userapi.content.domain.dto.ContentRequestDto;
-import com.biengual.userapi.content.domain.dto.ContentResponseDto;
-import com.biengual.userapi.content.domain.entity.ContentEntity;
-import com.biengual.userapi.content.domain.enums.ContentStatus;
-import com.biengual.userapi.content.domain.enums.ContentType;
+import com.biengual.userapi.content.presentation.ContentRequestDto;
+import com.biengual.userapi.content.presentation.ContentResponseDto;
 import com.biengual.userapi.message.error.exception.CommonException;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
@@ -38,7 +35,7 @@ public class ContentRepositoryImpl extends QuerydslRepositorySupport implements 
 
 	@Override
 	public Page<ContentEntity> findAllBySearchCondition(
-		ContentRequestDto.ContentSearchDto searchDto, Pageable pageable
+		ContentRequestDto.SearchReq searchDto, Pageable pageable
 	) {
 		BooleanBuilder booleanBuilder = new BooleanBuilder();
 
@@ -70,7 +67,7 @@ public class ContentRepositoryImpl extends QuerydslRepositorySupport implements 
 	}
 
 	@Override
-	public List<ContentResponseDto.ContentPreviewResponseDto> findPreviewContents(
+	public List<ContentResponseDto.PreviewRes> findPreviewContents(
 		ContentType contentType, String sortBy, int num
 	) {
 		Field field;
@@ -95,7 +92,7 @@ public class ContentRepositoryImpl extends QuerydslRepositorySupport implements 
 			.fetch();
 
 		return contents.stream()
-			.map(content -> new ContentResponseDto.ContentPreviewResponseDto(
+			.map(content -> new ContentResponseDto.PreviewRes(
 				content.getId(),
 				content.getTitle(),
 				content.getThumbnailUrl(),
@@ -156,7 +153,7 @@ public class ContentRepositoryImpl extends QuerydslRepositorySupport implements 
 	}
 
 	@Override
-	public List<ContentResponseDto.ContentByScrapCountDto> contentByScrapCount(int num) {
+	public List<ContentResponseDto.GetByScrapCount> contentByScrapCount(int num) {
 		List<Tuple> tuples = from(scrapEntity)
 			.select(scrapEntity.content.id, scrapEntity.count())
 			.where(scrapEntity.content.contentStatus.eq(ContentStatus.ACTIVATED))
@@ -182,8 +179,8 @@ public class ContentRepositoryImpl extends QuerydslRepositorySupport implements 
 					.findFirst()
 					.map(tuple -> tuple.get(scrapEntity.count()))
 					.orElse(0L);
-				return ContentResponseDto.ContentByScrapCountDto.of(content, count);
-			}).sorted(Comparator.comparing(ContentResponseDto.ContentByScrapCountDto::countScrap).reversed())
+				return ContentResponseDto.GetByScrapCount.of(content, count);
+			}).sorted(Comparator.comparing(ContentResponseDto.GetByScrapCount::countScrap).reversed())
 			.toList();
 
 	}

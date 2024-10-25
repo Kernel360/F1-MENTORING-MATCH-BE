@@ -1,4 +1,4 @@
-package com.biengual.userapi.crawling.service;
+package com.biengual.userapi.crawling.application;
 
 import static com.biengual.userapi.message.error.code.CrawlingErrorCode.*;
 

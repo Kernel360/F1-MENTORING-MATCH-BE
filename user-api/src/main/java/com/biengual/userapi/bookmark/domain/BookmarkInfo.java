@@ -3,7 +3,7 @@ package com.biengual.userapi.bookmark.domain;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.biengual.userapi.content.domain.enums.ContentType;
+import com.biengual.userapi.content.domain.ContentType;
 
 import lombok.Builder;
 
