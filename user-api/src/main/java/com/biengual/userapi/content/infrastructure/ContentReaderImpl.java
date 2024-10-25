@@ -13,6 +13,7 @@ import java.util.List;
 public class ContentReaderImpl implements ContentReader {
     private final ContentCustomRepository contentCustomRepository;
 
+    // 스크랩 많은 순 컨텐츠 조회
     @Override
     public List<ContentInfo.PreviewContent> findContentsByScrapCount(Integer size) {
         return contentCustomRepository.findContentsByScrapCount(size);
