@@ -1,7 +1,5 @@
 package com.biengual.userapi.bookmark.domain;
 
-import static com.biengual.userapi.bookmark.domain.QBookmarkEntity.*;
-
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
@@ -16,6 +14,8 @@ public class BookmarkCustomRepository {
 	private final JPAQueryFactory queryFactory;
 
 	public boolean deleteBookmark(BookmarkCommand.Delete command) {
+		QBookmarkEntity bookmarkEntity = QBookmarkEntity.bookmarkEntity;
+
 		return queryFactory.delete(bookmarkEntity)
 			.where(bookmarkEntity.userId.eq(command.userId()))
 			.where(bookmarkEntity.id.eq(command.bookmarkId()))
@@ -23,6 +23,8 @@ public class BookmarkCustomRepository {
 	}
 
 	public List<BookmarkEntity> findBookmarks(Long userId) {
+		QBookmarkEntity bookmarkEntity = QBookmarkEntity.bookmarkEntity;
+
 		return queryFactory.select(bookmarkEntity)
 			.from(bookmarkEntity)
 			.where(bookmarkEntity.userId.eq(userId))
@@ -31,6 +33,8 @@ public class BookmarkCustomRepository {
 	}
 
 	public List<BookmarkEntity> findBookmarksByUserIdAndScriptIndex(Long userId, Long scriptIndex) {
+		QBookmarkEntity bookmarkEntity = QBookmarkEntity.bookmarkEntity;
+
 		return queryFactory.select(bookmarkEntity)
 			.from(bookmarkEntity)
 			.where(bookmarkEntity.userId.eq(userId))
@@ -40,6 +44,8 @@ public class BookmarkCustomRepository {
 	}
 
 	public boolean isBookmarkAlreadyPresent(BookmarkCommand.Create command) {
+		QBookmarkEntity bookmarkEntity = QBookmarkEntity.bookmarkEntity;
+
 		return queryFactory.from(bookmarkEntity)
 			.where(bookmarkEntity.userId.eq(command.userId()))
 			.where(bookmarkEntity.scriptIndex.eq(command.contentId()))
