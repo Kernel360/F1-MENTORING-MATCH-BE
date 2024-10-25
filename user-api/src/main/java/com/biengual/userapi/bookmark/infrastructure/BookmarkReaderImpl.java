@@ -24,7 +24,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class BookmarkReaderImpl implements BookmarkReader {
 	private final UserRepository userRepository;
-	private final BookmarkRepository bookmarkRepository;
 	private final BookmarkCustomRepository bookmarkCustomRepository;
 	private final ContentRepository contentRepository;
 	private final BookmarkDtoMapper bookmarkDtoMapper;
