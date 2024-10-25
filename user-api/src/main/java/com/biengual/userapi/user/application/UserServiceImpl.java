@@ -1,9 +1,7 @@
 package com.biengual.userapi.user.application;
 
-import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
 import com.biengual.userapi.user.domain.*;
-import com.biengual.userapi.user.repository.UserRepository;
 import com.biengual.userapi.util.CookieUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -11,13 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.biengual.userapi.message.error.code.UserErrorCode.USER_NOT_FOUND;
-
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 	private final CookieUtil cookieUtil;
-	private final UserRepository userRepository;
 	private final UserReader userReader;
 	private final UserStore userStore;
 	private final RefreshTokenStore refreshTokenStore;
@@ -41,15 +36,6 @@ public class UserServiceImpl implements UserService {
 	@Transactional(readOnly = true)
 	public UserInfo.MySignUpTime getMySignUpTime(Long userId) {
 		return userReader.findMySignUpTime(userId);
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public UserEntity getUserById(Long userId) {
-		UserEntity user = userRepository.findById(userId)
-			.orElseThrow(() -> new CommonException(USER_NOT_FOUND));
-
-		return user;
 	}
 
 	// OAuth 유저 회원가입 및 로그인 처리

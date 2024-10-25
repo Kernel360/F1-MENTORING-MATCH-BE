@@ -16,8 +16,6 @@ public interface UserService {
 
     UserInfo.MySignUpTime getMySignUpTime(Long userId);
 
-    UserEntity getUserById(Long userId);
-
     UserEntity getUserByOAuthUser(OAuth2UserPrincipal oAuthUser);
 
     void logout(HttpServletRequest request, HttpServletResponse response, Long userId);
