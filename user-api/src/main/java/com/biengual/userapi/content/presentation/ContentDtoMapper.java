@@ -2,6 +2,7 @@ package com.biengual.userapi.content.presentation;
 
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 import com.biengual.userapi.content.domain.ContentCommand;
@@ -24,7 +25,8 @@ public interface ContentDtoMapper {
 	// Command <- Request
 	ContentCommand.CrawlingContent doCrawlingContent(ContentRequestDto.CreateReq request);
 
-	ContentCommand.Modify doModify(Long id, ContentRequestDto.UpdateReq request);
+	@Mapping(target = "id", source = "contentId")
+	ContentCommand.Modify doModify(Long contentId, ContentRequestDto.UpdateReq request);
 
 	// Response <- Info
 	// Entity <-> Info, Info <-> Info

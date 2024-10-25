@@ -6,7 +6,7 @@ import static com.biengual.userapi.message.error.code.ContentErrorCode.*;
 import org.bson.types.ObjectId;
 
 import com.biengual.userapi.annotation.DataProvider;
-import com.biengual.userapi.category.domain.entity.CategoryEntity;
+import com.biengual.userapi.category.domain.CategoryEntity;
 import com.biengual.userapi.category.repository.CategoryRepository;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentDocument;
