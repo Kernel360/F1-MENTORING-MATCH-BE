@@ -27,6 +27,7 @@ public class BookmarkCommand {
 				.description(this.description)
 				.detail(detail)
 				.startTimeInSecond(startTime)
+				.userId(this.userId)
 				.build();
 		}
 	}

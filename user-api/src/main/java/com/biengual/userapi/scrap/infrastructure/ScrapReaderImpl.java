@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.biengual.userapi.annotation.DataProvider;
 import com.biengual.userapi.scrap.domain.ScrapCommand;
+import com.biengual.userapi.scrap.domain.ScrapCustomRepository;
 import com.biengual.userapi.scrap.domain.ScrapEntity;
 import com.biengual.userapi.scrap.domain.ScrapInfo;
 import com.biengual.userapi.scrap.domain.ScrapReader;
@@ -16,11 +17,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ScrapReaderImpl implements ScrapReader {
 	private final ScrapRepository scrapRepository;
+	private final ScrapCustomRepository scrapCustomRepository;
 	private final ScrapDtoMapper scrapDtoMapper;
 
 	@Override
 	public List<ScrapInfo.View> findAllByUserId(Long userId) {
-		List<ScrapEntity> scraps = scrapRepository.findAllByUserId(userId);
+		List<ScrapEntity> scraps = scrapCustomRepository.findAllByUserId(userId);
 		return scraps.stream()
 			.map(scrapDtoMapper::buildView)
 			.toList();
@@ -28,6 +30,6 @@ public class ScrapReaderImpl implements ScrapReader {
 
 	@Override
 	public boolean existsScrap(ScrapCommand.GetByContents command) {
-		return scrapRepository.existsScrap(command.userId(), command.contentId());
+		return scrapCustomRepository.existsScrap(command.userId(), command.contentId());
 	}
 }

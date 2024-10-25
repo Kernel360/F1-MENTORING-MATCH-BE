@@ -113,18 +113,9 @@ public class UserEntity extends BaseEntity {
 			UserStatus.USER_STATUS_CREATED ? UserStatus.USER_STATUS_ACTIVATE : this.userStatus;
 	}
 
-	public void updateUserBookmark(BookmarkEntity bookmark) {
-		this.bookmarks.add(bookmark);
-	}
-
 	public void updateAfterOAuth2Login(OAuth2UserPrincipal oAuthUser) {
 		this.username = oAuthUser.getUsername();
 		this.provider = oAuthUser.getProvider();
 		this.providerId = oAuthUser.getProviderId();
-	}
-
-	public boolean hasContent(Long contentId){
-		return this.scraps.stream()
-			.anyMatch(scrap -> scrap.getContent().getId().equals(contentId));
 	}
 }

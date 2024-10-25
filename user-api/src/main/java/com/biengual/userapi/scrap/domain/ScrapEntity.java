@@ -3,6 +3,7 @@ package com.biengual.userapi.scrap.domain;
 import com.biengual.userapi.content.domain.entity.ContentEntity;
 import com.biengual.userapi.common.entity.BaseEntity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -32,8 +33,12 @@ public class ScrapEntity extends BaseEntity {
 	@JoinColumn(name = "content_id", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
 	private ContentEntity content;
 
+	@Column(name = "user_id", nullable = false, columnDefinition = "bigint")
+	private Long userId;
+
 	@Builder
-	public ScrapEntity(ContentEntity content) {
+	public ScrapEntity(ContentEntity content, Long userId) {
 		this.content = content;
+		this.userId = userId;
 	}
 }
