@@ -1,6 +1,6 @@
 package com.biengual.userapi.user.domain;
 
-import com.biengual.userapi.category.domain.entity.CategoryEntity;
+import com.biengual.userapi.category.domain.CategoryEntity;
 import com.biengual.userapi.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

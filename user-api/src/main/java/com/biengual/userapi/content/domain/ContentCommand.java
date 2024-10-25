@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 
-import com.biengual.userapi.category.domain.entity.CategoryEntity;
+import com.biengual.userapi.category.domain.CategoryEntity;
 import com.biengual.userapi.script.domain.entity.Script;
 
 import lombok.Builder;
@@ -26,12 +26,13 @@ public class ContentCommand {
 		ContentType contentType,
 		List<Script> script
 	) {
-		public ContentDocument toDocument(){
+		public ContentDocument toDocument() {
 			return ContentDocument.builder()
 				.scriptList(script)
 				.build();
 		}
-		public ContentEntity toEntity(ObjectId contentScriptId, ContentType contentType, CategoryEntity category){
+
+		public ContentEntity toEntity(ObjectId contentScriptId, ContentType contentType, CategoryEntity category) {
 			return ContentEntity.builder()
 				.contentType(contentType)
 				.url(url)
@@ -43,6 +44,7 @@ public class ContentCommand {
 				.build();
 
 		}
+
 		public CategoryEntity toCategoryEntity() {
 			return CategoryEntity.builder()
 				.name(this.category)

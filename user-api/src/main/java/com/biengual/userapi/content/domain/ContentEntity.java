@@ -1,14 +1,29 @@
 package com.biengual.userapi.content.domain;
 
-import com.biengual.userapi.category.domain.entity.CategoryEntity;
-import com.biengual.userapi.content.presentation.ContentRequestDto;
-import com.biengual.userapi.script.domain.entity.Script;
-import com.biengual.userapi.common.entity.BaseEntity;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
-import lombok.*;
-
 import java.util.List;
+
+import com.biengual.userapi.category.domain.CategoryEntity;
+import com.biengual.userapi.common.entity.BaseEntity;
+import com.biengual.userapi.script.domain.entity.Script;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.ConstraintMode;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "content")
@@ -88,11 +103,11 @@ public class ContentEntity extends BaseEntity {
 	}
 
 	private String truncate(String content, int maxLength) {
-		if(content.startsWith("[")){
+		if (content.startsWith("[")) {
 			content = content.substring(1);
 		}
-		if(content.endsWith("]")){
-			content = content.substring(0, content.length()-1);
+		if (content.endsWith("]")) {
+			content = content.substring(0, content.length() - 1);
 		}
 		return (content.length() > maxLength) ? content.substring(0, maxLength) : content;
 	}

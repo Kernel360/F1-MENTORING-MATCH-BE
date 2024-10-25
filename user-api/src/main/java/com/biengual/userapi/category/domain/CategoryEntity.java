@@ -1,4 +1,4 @@
-package com.biengual.userapi.category.domain.entity;
+package com.biengual.userapi.category.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
