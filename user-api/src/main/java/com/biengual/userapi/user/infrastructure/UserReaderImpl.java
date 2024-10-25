@@ -34,7 +34,7 @@ public class UserReaderImpl implements UserReader {
     // OAuth2UserPrincipal을 이용한 회원가입 및 로그인 처리와 함께 UserEntity 조회
     @Override
     public UserEntity findUser(OAuth2UserPrincipal principal) {
-        UserEntity user = userRepository.findById(principal.getId())
+        UserEntity user = userRepository.findByEmail(principal.getEmail())
             .orElseGet(() -> {
                 UserEntity newUser = UserEntity.createByOAuthUser(principal);
 
