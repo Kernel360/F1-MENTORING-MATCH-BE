@@ -2,7 +2,6 @@ package com.biengual.userapi.category.presentation;
 
 import com.biengual.userapi.category.application.CategoryFacade;
 import com.biengual.userapi.category.domain.CategoryInfo;
-import com.biengual.userapi.category.domain.dto.CategoryResponseDto;
 import com.biengual.userapi.message.ResponseEntityFactory;
 import com.biengual.userapi.swagger.category.SwaggerCategory;
 

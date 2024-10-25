@@ -1,4 +1,4 @@
-package com.biengual.userapi.category.domain.dto;
+package com.biengual.userapi.category.presentation;
 
 import com.biengual.userapi.category.domain.entity.CategoryEntity;
 

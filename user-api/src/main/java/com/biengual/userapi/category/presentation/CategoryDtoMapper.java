@@ -1,7 +1,6 @@
 package com.biengual.userapi.category.presentation;
 
 import com.biengual.userapi.category.domain.CategoryInfo;
-import com.biengual.userapi.category.domain.dto.CategoryResponseDto;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
