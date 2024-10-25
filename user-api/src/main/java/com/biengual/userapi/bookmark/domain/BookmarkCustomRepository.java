@@ -4,12 +4,13 @@ import static com.biengual.userapi.bookmark.domain.QBookmarkEntity.*;
 
 import java.util.List;
 
-import com.biengual.userapi.annotation.DataProvider;
+import org.springframework.stereotype.Repository;
+
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
 
-@DataProvider
+@Repository
 @RequiredArgsConstructor
 public class BookmarkCustomRepository {
 	private final JPAQueryFactory queryFactory;

@@ -118,9 +118,4 @@ public class UserEntity extends BaseEntity {
 		this.provider = oAuthUser.getProvider();
 		this.providerId = oAuthUser.getProviderId();
 	}
-
-	public boolean hasContent(Long contentId){
-		return this.scraps.stream()
-			.anyMatch(scrap -> scrap.getContent().getId().equals(contentId));
-	}
 }
