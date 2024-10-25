@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 public class CategoryServiceImpl implements CategoryService {
 	private final CategoryReader categoryReader;
 
+	// 모든 카테고리 조회
 	@Override
 	public CategoryInfo.AllCategories getAllCategories() {
 		return CategoryInfo.AllCategories.of(categoryReader.findAllCategories());
