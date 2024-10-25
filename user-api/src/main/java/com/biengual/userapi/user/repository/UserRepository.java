@@ -12,7 +12,7 @@ import com.biengual.userapi.user.domain.UserEntity;
  * @author 김영래
  */
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
-	Optional<UserEntity> findById(Long id);
+	Optional<UserEntity> findById(Long userId);
 
 	Optional<UserEntity> findByEmail(String email);
 
