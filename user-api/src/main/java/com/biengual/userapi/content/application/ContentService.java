@@ -1,15 +1,20 @@
 package com.biengual.userapi.content.application;
 
-import java.util.List;
-
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-
+import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.content.domain.dto.ContentRequestDto;
 import com.biengual.userapi.content.domain.dto.ContentResponseDto;
 import com.biengual.userapi.content.domain.enums.ContentType;
 import com.biengual.userapi.util.PaginationDto;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 
+import java.util.List;
+
+/**
+ * Content 도메인의 Service 계층의 인터페이스
+ *
+ * @author 김영래
+ */
 public interface ContentService {
 	PaginationDto<ContentResponseDto.ContentPreviewResponseDto> search(
 		ContentRequestDto.ContentSearchDto searchDto, Pageable pageable
@@ -36,5 +41,5 @@ public interface ContentService {
 		ContentType contentType, String sortBy, int num
 	);
 
-	List<ContentResponseDto.ContentByScrapCountDto> contentByScrapCount(int num);
+	ContentInfo.PreviewContents getContentsByScrapCount(Integer size);
 }

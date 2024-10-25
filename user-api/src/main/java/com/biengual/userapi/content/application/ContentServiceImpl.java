@@ -1,20 +1,9 @@
 package com.biengual.userapi.content.application;
 
-import static com.biengual.userapi.message.error.code.CategoryErrorCode.*;
-import static com.biengual.userapi.message.error.code.ContentErrorCode.*;
-import static com.biengual.userapi.message.error.code.CrawlingErrorCode.*;
-
-import java.util.List;
-
-import org.bson.types.ObjectId;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.biengual.userapi.category.domain.CategoryEntity;
 import com.biengual.userapi.category.repository.CategoryRepository;
+import com.biengual.userapi.content.domain.ContentInfo;
+import com.biengual.userapi.content.domain.ContentReader;
 import com.biengual.userapi.content.domain.dto.ContentRequestDto;
 import com.biengual.userapi.content.domain.dto.ContentResponseDto;
 import com.biengual.userapi.content.domain.entity.ContentDocument;
@@ -27,8 +16,20 @@ import com.biengual.userapi.crawling.domain.dto.CrawlingResponseDto;
 import com.biengual.userapi.crawling.service.CrawlingServiceImpl;
 import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.util.PaginationDto;
-
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+import static com.biengual.userapi.message.error.code.CategoryErrorCode.CATEGORY_NOT_FOUND;
+import static com.biengual.userapi.message.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
+import static com.biengual.userapi.message.error.code.ContentErrorCode.CONTENT_SEARCH_WORD_NOT_FOUND;
+import static com.biengual.userapi.message.error.code.CrawlingErrorCode.CRAWLING_ALREADY_DONE;
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +39,7 @@ public class ContentServiceImpl implements ContentService {
 	private final ContentScriptRepository contentScriptRepository;
 	private final CrawlingServiceImpl crawlingService;
 	private final CategoryRepository categoryRepository;
+	private final ContentReader contentReader;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -133,10 +135,11 @@ public class ContentServiceImpl implements ContentService {
 		return contentRepository.findPreviewContents(contentType, sortBy, num);
 	}
 
+	// 스크랩 많은 순 컨텐츠 조회
 	@Override
 	@Transactional(readOnly = true)
-	public List<ContentResponseDto.ContentByScrapCountDto> contentByScrapCount(int num) {
-		return contentRepository.contentByScrapCount(num);
+	public ContentInfo.PreviewContents getContentsByScrapCount(Integer size) {
+		return ContentInfo.PreviewContents.of(contentReader.findContentsByScrapCount(size));
 	}
 
 	@Override
