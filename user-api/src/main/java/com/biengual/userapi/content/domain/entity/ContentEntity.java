@@ -1,6 +1,6 @@
 package com.biengual.userapi.content.domain.entity;
 
-import com.biengual.userapi.category.domain.entity.CategoryEntity;
+import com.biengual.userapi.category.domain.CategoryEntity;
 import com.biengual.userapi.content.domain.dto.ContentRequestDto;
 import com.biengual.userapi.content.domain.enums.ContentStatus;
 import com.biengual.userapi.content.domain.enums.ContentType;

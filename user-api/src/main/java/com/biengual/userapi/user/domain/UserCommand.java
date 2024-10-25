@@ -1,6 +1,6 @@
 package com.biengual.userapi.user.domain;
 
-import com.biengual.userapi.category.domain.entity.CategoryEntity;
+import com.biengual.userapi.category.domain.CategoryEntity;
 import com.biengual.userapi.user.domain.enums.Gender;
 import lombok.Builder;
 

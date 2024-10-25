@@ -1,7 +1,7 @@
 package com.biengual.userapi.user.infrastructure;
 
 import com.biengual.userapi.annotation.DataProvider;
-import com.biengual.userapi.category.domain.entity.CategoryEntity;
+import com.biengual.userapi.category.domain.CategoryEntity;
 import com.biengual.userapi.category.repository.CategoryRepository;
 import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.user.domain.UserCategoryEntity;

@@ -1,6 +1,6 @@
 package com.biengual.userapi.crawling.domain.dto;
 
-import com.biengual.userapi.category.domain.entity.CategoryEntity;
+import com.biengual.userapi.category.domain.CategoryEntity;
 import com.biengual.userapi.content.domain.entity.ContentDocument;
 import com.biengual.userapi.content.domain.entity.ContentEntity;
 import com.biengual.userapi.content.domain.enums.ContentType;

@@ -13,7 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.biengual.userapi.category.domain.entity.CategoryEntity;
+import com.biengual.userapi.category.domain.CategoryEntity;
 import com.biengual.userapi.category.repository.CategoryRepository;
 import com.biengual.userapi.content.domain.dto.ContentRequestDto;
 import com.biengual.userapi.content.domain.dto.ContentResponseDto;
