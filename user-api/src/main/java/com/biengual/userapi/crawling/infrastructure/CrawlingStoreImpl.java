@@ -58,7 +58,7 @@ public class CrawlingStoreImpl implements CrawlingStore {
 	private String YOUTUBE_API_KEY;
 
 	@Override
-	public ContentCommand.Create getYoutubeDetail(ContentCommand.GetDetail command) {
+	public ContentCommand.Create getYoutubeDetail(ContentCommand.CrawlingContent command) {
 		// Extract the video ID from the URL
 		String videoId = extractVideoId(command.url());
 
@@ -107,7 +107,7 @@ public class CrawlingStoreImpl implements CrawlingStore {
 	}
 
 	@Override
-	public ContentCommand.Create getCNNDetail(ContentCommand.GetDetail command) {
+	public ContentCommand.Create getCNNDetail(ContentCommand.CrawlingContent command) {
 		CrawlingResponseDto.ContentDetailRes response = fetchArticle(command.url());
 		return ContentCommand.Create.builder()
 			.url(response.url())

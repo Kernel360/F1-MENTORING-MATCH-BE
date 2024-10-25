@@ -53,7 +53,7 @@ public class ContentApiController {
 		@RequestBody
 		ContentRequestDto.CreateReq request
 	) {
-		ContentCommand.GetDetail command = contentDtoMapper.doGetDetail(request);
+		ContentCommand.CrawlingContent command = contentDtoMapper.doCrawlingContent(request);
 		contentFacade.createContent(command);
 
 		return ResponseEntityFactory.toResponseEntity(CONTENT_CREATE_SUCCESS);

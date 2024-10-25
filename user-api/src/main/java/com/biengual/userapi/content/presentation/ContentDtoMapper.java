@@ -22,7 +22,7 @@ import com.biengual.userapi.content.domain.ContentCommand;
 )
 public interface ContentDtoMapper {
 	// Command <- Request
-	ContentCommand.GetDetail doGetDetail(ContentRequestDto.CreateReq request);
+	ContentCommand.CrawlingContent doCrawlingContent(ContentRequestDto.CreateReq request);
 
 	ContentCommand.Modify doModify(Long id, ContentRequestDto.UpdateReq request);
 

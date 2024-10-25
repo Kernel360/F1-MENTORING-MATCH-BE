@@ -13,7 +13,7 @@ public class ContentFacade {
 	private final CrawlingService crawlingService;
 	private final ContentService contentService;
 
-	public void createContent(ContentCommand.GetDetail command) {
+	public void createContent(ContentCommand.CrawlingContent command) {
 		ContentCommand.Create contentCommand = crawlingService.getCrawlingDetail(command);
 		contentService.createContent(contentCommand);
 	}

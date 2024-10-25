@@ -11,7 +11,7 @@ import lombok.Builder;
 
 public class ContentCommand {
 
-	public record GetDetail(
+	public record CrawlingContent(
 		String url,
 		ContentType contentType
 	) {

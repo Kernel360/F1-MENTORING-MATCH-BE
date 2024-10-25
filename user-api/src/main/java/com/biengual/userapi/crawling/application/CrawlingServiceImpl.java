@@ -17,7 +17,7 @@ public class CrawlingServiceImpl implements CrawlingService {
 	private final CrawlingStore crawlingStore;
 
 	@Override
-	public ContentCommand.Create getCrawlingDetail(ContentCommand.GetDetail command) {
+	public ContentCommand.Create getCrawlingDetail(ContentCommand.CrawlingContent command) {
 		ContentCommand.Create contentCommand = null;
 		if (command.contentType().equals(ContentType.LISTENING)) {
 			contentCommand = getYoutubeDetail(command);
@@ -29,12 +29,12 @@ public class CrawlingServiceImpl implements CrawlingService {
 	}
 
 	@Override
-	public ContentCommand.Create getYoutubeDetail(ContentCommand.GetDetail command) {
+	public ContentCommand.Create getYoutubeDetail(ContentCommand.CrawlingContent command) {
 		return crawlingStore.getYoutubeDetail(command);
 	}
 
 	@Override
-	public ContentCommand.Create getCNNDetail(ContentCommand.GetDetail command) {
+	public ContentCommand.Create getCNNDetail(ContentCommand.CrawlingContent command) {
 		return crawlingStore.getCNNDetail(command);
 	}
 
