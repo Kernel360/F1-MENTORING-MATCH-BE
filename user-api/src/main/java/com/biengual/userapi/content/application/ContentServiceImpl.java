@@ -92,8 +92,8 @@ public class ContentServiceImpl implements ContentService {
 
 	@Override
 	@Transactional
-	public void deactivateContent(Long id) {
-		contentStore.deactivateContent(id);
+	public void deactivateContent(Long contentId) {
+		contentStore.deactivateContent(contentId);
 	}
 
 	@Override
