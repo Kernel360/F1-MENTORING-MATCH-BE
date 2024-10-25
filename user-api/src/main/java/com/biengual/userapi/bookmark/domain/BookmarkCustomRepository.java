@@ -13,13 +13,13 @@ import lombok.RequiredArgsConstructor;
 public class BookmarkCustomRepository {
 	private final JPAQueryFactory queryFactory;
 
-	public boolean deleteBookmark(BookmarkCommand.Delete command) {
+	public void deleteBookmark(BookmarkCommand.Delete command) {
 		QBookmarkEntity bookmarkEntity = QBookmarkEntity.bookmarkEntity;
 
-		return queryFactory.delete(bookmarkEntity)
+		 queryFactory.delete(bookmarkEntity)
 			.where(bookmarkEntity.userId.eq(command.userId()))
 			.where(bookmarkEntity.id.eq(command.bookmarkId()))
-			.execute() > 0;
+			.execute();
 	}
 
 	public List<BookmarkEntity> findBookmarks(Long userId) {

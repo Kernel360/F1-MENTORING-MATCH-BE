@@ -23,13 +23,13 @@ public class ScrapCustomRepository {
 			.fetch();
 	}
 
-	public boolean deleteScrap(ScrapCommand.Delete command) {
+	public void deleteScrap(ScrapCommand.Delete command) {
 		QScrapEntity scrapEntity = QScrapEntity.scrapEntity;
 
-		return queryFactory.delete(scrapEntity)
+		queryFactory.delete(scrapEntity)
 			.where(scrapEntity.userId.eq(command.userId()))
 			.where(scrapEntity.content.id.eq(command.contentId()))
-			.execute() > 0;
+			.execute();
 
 	}
 

@@ -40,8 +40,6 @@ public class ScrapStoreImpl implements ScrapStore {
 
 	@Override
 	public void deleteScrap(ScrapCommand.Delete command) {
-		if(!scrapCustomRepository.deleteScrap(command)){
-			throw  new CommonException(SCRAP_NOT_FOUND);
-		}
+		scrapCustomRepository.deleteScrap(command);
 	}
 }
