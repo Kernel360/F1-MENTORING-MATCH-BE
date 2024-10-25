@@ -1,50 +1,49 @@
 package com.biengual.userapi.bookmark.domain;
 
-import com.biengual.userapi.message.error.exception.CommonException;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+import static com.biengual.userapi.bookmark.domain.QBookmarkEntity.*;
+import static com.biengual.userapi.message.error.code.BookmarkErrorCode.*;
+import static com.biengual.userapi.user.domain.QUserEntity.*;
 
 import java.util.List;
 import java.util.Optional;
 
-import static com.biengual.userapi.bookmark.domain.QBookmarkEntity.bookmarkEntity;
-import static com.biengual.userapi.message.error.code.BookmarkErrorCode.BOOKMARK_NOT_FOUND;
-import static com.biengual.userapi.user.domain.QUserEntity.userEntity;
+import com.biengual.userapi.annotation.DataProvider;
+import com.biengual.userapi.message.error.exception.CommonException;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
-public class BookmarkRepositoryImpl extends QuerydslRepositorySupport implements BookmarkRepositoryCustom {
+import lombok.RequiredArgsConstructor;
 
-	public BookmarkRepositoryImpl() {
-		super(BookmarkEntity.class);
-	}
+@DataProvider
+@RequiredArgsConstructor
+public class BookmarkCustomRepository {
+	private final JPAQueryFactory queryFactory;
 
-	@Override
 	public void deleteBookmark(Long userId, Long bookmarkId) {
-		Optional.ofNullable(from(userEntity)
+		Optional.ofNullable(queryFactory.select(bookmarkEntity)
+				.from(userEntity)
 				.join(userEntity.bookmarks, bookmarkEntity)
-				.select(bookmarkEntity)
 				.where(userEntity.id.eq(userId))
 				.where(bookmarkEntity.id.eq(bookmarkId))
 				.fetchOne())
 			.orElseThrow(() -> new CommonException(BOOKMARK_NOT_FOUND));
 
-		delete(bookmarkEntity)
+		queryFactory.delete(bookmarkEntity)
 			.where(bookmarkEntity.id.eq(bookmarkId))
 			.execute();
 	}
 
-	@Override
 	public List<BookmarkEntity> getAllBookmarks(Long userId) {
-		return from(userEntity)
+		return queryFactory.select(bookmarkEntity)
+			.from(userEntity)
 			.join(userEntity.bookmarks, bookmarkEntity)
-			.select(bookmarkEntity)
 			.where(userEntity.id.eq(userId))
 			.orderBy(bookmarkEntity.createdAt.desc())
 			.fetch();
 	}
 
-	@Override
 	public boolean isBookmarkAlreadyPresent(BookmarkCommand.Create command) {
-		return from(userEntity)
+		return queryFactory.from(userEntity)
 			.leftJoin(userEntity.bookmarks, bookmarkEntity)
 			.where(bookmarkBooleanExpression(command))
 			.fetchFirst() != null;

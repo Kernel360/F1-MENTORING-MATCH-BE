@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.biengual.userapi.annotation.DataProvider;
 import com.biengual.userapi.bookmark.domain.BookmarkCommand;
+import com.biengual.userapi.bookmark.domain.BookmarkCustomRepository;
 import com.biengual.userapi.bookmark.domain.BookmarkEntity;
 import com.biengual.userapi.bookmark.domain.BookmarkInfo;
 import com.biengual.userapi.bookmark.domain.BookmarkReader;
@@ -24,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class BookmarkReaderImpl implements BookmarkReader {
 	private final UserRepository userRepository;
 	private final BookmarkRepository bookmarkRepository;
+	private final BookmarkCustomRepository bookmarkCustomRepository;
 	private final ContentRepository contentRepository;
 	private final BookmarkDtoMapper bookmarkDtoMapper;
 
@@ -43,7 +45,7 @@ public class BookmarkReaderImpl implements BookmarkReader {
 
 	@Override
 	public List<BookmarkInfo.MyList> getAllBookmarks(Long userId) {
-		List<BookmarkEntity> bookmarks = bookmarkRepository.getAllBookmarks(userId);
+		List<BookmarkEntity> bookmarks = bookmarkCustomRepository.getAllBookmarks(userId);
 		return bookmarks.stream()
 			.map(bookmark -> bookmarkDtoMapper.buildMyList(
 				bookmark,
@@ -54,6 +56,6 @@ public class BookmarkReaderImpl implements BookmarkReader {
 
 	@Override
 	public boolean isBookmarkAlreadyPresent(BookmarkCommand.Create command) {
-		return bookmarkRepository.isBookmarkAlreadyPresent(command);
+		return bookmarkCustomRepository.isBookmarkAlreadyPresent(command);
 	}
 }

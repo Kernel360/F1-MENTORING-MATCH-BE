@@ -8,6 +8,7 @@ import com.biengual.userapi.annotation.DataProvider;
 import com.biengual.userapi.content.repository.ContentRepository;
 import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.scrap.domain.ScrapCommand;
+import com.biengual.userapi.scrap.domain.ScrapCustomRepository;
 import com.biengual.userapi.scrap.domain.ScrapEntity;
 import com.biengual.userapi.scrap.domain.ScrapRepository;
 import com.biengual.userapi.scrap.domain.ScrapStore;
@@ -23,8 +24,9 @@ import lombok.RequiredArgsConstructor;
 public class ScrapStoreImpl implements ScrapStore {
 	private final UserRepository userRepository;
 	private final ScrapRepository scrapRepository;
-	private final ContentRepository contentRepository;
+	private final ScrapCustomRepository scrapCustomRepository;
 	private final ScrapDtoMapper scrapDtoMapper;
+	private final ContentRepository contentRepository;
 
 	@Override
 	public void createScrap(ScrapCommand.Create command) {
@@ -46,6 +48,6 @@ public class ScrapStoreImpl implements ScrapStore {
 
 	@Override
 	public void deleteScrap(ScrapCommand.Delete command) {
-		scrapRepository.deleteScrap(command.userId(), command.contentId());
+		scrapCustomRepository.deleteScrap(command.userId(), command.contentId());
 	}
 }

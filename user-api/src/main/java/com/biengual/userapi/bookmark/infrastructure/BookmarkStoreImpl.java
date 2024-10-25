@@ -24,6 +24,7 @@ import static com.biengual.userapi.message.error.code.UserErrorCode.USER_NOT_FOU
 @RequiredArgsConstructor
 public class BookmarkStoreImpl implements BookmarkStore {
 	private final BookmarkRepository bookmarkRepository;
+	private final BookmarkCustomRepository bookmarkCustomRepository;
 	private final UserRepository userRepository;
 	private final ContentRepository contentRepository;
 	private final ContentScriptRepository contentScriptRepository;
@@ -31,7 +32,7 @@ public class BookmarkStoreImpl implements BookmarkStore {
 
 	@Override
 	public void deleteBookmark(BookmarkCommand.Delete command) {
-		bookmarkRepository.deleteBookmark(command.userId(), command.bookmarkId());
+		bookmarkCustomRepository.deleteBookmark(command.userId(), command.bookmarkId());
 	}
 
 	@Override
