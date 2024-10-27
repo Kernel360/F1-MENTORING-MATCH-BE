@@ -27,4 +27,15 @@ public class ContentInfo {
                 .build();
         }
     }
+
+    public record ViewContent(
+        Long contentId,
+        String title,
+        String thumbnailUrl,
+        ContentType contentType,
+        String preScripts,
+        String category,
+        Integer hits
+    ) {
+    }
 }

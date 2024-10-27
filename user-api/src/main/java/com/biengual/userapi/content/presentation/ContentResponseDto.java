@@ -101,6 +101,27 @@ public class ContentResponseDto {
 	) {
 	}
 
+	public record ViewContent(
+		Long contentId,
+		String title,
+		String thumbnailUrl,
+		ContentType contentType,
+		String preScripts,
+		String category,
+		Integer hits
+	) {
+	}
+
+	@Builder
+	public record ReadingViewContentsRes(
+		Integer pageNumber,
+		Integer pageSize,
+		Integer totalPages,
+		Long totalElements,
+		List<ViewContent> readingView
+	) {
+	}
+
 	public record GetByScrapCount(
 		Long contentId,
 		String title,

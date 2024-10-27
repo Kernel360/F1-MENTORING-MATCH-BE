@@ -67,4 +67,12 @@ public class ContentCommand {
 		String keyword
 	) {
 	}
+
+	@Builder
+	public record GetReadingContents(
+		Pageable pageable,
+		ContentType contentType,
+		Long categoryId
+	) {
+	}
 }

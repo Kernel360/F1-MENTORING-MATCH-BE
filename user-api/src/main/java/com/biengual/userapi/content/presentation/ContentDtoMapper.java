@@ -32,13 +32,24 @@ public interface ContentDtoMapper {
 	@Mapping(target = "pageable", expression = "java(toPageable(page, size, direction, sort))")
 	ContentCommand.Search doSearch(Integer page, Integer size, Sort.Direction direction, String sort, String keyword);
 
+	@Mapping(target = "pageable", expression = "java(toPageable(page, size, direction, sort))")
+	@Mapping(target = "contentType", constant = "READING")
+	ContentCommand.GetReadingContents doGetReadingContents(
+		Integer page, Integer size, Sort.Direction direction, String sort, Long categoryId
+	);
+
 	// Response <- Info
     @Mapping(target = "scrapPreview", source = "previewContents")
     ContentResponseDto.ScrapPreviewContentsRes ofScrapPreviewContentsRes(ContentInfo.PreviewContents previewContents);
 
 	@Mapping(target = "searchPreview", source = "contents")
 	ContentResponseDto.SearchPreviewContentsRes ofSearchPreviewContentsRes(
-		PaginationInfo<ContentInfo.PreviewContent> paginationInfo
+		PaginationInfo<ContentInfo.PreviewContent> searchPreview
+	);
+
+	@Mapping(target = "readingView", source = "contents")
+	ContentResponseDto.ReadingViewContentsRes ofReadingViewContentsRes(
+		PaginationInfo<ContentInfo.ViewContent> readingView
 	);
 
 	// Entity <-> Info, Info <-> Info
