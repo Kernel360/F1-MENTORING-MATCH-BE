@@ -46,4 +46,9 @@ public class ContentFacade {
 	public PaginationInfo<ContentInfo.ViewContent> getListeningView(ContentCommand.GetListeningView command) {
 		return contentService.getViewContents(command);
 	}
+
+	// 리딩 컨텐츠 프리뷰 조회
+	public ContentInfo.PreviewContents getReadingPreview(ContentCommand.GetReadingPreview command) {
+		return contentService.getPreviewContents(command);
+	}
 }
