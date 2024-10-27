@@ -33,7 +33,6 @@ import static com.biengual.userapi.message.response.ContentResponseCode.CONTENT_
 @Tag(name = "Content - public API", description = "컨텐츠 공통 API")
 public class ContentPublicController {
 
-	private final ContentService contentService;
 	private final ContentDtoMapper contentDtoMapper;
 	private final ContentFacade contentFacade;
 
@@ -44,7 +43,7 @@ public class ContentPublicController {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerContentScrapPreview.class))
 		}),
 		@ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
-		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content)
+		@ApiResponse(responseCode = "500", description = "서버 에러", content = @Content)
 	})
 	@Parameters({
 		@Parameter(name = "size", description = "컨텐츠 수 / default: 8", in = ParameterIn.QUERY, schema = @Schema(type = "integer", defaultValue = "8")),
@@ -68,7 +67,7 @@ public class ContentPublicController {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerContentSearchPreview.class))
 		}),
 		@ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
-		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content)
+		@ApiResponse(responseCode = "500", description = "서버 에러", content = @Content)
 	})
 	@Parameters({
 		@Parameter(name = "page", description = "페이지 번호 (0부터 시작) / default: 0", in = ParameterIn.QUERY, schema = @Schema(type = "integer", defaultValue = "0")),
@@ -130,7 +129,7 @@ public class ContentPublicController {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerContentListeningView.class))
 		}),
 		@ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
-		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content)
+		@ApiResponse(responseCode = "500", description = "서버 에러", content = @Content)
 	})
 	@Parameters({
 		@Parameter(name = "page", description = "페이지 번호 (0부터 시작) / default: 0", in = ParameterIn.QUERY, schema = @Schema(type = "integer", defaultValue = "0")),
@@ -161,7 +160,7 @@ public class ContentPublicController {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerContentReadingPreview.class))
 		}),
 		@ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
-		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content)
+		@ApiResponse(responseCode = "500", description = "서버 에러", content = @Content)
 	})
 	public ResponseEntity<Object> getPreviewLeadingContents(
 		@RequestParam(defaultValue = "8") Integer size,
@@ -181,7 +180,7 @@ public class ContentPublicController {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerContentListeningPreview.class))
 		}),
 		@ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
-		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content)
+		@ApiResponse(responseCode = "500", description = "서버 에러", content = @Content)
 	})
 	public ResponseEntity<Object> getPreviewListeningContents(
 		@RequestParam(defaultValue = "8") Integer size,
@@ -197,22 +196,22 @@ public class ContentPublicController {
 	/**
 	 * 컨텐츠 상세조회
 	 */
-	@GetMapping("/details/{id}")
+	@GetMapping("/details/{contentId}")
 	@Operation(summary = "컨텐츠 상세 조회", description = "컨텐츠 내용을 상세 조회합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "요청에 성공하였습니다.", content = {
+		@ApiResponse(responseCode = "200", description = "컨텐츠 상세 조회 요청 성공", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerContentDetail.class))
 		}),
-		@ApiResponse(responseCode = "204", description = "컨텐츠가 없습니다.", content = @Content),
-		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content)
+		@ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
+		@ApiResponse(responseCode = "500", description = "서버 에러", content = @Content)
 	})
-	public ResponseEntity<Object> getDetailContents(
-		@PathVariable Long id
+	public ResponseEntity<Object> getDetailContent(
+		@PathVariable Long contentId
 	) {
+		ContentInfo.Detail info = contentFacade.getDetailContent(contentId);
+		ContentResponseDto.DetailRes response = contentDtoMapper.ofDetailRes(info);
 
-		ContentResponseDto.DetailRes scriptsOfContent = contentService.getScriptsOfContent(id);
-
-		return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, scriptsOfContent);
+		return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
 	}
 
 }

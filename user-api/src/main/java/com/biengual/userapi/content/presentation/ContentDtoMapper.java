@@ -1,12 +1,17 @@
 package com.biengual.userapi.content.presentation;
 
 import com.biengual.userapi.content.domain.ContentCommand;
+import com.biengual.userapi.content.domain.ContentEntity;
 import com.biengual.userapi.content.domain.ContentInfo;
+import com.biengual.userapi.content.domain.ContentType;
+import com.biengual.userapi.script.domain.entity.Script;
 import com.biengual.userapi.util.PaginationInfo;
 import org.mapstruct.*;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+
+import java.util.List;
 
 /**
  * do~ : Command <- Request
@@ -79,12 +84,24 @@ public interface ContentDtoMapper {
         ContentInfo.PreviewContents listeningPreview
     );
 
+	ContentResponseDto.DetailRes ofDetailRes(ContentInfo.Detail detail);
+
 	// Entity <-> Info, Info <-> Info
+	@Mapping(target = "contentId", source = "content.id")
+	@Mapping(target = "videoUrl", source = "content", qualifiedByName = "toVideoUrl")
+	@Mapping(target = "category", source = "content.category.name")
+	@Mapping(target = "scriptList", source = "scripts")
+	ContentInfo.Detail buildDetail(ContentEntity content, List<Script> scripts);
 
 	// Internal Method =================================================================================================
 
 	@Named("toPageable")
 	default Pageable toPageable(Integer page, Integer size, Sort.Direction direction, String sort) {
 		return PageRequest.of(page, size, direction,sort);
+	}
+
+	@Named("toVideoUrl")
+	default String toVideoUrl(ContentEntity content) {
+		return content.getContentType().equals(ContentType.LISTENING) ? content.getUrl() : null;
 	}
 }

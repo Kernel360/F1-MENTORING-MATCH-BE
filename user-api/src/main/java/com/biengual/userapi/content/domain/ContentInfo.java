@@ -1,5 +1,6 @@
 package com.biengual.userapi.content.domain;
 
+import com.biengual.userapi.script.domain.entity.Script;
 import lombok.Builder;
 
 import java.util.List;
@@ -36,6 +37,19 @@ public class ContentInfo {
         String preScripts,
         String category,
         Integer hits
+    ) {
+    }
+
+    @Builder
+    public record Detail(
+        Long contentId,
+        ContentType contentType,
+        String category,
+        String title,
+        String thumbnailUrl,
+        String videoUrl,
+        Integer hits,
+        List<Script> scriptList
     ) {
     }
 }

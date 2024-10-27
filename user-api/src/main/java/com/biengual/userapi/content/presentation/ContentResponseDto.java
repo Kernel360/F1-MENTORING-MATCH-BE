@@ -1,16 +1,12 @@
 package com.biengual.userapi.content.presentation;
 
-import com.biengual.userapi.content.domain.ContentDocument;
 import com.biengual.userapi.content.domain.ContentEntity;
 import com.biengual.userapi.content.domain.ContentType;
-import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.script.domain.entity.Script;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 
 import java.util.List;
-
-import static com.biengual.userapi.message.error.code.CategoryErrorCode.CATEGORY_NOT_FOUND;
 
 public class ContentResponseDto {
 
@@ -26,30 +22,6 @@ public class ContentResponseDto {
 		Integer hits,
 		List<Script> scriptList
 	) {
-		public static DetailRes of(ContentEntity content, ContentDocument contentDocument) {
-			return DetailRes.builder()
-				.contentId(content.getId())
-				.contentType(content.getContentType())
-				.category(content.getCategory().getName())
-				.title(content.getTitle())
-				.thumbnailUrl(content.getThumbnailUrl())
-				.videoUrl(toListeningUrl(content))
-				.hits(content.getHits())
-				.scriptList(contentDocument.getScripts())
-				.build();
-		}
-
-		private static String toListeningUrl(ContentEntity content) {
-			switch (content.getContentType()) {
-				case LISTENING -> {
-					return content.getUrl();
-				}
-				case READING -> {
-					return null;
-				}
-				default -> throw new CommonException(CATEGORY_NOT_FOUND);
-			}
-		}
 	}
 
 	public record PreviewRes(
