@@ -21,4 +21,6 @@ public interface ContentReader {
     List<ContentInfo.PreviewContent> findReadingPreview(ContentCommand.GetReadingPreview command);
 
     List<ContentInfo.PreviewContent> findListeningPreview(ContentCommand.GetListeningPreview command);
+
+    ContentEntity findContent(Long contentId);
 }

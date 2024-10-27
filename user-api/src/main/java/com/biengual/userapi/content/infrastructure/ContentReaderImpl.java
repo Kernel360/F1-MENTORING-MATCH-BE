@@ -1,19 +1,21 @@
 package com.biengual.userapi.content.infrastructure;
 
 import com.biengual.userapi.annotation.DataProvider;
-import com.biengual.userapi.content.domain.ContentCommand;
-import com.biengual.userapi.content.domain.ContentInfo;
-import com.biengual.userapi.content.domain.ContentReader;
+import com.biengual.userapi.content.domain.*;
 import com.biengual.userapi.content.repository.ContentCustomRepository;
+import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.util.PaginationInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 
+import static com.biengual.userapi.message.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
+
 @DataProvider
 @RequiredArgsConstructor
 public class ContentReaderImpl implements ContentReader {
+    private final ContentRepository contentRepository;
     private final ContentCustomRepository contentCustomRepository;
 
     // 스크랩 많은 순 컨텐츠 프리뷰 조회
@@ -65,5 +67,12 @@ public class ContentReaderImpl implements ContentReader {
         return contentCustomRepository.findPreviewBySizeAndSortAndContentType(
             command.size(), command.sort(), command.contentType()
         );
+    }
+
+    // script를 제외한 컨텐츠 디테일 조회
+    @Override
+    public ContentEntity findContent(Long contentId) {
+        return contentRepository.findById(contentId)
+            .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
     }
 }

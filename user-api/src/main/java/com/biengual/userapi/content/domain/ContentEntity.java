@@ -89,6 +89,10 @@ public class ContentEntity extends BaseEntity {
 		this.contentStatus = contentStatus == null ? ContentStatus.ACTIVATED : contentStatus;
 	}
 
+	public void updateHits() {
+		this.hits += 1;
+	}
+
 	private String truncate(String content, int maxLength) {
 		if (content.startsWith("[")) {
 			content = content.substring(1);
