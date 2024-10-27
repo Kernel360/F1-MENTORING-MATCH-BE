@@ -44,6 +44,9 @@ public interface ContentDtoMapper {
 		Integer page, Integer size, Sort.Direction direction, String sort, Long categoryId
 	);
 
+	@Mapping(target = "contentType", constant = "READING")
+	ContentCommand.GetReadingPreview doGetReadingPreview(Integer size, String sort);
+
 	// Response <- Info
     @Mapping(target = "scrapPreview", source = "previewContents")
     ContentResponseDto.ScrapPreviewContentsRes ofScrapPreviewContentsRes(ContentInfo.PreviewContents previewContents);
@@ -61,6 +64,11 @@ public interface ContentDtoMapper {
 	@Mapping(target = "listeningView", source = "contents")
 	ContentResponseDto.ListeningViewContentsRes ofListeningViewContentsRes(
 		PaginationInfo<ContentInfo.ViewContent> readingView
+	);
+
+	@Mapping(target = "readingPreview", source = "previewContents")
+	ContentResponseDto.ReadingPreviewContentsRes ofReadingPreviewContentsRes(
+		ContentInfo.PreviewContents readingPreview
 	);
 
 	// Entity <-> Info, Info <-> Info

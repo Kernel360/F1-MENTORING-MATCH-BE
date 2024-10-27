@@ -132,6 +132,12 @@ public class ContentResponseDto {
 	) {
 	}
 
+	@Builder
+	public record ReadingPreviewContentsRes(
+		List<PreviewContent> readingPreview
+	) {
+	}
+
 	public record GetByScrapCount(
 		Long contentId,
 		String title,

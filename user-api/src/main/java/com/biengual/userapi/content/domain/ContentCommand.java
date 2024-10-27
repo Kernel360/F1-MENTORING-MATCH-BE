@@ -83,4 +83,12 @@ public class ContentCommand {
 		Long categoryId
 	) {
 	}
+
+	@Builder
+	public record GetReadingPreview(
+		Integer size,
+		String sort,
+		ContentType contentType
+	) {
+	}
 }

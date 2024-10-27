@@ -169,13 +169,14 @@ public class ContentPublicController {
 		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content)
 	})
 	public ResponseEntity<Object> getPreviewLeadingContents(
-		@RequestParam(defaultValue = "hits") String sort,
-		@RequestParam(defaultValue = "8") Integer size
+		@RequestParam(defaultValue = "8") Integer size,
+		@RequestParam(defaultValue = "hits") String sort
 	) {
-		Map<String, List<ContentResponseDto.PreviewRes>> data = new HashMap<>();
-		data.put("readingPreview", contentService.findPreviewContents(ContentType.READING, sort, size));
+		ContentCommand.GetReadingPreview command = contentDtoMapper.doGetReadingPreview(size, sort);
+		ContentInfo.PreviewContents info = contentFacade.getReadingPreview(command);
+		ContentResponseDto.ReadingPreviewContentsRes response = contentDtoMapper.ofReadingPreviewContentsRes(info);
 
-		return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, data);
+		return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
 	}
 
 	@GetMapping("/preview/listening")
