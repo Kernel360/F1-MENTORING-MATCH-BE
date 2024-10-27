@@ -2,6 +2,7 @@ package com.biengual.userapi.content.repository;
 
 import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.content.domain.ContentStatus;
+import com.biengual.userapi.content.domain.ContentType;
 import com.biengual.userapi.content.domain.QContentEntity;
 import com.biengual.userapi.scrap.domain.QScrapEntity;
 import com.querydsl.core.types.Predicate;
@@ -72,12 +73,23 @@ public class ContentCustomRepository {
     }
 
     // 검색 조건에 맞는 컨텐츠를 조회하기 위한 쿼리
-    public Page<ContentInfo.PreviewContent> findPageBySearch(Pageable pageable, String keyword) {
+    public Page<ContentInfo.PreviewContent> findPreviewPageBySearch(Pageable pageable, String keyword) {
         QContentEntity contentEntity = QContentEntity.contentEntity;
 
         BooleanExpression predicate = getSearchPredicate(keyword, contentEntity);
 
         return findPreviewPage(pageable, predicate, contentEntity);
+    }
+
+    // 컨텐츠 뷰 페이지 조회하기 위한 쿼리
+    public Page<ContentInfo.ViewContent> findViewPageByContentTypeAndCategoryId(
+        Pageable pageable, ContentType contentType, Long categoryId
+    ) {
+        QContentEntity contentEntity = QContentEntity.contentEntity;
+
+        BooleanExpression predicate = getViewPredicate(contentType, categoryId, contentEntity);
+
+        return findViewPage(pageable, predicate, contentEntity);
     }
 
     // Internal Method =================================================================================================
@@ -89,6 +101,35 @@ public class ContentCustomRepository {
             .select(
                 Projections.constructor(
                     ContentInfo.PreviewContent.class,
+                    contentEntity.id,
+                    contentEntity.title,
+                    contentEntity.url,
+                    contentEntity.contentType,
+                    contentEntity.preScripts,
+                    contentEntity.category.name,
+                    contentEntity.hits
+                )
+            )
+            .from(contentEntity)
+            .where(predicate)
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
+
+        JPAQuery<Long> countQuery = queryFactory.select(contentEntity.id.count())
+            .from(contentEntity)
+            .where(predicate);
+
+        return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchOne);
+    }
+
+    // TODO: Predicate를 사용하지 않는 경우에는 Override? 아니면 null로 입력?
+    // View Page를 위한 공통 Pagination 쿼리
+    private Page<ContentInfo.ViewContent> findViewPage(Pageable pageable, Predicate predicate, QContentEntity contentEntity) {
+        List<ContentInfo.ViewContent> contents = queryFactory
+            .select(
+                Projections.constructor(
+                    ContentInfo.ViewContent.class,
                     contentEntity.id,
                     contentEntity.title,
                     contentEntity.url,
@@ -141,5 +182,15 @@ public class ContentCustomRepository {
             .orElse(null);
 
         return baseExpression.and(searchExpression);
+    }
+
+    // 컨텐츠 뷰 Predicate
+    private BooleanExpression getViewPredicate(ContentType contentType, Long categoryId, QContentEntity contentEntity) {
+        BooleanExpression baseExpression = getPublicContentsPredicate(contentEntity);
+
+        BooleanExpression readingExpression = contentEntity.contentType.eq(contentType)
+            .and(categoryId != null ? contentEntity.category.id.eq(categoryId) : null);
+
+        return baseExpression.and(readingExpression);
     }
 }
