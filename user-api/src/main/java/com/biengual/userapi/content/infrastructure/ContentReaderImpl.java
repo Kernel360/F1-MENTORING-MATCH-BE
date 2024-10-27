@@ -41,6 +41,7 @@ public class ContentReaderImpl implements ContentReader {
         return PaginationInfo.from(page);
     }
 
+    // 리스닝 컨텐츠 뷰 페이지 조회
     @Override
     public PaginationInfo<ContentInfo.ViewContent> findListeningViewPage(ContentCommand.GetListeningView command) {
         Page<ContentInfo.ViewContent> page = contentCustomRepository.findViewPageByContentTypeAndCategoryId(
@@ -48,5 +49,13 @@ public class ContentReaderImpl implements ContentReader {
         );
 
         return PaginationInfo.from(page);
+    }
+
+    // 리딩 컨텐츠 프리뷰 조회
+    @Override
+    public List<ContentInfo.PreviewContent> findReadingPreview(ContentCommand.GetReadingPreview command) {
+        return contentCustomRepository.findPreviewBySizeAndSortAndContentType(
+            command.size(), command.sort(), command.contentType()
+        );
     }
 }
