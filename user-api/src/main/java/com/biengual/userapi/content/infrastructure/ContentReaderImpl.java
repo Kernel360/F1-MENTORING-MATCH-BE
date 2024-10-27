@@ -16,17 +16,27 @@ import java.util.List;
 public class ContentReaderImpl implements ContentReader {
     private final ContentCustomRepository contentCustomRepository;
 
-    // 스크랩 많은 순 컨텐츠 조회
+    // 스크랩 많은 순 컨텐츠 프리뷰 조회
     @Override
     public List<ContentInfo.PreviewContent> findContentsByScrapCount(Integer size) {
         return contentCustomRepository.findContentsByScrapCount(size);
     }
 
-    // 검색 조건에 맞는 컨텐츠 조회
+    // 검색 조건에 맞는 컨텐츠 프리뷰 페이지 조회
     @Override
-    public PaginationInfo<ContentInfo.PreviewContent> findPageBySearch(ContentCommand.Search command) {
+    public PaginationInfo<ContentInfo.PreviewContent> findPreviewPageBySearch(ContentCommand.Search command) {
         Page<ContentInfo.PreviewContent> page =
-            contentCustomRepository.findPageBySearch(command.pageable(), command.keyword());
+            contentCustomRepository.findPreviewPageBySearch(command.pageable(), command.keyword());
+
+        return PaginationInfo.from(page);
+    }
+
+    // 리딩 컨텐츠 뷰 페이지 조회
+    @Override
+    public PaginationInfo<ContentInfo.ViewContent> findReadingViewPage(ContentCommand.GetReadingContents command) {
+        Page<ContentInfo.ViewContent> page = contentCustomRepository.findViewPageByContentTypeAndCategoryId(
+                command.pageable(), command.contentType(), command.categoryId()
+            );
 
         return PaginationInfo.from(page);
     }

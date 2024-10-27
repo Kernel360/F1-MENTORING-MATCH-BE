@@ -12,5 +12,7 @@ import java.util.List;
 public interface ContentReader {
     List<ContentInfo.PreviewContent> findContentsByScrapCount(Integer size);
 
-    PaginationInfo<ContentInfo.PreviewContent> findPageBySearch(ContentCommand.Search command);
+    PaginationInfo<ContentInfo.PreviewContent> findPreviewPageBySearch(ContentCommand.Search command);
+
+    PaginationInfo<ContentInfo.ViewContent> findReadingViewPage(ContentCommand.GetReadingContents command);
 }
