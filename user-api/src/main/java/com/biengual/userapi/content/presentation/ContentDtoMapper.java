@@ -38,6 +38,12 @@ public interface ContentDtoMapper {
 		Integer page, Integer size, Sort.Direction direction, String sort, Long categoryId
 	);
 
+	@Mapping(target = "pageable", expression = "java(toPageable(page, size, direction, sort))")
+	@Mapping(target = "contentType", constant = "LISTENING")
+	ContentCommand.GetListeningContents doGetListeningContents(
+		Integer page, Integer size, Sort.Direction direction, String sort, Long categoryId
+	);
+
 	// Response <- Info
     @Mapping(target = "scrapPreview", source = "previewContents")
     ContentResponseDto.ScrapPreviewContentsRes ofScrapPreviewContentsRes(ContentInfo.PreviewContents previewContents);
@@ -49,6 +55,11 @@ public interface ContentDtoMapper {
 
 	@Mapping(target = "readingView", source = "contents")
 	ContentResponseDto.ReadingViewContentsRes ofReadingViewContentsRes(
+		PaginationInfo<ContentInfo.ViewContent> readingView
+	);
+
+	@Mapping(target = "listeningView", source = "contents")
+	ContentResponseDto.ListeningViewContentsRes ofListeningViewContentsRes(
 		PaginationInfo<ContentInfo.ViewContent> readingView
 	);
 

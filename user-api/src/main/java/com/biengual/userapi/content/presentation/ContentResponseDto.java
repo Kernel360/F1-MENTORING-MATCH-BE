@@ -122,6 +122,16 @@ public class ContentResponseDto {
 	) {
 	}
 
+	@Builder
+	public record ListeningViewContentsRes(
+		Integer pageNumber,
+		Integer pageSize,
+		Integer totalPages,
+		Long totalElements,
+		List<ViewContent> listeningView
+	) {
+	}
+
 	public record GetByScrapCount(
 		Long contentId,
 		String title,

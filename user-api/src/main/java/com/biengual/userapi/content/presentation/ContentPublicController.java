@@ -6,11 +6,7 @@ import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.content.domain.ContentService;
 import com.biengual.userapi.content.domain.ContentType;
 import com.biengual.userapi.message.ResponseEntityFactory;
-import com.biengual.userapi.swagger.content.SwaggerContentReadingView;
-import com.biengual.userapi.swagger.content.SwaggerContentScrapPreview;
-import com.biengual.userapi.swagger.content.SwaggerContentDetail;
-import com.biengual.userapi.swagger.content.SwaggerContentSearchPreview;
-import com.biengual.userapi.util.PaginationDto;
+import com.biengual.userapi.swagger.content.*;
 import com.biengual.userapi.util.PaginationInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -23,10 +19,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -102,6 +95,7 @@ public class ContentPublicController {
 		return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
 	}
 
+	// TODO: Approve가 된다면 Page 내용을 담는 key 값 변경 사항을 프론트에게 공유해야 합니다.
 	@GetMapping("/view/reading")
 	@Operation(summary = "리딩 컨텐츠 조회", description = "페이지네이션을 적용하여 리딩 컨텐츠 목록을 조회합니다.")
 	@ApiResponses(value = {
@@ -125,41 +119,45 @@ public class ContentPublicController {
 		@RequestParam(required = false, defaultValue = "DESC") Sort.Direction direction,
 		@RequestParam(required = false) Long categoryId
 	) {
-		ContentCommand.GetReadingContents command = contentDtoMapper.doGetReadingContents(page, size, direction, sort, categoryId);
+		ContentCommand.GetReadingContents command =
+			contentDtoMapper.doGetReadingContents(page, size, direction, sort, categoryId);
 		PaginationInfo<ContentInfo.ViewContent> info = contentFacade.getReadingContents(command);
 		ContentResponseDto.ReadingViewContentsRes response = contentDtoMapper.ofReadingViewContentsRes(info);
 
 		return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
 	}
 
+	// TODO: Approve가 된다면 Page 내용을 담는 key 값 변경 사항을 프론트에게 공유해야 합니다.
 	@GetMapping("/view/listening")
 	@Operation(summary = "리스닝 컨텐츠 조회", description = "페이지네이션을 적용하여 리스닝 컨텐츠 목록을 조회합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "요청에 성공하였습니다.", content = {
-			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerContentSearchPreview.class))
+		@ApiResponse(responseCode = "200", description = "리스닝 컨텐츠 페이지 조회 요청 성공", content = {
+			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerContentListeningView.class))
 		}),
-		@ApiResponse(responseCode = "204", description = "컨텐츠가 없습니다.", content = @Content),
+		@ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
 		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content)
 	})
 	@Parameters({
 		@Parameter(name = "page", description = "페이지 번호 (0부터 시작) / default: 0", in = ParameterIn.QUERY, schema = @Schema(type = "integer", defaultValue = "0")),
 		@Parameter(name = "size", description = "페이지당 데이터 수 / default: 10", in = ParameterIn.QUERY, schema = @Schema(type = "integer", defaultValue = "10")),
-		@Parameter(name = "sort", description = "정렬 기준 (createdAt, hits) / default: createdAt", in = ParameterIn.QUERY, schema = @Schema(type = "string")),
 		@Parameter(name = "direction", description = "정렬 방법 / default: DESC / 대문자로 입력", in = ParameterIn.QUERY, schema = @Schema(type = "string")),
+		@Parameter(name = "sort", description = "정렬 기준 (createdAt, hits) / default: createdAt", in = ParameterIn.QUERY, schema = @Schema(type = "string")),
 		@Parameter(name = "categoryId", description = "category Id (값이 없으면 전체 카테고리)", in = ParameterIn.QUERY, schema = @Schema(type = "integer"))
 	})
 	public ResponseEntity<Object>
 	getListeningContents(
+		@RequestParam(required = false, defaultValue = "0") Integer page,
+		@RequestParam(required = false, defaultValue = "10") Integer size,
 		@RequestParam(required = false, defaultValue = "createdAt") String sort,
 		@RequestParam(required = false, defaultValue = "DESC") Sort.Direction direction,
-		@Parameter(hidden = true) @PageableDefault(page = 0, size = 10) Pageable pageable,
 		@RequestParam(required = false) Long categoryId
 	) {
-		Pageable pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), direction, sort);
-		PaginationDto<ContentResponseDto.PreviewRes> pageContentList
-			= contentService.getAllContents(ContentType.LISTENING, pageRequest, categoryId);
+		ContentCommand.GetListeningContents command =
+			contentDtoMapper.doGetListeningContents(page, size, direction, sort, categoryId);
+		PaginationInfo<ContentInfo.ViewContent> info = contentFacade.getListeningContents(command);
+		ContentResponseDto.ListeningViewContentsRes response = contentDtoMapper.ofListeningViewContentsRes(info);
 
-		return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, pageContentList);
+		return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
 	}
 
 	@GetMapping("/preview/reading")

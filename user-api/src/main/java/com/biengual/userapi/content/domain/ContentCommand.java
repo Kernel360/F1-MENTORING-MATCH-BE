@@ -75,4 +75,12 @@ public class ContentCommand {
 		Long categoryId
 	) {
 	}
+
+	@Builder
+	public record GetListeningContents(
+		Pageable pageable,
+		ContentType contentType,
+		Long categoryId
+	) {
+	}
 }
