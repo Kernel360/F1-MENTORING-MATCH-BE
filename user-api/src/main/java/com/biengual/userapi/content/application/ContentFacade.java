@@ -5,6 +5,7 @@ import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.content.domain.ContentService;
 import com.biengual.userapi.crawling.domain.CrawlingService;
+import com.biengual.userapi.util.PaginationInfo;
 import lombok.RequiredArgsConstructor;
 
 @Facade
@@ -30,4 +31,9 @@ public class ContentFacade {
     public ContentInfo.PreviewContents getContentsByScrapCount(Integer size) {
         return contentService.getContentsByScrapCount(size);
     }
+
+	// 검색 조건에 맞는 컨텐츠 조회
+	public PaginationInfo<ContentInfo.PreviewContent> search(ContentCommand.Search command) {
+		return contentService.search(command);
+	}
 }
