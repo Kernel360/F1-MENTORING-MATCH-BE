@@ -1,5 +1,7 @@
 package com.biengual.userapi.content.domain;
 
+import com.biengual.userapi.util.PaginationInfo;
+
 import java.util.List;
 
 /**
@@ -9,4 +11,6 @@ import java.util.List;
  */
 public interface ContentReader {
     List<ContentInfo.PreviewContent> findContentsByScrapCount(Integer size);
+
+    PaginationInfo<ContentInfo.PreviewContent> findPageBySearch(ContentCommand.Search command);
 }
