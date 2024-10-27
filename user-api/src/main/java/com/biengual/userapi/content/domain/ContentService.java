@@ -23,7 +23,7 @@ public interface ContentService {
 
 	PaginationInfo<ContentInfo.ViewContent> getViewContents(ContentCommand.GetListeningView command);
 
-	ContentResponseDto.DetailRes getScriptsOfContent(Long id);
+	ContentInfo.Detail getScriptsOfContent(Long contentId);
 
 	void createContent(ContentCommand.Create command);
 

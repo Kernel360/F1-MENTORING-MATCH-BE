@@ -1,12 +1,12 @@
 package com.biengual.userapi.content.application;
 
 import com.biengual.userapi.content.domain.*;
+import com.biengual.userapi.content.presentation.ContentDtoMapper;
 import com.biengual.userapi.content.presentation.ContentResponseDto;
-import com.biengual.userapi.message.error.exception.CommonException;
+import com.biengual.userapi.script.domain.entity.Script;
 import com.biengual.userapi.util.PaginationDto;
 import com.biengual.userapi.util.PaginationInfo;
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,16 +14,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.biengual.userapi.message.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
-
 @Service
 @RequiredArgsConstructor
 public class ContentServiceImpl implements ContentService {
+	private final ContentDtoMapper contentDtoMapper;
     private final ContentReader contentReader;
     private final ContentStore contentStore;
+	private final ContentDocumentReader contentDocumentReader;
 
 	private final ContentRepository contentRepository;
-	private final ContentScriptRepository contentScriptRepository;
 
 	// 검색 조건에 맞는 컨텐츠 프리뷰 페이지 조회
 	@Override
@@ -111,18 +110,18 @@ public class ContentServiceImpl implements ContentService {
 		contentStore.deactivateContent(contentId);
 	}
 
+	// TODO: 멘토님에게 DataProvider의 영역에 대한 답변을 들어볼 것
+	// 컨텐츠 디테일 조회
 	@Override
 	@Transactional    // hit 증가 로직 있어서 readOnly 생략
-	public ContentResponseDto.DetailRes getScriptsOfContent(Long id) {
-		ContentEntity content = contentRepository.findById(id)
-			.orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
+	public ContentInfo.Detail getScriptsOfContent(Long contentId) {
+		ContentEntity content = contentReader.findContent(contentId);
 
-		ContentDocument contentDocument = contentScriptRepository.findById(
-			new ObjectId(content.getMongoContentId())
-		).orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
+		List<Script> scripts = contentDocumentReader.findScripts(content.getMongoContentId());
 
-		contentRepository.updateHit(id); // TODO: 추후 레디스로 바꿀 예정
+		// TODO: 추후 레디스로 바꿀 예정
+		content.updateHits();
 
-		return ContentResponseDto.DetailRes.of(content, contentDocument);
+		return contentDtoMapper.buildDetail(content, scripts);
 	}
 }
