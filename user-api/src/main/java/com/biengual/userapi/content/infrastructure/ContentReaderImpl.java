@@ -40,4 +40,13 @@ public class ContentReaderImpl implements ContentReader {
 
         return PaginationInfo.from(page);
     }
+
+    @Override
+    public PaginationInfo<ContentInfo.ViewContent> findListeningViewPage(ContentCommand.GetListeningContents command) {
+        Page<ContentInfo.ViewContent> page = contentCustomRepository.findViewPageByContentTypeAndCategoryId(
+            command.pageable(), command.contentType(), command.categoryId()
+        );
+
+        return PaginationInfo.from(page);
+    }
 }
