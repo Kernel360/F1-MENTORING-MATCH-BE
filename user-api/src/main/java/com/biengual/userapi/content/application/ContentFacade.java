@@ -27,13 +27,18 @@ public class ContentFacade {
 		contentService.deactivateContent(id);
 	}
 
-    // 스크랩 많은 순 컨텐츠 조회
+    // 스크랩 많은 순 컨텐츠 프리뷰 조회
     public ContentInfo.PreviewContents getContentsByScrapCount(Integer size) {
         return contentService.getContentsByScrapCount(size);
     }
 
-	// 검색 조건에 맞는 컨텐츠 조회
+	// 검색 조건에 맞는 컨텐츠 프리뷰 페이지 조회
 	public PaginationInfo<ContentInfo.PreviewContent> search(ContentCommand.Search command) {
 		return contentService.search(command);
+	}
+
+	// 리딩 컨텐츠 뷰 페이지 조회
+	public PaginationInfo<ContentInfo.ViewContent> getReadingContents(ContentCommand.GetReadingContents command) {
+		return contentService.getViewContents(command);
 	}
 }
