@@ -58,4 +58,12 @@ public class ContentReaderImpl implements ContentReader {
             command.size(), command.sort(), command.contentType()
         );
     }
+
+    // 리스닝 컨텐츠 프리뷰 조회
+    @Override
+    public List<ContentInfo.PreviewContent> findListeningPreview(ContentCommand.GetListeningPreview command) {
+        return contentCustomRepository.findPreviewBySizeAndSortAndContentType(
+            command.size(), command.sort(), command.contentType()
+        );
+    }
 }
