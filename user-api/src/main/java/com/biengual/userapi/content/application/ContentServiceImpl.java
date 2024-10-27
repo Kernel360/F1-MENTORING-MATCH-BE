@@ -25,11 +25,11 @@ public class ContentServiceImpl implements ContentService {
 	private final ContentRepository contentRepository;
 	private final ContentScriptRepository contentScriptRepository;
 
-	// 검색 조건에 맞는 컨텐츠 조회
+	// 검색 조건에 맞는 컨텐츠 프리뷰 페이지 조회
 	@Override
 	@Transactional(readOnly = true)
 	public PaginationInfo<ContentInfo.PreviewContent> search(ContentCommand.Search command) {
-		return contentReader.findPageBySearch(command);
+		return contentReader.findPreviewPageBySearch(command);
 	}
 
 	@Override
@@ -44,6 +44,13 @@ public class ContentServiceImpl implements ContentService {
 			.toList();
 
 		return PaginationDto.from(page, contents);
+	}
+
+	// 리딩 컨텐츠 뷰 페이지 조회
+	@Override
+	@Transactional(readOnly = true)
+	public PaginationInfo<ContentInfo.ViewContent> getViewContents(ContentCommand.GetReadingContents command) {
+		return contentReader.findReadingViewPage(command);
 	}
 
 	@Override

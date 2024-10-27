@@ -19,6 +19,8 @@ public interface ContentService {
 		ContentType contentType, Pageable pageable, Long categoryId
 	);
 
+	PaginationInfo<ContentInfo.ViewContent> getViewContents(ContentCommand.GetReadingContents command);
+
 	ContentResponseDto.DetailRes getScriptsOfContent(Long id);
 
 	void createContent(ContentCommand.Create command);
