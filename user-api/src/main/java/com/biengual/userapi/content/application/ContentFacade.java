@@ -56,4 +56,9 @@ public class ContentFacade {
 	public ContentInfo.PreviewContents getListeningPreview(ContentCommand.GetListeningPreview command) {
 		return contentService.getPreviewContents(command);
 	}
+
+	// 컨텐츠 디테일 조회
+	public ContentInfo.Detail getDetailContent(Long contentId) {
+		return contentService.getScriptsOfContent(contentId);
+	}
 }
