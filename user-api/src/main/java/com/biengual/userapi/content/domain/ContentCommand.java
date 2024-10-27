@@ -69,7 +69,7 @@ public class ContentCommand {
 	}
 
 	@Builder
-	public record GetReadingContents(
+	public record GetReadingView(
 		Pageable pageable,
 		ContentType contentType,
 		Long categoryId
@@ -77,7 +77,7 @@ public class ContentCommand {
 	}
 
 	@Builder
-	public record GetListeningContents(
+	public record GetListeningView(
 		Pageable pageable,
 		ContentType contentType,
 		Long categoryId

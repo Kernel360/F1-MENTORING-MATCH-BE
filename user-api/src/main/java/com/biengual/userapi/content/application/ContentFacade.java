@@ -38,12 +38,12 @@ public class ContentFacade {
 	}
 
 	// 리딩 컨텐츠 뷰 페이지 조회
-	public PaginationInfo<ContentInfo.ViewContent> getReadingContents(ContentCommand.GetReadingContents command) {
+	public PaginationInfo<ContentInfo.ViewContent> getReadingView(ContentCommand.GetReadingView command) {
 		return contentService.getViewContents(command);
 	}
 
 	// 리스닝 컨텐츠 뷰 페이지 조회
-	public PaginationInfo<ContentInfo.ViewContent> getListeningContents(ContentCommand.GetListeningContents command) {
+	public PaginationInfo<ContentInfo.ViewContent> getListeningView(ContentCommand.GetListeningView command) {
 		return contentService.getViewContents(command);
 	}
 }

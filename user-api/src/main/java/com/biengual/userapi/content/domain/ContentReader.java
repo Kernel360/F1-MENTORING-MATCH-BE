@@ -14,7 +14,7 @@ public interface ContentReader {
 
     PaginationInfo<ContentInfo.PreviewContent> findPreviewPageBySearch(ContentCommand.Search command);
 
-    PaginationInfo<ContentInfo.ViewContent> findReadingViewPage(ContentCommand.GetReadingContents command);
+    PaginationInfo<ContentInfo.ViewContent> findReadingViewPage(ContentCommand.GetReadingView command);
 
-    PaginationInfo<ContentInfo.ViewContent> findListeningViewPage(ContentCommand.GetListeningContents command);
+    PaginationInfo<ContentInfo.ViewContent> findListeningViewPage(ContentCommand.GetListeningView command);
 }

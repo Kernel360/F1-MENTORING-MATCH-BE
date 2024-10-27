@@ -112,16 +112,16 @@ public class ContentPublicController {
 		@Parameter(name = "sort", description = "정렬 기준 (createdAt, hits) / default: createdAt", in = ParameterIn.QUERY, schema = @Schema(type = "string")),
 		@Parameter(name = "categoryId", description = "category Id (값이 없으면 전체 카테고리)", in = ParameterIn.QUERY, schema = @Schema(type = "integer"))
 	})
-	public ResponseEntity<Object> getReadingContents(
+	public ResponseEntity<Object> getReadingView(
 		@RequestParam(required = false, defaultValue = "0") Integer page,
 		@RequestParam(required = false, defaultValue = "10") Integer size,
 		@RequestParam(required = false, defaultValue = "createdAt") String sort,
 		@RequestParam(required = false, defaultValue = "DESC") Sort.Direction direction,
 		@RequestParam(required = false) Long categoryId
 	) {
-		ContentCommand.GetReadingContents command =
-			contentDtoMapper.doGetReadingContents(page, size, direction, sort, categoryId);
-		PaginationInfo<ContentInfo.ViewContent> info = contentFacade.getReadingContents(command);
+		ContentCommand.GetReadingView command =
+			contentDtoMapper.doGetReadingView(page, size, direction, sort, categoryId);
+		PaginationInfo<ContentInfo.ViewContent> info = contentFacade.getReadingView(command);
 		ContentResponseDto.ReadingViewContentsRes response = contentDtoMapper.ofReadingViewContentsRes(info);
 
 		return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
@@ -144,17 +144,16 @@ public class ContentPublicController {
 		@Parameter(name = "sort", description = "정렬 기준 (createdAt, hits) / default: createdAt", in = ParameterIn.QUERY, schema = @Schema(type = "string")),
 		@Parameter(name = "categoryId", description = "category Id (값이 없으면 전체 카테고리)", in = ParameterIn.QUERY, schema = @Schema(type = "integer"))
 	})
-	public ResponseEntity<Object>
-	getListeningContents(
+	public ResponseEntity<Object> getListeningView(
 		@RequestParam(required = false, defaultValue = "0") Integer page,
 		@RequestParam(required = false, defaultValue = "10") Integer size,
 		@RequestParam(required = false, defaultValue = "createdAt") String sort,
 		@RequestParam(required = false, defaultValue = "DESC") Sort.Direction direction,
 		@RequestParam(required = false) Long categoryId
 	) {
-		ContentCommand.GetListeningContents command =
-			contentDtoMapper.doGetListeningContents(page, size, direction, sort, categoryId);
-		PaginationInfo<ContentInfo.ViewContent> info = contentFacade.getListeningContents(command);
+		ContentCommand.GetListeningView command =
+			contentDtoMapper.doGetListeningView(page, size, direction, sort, categoryId);
+		PaginationInfo<ContentInfo.ViewContent> info = contentFacade.getListeningView(command);
 		ContentResponseDto.ListeningViewContentsRes response = contentDtoMapper.ofListeningViewContentsRes(info);
 
 		return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
@@ -164,18 +163,17 @@ public class ContentPublicController {
 	@Operation(summary = "리딩 컨텐츠 프리뷰 조회", description = "리딩 컨텐츠 프리뷰 목록을 조회합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "요청에 성공하였습니다.", content = {
-			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerContentSearchPreview.class))
+			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerContentReadingPreview.class))
 		}),
-		@ApiResponse(responseCode = "204", description = "컨텐츠가 없습니다.", content = @Content),
+		@ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
 		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content)
 	})
-	public ResponseEntity<Object>
-	getPreviewLeadingContents(
-		@RequestParam(defaultValue = "hits") String sortBy,
-		@RequestParam(defaultValue = "8") int num
+	public ResponseEntity<Object> getPreviewLeadingContents(
+		@RequestParam(defaultValue = "hits") String sort,
+		@RequestParam(defaultValue = "8") Integer size
 	) {
 		Map<String, List<ContentResponseDto.PreviewRes>> data = new HashMap<>();
-		data.put("readingPreview", contentService.findPreviewContents(ContentType.READING, sortBy, num));
+		data.put("readingPreview", contentService.findPreviewContents(ContentType.READING, sort, size));
 
 		return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, data);
 	}

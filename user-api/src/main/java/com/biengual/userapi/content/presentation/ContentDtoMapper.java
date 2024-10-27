@@ -34,13 +34,13 @@ public interface ContentDtoMapper {
 
 	@Mapping(target = "pageable", expression = "java(toPageable(page, size, direction, sort))")
 	@Mapping(target = "contentType", constant = "READING")
-	ContentCommand.GetReadingContents doGetReadingContents(
+	ContentCommand.GetReadingView doGetReadingView(
 		Integer page, Integer size, Sort.Direction direction, String sort, Long categoryId
 	);
 
 	@Mapping(target = "pageable", expression = "java(toPageable(page, size, direction, sort))")
 	@Mapping(target = "contentType", constant = "LISTENING")
-	ContentCommand.GetListeningContents doGetListeningContents(
+	ContentCommand.GetListeningView doGetListeningView(
 		Integer page, Integer size, Sort.Direction direction, String sort, Long categoryId
 	);
 
