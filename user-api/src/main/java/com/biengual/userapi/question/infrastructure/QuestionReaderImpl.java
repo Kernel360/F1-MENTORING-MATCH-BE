@@ -2,9 +2,9 @@ package com.biengual.userapi.question.infrastructure;
 
 import com.biengual.userapi.annotation.DataProvider;
 import com.biengual.userapi.content.domain.ContentDocument;
+import com.biengual.userapi.content.domain.ContentDocumentRepository;
 import com.biengual.userapi.content.domain.ContentEntity;
 import com.biengual.userapi.content.domain.ContentRepository;
-import com.biengual.userapi.content.domain.ContentScriptRepository;
 import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.question.domain.QuestionDocument;
 import com.biengual.userapi.question.domain.QuestionInfo;
@@ -24,7 +24,7 @@ import static com.biengual.userapi.message.error.code.QuestionErrorCode.QUESTION
 public class QuestionReaderImpl implements QuestionReader {
 	private final QuestionRepository questionRepository;
 	private final ContentRepository contentRepository;
-	private final ContentScriptRepository contentScriptRepository;
+	private final ContentDocumentRepository contentDocumentRepository;
 
 	@Override
 	public List<QuestionInfo.Detail> getQuestions(Long contentId) {
@@ -53,7 +53,7 @@ public class QuestionReaderImpl implements QuestionReader {
 		ContentEntity content = contentRepository.findById(contentId)
 			.orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
 
-		return contentScriptRepository.findById(new ObjectId(content.getMongoContentId()))
+		return contentDocumentRepository.findById(new ObjectId(content.getMongoContentId()))
 			.orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
 	}
 }

@@ -17,7 +17,7 @@ import static com.biengual.userapi.question.domain.QuestionDocument.of;
 public class QuestionStoreImpl implements QuestionStore {
 	private final QuestionRepository questionRepository;
 	private final ContentRepository contentRepository;
-	private final ContentScriptRepository contentScriptRepository;
+	private final ContentDocumentRepository contentDocumentRepository;
 
 	@Override
 	public void createQuestion(QuestionCommand.Create command) {
@@ -49,7 +49,7 @@ public class QuestionStoreImpl implements QuestionStore {
 
 		// update QuestionIds
 		contentDocument.updateQuestionIds(questionIds);
-		contentScriptRepository.save(contentDocument);
+		contentDocumentRepository.save(contentDocument);
 	}
 
 	// Internal Methods ------------------------------------------------------------------------------------------------
@@ -120,7 +120,7 @@ public class QuestionStoreImpl implements QuestionStore {
 			.orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
 		content.updateStatus(ContentStatus.ACTIVATED);
 
-		return contentScriptRepository.findById(new ObjectId(content.getMongoContentId()))
+		return contentDocumentRepository.findById(new ObjectId(content.getMongoContentId()))
 			.orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
 	}
 }
