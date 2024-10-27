@@ -80,7 +80,13 @@ public class ContentServiceImpl implements ContentService {
 		return contentRepository.findPreviewContents(contentType, sortBy, num);
 	}
 
-	// 스크랩 많은 순 컨텐츠 조회
+	// 인기순 리딩 콘텐츠 프리뷰 조회
+	@Override
+	public ContentInfo.PreviewContents getPreviewContents(ContentCommand.GetReadingPreview command) {
+		return ContentInfo.PreviewContents.of(contentReader.findReadingPreview(command));
+	}
+
+	// 스크랩 많은 순 컨텐츠 프리뷰 조회
 	@Override
 	@Transactional(readOnly = true)
 	public ContentInfo.PreviewContents getContentsByScrapCount(Integer size) {

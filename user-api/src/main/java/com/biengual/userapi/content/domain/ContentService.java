@@ -35,6 +35,8 @@ public interface ContentService {
 		ContentType contentType, String sortBy, int num
 	);
 
+	ContentInfo.PreviewContents getPreviewContents(ContentCommand.GetReadingPreview command);
+
 	List<ContentResponseDto.GetByScrapCount> contentByScrapCount(int num);
 
     ContentInfo.PreviewContents getContentsByScrapCount(Integer size);
