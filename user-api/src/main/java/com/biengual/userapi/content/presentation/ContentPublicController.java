@@ -21,23 +21,27 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.biengual.userapi.common.constant.BadRequestMessageConstant.BLANK_CONTENT_KEYWORD_ERROR_MESSAGE;
 import static com.biengual.userapi.message.response.ContentResponseCode.CONTENT_VIEW_SUCCESS;
 
-@RequiredArgsConstructor
+@Validated
 @RestController
 @RequestMapping("/api/contents")
+@RequiredArgsConstructor
 @Tag(name = "Content - public API", description = "컨텐츠 공통 API")
 public class ContentPublicController {
 
@@ -90,7 +94,7 @@ public class ContentPublicController {
 		@RequestParam(required = false, defaultValue = "10") Integer size,
 		@RequestParam(required = false, defaultValue = "createdAt") String sort,
 		@RequestParam(required = false, defaultValue = "DESC") Sort.Direction direction,
-		@NotBlank @RequestParam String keyword
+		@NotBlank(message = BLANK_CONTENT_KEYWORD_ERROR_MESSAGE) @RequestParam String keyword
 	) {
 		ContentCommand.Search command = contentDtoMapper.doSearch(page, size, direction, sort, keyword);
 		PaginationInfo<ContentInfo.PreviewContent> info = contentFacade.search(command);

@@ -118,7 +118,7 @@ public class ContentCustomRepository {
 
     // keyword 검색 비지니스 로직
     private List<String> splitAndLimitWords(String keyword) {
-        return Arrays.stream(keyword.replace(',', ' ').split("\\s+"))
+        return Arrays.stream(keyword.strip().replace(',', ' ').split("\\s+"))
             .limit(10)
             .toList();
     }
