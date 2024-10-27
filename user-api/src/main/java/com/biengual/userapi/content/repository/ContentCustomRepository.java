@@ -1,18 +1,17 @@
 package com.biengual.userapi.content.repository;
 
 import com.biengual.userapi.content.domain.ContentInfo;
+import com.biengual.userapi.content.domain.ContentStatus;
 import com.biengual.userapi.content.domain.QContentEntity;
 import com.biengual.userapi.scrap.domain.QScrapEntity;
-import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Repository
 @RequiredArgsConstructor
@@ -24,11 +23,12 @@ public class ContentCustomRepository {
         QScrapEntity scrapEntity = QScrapEntity.scrapEntity;
         QContentEntity contentEntity = QContentEntity.contentEntity;
 
-        // 커버링 인덱스
+        // 정렬된 커버링 인덱스
         List<Long> contentIds = queryFactory.select(scrapEntity.content.id)
             .from(scrapEntity)
+            .where(scrapEntity.content.contentStatus.eq(ContentStatus.ACTIVATED))
             .groupBy(scrapEntity.content.id)
-            .orderBy(scrapEntity.content.id.count().desc())
+            .orderBy(scrapEntity.id.count().desc())
             .limit(size)
             .fetch();
 
@@ -37,7 +37,7 @@ public class ContentCustomRepository {
             return Collections.emptyList();
         }
 
-        return queryFactory.select(
+        List<ContentInfo.PreviewContent> unalignedScrapPreview = queryFactory.select(
                 Projections.constructor(
                     ContentInfo.PreviewContent.class,
                     contentEntity.id,
@@ -51,18 +51,16 @@ public class ContentCustomRepository {
             )
             .from(contentEntity)
             .where(contentEntity.id.in(contentIds))
-            .orderBy(coveringIndexOrder(contentEntity.id, contentIds))
             .fetch();
-    }
 
-    // Internal Methods=================================================================================================
-
-    // 커버링 인덱스의 순서를 유지하기 위한 OrderSpecifier
-    private OrderSpecifier<String> coveringIndexOrder(NumberPath<Long> idPath, List<Long> ids) {
-        return Expressions.stringTemplate(
-            "FIELD({0}, {1})",
-            idPath,
-            Expressions.constant(ids)
-        ).asc();
+        // TODO: DB에서 정렬된 채로 가져올 수 있는 방법이 있다면?
+        // 정렬된 커버링 인덱스의 순서에 따라 정렬
+        return contentIds.stream()
+            .map(id -> unalignedScrapPreview.stream()
+                .filter(content -> content.contentId().equals(id))
+                .findFirst()
+                .orElse(null))
+            .filter(Objects::nonNull)
+            .toList();
     }
 }

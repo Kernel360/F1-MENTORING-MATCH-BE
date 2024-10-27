@@ -22,6 +22,7 @@ import static com.biengual.userapi.content.domain.QContentEntity.contentEntity;
 import static com.biengual.userapi.message.error.code.ContentErrorCode.CONTENT_SORT_COL_NOT_FOUND;
 import static com.biengual.userapi.scrap.domain.QScrapEntity.scrapEntity;
 
+@Deprecated
 public class ContentRepositoryImpl extends QuerydslRepositorySupport implements ContentRepositoryCustom {
 
 	public ContentRepositoryImpl() {
