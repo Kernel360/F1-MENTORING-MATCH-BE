@@ -249,11 +249,18 @@ public class ContentCustomRepository {
         return baseExpression.and(previewExpression);
     }
 
+    // TODO: 정렬 가능 필드 범위가 정해지면 Dto 단계에서 검증할 것
     // Pageable OrderSpecifiers
     private List<OrderSpecifier<?>> getPageOrderSpecifiers(Pageable pageable) {
         List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
 
         for (Sort.Order order : pageable.getSort()) {
+            try {
+                QContentEntity.class.getDeclaredField(order.getProperty());
+            } catch (NoSuchFieldException e) {
+                throw new CommonException(CONTENT_SORT_COL_NOT_FOUND);
+            }
+
             PathBuilder pathBuilder = new PathBuilder(QContentEntity.class, "contentEntity");
             orderSpecifiers.add(new OrderSpecifier(
                 order.isAscending() ? Order.ASC : Order.DESC,
