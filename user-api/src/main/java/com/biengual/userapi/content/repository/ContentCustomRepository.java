@@ -4,22 +4,25 @@ import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.content.domain.ContentStatus;
 import com.biengual.userapi.content.domain.ContentType;
 import com.biengual.userapi.content.domain.QContentEntity;
+import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.scrap.domain.QScrapEntity;
-import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.lang.reflect.Field;
+import java.util.*;
+
+import static com.biengual.userapi.message.error.code.ContentErrorCode.CONTENT_SORT_COL_NOT_FOUND;
 
 @Repository
 @RequiredArgsConstructor
@@ -89,7 +92,22 @@ public class ContentCustomRepository {
 
         BooleanExpression predicate = getViewPredicate(contentType, categoryId, contentEntity);
 
-        return findViewPage(pageable, predicate, contentEntity);
+        List<OrderSpecifier<?>> orderSpecifiers = getPageOrderSpecifiers(pageable);
+
+        return findViewPage(pageable, predicate, orderSpecifiers, contentEntity);
+    }
+
+    // 컨텐츠 프리뷰 조회하기 위한 쿼리
+    public List<ContentInfo.PreviewContent> findPreviewBySizeAndSortAndContentType(
+        Integer size, String sort, ContentType contentType
+    ) {
+        QContentEntity contentEntity = QContentEntity.contentEntity;
+
+        BooleanExpression predicate = getPreviewPredicate(contentType, contentEntity);
+
+        List<OrderSpecifier<?>> orderSpecifiers = getOrderSpecifiers(sort, contentEntity);
+
+        return findPreview(size, predicate, orderSpecifiers, contentEntity);
     }
 
     // Internal Method =================================================================================================
@@ -125,7 +143,9 @@ public class ContentCustomRepository {
 
     // TODO: Predicate를 사용하지 않는 경우에는 Override? 아니면 null로 입력?
     // View Page를 위한 공통 Pagination 쿼리
-    private Page<ContentInfo.ViewContent> findViewPage(Pageable pageable, Predicate predicate, QContentEntity contentEntity) {
+    private Page<ContentInfo.ViewContent> findViewPage(
+        Pageable pageable, Predicate predicate, List<OrderSpecifier<?>> orderSpecifiers, QContentEntity contentEntity
+    ) {
         List<ContentInfo.ViewContent> contents = queryFactory
             .select(
                 Projections.constructor(
@@ -141,6 +161,7 @@ public class ContentCustomRepository {
             )
             .from(contentEntity)
             .where(predicate)
+            .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
@@ -150,6 +171,31 @@ public class ContentCustomRepository {
             .where(predicate);
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchOne);
+    }
+
+    // TODO: Predicate를 사용하지 않는 경우에는 Override? 아니면 null로 입력?
+    // Preview를 위한 공통 쿼리
+    private List<ContentInfo.PreviewContent> findPreview(
+        Integer size, Predicate predicate, List<OrderSpecifier<?>> orderSpecifiers, QContentEntity contentEntity
+    ) {
+        return queryFactory
+            .select(
+                Projections.constructor(
+                    ContentInfo.PreviewContent.class,
+                    contentEntity.id,
+                    contentEntity.title,
+                    contentEntity.url,
+                    contentEntity.contentType,
+                    contentEntity.preScripts,
+                    contentEntity.category.name,
+                    contentEntity.hits
+                )
+            )
+            .from(contentEntity)
+            .where(predicate)
+            .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
+            .limit(size)
+            .fetch();
     }
 
     // Public API에서 사용하는 공통 Predicate
@@ -188,9 +234,52 @@ public class ContentCustomRepository {
     private BooleanExpression getViewPredicate(ContentType contentType, Long categoryId, QContentEntity contentEntity) {
         BooleanExpression baseExpression = getPublicContentsPredicate(contentEntity);
 
-        BooleanExpression readingExpression = contentEntity.contentType.eq(contentType)
+        BooleanExpression viewExpression = contentEntity.contentType.eq(contentType)
             .and(categoryId != null ? contentEntity.category.id.eq(categoryId) : null);
 
-        return baseExpression.and(readingExpression);
+        return baseExpression.and(viewExpression);
+    }
+
+    // 컨텐츠 프리뷰 Predicate
+    private BooleanExpression getPreviewPredicate(ContentType contentType, QContentEntity contentEntity) {
+        BooleanExpression baseExpression = getPublicContentsPredicate(contentEntity);
+
+        BooleanExpression previewExpression = contentEntity.contentType.eq(contentType);
+
+        return baseExpression.and(previewExpression);
+    }
+
+    // Pageable OrderSpecifiers
+    private List<OrderSpecifier<?>> getPageOrderSpecifiers(Pageable pageable) {
+        List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
+
+        for (Sort.Order order : pageable.getSort()) {
+            PathBuilder pathBuilder = new PathBuilder(QContentEntity.class, "contentEntity");
+            orderSpecifiers.add(new OrderSpecifier(
+                order.isAscending() ? Order.ASC : Order.DESC,
+                pathBuilder.get(order.getProperty())
+            ));
+        }
+
+        return orderSpecifiers;
+    }
+
+    // TODO: 정렬 가능 필드 범위가 정해지면 Dto 단계에서 검증할 것
+    // OrderSpecifiers
+    private List<OrderSpecifier<?>> getOrderSpecifiers(String sort, QContentEntity contentEntity) {
+        List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
+
+        Field field;
+        try {
+            field = contentEntity.getClass().getField(sort);
+        } catch (NoSuchFieldException e) {
+            throw new CommonException(CONTENT_SORT_COL_NOT_FOUND);
+        }
+
+        Path<Object> path = Expressions.path(Object.class, contentEntity, field.getName());
+
+        orderSpecifiers.add(new OrderSpecifier(Order.DESC, path));
+
+        return orderSpecifiers;
     }
 }
