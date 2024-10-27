@@ -1,10 +1,10 @@
 package com.biengual.userapi.content.application;
 
 import com.biengual.userapi.content.domain.*;
-import com.biengual.userapi.content.presentation.ContentRequestDto;
 import com.biengual.userapi.content.presentation.ContentResponseDto;
 import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.util.PaginationDto;
+import com.biengual.userapi.util.PaginationInfo;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.biengual.userapi.message.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
-import static com.biengual.userapi.message.error.code.ContentErrorCode.CONTENT_SEARCH_WORD_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -26,21 +25,11 @@ public class ContentServiceImpl implements ContentService {
 	private final ContentRepository contentRepository;
 	private final ContentScriptRepository contentScriptRepository;
 
+	// 검색 조건에 맞는 컨텐츠 조회
 	@Override
 	@Transactional(readOnly = true)
-	public PaginationDto<ContentResponseDto.PreviewRes> search(
-		ContentRequestDto.SearchReq searchDto, Pageable pageable
-	) {
-		if (searchDto.searchWords().isBlank()) {
-			throw new CommonException(CONTENT_SEARCH_WORD_NOT_FOUND);
-		}
-		Page<ContentEntity> page = contentRepository.findAllBySearchCondition(searchDto, pageable);
-		List<ContentResponseDto.PreviewRes> contents
-			= page.getContent().stream()
-			.map(ContentResponseDto.PreviewRes::of)
-			.toList();
-
-		return PaginationDto.from(page, contents);
+	public PaginationInfo<ContentInfo.PreviewContent> search(ContentCommand.Search command) {
+		return contentReader.findPageBySearch(command);
 	}
 
 	@Override

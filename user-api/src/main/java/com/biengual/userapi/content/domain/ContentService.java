@@ -1,8 +1,8 @@
 package com.biengual.userapi.content.domain;
 
-import com.biengual.userapi.content.presentation.ContentRequestDto;
 import com.biengual.userapi.content.presentation.ContentResponseDto;
 import com.biengual.userapi.util.PaginationDto;
+import com.biengual.userapi.util.PaginationInfo;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -13,9 +13,7 @@ import java.util.List;
  * @author 김영래
  */
 public interface ContentService {
-	PaginationDto<ContentResponseDto.PreviewRes> search(
-		ContentRequestDto.SearchReq searchDto, Pageable pageable
-	);
+	PaginationInfo<ContentInfo.PreviewContent> search(ContentCommand.Search command);
 
 	PaginationDto<ContentResponseDto.PreviewRes> getAllContents(
 		ContentType contentType, Pageable pageable, Long categoryId
