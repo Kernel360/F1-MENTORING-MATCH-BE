@@ -2,10 +2,11 @@ package com.biengual.userapi.content.presentation;
 
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentInfo;
-import org.mapstruct.InjectionStrategy;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
+import com.biengual.userapi.util.PaginationInfo;
+import org.mapstruct.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 /**
  * do~ : Command <- Request
@@ -28,10 +29,24 @@ public interface ContentDtoMapper {
 	@Mapping(target = "id", source = "contentId")
 	ContentCommand.Modify doModify(Long contentId, ContentRequestDto.UpdateReq request);
 
+	@Mapping(target = "pageable", expression = "java(toPageable(page, size, direction, sort))")
+	ContentCommand.Search doSearch(Integer page, Integer size, Sort.Direction direction, String sort, String keyword);
+
 	// Response <- Info
     @Mapping(target = "scrapPreview", source = "previewContents")
     ContentResponseDto.ScrapPreviewContentsRes ofScrapPreviewContentsRes(ContentInfo.PreviewContents previewContents);
 
+	@Mapping(target = "searchPreview", source = "contents")
+	ContentResponseDto.SearchPreviewContentsRes ofSearchPreviewContentsRes(
+		PaginationInfo<ContentInfo.PreviewContent> paginationInfo
+	);
+
 	// Entity <-> Info, Info <-> Info
 
+	// Internal Method =================================================================================================
+
+	@Named("toPageable")
+	default Pageable toPageable(Integer page, Integer size, Sort.Direction direction, String sort) {
+		return PageRequest.of(page, size, direction,sort);
+	}
 }

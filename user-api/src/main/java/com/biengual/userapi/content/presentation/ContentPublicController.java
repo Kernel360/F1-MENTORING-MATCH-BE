@@ -1,6 +1,7 @@
 package com.biengual.userapi.content.presentation;
 
 import com.biengual.userapi.content.application.ContentFacade;
+import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.content.domain.ContentService;
 import com.biengual.userapi.content.domain.ContentType;
@@ -9,6 +10,7 @@ import com.biengual.userapi.swagger.content.SwaggerContentByScrapCount;
 import com.biengual.userapi.swagger.content.SwaggerContentDetail;
 import com.biengual.userapi.swagger.content.SwaggerContentPreview;
 import com.biengual.userapi.util.PaginationDto;
+import com.biengual.userapi.util.PaginationInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -18,6 +20,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -65,13 +68,15 @@ public class ContentPublicController {
 		return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
 	}
 
+	// TODO: 검색 키워드 개수와는 별개로 입력 받을 수 있는 글자 수는 정해야줘야 할 것 같습니다.
+	// TODO: Get 요청의 공통 컨벤션은 requestBody가 없기에 keyword를 requestParam으로 옮겼고, 이렇게 쓰인다면 프론트 분들에게 공유드려야 합니다.
 	@GetMapping("/search")
 	@Operation(summary = "컨텐츠 검색", description = "페이지네이션을 적용해 컨텐츠를 검색합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "요청에 성공하였습니다.", content = {
+		@ApiResponse(responseCode = "200", description = "컨텐츠 검색 성공", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerContentPreview.class))
 		}),
-		@ApiResponse(responseCode = "204", description = "컨텐츠가 없습니다.", content = @Content),
+		@ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
 		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content)
 	})
 	@Parameters({
@@ -80,17 +85,18 @@ public class ContentPublicController {
 		@Parameter(name = "sort", description = "정렬 기준 (createdAt, hits) / default: createdAt", in = ParameterIn.QUERY, schema = @Schema(type = "string")),
 		@Parameter(name = "direction", description = "정렬 방법 / default: DESC / 대문자로 입력", in = ParameterIn.QUERY, schema = @Schema(type = "string"))
 	})
-	public ResponseEntity<Object>
-	getContentsBySearch(
-		@ModelAttribute ContentRequestDto.SearchReq searchDto,
+	public ResponseEntity<Object> searchContents(
+		@RequestParam(required = false, defaultValue = "0") Integer page,
+		@RequestParam(required = false, defaultValue = "10") Integer size,
 		@RequestParam(required = false, defaultValue = "createdAt") String sort,
 		@RequestParam(required = false, defaultValue = "DESC") Sort.Direction direction,
-		@Parameter(hidden = true) @PageableDefault(page = 0, size = 10) Pageable pageable
+		@NotBlank @RequestParam String keyword
 	) {
-		Pageable pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), direction, sort);
-		PaginationDto<ContentResponseDto.PreviewRes> pageContentList
-			= contentService.search(searchDto, pageRequest);
-		return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, pageContentList);
+		ContentCommand.Search command = contentDtoMapper.doSearch(page, size, direction, sort, keyword);
+		PaginationInfo<ContentInfo.PreviewContent> info = contentFacade.search(command);
+		ContentResponseDto.SearchPreviewContentsRes response = contentDtoMapper.ofSearchPreviewContentsRes(info);
+
+		return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
 	}
 
 	@GetMapping("/view/reading")

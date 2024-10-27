@@ -52,6 +52,7 @@ public class ContentApiController {
 		return ResponseEntityFactory.toResponseEntity(CONTENT_CREATE_SUCCESS);
 	}
 
+	// TODO: request 매핑이 안되는 버그 있음
 	/**
 	 * 컨텐츠 수정
 	 */
@@ -72,9 +73,6 @@ public class ContentApiController {
 		ContentRequestDto.UpdateReq request
 	) {
 		ContentCommand.Modify command = contentDtoMapper.doModify(contentId, request);
-
-		System.out.println("command script : " + command.script().size());
-
 		contentFacade.modifyContent(command);
 
 		return ResponseEntityFactory.toResponseEntity(CONTENT_MODIFY_SUCCESS);

@@ -4,6 +4,7 @@ import com.biengual.userapi.category.domain.CategoryEntity;
 import com.biengual.userapi.script.domain.entity.Script;
 import lombok.Builder;
 import org.bson.types.ObjectId;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -60,4 +61,10 @@ public class ContentCommand {
 	) {
 	}
 
+	@Builder
+	public record Search(
+		Pageable pageable,
+		String keyword
+	) {
+	}
 }

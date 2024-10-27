@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
+@Deprecated
 public record PaginationDto<T>(
     Integer pageNumber,
     Integer pageSize,

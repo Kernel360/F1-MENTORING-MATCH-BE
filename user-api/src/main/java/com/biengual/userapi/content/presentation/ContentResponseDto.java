@@ -91,6 +91,16 @@ public class ContentResponseDto {
 	) {
 	}
 
+	@Builder
+	public record SearchPreviewContentsRes(
+		Integer pageNumber,
+		Integer pageSize,
+		Integer totalPages,
+		Long totalElements,
+		List<PreviewContent> searchPreview
+	) {
+	}
+
 	public record GetByScrapCount(
 		Long contentId,
 		String title,
@@ -112,5 +122,4 @@ public class ContentResponseDto {
 			);
 		}
 	}
-
 }
