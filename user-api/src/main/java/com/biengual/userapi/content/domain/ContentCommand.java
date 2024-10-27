@@ -91,4 +91,12 @@ public class ContentCommand {
 		ContentType contentType
 	) {
 	}
+
+	@Builder
+	public record GetListeningPreview(
+		Integer size,
+		String sort,
+		ContentType contentType
+	) {
+	}
 }

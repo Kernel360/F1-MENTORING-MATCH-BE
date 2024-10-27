@@ -47,6 +47,9 @@ public interface ContentDtoMapper {
 	@Mapping(target = "contentType", constant = "READING")
 	ContentCommand.GetReadingPreview doGetReadingPreview(Integer size, String sort);
 
+	@Mapping(target = "contentType", constant = "LISTENING")
+	ContentCommand.GetListeningPreview doGetListeningPreview(Integer size, String sort);
+
 	// Response <- Info
     @Mapping(target = "scrapPreview", source = "previewContents")
     ContentResponseDto.ScrapPreviewContentsRes ofScrapPreviewContentsRes(ContentInfo.PreviewContents previewContents);
@@ -70,6 +73,11 @@ public interface ContentDtoMapper {
 	ContentResponseDto.ReadingPreviewContentsRes ofReadingPreviewContentsRes(
 		ContentInfo.PreviewContents readingPreview
 	);
+
+    @Mapping(target = "listeningPreview", source = "previewContents")
+    ContentResponseDto.ListeningPreviewContentsRes ofListeningPreviewContentsRes(
+        ContentInfo.PreviewContents listeningPreview
+    );
 
 	// Entity <-> Info, Info <-> Info
 

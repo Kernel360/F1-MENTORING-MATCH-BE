@@ -4,7 +4,6 @@ import com.biengual.userapi.content.application.ContentFacade;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.content.domain.ContentService;
-import com.biengual.userapi.content.domain.ContentType;
 import com.biengual.userapi.message.ResponseEntityFactory;
 import com.biengual.userapi.swagger.content.*;
 import com.biengual.userapi.util.PaginationInfo;
@@ -23,10 +22,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static com.biengual.userapi.common.constant.BadRequestMessageConstant.BLANK_CONTENT_KEYWORD_ERROR_MESSAGE;
 import static com.biengual.userapi.message.response.ContentResponseCode.CONTENT_VIEW_SUCCESS;
@@ -97,7 +92,7 @@ public class ContentPublicController {
 
 	// TODO: Approve가 된다면 Page 내용을 담는 key 값 변경 사항을 프론트에게 공유해야 합니다.
 	@GetMapping("/view/reading")
-	@Operation(summary = "리딩 컨텐츠 조회", description = "페이지네이션을 적용하여 리딩 컨텐츠 목록을 조회합니다.")
+	@Operation(summary = "리딩 컨텐츠 뷰 조회", description = "페이지네이션을 적용하여 리딩 컨텐츠 목록을 조회합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "리딩 컨텐츠 페이지 조회 요청 성공", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerContentReadingView.class))
@@ -129,7 +124,7 @@ public class ContentPublicController {
 
 	// TODO: Approve가 된다면 Page 내용을 담는 key 값 변경 사항을 프론트에게 공유해야 합니다.
 	@GetMapping("/view/listening")
-	@Operation(summary = "리스닝 컨텐츠 조회", description = "페이지네이션을 적용하여 리스닝 컨텐츠 목록을 조회합니다.")
+	@Operation(summary = "리스닝 컨텐츠 뷰 조회", description = "페이지네이션을 적용하여 리스닝 컨텐츠 목록을 조회합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "리스닝 컨텐츠 페이지 조회 요청 성공", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerContentListeningView.class))
@@ -162,7 +157,7 @@ public class ContentPublicController {
 	@GetMapping("/preview/reading")
 	@Operation(summary = "리딩 컨텐츠 프리뷰 조회", description = "리딩 컨텐츠 프리뷰 목록을 조회합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "요청에 성공하였습니다.", content = {
+		@ApiResponse(responseCode = "200", description = "리딩 컨텐츠 프리뷰 조회 요청 성공", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerContentReadingPreview.class))
 		}),
 		@ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
@@ -182,21 +177,21 @@ public class ContentPublicController {
 	@GetMapping("/preview/listening")
 	@Operation(summary = "리스닝 컨텐츠 프리뷰 조회", description = "리스닝 컨텐츠 프리뷰 목록을 조회합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "요청에 성공하였습니다.", content = {
-			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerContentSearchPreview.class))
+		@ApiResponse(responseCode = "200", description = "리스닝 컨텐츠 프리뷰 조회 요청 성공", content = {
+			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerContentListeningPreview.class))
 		}),
-		@ApiResponse(responseCode = "204", description = "컨텐츠가 없습니다.", content = @Content),
+		@ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
 		@ApiResponse(responseCode = "500", description = "서버 에러가 발생하였습니다.", content = @Content)
 	})
-	public ResponseEntity<Object>
-	getPreviewListeningContents( // 최소한 list, map은 객체로 만들어야 함
-		@RequestParam(defaultValue = "hits") String sortBy,
-		@RequestParam(defaultValue = "8") int num
+	public ResponseEntity<Object> getPreviewListeningContents(
+		@RequestParam(defaultValue = "8") Integer size,
+		@RequestParam(defaultValue = "hits") String sort
 	) {
-		Map<String, List<ContentResponseDto.PreviewRes>> data = new HashMap<>();
-		data.put("listeningPreview", contentService.findPreviewContents(ContentType.LISTENING, sortBy, num));
+		ContentCommand.GetListeningPreview command = contentDtoMapper.doGetListeningPreview(size, sort);
+		ContentInfo.PreviewContents info = contentFacade.getListeningPreview(command);
+		ContentResponseDto.ListeningPreviewContentsRes response = contentDtoMapper.ofListeningPreviewContentsRes(info);
 
-		return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, data);
+		return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
 	}
 
 	/**
