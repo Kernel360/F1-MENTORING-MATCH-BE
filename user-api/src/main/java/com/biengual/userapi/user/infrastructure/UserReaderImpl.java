@@ -7,9 +7,9 @@ import com.biengual.userapi.user.domain.UserInfo;
 import com.biengual.userapi.user.domain.UserReader;
 import com.biengual.userapi.user.domain.UserEntity;
 import com.biengual.userapi.user.presentation.UserDtoMapper;
-import com.biengual.userapi.user.repository.UserCategoryCustomRepository;
-import com.biengual.userapi.user.repository.UserCustomRepository;
-import com.biengual.userapi.user.repository.UserRepository;
+import com.biengual.userapi.user.domain.UserCategoryCustomRepository;
+import com.biengual.userapi.user.domain.UserCustomRepository;
+import com.biengual.userapi.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;

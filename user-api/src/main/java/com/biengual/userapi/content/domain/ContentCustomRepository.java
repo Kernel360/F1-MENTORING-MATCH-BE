@@ -1,9 +1,5 @@
-package com.biengual.userapi.content.repository;
+package com.biengual.userapi.content.domain;
 
-import com.biengual.userapi.content.domain.ContentInfo;
-import com.biengual.userapi.content.domain.ContentStatus;
-import com.biengual.userapi.content.domain.ContentType;
-import com.biengual.userapi.content.domain.QContentEntity;
 import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.scrap.domain.QScrapEntity;
 import com.querydsl.core.types.*;

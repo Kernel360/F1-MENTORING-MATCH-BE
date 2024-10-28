@@ -1,6 +1,5 @@
-package com.biengual.userapi.user.repository;
+package com.biengual.userapi.user.domain;
 
-import com.biengual.userapi.user.domain.UserCategoryEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

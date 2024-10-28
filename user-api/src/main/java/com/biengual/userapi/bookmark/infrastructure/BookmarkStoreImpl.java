@@ -6,7 +6,7 @@ import com.biengual.userapi.bookmark.presentation.BookmarkDtoMapper;
 import com.biengual.userapi.content.domain.ContentDocument;
 import com.biengual.userapi.content.domain.ContentDocumentRepository;
 import com.biengual.userapi.content.domain.ContentType;
-import com.biengual.userapi.content.repository.ContentCustomRepository;
+import com.biengual.userapi.content.domain.ContentCustomRepository;
 import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.script.domain.entity.YoutubeScript;
 import lombok.RequiredArgsConstructor;

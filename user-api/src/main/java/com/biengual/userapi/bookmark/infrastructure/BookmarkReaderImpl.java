@@ -3,7 +3,7 @@ package com.biengual.userapi.bookmark.infrastructure;
 import com.biengual.userapi.annotation.DataProvider;
 import com.biengual.userapi.bookmark.domain.*;
 import com.biengual.userapi.bookmark.presentation.BookmarkDtoMapper;
-import com.biengual.userapi.content.repository.ContentCustomRepository;
+import com.biengual.userapi.content.domain.ContentCustomRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;

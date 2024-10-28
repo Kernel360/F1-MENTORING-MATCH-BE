@@ -2,7 +2,7 @@ package com.biengual.userapi.content.infrastructure;
 
 import com.biengual.userapi.annotation.DataProvider;
 import com.biengual.userapi.content.domain.*;
-import com.biengual.userapi.content.repository.ContentCustomRepository;
+import com.biengual.userapi.content.domain.ContentCustomRepository;
 import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.util.PaginationInfo;
 import lombok.RequiredArgsConstructor;

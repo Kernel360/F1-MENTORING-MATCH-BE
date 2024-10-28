@@ -2,7 +2,7 @@ package com.biengual.userapi.crawling.infrastructure;
 
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentType;
-import com.biengual.userapi.content.repository.ContentCustomRepository;
+import com.biengual.userapi.content.domain.ContentCustomRepository;
 import com.biengual.userapi.crawling.application.TranslateService;
 import com.biengual.userapi.crawling.domain.CrawlingStore;
 import com.biengual.userapi.crawling.presentation.CrawlingResponseDto;
