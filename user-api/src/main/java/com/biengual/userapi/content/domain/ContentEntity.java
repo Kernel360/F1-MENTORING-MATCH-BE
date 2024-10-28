@@ -96,6 +96,10 @@ public class ContentEntity extends BaseEntity {
 		this.contentStatus = contentStatus == null ? ContentStatus.ACTIVATED : contentStatus;
 	}
 
+	public void updateNumOfQuiz(Integer numOfQuiz) {
+		this.numOfQuiz += numOfQuiz;
+	}
+
 	public void updateHits() {
 		this.hits += 1;
 	}
