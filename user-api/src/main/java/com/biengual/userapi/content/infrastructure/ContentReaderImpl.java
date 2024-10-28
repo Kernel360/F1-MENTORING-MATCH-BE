@@ -71,8 +71,8 @@ public class ContentReaderImpl implements ContentReader {
 
     // script를 제외한 컨텐츠 디테일 조회
     @Override
-    public ContentEntity findContent(Long contentId) {
-        return contentRepository.findById(contentId)
+    public ContentEntity findActiveContent(Long contentId) {
+        return contentRepository.findByIdAndContentStatus(contentId, ContentStatus.ACTIVATED)
             .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
     }
 }

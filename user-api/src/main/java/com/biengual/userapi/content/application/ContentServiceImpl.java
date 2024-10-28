@@ -81,7 +81,7 @@ public class ContentServiceImpl implements ContentService {
 	@Override
 	@Transactional    // hit 증가 로직 있어서 readOnly 생략
 	public ContentInfo.Detail getScriptsOfContent(Long contentId) {
-		ContentEntity content = contentReader.findContent(contentId);
+		ContentEntity content = contentReader.findActiveContent(contentId);
 
 		List<Script> scripts = contentDocumentReader.findScripts(content.getMongoContentId());
 
