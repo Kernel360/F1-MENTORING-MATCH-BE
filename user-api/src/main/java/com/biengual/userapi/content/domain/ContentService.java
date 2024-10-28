@@ -1,31 +1,28 @@
 package com.biengual.userapi.content.domain;
 
-import java.util.List;
+import com.biengual.userapi.util.PaginationInfo;
 
-import org.springframework.data.domain.Pageable;
-
-import com.biengual.userapi.content.presentation.ContentRequestDto;
-import com.biengual.userapi.content.presentation.ContentResponseDto;
-import com.biengual.userapi.util.PaginationDto;
-
+/**
+ * Content 도메인의 Service 계층의 인터페이스
+ *
+ * @author 김영래
+ */
 public interface ContentService {
-	PaginationDto<ContentResponseDto.PreviewRes> search(
-		ContentRequestDto.SearchReq searchDto, Pageable pageable
-	);
+	PaginationInfo<ContentInfo.PreviewContent> search(ContentCommand.Search command);
 
-	PaginationDto<ContentResponseDto.PreviewRes> getAllContents(
-		ContentType contentType, Pageable pageable, Long categoryId
-	);
+	PaginationInfo<ContentInfo.ViewContent> getViewContents(ContentCommand.GetReadingView command);
 
-	ContentResponseDto.DetailRes getScriptsOfContent(Long id);
+	PaginationInfo<ContentInfo.ViewContent> getViewContents(ContentCommand.GetListeningView command);
+
+	ContentInfo.Detail getScriptsOfContent(Long contentId);
 
 	void createContent(ContentCommand.Create command);
 
 	void modifyContentStatus(Long contentId);
 
-	List<ContentResponseDto.PreviewRes> findPreviewContents(
-		ContentType contentType, String sortBy, int num
-	);
+	ContentInfo.PreviewContents getPreviewContents(ContentCommand.GetReadingPreview command);
 
-	List<ContentResponseDto.GetByScrapCount> contentByScrapCount(int num);
+	ContentInfo.PreviewContents getPreviewContents(ContentCommand.GetListeningPreview command);
+
+    ContentInfo.PreviewContents getContentsByScrapCount(Integer size);
 }

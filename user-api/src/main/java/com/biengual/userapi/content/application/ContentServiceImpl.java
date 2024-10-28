@@ -1,67 +1,42 @@
 package com.biengual.userapi.content.application;
 
-import static com.biengual.userapi.message.error.code.ContentErrorCode.*;
-
-import java.util.List;
-
-import org.bson.types.ObjectId;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import com.biengual.userapi.content.domain.*;
+import com.biengual.userapi.content.presentation.ContentDtoMapper;
+import com.biengual.userapi.script.domain.entity.Script;
+import com.biengual.userapi.util.PaginationInfo;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.biengual.userapi.content.domain.ContentCommand;
-import com.biengual.userapi.content.domain.ContentDocument;
-import com.biengual.userapi.content.domain.ContentEntity;
-import com.biengual.userapi.content.domain.ContentRepository;
-import com.biengual.userapi.content.domain.ContentScriptRepository;
-import com.biengual.userapi.content.domain.ContentService;
-import com.biengual.userapi.content.domain.ContentStore;
-import com.biengual.userapi.content.domain.ContentType;
-import com.biengual.userapi.content.presentation.ContentRequestDto;
-import com.biengual.userapi.content.presentation.ContentResponseDto;
-import com.biengual.userapi.message.error.exception.CommonException;
-import com.biengual.userapi.util.PaginationDto;
-
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class ContentServiceImpl implements ContentService {
-	private final ContentStore contentStore;
+	private final ContentDtoMapper contentDtoMapper;
+    private final ContentReader contentReader;
+    private final ContentStore contentStore;
+	private final ContentDocumentReader contentDocumentReader;
 
-	private final ContentRepository contentRepository;
-	private final ContentScriptRepository contentScriptRepository;
-
+	// 검색 조건에 맞는 컨텐츠 프리뷰 페이지 조회
 	@Override
 	@Transactional(readOnly = true)
-	public PaginationDto<ContentResponseDto.PreviewRes> search(
-		ContentRequestDto.SearchReq searchDto, Pageable pageable
-	) {
-		if (searchDto.searchWords().isBlank()) {
-			throw new CommonException(CONTENT_SEARCH_WORD_NOT_FOUND);
-		}
-		Page<ContentEntity> page = contentRepository.findAllBySearchCondition(searchDto, pageable);
-		List<ContentResponseDto.PreviewRes> contents
-			= page.getContent().stream()
-			.map(ContentResponseDto.PreviewRes::of)
-			.toList();
-
-		return PaginationDto.from(page, contents);
+	public PaginationInfo<ContentInfo.PreviewContent> search(ContentCommand.Search command) {
+		return contentReader.findPreviewPageBySearch(command);
 	}
 
+	// 리딩 컨텐츠 프리뷰 페이지 조회
 	@Override
 	@Transactional(readOnly = true)
-	public PaginationDto<ContentResponseDto.PreviewRes> getAllContents(
-		ContentType contentType, Pageable pageable, Long categoryId
-	) {
-		Page<ContentEntity> page = contentRepository.findAllByContentTypeAndCategory(contentType, pageable, categoryId);
+	public PaginationInfo<ContentInfo.ViewContent> getViewContents(ContentCommand.GetReadingView command) {
+		return contentReader.findReadingViewPage(command);
+	}
 
-		List<ContentResponseDto.PreviewRes> contents = page.getContent().stream()
-			.map(ContentResponseDto.PreviewRes::of)
-			.toList();
-
-		return PaginationDto.from(page, contents);
+	// 리스닝 컨텐츠 프리뷰 페이지 조회
+	@Override
+	@Transactional(readOnly = true)
+	public PaginationInfo<ContentInfo.ViewContent> getViewContents(ContentCommand.GetListeningView command) {
+		return contentReader.findListeningViewPage(command);
 	}
 
 	@Override
@@ -70,19 +45,26 @@ public class ContentServiceImpl implements ContentService {
 		contentStore.createContent(command);
 	}
 
+	// 리딩 콘텐츠 프리뷰 조회
 	@Override
 	@Transactional(readOnly = true)
-	public List<ContentResponseDto.PreviewRes> findPreviewContents(
-		ContentType contentType, String sortBy, int num
-	) {
-		return contentRepository.findPreviewContents(contentType, sortBy, num);
+	public ContentInfo.PreviewContents getPreviewContents(ContentCommand.GetReadingPreview command) {
+		return ContentInfo.PreviewContents.of(contentReader.findReadingPreview(command));
 	}
 
+	// 리스닝 콘텐츠 프리뷰 조회
 	@Override
 	@Transactional(readOnly = true)
-	public List<ContentResponseDto.GetByScrapCount> contentByScrapCount(int num) {
-		return contentRepository.contentByScrapCount(num);
+	public ContentInfo.PreviewContents getPreviewContents(ContentCommand.GetListeningPreview command) {
+		return ContentInfo.PreviewContents.of(contentReader.findListeningPreview(command));
 	}
+
+	// 스크랩 많은 순 컨텐츠 프리뷰 조회
+	@Override
+	@Transactional(readOnly = true)
+	public ContentInfo.PreviewContents getContentsByScrapCount(Integer size) {
+        return ContentInfo.PreviewContents.of(contentReader.findContentsByScrapCount(size));
+    }
 
 	@Override
 	@Transactional
@@ -90,19 +72,18 @@ public class ContentServiceImpl implements ContentService {
 		contentStore.modifyContentStatus(contentId);
 	}
 
+	// TODO: 멘토님에게 DataProvider의 영역에 대한 답변을 들어볼 것
+	// 컨텐츠 디테일 조회
 	@Override
 	@Transactional    // hit 증가 로직 있어서 readOnly 생략
-	public ContentResponseDto.DetailRes getScriptsOfContent(Long id) {
-		ContentEntity content = contentRepository.findById(id)
-			.orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
+	public ContentInfo.Detail getScriptsOfContent(Long contentId) {
+		ContentEntity content = contentReader.findActiveContent(contentId);
 
-		ContentDocument contentDocument = contentScriptRepository.findById(
-			new ObjectId(content.getMongoContentId())
-		).orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
+		List<Script> scripts = contentDocumentReader.findScripts(content.getMongoContentId());
 
-		contentRepository.updateHit(id); // TODO: 추후 레디스로 바꿀 예정
+		// TODO: 추후 레디스로 바꿀 예정
+		content.updateHits();
 
-		return ContentResponseDto.DetailRes.of(content, contentDocument);
+		return contentDtoMapper.buildDetail(content, scripts);
 	}
-
 }

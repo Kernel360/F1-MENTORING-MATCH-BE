@@ -1,14 +1,21 @@
 package com.biengual.userapi.crawling.infrastructure;
 
-import static com.biengual.userapi.message.error.code.CrawlingErrorCode.*;
-
-import java.io.IOException;
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
+import com.biengual.userapi.content.domain.ContentCommand;
+import com.biengual.userapi.content.domain.ContentType;
+import com.biengual.userapi.content.repository.ContentCustomRepository;
+import com.biengual.userapi.crawling.application.TranslateService;
+import com.biengual.userapi.crawling.domain.CrawlingStore;
+import com.biengual.userapi.crawling.presentation.CrawlingResponseDto;
+import com.biengual.userapi.message.error.exception.CommonException;
+import com.biengual.userapi.script.domain.entity.CNNScript;
+import com.biengual.userapi.script.domain.entity.Script;
+import com.biengual.userapi.script.domain.entity.YoutubeScript;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.bonigarcia.wdm.WebDriverManager;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -29,23 +36,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.biengual.userapi.content.domain.ContentCommand;
-import com.biengual.userapi.content.domain.ContentCustomRepository;
-import com.biengual.userapi.content.domain.ContentType;
-import com.biengual.userapi.crawling.application.TranslateService;
-import com.biengual.userapi.crawling.domain.CrawlingStore;
-import com.biengual.userapi.crawling.presentation.CrawlingResponseDto;
-import com.biengual.userapi.message.error.exception.CommonException;
-import com.biengual.userapi.script.domain.entity.CNNScript;
-import com.biengual.userapi.script.domain.entity.Script;
-import com.biengual.userapi.script.domain.entity.YoutubeScript;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import static com.biengual.userapi.message.error.code.CrawlingErrorCode.*;
 
 @Slf4j
 @Service

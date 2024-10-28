@@ -1,39 +1,23 @@
 package com.biengual.userapi.question.infrastructure;
 
-import static com.biengual.userapi.message.error.code.ContentErrorCode.*;
-import static com.biengual.userapi.question.domain.QuestionDocument.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
-
+import com.biengual.userapi.annotation.DataProvider;
+import com.biengual.userapi.content.domain.*;
+import com.biengual.userapi.message.error.exception.CommonException;
+import com.biengual.userapi.question.domain.*;
+import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 
-import com.biengual.userapi.annotation.DataProvider;
-import com.biengual.userapi.content.domain.ContentDocument;
-import com.biengual.userapi.content.domain.ContentEntity;
-import com.biengual.userapi.content.domain.ContentStatus;
-import com.biengual.userapi.content.domain.ContentRepository;
-import com.biengual.userapi.content.domain.ContentScriptRepository;
-import com.biengual.userapi.message.error.exception.CommonException;
-import com.biengual.userapi.question.domain.QuestionCommand;
-import com.biengual.userapi.question.domain.QuestionDocument;
-import com.biengual.userapi.question.domain.QuestionRepository;
-import com.biengual.userapi.question.domain.QuestionStore;
-import com.biengual.userapi.question.domain.QuestionType;
+import java.util.*;
 
-import lombok.RequiredArgsConstructor;
+import static com.biengual.userapi.message.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
+import static com.biengual.userapi.question.domain.QuestionDocument.of;
 
 @DataProvider
 @RequiredArgsConstructor
 public class QuestionStoreImpl implements QuestionStore {
 	private final QuestionRepository questionRepository;
 	private final ContentRepository contentRepository;
-	private final ContentScriptRepository contentScriptRepository;
+	private final ContentDocumentRepository contentDocumentRepository;
 
 	@Override
 	public void createQuestion(QuestionCommand.Create command) {
@@ -65,7 +49,7 @@ public class QuestionStoreImpl implements QuestionStore {
 
 		// update QuestionIds
 		contentDocument.updateQuestionIds(questionIds);
-		contentScriptRepository.save(contentDocument);
+		contentDocumentRepository.save(contentDocument);
 	}
 
 	// Internal Methods ------------------------------------------------------------------------------------------------
@@ -136,7 +120,7 @@ public class QuestionStoreImpl implements QuestionStore {
 			.orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
 		content.updateStatus(ContentStatus.ACTIVATED);
 
-		return contentScriptRepository.findById(new ObjectId(content.getMongoContentId()))
+		return contentDocumentRepository.findById(new ObjectId(content.getMongoContentId()))
 			.orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
 	}
 }

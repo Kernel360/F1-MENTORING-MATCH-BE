@@ -1,17 +1,11 @@
 package com.biengual.userapi.content.presentation;
 
-import static com.biengual.userapi.message.error.code.CategoryErrorCode.*;
-
-import java.util.List;
-
-import com.biengual.userapi.content.domain.ContentDocument;
-import com.biengual.userapi.content.domain.ContentEntity;
 import com.biengual.userapi.content.domain.ContentType;
-import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.script.domain.entity.Script;
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import lombok.Builder;
+
+import java.util.List;
 
 public class ContentResponseDto {
 
@@ -27,74 +21,76 @@ public class ContentResponseDto {
 		Integer hits,
 		List<Script> scriptList
 	) {
-		public static DetailRes of(ContentEntity content, ContentDocument contentDocument) {
-			return DetailRes.builder()
-				.contentId(content.getId())
-				.contentType(content.getContentType())
-				.category(content.getCategory().getName())
-				.title(content.getTitle())
-				.thumbnailUrl(content.getThumbnailUrl())
-				.videoUrl(toListeningUrl(content))
-				.hits(content.getHits())
-				.scriptList(contentDocument.getScripts())
-				.build();
-		}
-
-		private static String toListeningUrl(ContentEntity content) {
-			switch (content.getContentType()) {
-				case LISTENING -> {
-					return content.getUrl();
-				}
-				case READING -> {
-					return null;
-				}
-				default -> throw new CommonException(CATEGORY_NOT_FOUND);
-			}
-		}
 	}
 
-	public record PreviewRes(
+	public record PreviewContent(
 		Long contentId,
 		String title,
-		String thumbnailUrl,	// coverImageUrl
+		String thumbnailUrl,   // coverImageUrl
 		ContentType contentType,
-		String preScripts,	// description
+		String preScripts,     // description
 		String category,
-		int hits
+		Integer hits
 	) {
-		public static PreviewRes of(ContentEntity content) {
-			return new PreviewRes(
-				content.getId(),
-				content.getTitle(),
-				content.getThumbnailUrl(),
-				content.getContentType(),
-				content.getPreScripts(),
-				content.getCategory().getName(),
-				content.getHits()
-			);
-		}
 	}
 
-	public record GetByScrapCount(
+	@Builder
+	public record ScrapPreviewContentsRes(
+		List<PreviewContent> contentByScrapCount
+	) {
+	}
+
+	// TODO: 응답에 담길 네이밍이 변경될 여지가 없다면 기존 PaginationDto처럼 통일해도 좋을 것 같음
+	@Builder
+	public record SearchPreviewContentsRes(
+		Integer pageNumber,
+		Integer pageSize,
+		Integer totalPages,
+		Long totalElements,
+		List<PreviewContent> contents
+	) {
+	}
+
+	public record ViewContent(
 		Long contentId,
 		String title,
 		String thumbnailUrl,
 		ContentType contentType,
 		String preScripts,
 		String category,
-		Long countScrap
+		Integer hits
 	) {
-		public static GetByScrapCount of(ContentEntity content, Long count){
-			return new GetByScrapCount(
-				content.getId(),
-				content.getTitle(),
-				content.getThumbnailUrl(),
-				content.getContentType(),
-				content.getPreScripts(),
-				content.getCategory().getName(),
-				count
-			);
-		}
 	}
 
+	@Builder
+	public record ReadingViewContentsRes(
+		Integer pageNumber,
+		Integer pageSize,
+		Integer totalPages,
+		Long totalElements,
+		List<ViewContent> contents
+	) {
+	}
+
+	@Builder
+	public record ListeningViewContentsRes(
+		Integer pageNumber,
+		Integer pageSize,
+		Integer totalPages,
+		Long totalElements,
+		List<ViewContent> contents
+	) {
+	}
+
+	@Builder
+	public record ReadingPreviewContentsRes(
+		List<PreviewContent> readingPreview
+	) {
+	}
+
+	@Builder
+	public record ListeningPreviewContentsRes(
+		List<PreviewContent> listeningPreview
+	) {
+	}
 }

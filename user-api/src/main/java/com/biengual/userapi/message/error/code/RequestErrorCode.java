@@ -2,6 +2,7 @@ package com.biengual.userapi.message.error.code;
 
 import com.biengual.userapi.message.status.RequestServiceStatus;
 import com.biengual.userapi.message.status.ServiceStatus;
+import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -43,6 +44,10 @@ public enum RequestErrorCode implements ErrorCode {
         this.message = e.getBindingResult().getAllErrors().stream()
             .map(DefaultMessageSourceResolvable::getDefaultMessage)
             .collect(Collectors.joining("\n"));
+    }
+
+    public void setMessage(ConstraintViolationException e) {
+        this.message = e.getMessage();
     }
 
     // RequestBody Json 포맷 실패 메시지 set

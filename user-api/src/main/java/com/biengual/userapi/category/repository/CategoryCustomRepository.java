@@ -1,15 +1,13 @@
 package com.biengual.userapi.category.repository;
 
-import java.util.List;
-
-import org.springframework.stereotype.Repository;
-
 import com.biengual.userapi.category.domain.CategoryInfo;
 import com.biengual.userapi.category.domain.QCategoryEntity;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 @RequiredArgsConstructor

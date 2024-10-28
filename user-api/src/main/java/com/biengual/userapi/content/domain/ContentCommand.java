@@ -1,13 +1,12 @@
 package com.biengual.userapi.content.domain;
 
-import java.util.List;
-
-import org.bson.types.ObjectId;
-
 import com.biengual.userapi.category.domain.CategoryEntity;
 import com.biengual.userapi.script.domain.entity.Script;
-
 import lombok.Builder;
+import org.bson.types.ObjectId;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public class ContentCommand {
 
@@ -52,4 +51,42 @@ public class ContentCommand {
 		}
 	}
 
+	@Builder
+	public record Search(
+		Pageable pageable,
+		String keyword
+	) {
+	}
+
+	@Builder
+	public record GetReadingView(
+		Pageable pageable,
+		ContentType contentType,
+		Long categoryId
+	) {
+	}
+
+	@Builder
+	public record GetListeningView(
+		Pageable pageable,
+		ContentType contentType,
+		Long categoryId
+	) {
+	}
+
+	@Builder
+	public record GetReadingPreview(
+		Integer size,
+		String sort,
+		ContentType contentType
+	) {
+	}
+
+	@Builder
+	public record GetListeningPreview(
+		Integer size,
+		String sort,
+		ContentType contentType
+	) {
+	}
 }
