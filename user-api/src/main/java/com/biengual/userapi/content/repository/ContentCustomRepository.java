@@ -92,7 +92,7 @@ public class ContentCustomRepository {
 
         BooleanExpression predicate = getViewPredicate(contentType, categoryId, contentEntity);
 
-        List<OrderSpecifier<?>> orderSpecifiers = getPageOrderSpecifiers(pageable);
+        List<OrderSpecifier<?>> orderSpecifiers = getOrderSpecifiers(pageable);
 
         return findViewPage(pageable, predicate, orderSpecifiers, contentEntity);
     }
@@ -134,7 +134,8 @@ public class ContentCustomRepository {
             .limit(pageable.getPageSize())
             .fetch();
 
-        JPAQuery<Long> countQuery = queryFactory.select(contentEntity.id.count())
+        JPAQuery<Long> countQuery = queryFactory
+            .select(contentEntity.id.count())
             .from(contentEntity)
             .where(predicate);
 
@@ -166,7 +167,8 @@ public class ContentCustomRepository {
             .limit(pageable.getPageSize())
             .fetch();
 
-        JPAQuery<Long> countQuery = queryFactory.select(contentEntity.id.count())
+        JPAQuery<Long> countQuery = queryFactory
+            .select(contentEntity.id.count())
             .from(contentEntity)
             .where(predicate);
 
@@ -251,7 +253,7 @@ public class ContentCustomRepository {
 
     // TODO: 정렬 가능 필드 범위가 정해지면 Dto 단계에서 검증할 것
     // Pageable OrderSpecifiers
-    private List<OrderSpecifier<?>> getPageOrderSpecifiers(Pageable pageable) {
+    private List<OrderSpecifier<?>> getOrderSpecifiers(Pageable pageable) {
         List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
 
         for (Sort.Order order : pageable.getSort()) {
@@ -272,7 +274,7 @@ public class ContentCustomRepository {
     }
 
     // TODO: 정렬 가능 필드 범위가 정해지면 Dto 단계에서 검증할 것
-    // OrderSpecifiers
+    // Field OrderSpecifiers
     private List<OrderSpecifier<?>> getOrderSpecifiers(String sort, QContentEntity contentEntity) {
         List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
 
