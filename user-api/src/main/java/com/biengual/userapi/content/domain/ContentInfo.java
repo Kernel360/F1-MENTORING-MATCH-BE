@@ -60,8 +60,8 @@ public class ContentInfo {
 		String title,
 		String category,
 		ContentType contentType,
-		int hits,
-		int numOfQuiz,
+		Integer hits,
+		Integer numOfQuiz,
 		ContentStatus contentStatus
 	) {
 	}

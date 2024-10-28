@@ -1,12 +1,13 @@
 package com.biengual.userapi.content.presentation;
 
+import java.util.List;
+
 import com.biengual.userapi.content.domain.ContentStatus;
 import com.biengual.userapi.content.domain.ContentType;
 import com.biengual.userapi.script.domain.entity.Script;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Builder;
 
-import java.util.List;
+import lombok.Builder;
 
 public class ContentResponseDto {
 
@@ -100,8 +101,8 @@ public class ContentResponseDto {
 		String title,
 		String category,
 		ContentType contentType,
-		int hits,
-		int numOfQuiz,
+		Integer hits,
+		Integer numOfQuiz,
 		ContentStatus contentStatus
 	) {
 	}
