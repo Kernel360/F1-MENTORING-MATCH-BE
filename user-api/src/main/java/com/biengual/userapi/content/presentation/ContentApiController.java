@@ -60,12 +60,12 @@ public class ContentApiController {
 	}
 
 	/**
-	 * 컨텐츠 수정
+	 * 컨텐츠 활성화, 비활성화
 	 */
-	@PutMapping("/modify/{contentId}")
-	@Operation(summary = "어드민 - 컨텐츠 수정", description = "어드민 회원이 컨텐츠를 수정합니다.")
+	@PutMapping("/toggle-active/{contentId}")
+	@Operation(summary = "어드민 - 컨텐츠 상태 수정", description = "어드민 회원이 컨텐츠 상태를 변경합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "컨텐츠 수정 성공",
+		@ApiResponse(responseCode = "200", description = "컨텐츠 상태 변경 성공",
 			content = {
 				@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerVoidReturn.class))}
 		),
@@ -74,35 +74,10 @@ public class ContentApiController {
 	})
 	public ResponseEntity<Object> modifyContent(
 		@PathVariable
-		Long contentId,
-		@RequestBody
-		ContentRequestDto.UpdateReq request
-	) {
-		ContentCommand.Modify command = contentDtoMapper.doModify(contentId, request);
-		contentFacade.modifyContent(command);
-
-		return ResponseEntityFactory.toResponseEntity(CONTENT_MODIFY_SUCCESS);
-	}
-
-	/**
-	 * 컨텐츠 비활성화
-	 */
-	@PutMapping("/deactivate/{contentId}")
-	@Operation(summary = "어드민 - 컨텐츠 비활성화", description = "어드민 회원이 컨텐츠를 비활성화합니다.")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "컨텐츠 비활성화 성공",
-			content = {
-				@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerVoidReturn.class))}
-		),
-		@ApiResponse(responseCode = "404", description = "컨텐츠 조회 실패", content = @Content(mediaType = "application/json")),
-		@ApiResponse(responseCode = "500", description = "서버 에러", content = @Content(mediaType = "application/json"))
-	})
-	public ResponseEntity<Object> deactivateContent(
-		@PathVariable
 		Long contentId
 	) {
-		contentFacade.deactivateContent(contentId);
+		contentFacade.modifyContent(contentId);
 
-		return ResponseEntityFactory.toResponseEntity(CONTENT_DEACTIVATE_SUCCESS);
+		return ResponseEntityFactory.toResponseEntity(CONTENT_MODIFY_SUCCESS);
 	}
 }

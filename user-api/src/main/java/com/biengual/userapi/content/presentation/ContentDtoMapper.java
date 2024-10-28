@@ -25,9 +25,6 @@ public interface ContentDtoMapper {
 	// Command <- Request
 	ContentCommand.CrawlingContent doCrawlingContent(ContentRequestDto.CreateReq request);
 
-	@Mapping(target = "id", source = "contentId")
-	ContentCommand.Modify doModify(Long contentId, ContentRequestDto.UpdateReq request);
-
 	// Response <- Info
 	// Entity <-> Info, Info <-> Info
 

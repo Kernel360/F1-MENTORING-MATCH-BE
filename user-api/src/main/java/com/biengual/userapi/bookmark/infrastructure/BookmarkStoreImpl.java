@@ -13,10 +13,11 @@ import com.biengual.userapi.bookmark.domain.BookmarkInfo;
 import com.biengual.userapi.bookmark.domain.BookmarkRepository;
 import com.biengual.userapi.bookmark.domain.BookmarkStore;
 import com.biengual.userapi.bookmark.presentation.BookmarkDtoMapper;
+import com.biengual.userapi.content.domain.ContentCustomRepository;
 import com.biengual.userapi.content.domain.ContentDocument;
-import com.biengual.userapi.content.domain.ContentType;
 import com.biengual.userapi.content.domain.ContentRepository;
 import com.biengual.userapi.content.domain.ContentScriptRepository;
+import com.biengual.userapi.content.domain.ContentType;
 import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.script.domain.entity.YoutubeScript;
 
@@ -28,6 +29,7 @@ public class BookmarkStoreImpl implements BookmarkStore {
 	private final BookmarkRepository bookmarkRepository;
 	private final BookmarkCustomRepository bookmarkCustomRepository;
 	private final ContentRepository contentRepository;
+	private final ContentCustomRepository contentCustomRepository;
 	private final ContentScriptRepository contentScriptRepository;
 	private final BookmarkDtoMapper bookmarkDtoMapper;
 
@@ -39,7 +41,7 @@ public class BookmarkStoreImpl implements BookmarkStore {
 	@Override
 	public void saveBookmark(BookmarkCommand.Create command) {
 		ContentDocument content = contentScriptRepository.findContentDocumentById(
-			new ObjectId(contentRepository.findMongoIdByContentId(command.contentId()))
+			new ObjectId(contentCustomRepository.findMongoIdByContentId(command.contentId()))
 		).orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
 
 		BookmarkEntity bookmark
@@ -68,7 +70,7 @@ public class BookmarkStoreImpl implements BookmarkStore {
 	}
 
 	private Double extractStartTime(BookmarkCommand.Create command, ContentDocument content) {
-		if (contentRepository.findContentTypeById(command.contentId()).equals(ContentType.READING)) {
+		if (contentCustomRepository.findContentTypeById(command.contentId()).equals(ContentType.READING)) {
 			return null;
 		}
 

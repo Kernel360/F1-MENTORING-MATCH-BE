@@ -71,12 +71,6 @@ public class ContentServiceImpl implements ContentService {
 	}
 
 	@Override
-	@Transactional
-	public void updateContent(ContentCommand.Modify command) {
-		contentStore.updateContent(command);
-	}
-
-	@Override
 	@Transactional(readOnly = true)
 	public List<ContentResponseDto.PreviewRes> findPreviewContents(
 		ContentType contentType, String sortBy, int num
@@ -92,8 +86,8 @@ public class ContentServiceImpl implements ContentService {
 
 	@Override
 	@Transactional
-	public void deactivateContent(Long contentId) {
-		contentStore.deactivateContent(contentId);
+	public void modifyContent(Long contentId) {
+		contentStore.modifyContent(contentId);
 	}
 
 	@Override

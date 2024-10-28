@@ -22,13 +22,6 @@ public interface ContentRepositoryCustom {
 
 	Page<ContentEntity> findAllByContentTypeAndCategory(ContentType contentType, Pageable pageable, Long categoryId);
 
-	String findTitleById(Long contentId);
-
-	String findMongoIdByContentId(Long contentId);
-
 	List<ContentResponseDto.GetByScrapCount> contentByScrapCount(int num);
 
-	ContentType findContentTypeById(Long scriptIndex);
-
-	boolean existsByUrl(String url);
 }

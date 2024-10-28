@@ -18,11 +18,7 @@ public class ContentFacade {
 		contentService.createContent(createContent);
 	}
 
-	public void modifyContent(ContentCommand.Modify command) {
-		contentService.updateContent(command);
-	}
-
-	public void deactivateContent(Long id) {
-		contentService.deactivateContent(id);
+	public void modifyContent(Long id) {
+		contentService.modifyContent(id);
 	}
 }

@@ -86,18 +86,6 @@ public class ContentEntity extends BaseEntity {
 		this.category = category;
 	}
 
-	public void update(ContentCommand.Modify command) {
-		this.url = command.url();
-		this.title = command.title();
-		this.contentStatus = command.contentStatus() == null ? ContentStatus.ACTIVATED : command.contentStatus();
-		this.preScripts = truncate(
-			command.script().subList(0, Math.min(command.script().size(), 5))
-				.stream()
-				.map(Script::getEnScript)
-				.toList().toString()
-			, 255);
-	}
-
 	public void updateStatus(ContentStatus contentStatus) {
 		this.contentStatus = contentStatus == null ? ContentStatus.ACTIVATED : contentStatus;
 	}
