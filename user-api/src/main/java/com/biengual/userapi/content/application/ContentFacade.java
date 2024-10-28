@@ -57,4 +57,14 @@ public class ContentFacade {
 	public ContentInfo.Detail getDetailContent(Long contentId) {
 		return contentService.getScriptsOfContent(contentId);
 	}
+
+	// 어드민 페이지 리딩 컨텐츠 조회
+	public PaginationInfo<ContentInfo.Admin> getAdminReadingView(ContentCommand.GetReadingView command) {
+		return contentService.getAdminView(command);
+	}
+
+	// 어드민 페이지 리스닝 컨텐츠 조회
+	public PaginationInfo<ContentInfo.Admin> getAdminListening(ContentCommand.GetListeningView command) {
+		return contentService.getAdminView(command);
+	}
 }

@@ -23,4 +23,8 @@ public interface ContentReader {
     List<ContentInfo.PreviewContent> findListeningPreview(ContentCommand.GetListeningPreview command);
 
     ContentEntity findActiveContent(Long contentId);
+
+    PaginationInfo<ContentInfo.Admin> findReadingAdmin(ContentCommand.GetReadingView command);
+
+    PaginationInfo<ContentInfo.Admin> findListeningAdmin(ContentCommand.GetListeningView command);
 }

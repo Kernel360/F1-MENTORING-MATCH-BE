@@ -1,5 +1,6 @@
 package com.biengual.userapi.content.presentation;
 
+import com.biengual.userapi.content.domain.ContentStatus;
 import com.biengual.userapi.content.domain.ContentType;
 import com.biengual.userapi.script.domain.entity.Script;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -91,6 +92,27 @@ public class ContentResponseDto {
 	@Builder
 	public record ListeningPreviewContentsRes(
 		List<PreviewContent> listeningPreview
+	) {
+	}
+
+	public record Admin(
+		Long contentId,
+		String title,
+		String category,
+		ContentType contentType,
+		int hits,
+		int numOfQuiz,
+		ContentStatus contentStatus
+	) {
+	}
+
+	@Builder
+	public record AdminListRes(
+		Integer pageNumber,
+		Integer pageSize,
+		Integer totalPages,
+		Long totalElements,
+		List<Admin> contents
 	) {
 	}
 }

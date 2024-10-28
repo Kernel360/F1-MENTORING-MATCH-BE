@@ -1,22 +1,32 @@
 package com.biengual.userapi.content.application;
 
-import com.biengual.userapi.content.domain.*;
-import com.biengual.userapi.content.presentation.ContentDtoMapper;
-import com.biengual.userapi.script.domain.entity.Script;
-import com.biengual.userapi.util.PaginationInfo;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import com.biengual.userapi.content.domain.ContentCommand;
+import com.biengual.userapi.content.domain.ContentDocumentReader;
+import com.biengual.userapi.content.domain.ContentEntity;
+import com.biengual.userapi.content.domain.ContentInfo;
+import com.biengual.userapi.content.domain.ContentReader;
+import com.biengual.userapi.content.domain.ContentService;
+import com.biengual.userapi.content.domain.ContentStore;
+import com.biengual.userapi.content.infrastructure.ContentDocumentReaderImpl;
+import com.biengual.userapi.content.presentation.ContentDtoMapper;
+import com.biengual.userapi.script.domain.entity.Script;
+import com.biengual.userapi.util.PaginationInfo;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class ContentServiceImpl implements ContentService {
 	private final ContentDtoMapper contentDtoMapper;
-    private final ContentReader contentReader;
-    private final ContentStore contentStore;
+	private final ContentReader contentReader;
+	private final ContentStore contentStore;
 	private final ContentDocumentReader contentDocumentReader;
+	private final ContentDocumentReaderImpl contentDocumentReaderImpl;
 
 	// 검색 조건에 맞는 컨텐츠 프리뷰 페이지 조회
 	@Override
@@ -63,8 +73,20 @@ public class ContentServiceImpl implements ContentService {
 	@Override
 	@Transactional(readOnly = true)
 	public ContentInfo.PreviewContents getContentsByScrapCount(Integer size) {
-        return ContentInfo.PreviewContents.of(contentReader.findContentsByScrapCount(size));
-    }
+		return ContentInfo.PreviewContents.of(contentReader.findContentsByScrapCount(size));
+	}
+
+	// 어드민 페이지 리딩 컨텐츠 조회 - DEACTIVATED 포함
+	@Override
+	public PaginationInfo<ContentInfo.Admin> getAdminView(ContentCommand.GetReadingView command) {
+		return contentReader.findReadingAdmin(command);
+	}
+
+	// 어드민 페이지 리스닝 컨텐츠 조회 - DEACTIVATED 포함
+	@Override
+	public PaginationInfo<ContentInfo.Admin> getAdminView(ContentCommand.GetListeningView command) {
+		return contentReader.findListeningAdmin(command);
+	}
 
 	@Override
 	@Transactional

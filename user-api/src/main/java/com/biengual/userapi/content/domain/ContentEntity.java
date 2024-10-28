@@ -54,6 +54,9 @@ public class ContentEntity extends BaseEntity {
 	@JoinColumn(name = "category_id", columnDefinition = "bigint", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
 	private CategoryEntity category;
 
+	@Column(name = "num_of_quiz", nullable = false, columnDefinition = "integer default 0")
+	private int numOfQuiz;
+
 	@Builder
 	public ContentEntity(
 		String url, String title, String thumbnailUrl,
