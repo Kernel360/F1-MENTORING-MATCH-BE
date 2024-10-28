@@ -30,7 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.biengual.userapi.content.domain.ContentCommand;
-import com.biengual.userapi.content.domain.ContentRepository;
+import com.biengual.userapi.content.domain.ContentCustomRepository;
 import com.biengual.userapi.content.domain.ContentType;
 import com.biengual.userapi.crawling.application.TranslateService;
 import com.biengual.userapi.crawling.domain.CrawlingStore;
@@ -52,7 +52,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class CrawlingStoreImpl implements CrawlingStore {
 	private final TranslateService translateService;
-	private final ContentRepository contentRepository;
+	private final ContentCustomRepository contentCustomRepository;
 
 	@Value("${YOUTUBE_API_KEY}")
 	private String YOUTUBE_API_KEY;
@@ -109,6 +109,10 @@ public class CrawlingStoreImpl implements CrawlingStore {
 	@Override
 	public ContentCommand.Create getCNNDetail(ContentCommand.CrawlingContent command) {
 		CrawlingResponseDto.ContentDetailRes response = fetchArticle(command.url());
+
+		// Check Already Stored In DB
+		verifyCrawling(command.url());
+
 		return ContentCommand.Create.builder()
 			.url(response.url())
 			.title(response.title())
@@ -406,7 +410,7 @@ public class CrawlingStoreImpl implements CrawlingStore {
 	// COMMON
 
 	private void verifyCrawling(String url) {
-		if (contentRepository.existsByUrl(url)) {
+		if (contentCustomRepository.existsByUrl(url)) {
 			throw new CommonException(CRAWLING_ALREADY_DONE);
 		}
 	}

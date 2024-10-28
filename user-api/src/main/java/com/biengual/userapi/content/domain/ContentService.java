@@ -21,9 +21,7 @@ public interface ContentService {
 
 	void createContent(ContentCommand.Create command);
 
-	void updateContent(ContentCommand.Modify command);
-
-	void deactivateContent(Long id);
+	void modifyContentStatus(Long contentId);
 
 	List<ContentResponseDto.PreviewRes> findPreviewContents(
 		ContentType contentType, String sortBy, int num

@@ -14,15 +14,6 @@ public class ContentRequestDto {
 	) {
 	}
 
-	public record UpdateReq(
-		String url,
-		String title,
-		List<Script> script,
-		ContentStatus contentStatus
-	) {
-
-	}
-
 	public record SearchReq(
 		String searchWords
 	) {

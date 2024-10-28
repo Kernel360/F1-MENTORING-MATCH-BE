@@ -3,8 +3,6 @@ package com.biengual.userapi.content.infrastructure;
 import static com.biengual.userapi.message.error.code.CategoryErrorCode.*;
 import static com.biengual.userapi.message.error.code.ContentErrorCode.*;
 
-import org.bson.types.ObjectId;
-
 import com.biengual.userapi.annotation.DataProvider;
 import com.biengual.userapi.category.domain.CategoryEntity;
 import com.biengual.userapi.category.repository.CategoryRepository;
@@ -38,25 +36,12 @@ public class ContentStoreImpl implements ContentStore {
 	}
 
 	@Override
-	public void updateContent(ContentCommand.Modify command) {
-		ContentEntity content = contentRepository.findById(command.id())
-			.orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
-		content.update(command);
-		contentRepository.save(content);
-
-		ContentDocument contentDocument
-			= contentScriptRepository.findContentDocumentById(new ObjectId(content.getMongoContentId()))
-			.orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
-		contentDocument.updateScript(command.script());
-		contentScriptRepository.save(contentDocument);
-	}
-
-	@Override
-	public void deactivateContent(Long contentId) {
+	public void modifyContentStatus(Long contentId) {
 		ContentEntity content = contentRepository.findById(contentId)
 			.orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
-
-		content.updateStatus(ContentStatus.DEACTIVATED);
+		content.updateStatus(
+			content.getContentStatus() == ContentStatus.ACTIVATED ? ContentStatus.DEACTIVATED : ContentStatus.ACTIVATED
+		);
 		contentRepository.save(content);
 	}
 
