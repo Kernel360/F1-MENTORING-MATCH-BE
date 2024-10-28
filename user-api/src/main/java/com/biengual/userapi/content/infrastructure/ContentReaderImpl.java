@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 
 import java.util.List;
 
+import static com.biengual.userapi.message.error.code.ContentErrorCode.CONTENT_IS_DEACTIVATED;
 import static com.biengual.userapi.message.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
 
 @DataProvider
@@ -72,7 +73,13 @@ public class ContentReaderImpl implements ContentReader {
     // script를 제외한 컨텐츠 디테일 조회
     @Override
     public ContentEntity findActiveContent(Long contentId) {
-        return contentRepository.findByIdAndContentStatus(contentId, ContentStatus.ACTIVATED)
+        ContentEntity content = contentRepository.findById(contentId)
             .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
+
+        if (!content.getContentStatus().equals(ContentStatus.ACTIVATED)) {
+            throw new CommonException(CONTENT_IS_DEACTIVATED);
+        }
+
+        return content;
     }
 }
