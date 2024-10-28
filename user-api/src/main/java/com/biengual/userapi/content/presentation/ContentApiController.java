@@ -18,7 +18,7 @@ import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.message.ResponseEntityFactory;
 import com.biengual.userapi.swagger.SwaggerVoidReturn;
-import com.biengual.userapi.swagger.content.SwaggerContentReadingView;
+import com.biengual.userapi.swagger.content.SwaggerContentAdminView;
 import com.biengual.userapi.util.PaginationInfo;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -97,7 +97,7 @@ public class ContentApiController {
 	@Operation(summary = "어드민 페이지 리딩 컨텐츠 조회", description = "페이지네이션을 적용하여 어드민 페이지에서 리딩 컨텐츠 목록을 조회합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "어드민 페이지 리딩 컨텐츠 조회 요청 성공", content = {
-			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerContentReadingView.class))
+			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerContentAdminView.class))
 		}),
 		@ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
 		@ApiResponse(responseCode = "500", description = "서버 에러", content = @Content)
@@ -128,7 +128,7 @@ public class ContentApiController {
 	@Operation(summary = "어드민 페이지 리스닝 컨텐츠 조회", description = "페이지네이션을 적용하여 어드민 페이지에서 리스닝 컨텐츠 목록을 조회합니다.")
 	@ApiResponses(value = {
 		@ApiResponse(responseCode = "200", description = "어드민 페이지 리스닝 컨텐츠 조회 요청 성공", content = {
-			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerContentReadingView.class))
+			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerContentAdminView.class))
 		}),
 		@ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
 		@ApiResponse(responseCode = "500", description = "서버 에러", content = @Content)

@@ -11,7 +11,7 @@ SET @exists = (
 );
 
 SET @query = IF(@exists = 0,
-                CONCAT('ALTER TABLE ', @tablename, ' ADD COLUMN ', @columnname, ' INT NOT NULL DEFAULT 0'),
+                CONCAT('ALTER TABLE ', @tablename, ' ADD COLUMN ', @columnname, ' bigint NOT NULL DEFAULT 0'),
                 'SELECT "Column already exists"'
              );
 
