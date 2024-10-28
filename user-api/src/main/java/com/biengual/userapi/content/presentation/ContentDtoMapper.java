@@ -56,14 +56,17 @@ public interface ContentDtoMapper {
     @Mapping(target = "contentByScrapCount", source = "previewContents")
     ContentResponseDto.ScrapPreviewContentsRes ofScrapPreviewContentsRes(ContentInfo.PreviewContents previewContents);
 
+	@Mapping(target = "pageNumber", source = "pageNumber", qualifiedByName = "toResPageNumber")
 	ContentResponseDto.SearchPreviewContentsRes ofSearchPreviewContentsRes(
 		PaginationInfo<ContentInfo.PreviewContent> searchPreview
 	);
 
+	@Mapping(target = "pageNumber", source = "pageNumber", qualifiedByName = "toResPageNumber")
 	ContentResponseDto.ReadingViewContentsRes ofReadingViewContentsRes(
 		PaginationInfo<ContentInfo.ViewContent> readingView
 	);
 
+	@Mapping(target = "pageNumber", source = "pageNumber", qualifiedByName = "toResPageNumber")
 	ContentResponseDto.ListeningViewContentsRes ofListeningViewContentsRes(
 		PaginationInfo<ContentInfo.ViewContent> readingView
 	);
@@ -80,6 +83,7 @@ public interface ContentDtoMapper {
 
 	ContentResponseDto.DetailRes ofDetailRes(ContentInfo.Detail detail);
 
+	@Mapping(target = "pageNumber", source = "pageNumber", qualifiedByName = "toResPageNumber")
 	ContentResponseDto.AdminListRes ofAdminListRes(PaginationInfo<ContentInfo.Admin> adminPaginationInfo);
 
 	// Entity <-> Info, Info <-> Info
@@ -93,7 +97,12 @@ public interface ContentDtoMapper {
 
 	@Named("toPageable")
 	default Pageable toPageable(Integer page, Integer size, Sort.Direction direction, String sort) {
-		return PageRequest.of(page, size, direction,sort);
+		return PageRequest.of(page - 1, size, direction, sort);
+	}
+
+	@Named("toResPageNumber")
+	default Integer toResPageNumber(Integer infoPageNumber) {
+		return infoPageNumber + 1;
 	}
 
 	@Named("toVideoUrl")
