@@ -47,12 +47,14 @@ public class ContentServiceImpl implements ContentService {
 
 	// 리딩 콘텐츠 프리뷰 조회
 	@Override
+	@Transactional(readOnly = true)
 	public ContentInfo.PreviewContents getPreviewContents(ContentCommand.GetReadingPreview command) {
 		return ContentInfo.PreviewContents.of(contentReader.findReadingPreview(command));
 	}
 
 	// 리스닝 콘텐츠 프리뷰 조회
 	@Override
+	@Transactional(readOnly = true)
 	public ContentInfo.PreviewContents getPreviewContents(ContentCommand.GetListeningPreview command) {
 		return ContentInfo.PreviewContents.of(contentReader.findListeningPreview(command));
 	}
