@@ -80,6 +80,8 @@ public interface ContentDtoMapper {
 
 	ContentResponseDto.DetailRes ofDetailRes(ContentInfo.Detail detail);
 
+	ContentResponseDto.AdminListRes ofAdminListRes(PaginationInfo<ContentInfo.Admin> adminPaginationInfo);
+
 	// Entity <-> Info, Info <-> Info
 	@Mapping(target = "contentId", source = "content.id")
 	@Mapping(target = "videoUrl", source = "content", qualifiedByName = "toVideoUrl")

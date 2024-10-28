@@ -1,11 +1,13 @@
 package com.biengual.userapi.content.presentation;
 
+import java.util.List;
+
+import com.biengual.userapi.content.domain.ContentStatus;
 import com.biengual.userapi.content.domain.ContentType;
 import com.biengual.userapi.script.domain.entity.Script;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Builder;
 
-import java.util.List;
+import lombok.Builder;
 
 public class ContentResponseDto {
 
@@ -91,6 +93,27 @@ public class ContentResponseDto {
 	@Builder
 	public record ListeningPreviewContentsRes(
 		List<PreviewContent> listeningPreview
+	) {
+	}
+
+	public record Admin(
+		Long contentId,
+		String title,
+		String category,
+		ContentType contentType,
+		Integer hits,
+		Integer numOfQuiz,
+		ContentStatus contentStatus
+	) {
+	}
+
+	@Builder
+	public record AdminListRes(
+		Integer pageNumber,
+		Integer pageSize,
+		Integer totalPages,
+		Long totalElements,
+		List<Admin> contents
 	) {
 	}
 }

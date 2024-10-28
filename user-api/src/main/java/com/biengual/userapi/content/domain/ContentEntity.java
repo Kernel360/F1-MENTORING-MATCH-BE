@@ -1,17 +1,31 @@
 package com.biengual.userapi.content.domain;
 
+import java.util.List;
+
+import org.hibernate.annotations.DynamicUpdate;
+
 import com.biengual.userapi.category.domain.CategoryEntity;
 import com.biengual.userapi.common.entity.BaseEntity;
 import com.biengual.userapi.script.domain.entity.Script;
-import jakarta.persistence.*;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.ConstraintMode;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicUpdate;
-
-import java.util.List;
 
 @Entity
 @Table(name = "content")
@@ -53,6 +67,9 @@ public class ContentEntity extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "category_id", columnDefinition = "bigint", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
 	private CategoryEntity category;
+
+	@Column(name = "num_of_quiz", nullable = false, columnDefinition = "bigint")
+	private Integer numOfQuiz;
 
 	@Builder
 	public ContentEntity(

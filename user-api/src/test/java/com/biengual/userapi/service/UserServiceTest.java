@@ -22,7 +22,7 @@ import com.biengual.userapi.user.presentation.UserResponseDto;
 import com.biengual.userapi.user.domain.UserEntity;
 import com.biengual.userapi.user.domain.enums.Gender;
 import com.biengual.userapi.user.domain.enums.UserStatus;
-import com.biengual.userapi.user.repository.UserRepository;
+import com.biengual.userapi.user.domain.UserRepository;
 
 class UserServiceTest {
 

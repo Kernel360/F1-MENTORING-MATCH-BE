@@ -1,10 +1,8 @@
-package com.biengual.userapi.user.repository;
+package com.biengual.userapi.user.domain;
 
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-
-import com.biengual.userapi.user.domain.UserEntity;
 
 /**
  * UserEntity의 Repository 계층의 인터페이스
