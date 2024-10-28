@@ -36,7 +36,7 @@ public class ContentStoreImpl implements ContentStore {
 	}
 
 	@Override
-	public void modifyContent(Long contentId) {
+	public void modifyContentStatus(Long contentId) {
 		ContentEntity content = contentRepository.findById(contentId)
 			.orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
 		content.updateStatus(

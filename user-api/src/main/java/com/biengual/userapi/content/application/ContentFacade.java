@@ -18,7 +18,7 @@ public class ContentFacade {
 		contentService.createContent(createContent);
 	}
 
-	public void modifyContent(Long id) {
-		contentService.modifyContent(id);
+	public void modifyContentStatus(Long contentId) {
+		contentService.modifyContentStatus(contentId);
 	}
 }

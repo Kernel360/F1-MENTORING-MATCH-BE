@@ -72,11 +72,11 @@ public class ContentApiController {
 		@ApiResponse(responseCode = "404", description = "컨텐츠 조회 실패", content = @Content(mediaType = "application/json")),
 		@ApiResponse(responseCode = "500", description = "서버 에러", content = @Content(mediaType = "application/json"))
 	})
-	public ResponseEntity<Object> modifyContent(
+	public ResponseEntity<Object> modifyContentStatus(
 		@PathVariable
 		Long contentId
 	) {
-		contentFacade.modifyContent(contentId);
+		contentFacade.modifyContentStatus(contentId);
 
 		return ResponseEntityFactory.toResponseEntity(CONTENT_MODIFY_SUCCESS);
 	}

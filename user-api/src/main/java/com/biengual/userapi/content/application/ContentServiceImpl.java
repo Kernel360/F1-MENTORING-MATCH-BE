@@ -86,8 +86,8 @@ public class ContentServiceImpl implements ContentService {
 
 	@Override
 	@Transactional
-	public void modifyContent(Long contentId) {
-		contentStore.modifyContent(contentId);
+	public void modifyContentStatus(Long contentId) {
+		contentStore.modifyContentStatus(contentId);
 	}
 
 	@Override
