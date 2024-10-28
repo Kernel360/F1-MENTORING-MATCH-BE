@@ -1,6 +1,5 @@
 package com.biengual.userapi.content.presentation;
 
-import com.biengual.userapi.content.domain.ContentEntity;
 import com.biengual.userapi.content.domain.ContentType;
 import com.biengual.userapi.script.domain.entity.Script;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -24,34 +23,12 @@ public class ContentResponseDto {
 	) {
 	}
 
-	public record PreviewRes(
-		Long contentId,
-		String title,
-		String thumbnailUrl,	// coverImageUrl
-		ContentType contentType,
-		String preScripts,	// description
-		String category,
-		int hits
-	) {
-		public static PreviewRes of(ContentEntity content) {
-			return new PreviewRes(
-				content.getId(),
-				content.getTitle(),
-				content.getThumbnailUrl(),
-				content.getContentType(),
-				content.getPreScripts(),
-				content.getCategory().getName(),
-				content.getHits()
-			);
-		}
-	}
-
 	public record PreviewContent(
 		Long contentId,
 		String title,
-		String thumbnailUrl,
+		String thumbnailUrl,   // coverImageUrl
 		ContentType contentType,
-		String preScripts,
+		String preScripts,     // description
 		String category,
 		Integer hits
 	) {
@@ -115,27 +92,5 @@ public class ContentResponseDto {
 	public record ListeningPreviewContentsRes(
 		List<PreviewContent> listeningPreview
 	) {
-	}
-
-	public record GetByScrapCount(
-		Long contentId,
-		String title,
-		String thumbnailUrl,
-		ContentType contentType,
-		String preScripts,
-		String category,
-		Long countScrap
-	) {
-		public static GetByScrapCount of(ContentEntity content, Long count){
-			return new GetByScrapCount(
-				content.getId(),
-				content.getTitle(),
-				content.getThumbnailUrl(),
-				content.getContentType(),
-				content.getPreScripts(),
-				content.getCategory().getName(),
-				count
-			);
-		}
 	}
 }

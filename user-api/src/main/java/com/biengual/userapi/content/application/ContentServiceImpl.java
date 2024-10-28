@@ -2,13 +2,9 @@ package com.biengual.userapi.content.application;
 
 import com.biengual.userapi.content.domain.*;
 import com.biengual.userapi.content.presentation.ContentDtoMapper;
-import com.biengual.userapi.content.presentation.ContentResponseDto;
 import com.biengual.userapi.script.domain.entity.Script;
-import com.biengual.userapi.util.PaginationDto;
 import com.biengual.userapi.util.PaginationInfo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,27 +18,11 @@ public class ContentServiceImpl implements ContentService {
     private final ContentStore contentStore;
 	private final ContentDocumentReader contentDocumentReader;
 
-	private final ContentRepository contentRepository;
-
 	// 검색 조건에 맞는 컨텐츠 프리뷰 페이지 조회
 	@Override
 	@Transactional(readOnly = true)
 	public PaginationInfo<ContentInfo.PreviewContent> search(ContentCommand.Search command) {
 		return contentReader.findPreviewPageBySearch(command);
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public PaginationDto<ContentResponseDto.PreviewRes> getAllContents(
-		ContentType contentType, Pageable pageable, Long categoryId
-	) {
-		Page<ContentEntity> page = contentRepository.findAllByContentTypeAndCategory(contentType, pageable, categoryId);
-
-		List<ContentResponseDto.PreviewRes> contents = page.getContent().stream()
-			.map(ContentResponseDto.PreviewRes::of)
-			.toList();
-
-		return PaginationDto.from(page, contents);
 	}
 
 	// 리딩 컨텐츠 프리뷰 페이지 조회
@@ -71,14 +51,6 @@ public class ContentServiceImpl implements ContentService {
 		contentStore.updateContent(command);
 	}
 
-	@Override
-	@Transactional(readOnly = true)
-	public List<ContentResponseDto.PreviewRes> findPreviewContents(
-		ContentType contentType, String sortBy, int num
-	) {
-		return contentRepository.findPreviewContents(contentType, sortBy, num);
-	}
-
 	// 리딩 콘텐츠 프리뷰 조회
 	@Override
 	public ContentInfo.PreviewContents getPreviewContents(ContentCommand.GetReadingPreview command) {
@@ -97,12 +69,6 @@ public class ContentServiceImpl implements ContentService {
 	public ContentInfo.PreviewContents getContentsByScrapCount(Integer size) {
         return ContentInfo.PreviewContents.of(contentReader.findContentsByScrapCount(size));
     }
-
-	@Override
-	@Transactional(readOnly = true)
-	public List<ContentResponseDto.GetByScrapCount> contentByScrapCount(int num) {
-		return contentRepository.contentByScrapCount(num);
-	}
 
 	@Override
 	@Transactional

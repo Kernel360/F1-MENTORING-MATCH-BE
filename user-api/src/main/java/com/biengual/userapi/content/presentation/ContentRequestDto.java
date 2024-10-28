@@ -20,11 +20,5 @@ public class ContentRequestDto {
 		List<Script> script,
 		ContentStatus contentStatus
 	) {
-
-	}
-
-	public record SearchReq(
-		String searchWords
-	) {
 	}
 }
