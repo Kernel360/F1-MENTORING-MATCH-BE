@@ -45,12 +45,6 @@ public class ContentServiceImpl implements ContentService {
 		contentStore.createContent(command);
 	}
 
-	@Override
-	@Transactional
-	public void updateContent(ContentCommand.Modify command) {
-		contentStore.updateContent(command);
-	}
-
 	// 리딩 콘텐츠 프리뷰 조회
 	@Override
 	public ContentInfo.PreviewContents getPreviewContents(ContentCommand.GetReadingPreview command) {
@@ -72,8 +66,8 @@ public class ContentServiceImpl implements ContentService {
 
 	@Override
 	@Transactional
-	public void deactivateContent(Long contentId) {
-		contentStore.deactivateContent(contentId);
+	public void modifyContentStatus(Long contentId) {
+		contentStore.modifyContentStatus(contentId);
 	}
 
 	// TODO: 멘토님에게 DataProvider의 영역에 대한 답변을 들어볼 것

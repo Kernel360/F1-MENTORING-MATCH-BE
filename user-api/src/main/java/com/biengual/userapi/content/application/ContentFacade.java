@@ -19,12 +19,8 @@ public class ContentFacade {
 		contentService.createContent(createContent);
 	}
 
-	public void modifyContent(ContentCommand.Modify command) {
-		contentService.updateContent(command);
-	}
-
-	public void deactivateContent(Long id) {
-		contentService.deactivateContent(id);
+	public void modifyContentStatus(Long contentId) {
+		contentService.modifyContentStatus(contentId);
 	}
 
     // 스크랩 많은 순 컨텐츠 프리뷰 조회

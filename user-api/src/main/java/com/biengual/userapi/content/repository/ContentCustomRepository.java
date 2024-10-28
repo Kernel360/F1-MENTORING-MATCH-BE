@@ -29,6 +29,46 @@ import static com.biengual.userapi.message.error.code.ContentErrorCode.CONTENT_S
 public class ContentCustomRepository {
     private final JPAQueryFactory queryFactory;
 
+    public ContentType findContentTypeById(Long contentId) {
+        QContentEntity contentEntity = QContentEntity.contentEntity;
+
+        return queryFactory
+            .select(contentEntity.contentType)
+            .from(contentEntity)
+            .where(contentEntity.id.eq(contentId))
+            .fetchFirst();
+
+    }
+
+    public String findTitleById(Long contentId) {
+        QContentEntity contentEntity = QContentEntity.contentEntity;
+
+        return queryFactory
+            .select(contentEntity.title)
+            .from(contentEntity)
+            .where(contentEntity.contentStatus.eq(ContentStatus.ACTIVATED).and(contentEntity.id.eq(contentId)))
+            .fetchFirst();
+    }
+
+    public String findMongoIdByContentId(Long contentId) {
+        QContentEntity contentEntity = QContentEntity.contentEntity;
+
+        return queryFactory
+            .select(contentEntity.mongoContentId)
+            .from(contentEntity)
+            .where(contentEntity.contentStatus.eq(ContentStatus.ACTIVATED).and(contentEntity.id.eq(contentId)))
+            .fetchOne();
+    }
+
+    public boolean existsByUrl(String url) {
+        QContentEntity contentEntity = QContentEntity.contentEntity;
+
+        return queryFactory
+            .from(contentEntity)
+            .where(contentEntity.url.eq(url))
+            .fetchFirst() != null;
+    }
+
     // 스크랩을 많이 한 컨텐츠를 조회하기 위한 쿼리
     public List<ContentInfo.PreviewContent> findContentsByScrapCount(Integer size) {
         QScrapEntity scrapEntity = QScrapEntity.scrapEntity;

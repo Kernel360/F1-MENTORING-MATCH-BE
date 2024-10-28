@@ -31,9 +31,6 @@ public interface ContentDtoMapper {
 	// Command <- Request
 	ContentCommand.CrawlingContent doCrawlingContent(ContentRequestDto.CreateReq request);
 
-	@Mapping(target = "id", source = "contentId")
-	ContentCommand.Modify doModify(Long contentId, ContentRequestDto.UpdateReq request);
-
 	@Mapping(target = "pageable", expression = "java(toPageable(page, size, direction, sort))")
 	ContentCommand.Search doSearch(Integer page, Integer size, Sort.Direction direction, String sort, String keyword);
 

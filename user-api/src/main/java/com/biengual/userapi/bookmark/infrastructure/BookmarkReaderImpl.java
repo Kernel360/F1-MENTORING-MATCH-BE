@@ -3,7 +3,7 @@ package com.biengual.userapi.bookmark.infrastructure;
 import com.biengual.userapi.annotation.DataProvider;
 import com.biengual.userapi.bookmark.domain.*;
 import com.biengual.userapi.bookmark.presentation.BookmarkDtoMapper;
-import com.biengual.userapi.content.domain.ContentRepository;
+import com.biengual.userapi.content.repository.ContentCustomRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookmarkReaderImpl implements BookmarkReader {
 	private final BookmarkCustomRepository bookmarkCustomRepository;
-	private final ContentRepository contentRepository;
+	private final ContentCustomRepository contentCustomRepository;
 	private final BookmarkDtoMapper bookmarkDtoMapper;
 
 	@Override
@@ -29,8 +29,8 @@ public class BookmarkReaderImpl implements BookmarkReader {
 		return bookmarks.stream()
 			.map(bookmark -> bookmarkDtoMapper.buildMyList(
 				bookmark,
-				contentRepository.findContentTypeById(bookmark.getScriptIndex()),
-				contentRepository.findTitleById(bookmark.getScriptIndex())
+				contentCustomRepository.findContentTypeById(bookmark.getScriptIndex()),
+				contentCustomRepository.findTitleById(bookmark.getScriptIndex())
 			)).toList();
 	}
 

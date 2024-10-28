@@ -52,16 +52,6 @@ public class ContentCommand {
 	}
 
 	@Builder
-	public record Modify(
-		Long id,
-		String url,
-		String title,
-		List<Script> script,
-		ContentStatus contentStatus
-	) {
-	}
-
-	@Builder
 	public record Search(
 		Pageable pageable,
 		String keyword

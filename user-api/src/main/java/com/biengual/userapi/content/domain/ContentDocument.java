@@ -30,10 +30,6 @@ public class ContentDocument extends MongoBaseDocument {
 		this.questionIds = new ArrayList<>();
 	}
 
-	public void updateScript(List<Script> scriptList) {
-		this.scripts = scriptList;
-	}
-
 	public void updateQuestionIds(List<String> questionIds) {
 		this.questionIds.addAll(questionIds);
 	}
