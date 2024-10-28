@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 public enum ContentResponseCode implements ResponseCode {
 	CONTENT_CREATE_SUCCESS(HttpStatus.CREATED, ContentServiceStatus.CONTENT_CREATE_SUCCESS, "컨텐츠 생성 성공"),
 	CONTENT_VIEW_SUCCESS(HttpStatus.OK, ContentServiceStatus.CONTENT_VIEW_SUCCESS, "컨텐츠 조회 성공"),
-	CONTENT_MODIFY_SUCCESS(HttpStatus.OK, ContentServiceStatus.CONTENT_MODIFY_SUCCESS, "컨텐츠 수정 성공"),
+	CONTENT_MODIFY_SUCCESS(HttpStatus.OK, ContentServiceStatus.CONTENT_MODIFY_SUCCESS, "컨텐츠 상태 변경 성공"),
 	CONTENT_DEACTIVATE_SUCCESS(HttpStatus.OK, ContentServiceStatus.CONTENT_DEACTIVATE_SUCCESS, "컨텐츠 비활성화 성공")
 	;
 

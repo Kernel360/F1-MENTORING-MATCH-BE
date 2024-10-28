@@ -2,10 +2,8 @@ package com.biengual.userapi.bookmark.domain;
 
 import java.util.List;
 
-import com.biengual.userapi.user.domain.entity.UserEntity;
-
 public interface BookmarkReader {
-	List<BookmarkInfo.Position> getContentList(UserEntity user, Long contentId);
+	List<BookmarkInfo.Position> getContentList(BookmarkCommand.GetByContents command);
 
 	List<BookmarkInfo.MyList> getAllBookmarks(Long userId);
 

@@ -2,8 +2,9 @@ package com.biengual.userapi.oauth2;
 
 import com.biengual.userapi.message.error.exception.CommonException;
 import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
-import com.biengual.userapi.user.domain.entity.UserEntity;
-import com.biengual.userapi.user.service.UserService;
+import com.biengual.userapi.user.domain.UserReader;
+import com.biengual.userapi.user.domain.UserEntity;
+import com.biengual.userapi.user.domain.enums.UserStatus;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,12 +17,14 @@ import java.util.Date;
 
 import static com.biengual.userapi.message.error.code.TokenErrorCode.TOKEN_EXPIRED;
 import static com.biengual.userapi.message.error.code.TokenErrorCode.TOKEN_INVALID;
+import static com.biengual.userapi.message.error.code.UserErrorCode.USER_FAIL_DEACTIVATE;
+import static com.biengual.userapi.message.error.code.UserErrorCode.USER_FAIL_SUSPEND;
 
 @Service
 @RequiredArgsConstructor
 public class TokenProvider {
 	private final JwtProperties jwtProperties;
-	private final UserService userService;
+	private final UserReader userReader;
 
 	public static final Duration ACCESS_TOKEN_EXPIRE = Duration.ofDays(1);
 	public static final Duration REFRESH_TOKEN_EXPIRE = Duration.ofDays(7);
@@ -63,7 +66,9 @@ public class TokenProvider {
 	public Authentication getAuthentication(String token) {
 		Claims claims = getClaims(token);
 
-		UserEntity user = userService.getUserById(claims.get("id", Long.class));
+		UserEntity user = userReader.findUser(claims.get("id", Long.class), claims.getSubject());
+
+		validateUserStatus(user);
 
 		OAuth2UserPrincipal principal = OAuth2UserPrincipal.from(user);
 
@@ -75,5 +80,15 @@ public class TokenProvider {
 			.setSigningKey(jwtProperties.getSecret())
 			.parseClaimsJws(token)
 			.getBody();
+	}
+
+	// 서비스를 사용할 수 있는 사용자인지 검증
+	private void validateUserStatus(UserEntity user) {
+		if (user.getUserStatus().equals(UserStatus.USER_STATUS_DEACTIVATED)) {
+			throw new CommonException(USER_FAIL_DEACTIVATE);
+		}
+		if (user.getUserStatus().equals(UserStatus.USER_STATUS_SUSPENDED)) {
+			throw new CommonException(USER_FAIL_SUSPEND);
+		}
 	}
 }

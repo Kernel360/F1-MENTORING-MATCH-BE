@@ -23,7 +23,11 @@ public enum CrawlingErrorCode implements ErrorCode {
 	),
 	CRAWLING_ALREADY_DONE(
 		HttpStatus.BAD_REQUEST, CrawlingServiceStatus.CRAWLING_ALREADY_DONE, "이미 DB에 저장된 크롤링 데이터"
-	);
+	),
+	CRAWLING_JACKSON_ERROR(
+		HttpStatus.CONFLICT, CrawlingServiceStatus.CRAWLING_JACKSON_ERROR, "Jackson 매핑 에러"
+	)
+	;
 
 	private final HttpStatus httpStatus;
 	private final ServiceStatus serviceStatus;

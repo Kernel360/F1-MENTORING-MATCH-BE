@@ -1,22 +1,21 @@
 package com.biengual.userapi.bookmark.presentation;
 
+import com.biengual.userapi.bookmark.domain.BookmarkCommand;
+import com.biengual.userapi.bookmark.domain.BookmarkEntity;
+import com.biengual.userapi.bookmark.domain.BookmarkInfo;
+import com.biengual.userapi.content.domain.ContentType;
+import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
-import com.biengual.userapi.bookmark.domain.BookmarkCommand;
-import com.biengual.userapi.bookmark.domain.BookmarkEntity;
-import com.biengual.userapi.bookmark.domain.BookmarkInfo;
-import com.biengual.userapi.content.domain.enums.ContentType;
-import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
-
 /**
  * do~ : Command <- Request
  * of~ : Response <- Info
  * build~ :  Entity <-> Info, Info <-> Info
- *
- * BookmarkDto 와 Info 간의 Mapper
+ * <p>
+ * BookmarkDto 와 Info, Command 간의 Mapper
  *
  * @author 김영래
  */

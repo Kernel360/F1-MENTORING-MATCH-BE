@@ -1,6 +1,6 @@
 package com.biengual.userapi.bookmark.domain;
 
-import com.biengual.userapi.user.domain.entity.BaseEntity;
+import com.biengual.userapi.common.entity.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,16 +41,20 @@ public class BookmarkEntity extends BaseEntity {
 	@Column(nullable = true, columnDefinition = "double")
 	private Double startTimeInSecond;
 
+	@Column(name = "user_id", nullable = false, columnDefinition = "bigint")
+	private Long userId;
+
 	@Builder
 	public BookmarkEntity(
 		@NotNull Long scriptIndex, Long sentenceIndex,
-		String detail, String description, Double startTimeInSecond
+		String detail, String description, Double startTimeInSecond, Long userId
 	) {
 		this.scriptIndex = scriptIndex;
 		this.sentenceIndex = sentenceIndex;
 		this.detail = detail;
 		this.description = description;
 		this.startTimeInSecond = startTimeInSecond;
+		this.userId = userId;
 	}
 
 	public void updateDescription(String description) {

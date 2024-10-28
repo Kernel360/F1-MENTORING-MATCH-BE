@@ -13,7 +13,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.Base64;
 
 
@@ -22,8 +21,7 @@ public class CookieUtil {
 	public static final String ACCESS_TOKEN_NAME = "access_token";
 	public static final String REFRESH_TOKEN_NAME = "refresh_token";
 	public static final String OAUTH2_AUTHORIZATION_REQUEST_NAME = "oauth2_authorization_request";
-	public static final String RETURN_URL_NAME = "return_url";
-	public static final String RETURN_URL_REQUEST_PARAMETER = "returnUrl";
+	public static final String RETURN_URL_NAME = "returnUrl";
 	public static final Duration ACCESS_TOKEN_COOKIE_EXPIRE = Duration.ofDays(1);
 	public static final Duration REFRESH_TOKEN_COOKIE_EXPIRE = Duration.ofDays(7);
 	public static final Duration OAUTH2_AUTHORIZATION_REQUEST_COOKIE_EXPIRE = Duration.ofMinutes(3);
@@ -31,10 +29,6 @@ public class CookieUtil {
 
 	@Value("${spring.profiles.active}")
 	private String activeProfile;
-
-	public boolean verifyAccessTokenCookie(Cookie[] cookies) {
-		return cookies != null && Arrays.stream(cookies).anyMatch(cookie -> cookie.getName().equals(ACCESS_TOKEN_NAME));
-	}
 
 	public void addAccessTokenCookie(HttpServletRequest request, HttpServletResponse response, String accessToken) {
 		removeCookie(request, response, ACCESS_TOKEN_NAME);
@@ -55,7 +49,7 @@ public class CookieUtil {
 
 	public void addReturnUrlCookie(HttpServletRequest request, HttpServletResponse response) {
 		removeCookie(request, response, RETURN_URL_NAME);
-		addCookie(response, RETURN_URL_NAME, request.getParameter(RETURN_URL_REQUEST_PARAMETER),
+		addCookie(response, RETURN_URL_NAME, request.getParameter(RETURN_URL_NAME),
 			(int) RETURN_URL_NAME_COOKIE_EXPIRE.toSeconds());
 	}
 

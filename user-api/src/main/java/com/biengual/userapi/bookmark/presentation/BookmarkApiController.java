@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.biengual.userapi.bookmark.application.BookmarkFacade;
 import com.biengual.userapi.bookmark.domain.BookmarkCommand;
+import com.biengual.userapi.bookmark.domain.BookmarkInfo;
 import com.biengual.userapi.message.ResponseEntityFactory;
 import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
 import com.biengual.userapi.swagger.SwaggerVoidReturn;
@@ -54,11 +55,10 @@ public class BookmarkApiController {
 		Long contentId
 	) {
 		BookmarkCommand.GetByContents command = bookmarkDtoMapper.doGetByContents(contentId, principal);
-
-		BookmarkResponseDto.ContentListRes contentListRes
+		BookmarkResponseDto.ContentListRes response
 			= bookmarkDtoMapper.ofContentListRes(bookmarkFacade.getBookmarks(command));
 
-		return ResponseEntityFactory.toResponseEntity(BOOKMARK_VIEW_SUCCESS, contentListRes);
+		return ResponseEntityFactory.toResponseEntity(BOOKMARK_VIEW_SUCCESS, response);
 	}
 
 	@GetMapping("/view")
@@ -74,10 +74,11 @@ public class BookmarkApiController {
 		@AuthenticationPrincipal
 		OAuth2UserPrincipal principal
 	) {
-		BookmarkResponseDto.MyListRes myListRes
-			= bookmarkDtoMapper.ofMyListRes(bookmarkFacade.getAllBookmarks(principal.getId()));
+		BookmarkInfo.MyListInfo info = bookmarkFacade.getAllBookmarks(principal.getId());
+		BookmarkResponseDto.MyListRes response
+			= bookmarkDtoMapper.ofMyListRes(info);
 
-		return ResponseEntityFactory.toResponseEntity(BOOKMARK_VIEW_SUCCESS, myListRes);
+		return ResponseEntityFactory.toResponseEntity(BOOKMARK_VIEW_SUCCESS, response);
 	}
 
 	@PostMapping("/create/{contentId}")
@@ -99,7 +100,6 @@ public class BookmarkApiController {
 		BookmarkRequestDto.CreateReq request
 	) {
 		BookmarkCommand.Create command = bookmarkDtoMapper.doCreate(contentId, request, principal);
-
 		bookmarkFacade.createBookmark(command);
 
 		return ResponseEntityFactory.toResponseEntity(BOOKMARK_CREATE_SUCCESS);
@@ -124,7 +124,6 @@ public class BookmarkApiController {
 		BookmarkRequestDto.UpdateReq request
 	) {
 		BookmarkCommand.Update command = bookmarkDtoMapper.doUpdate(contentId, request, principal);
-
 		BookmarkResponseDto.ContentList response = bookmarkDtoMapper.ofContentList(
 			bookmarkFacade.updateBookmark(command));
 

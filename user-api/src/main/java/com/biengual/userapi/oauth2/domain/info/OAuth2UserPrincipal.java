@@ -1,6 +1,6 @@
 package com.biengual.userapi.oauth2.domain.info;
 
-import com.biengual.userapi.user.domain.entity.UserEntity;
+import com.biengual.userapi.user.domain.UserEntity;
 import com.biengual.userapi.user.domain.enums.Role;
 import lombok.Builder;
 import lombok.Getter;
