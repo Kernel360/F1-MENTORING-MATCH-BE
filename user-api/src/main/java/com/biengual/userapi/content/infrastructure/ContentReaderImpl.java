@@ -33,7 +33,7 @@ public class ContentReaderImpl implements ContentReader {
         return PaginationInfo.from(page);
     }
 
-    // 리딩 컨텐츠 뷰 페이지 조회
+    // 리딩 컨텐츠 프리뷰 페이지 조회
     @Override
     public PaginationInfo<ContentInfo.ViewContent> findReadingViewPage(ContentCommand.GetReadingView command) {
         Page<ContentInfo.ViewContent> page = contentCustomRepository.findViewPageByContentTypeAndCategoryId(
@@ -43,7 +43,7 @@ public class ContentReaderImpl implements ContentReader {
         return PaginationInfo.from(page);
     }
 
-    // 리스닝 컨텐츠 뷰 페이지 조회
+    // 리스닝 컨텐츠 프리뷰 페이지 조회
     @Override
     public PaginationInfo<ContentInfo.ViewContent> findListeningViewPage(ContentCommand.GetListeningView command) {
         Page<ContentInfo.ViewContent> page = contentCustomRepository.findViewPageByContentTypeAndCategoryId(

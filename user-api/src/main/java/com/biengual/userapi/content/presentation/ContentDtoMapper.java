@@ -56,20 +56,17 @@ public interface ContentDtoMapper {
 	ContentCommand.GetListeningPreview doGetListeningPreview(Integer size, String sort);
 
 	// Response <- Info
-    @Mapping(target = "scrapPreview", source = "previewContents")
+    @Mapping(target = "contentByScrapCount", source = "previewContents")
     ContentResponseDto.ScrapPreviewContentsRes ofScrapPreviewContentsRes(ContentInfo.PreviewContents previewContents);
 
-	@Mapping(target = "searchPreview", source = "contents")
 	ContentResponseDto.SearchPreviewContentsRes ofSearchPreviewContentsRes(
 		PaginationInfo<ContentInfo.PreviewContent> searchPreview
 	);
 
-	@Mapping(target = "readingView", source = "contents")
 	ContentResponseDto.ReadingViewContentsRes ofReadingViewContentsRes(
 		PaginationInfo<ContentInfo.ViewContent> readingView
 	);
 
-	@Mapping(target = "listeningView", source = "contents")
 	ContentResponseDto.ListeningViewContentsRes ofListeningViewContentsRes(
 		PaginationInfo<ContentInfo.ViewContent> readingView
 	);

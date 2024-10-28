@@ -37,12 +37,12 @@ public class ContentFacade {
 		return contentService.search(command);
 	}
 
-	// 리딩 컨텐츠 뷰 페이지 조회
+	// 리딩 컨텐츠 프리뷰 페이지 조회
 	public PaginationInfo<ContentInfo.ViewContent> getReadingView(ContentCommand.GetReadingView command) {
 		return contentService.getViewContents(command);
 	}
 
-	// 리스닝 컨텐츠 뷰 페이지 조회
+	// 리스닝 컨텐츠 프리뷰 페이지 조회
 	public PaginationInfo<ContentInfo.ViewContent> getListeningView(ContentCommand.GetListeningView command) {
 		return contentService.getViewContents(command);
 	}

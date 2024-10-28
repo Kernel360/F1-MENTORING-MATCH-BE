@@ -84,7 +84,7 @@ public class ContentCustomRepository {
         return findPreviewPage(pageable, predicate, contentEntity);
     }
 
-    // 컨텐츠 뷰 페이지 조회하기 위한 쿼리
+    // 컨텐츠 프리뷰 페이지 조회하기 위한 쿼리
     public Page<ContentInfo.ViewContent> findViewPageByContentTypeAndCategoryId(
         Pageable pageable, ContentType contentType, Long categoryId
     ) {

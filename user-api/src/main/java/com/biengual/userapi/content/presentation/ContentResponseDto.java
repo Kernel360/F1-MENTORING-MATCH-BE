@@ -59,17 +59,18 @@ public class ContentResponseDto {
 
 	@Builder
 	public record ScrapPreviewContentsRes(
-		List<PreviewContent> scrapPreview
+		List<PreviewContent> contentByScrapCount
 	) {
 	}
 
+	// TODO: 응답에 담길 네이밍이 변경될 여지가 없다면 기존 PaginationDto처럼 통일해도 좋을 것 같음
 	@Builder
 	public record SearchPreviewContentsRes(
 		Integer pageNumber,
 		Integer pageSize,
 		Integer totalPages,
 		Long totalElements,
-		List<PreviewContent> searchPreview
+		List<PreviewContent> contents
 	) {
 	}
 
@@ -90,7 +91,7 @@ public class ContentResponseDto {
 		Integer pageSize,
 		Integer totalPages,
 		Long totalElements,
-		List<ViewContent> readingView
+		List<ViewContent> contents
 	) {
 	}
 
@@ -100,7 +101,7 @@ public class ContentResponseDto {
 		Integer pageSize,
 		Integer totalPages,
 		Long totalElements,
-		List<ViewContent> listeningView
+		List<ViewContent> contents
 	) {
 	}
 

@@ -80,9 +80,9 @@ public class ContentPublicController {
 		@RequestParam(required = false, defaultValue = "10") Integer size,
 		@RequestParam(required = false, defaultValue = "DESC") Sort.Direction direction,
 		@RequestParam(required = false, defaultValue = "createdAt") String sort,
-		@NotBlank(message = BLANK_CONTENT_KEYWORD_ERROR_MESSAGE) @RequestParam String keyword
+		@NotBlank(message = BLANK_CONTENT_KEYWORD_ERROR_MESSAGE) @RequestParam String searchWords
 	) {
-		ContentCommand.Search command = contentDtoMapper.doSearch(page, size, direction, sort, keyword);
+		ContentCommand.Search command = contentDtoMapper.doSearch(page, size, direction, sort, searchWords);
 		PaginationInfo<ContentInfo.PreviewContent> info = contentFacade.search(command);
 		ContentResponseDto.SearchPreviewContentsRes response = contentDtoMapper.ofSearchPreviewContentsRes(info);
 
@@ -90,10 +90,10 @@ public class ContentPublicController {
 	}
 
 	// TODO: Approve가 된다면 Page 내용을 담는 key 값 변경 사항을 프론트에게 공유해야 합니다.
-	@GetMapping("/view/reading")
-	@Operation(summary = "리딩 컨텐츠 뷰 조회", description = "페이지네이션을 적용하여 리딩 컨텐츠 목록을 조회합니다.")
+	@GetMapping("/preview/paginated-reading")
+	@Operation(summary = "리딩 컨텐츠 프리뷰 페이지 조회", description = "페이지네이션을 적용하여 리딩 컨텐츠 목록을 조회합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "리딩 컨텐츠 페이지 조회 요청 성공", content = {
+		@ApiResponse(responseCode = "200", description = "리딩 컨텐츠 프리뷰 페이지 조회 요청 성공", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerContentReadingView.class))
 		}),
 		@ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
@@ -122,10 +122,10 @@ public class ContentPublicController {
 	}
 
 	// TODO: Approve가 된다면 Page 내용을 담는 key 값 변경 사항을 프론트에게 공유해야 합니다.
-	@GetMapping("/view/listening")
-	@Operation(summary = "리스닝 컨텐츠 뷰 조회", description = "페이지네이션을 적용하여 리스닝 컨텐츠 목록을 조회합니다.")
+	@GetMapping("/preview/paginated-listening")
+	@Operation(summary = "리스닝 컨텐츠 프리뷰 페이지 조회", description = "페이지네이션을 적용하여 리스닝 컨텐츠 목록을 조회합니다.")
 	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "리스닝 컨텐츠 페이지 조회 요청 성공", content = {
+		@ApiResponse(responseCode = "200", description = "리스닝 컨텐츠 프리뷰 페이지 조회 요청 성공", content = {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerContentListeningView.class))
 		}),
 		@ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),

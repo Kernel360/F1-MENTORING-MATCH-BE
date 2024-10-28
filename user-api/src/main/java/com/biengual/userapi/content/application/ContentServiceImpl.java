@@ -45,14 +45,14 @@ public class ContentServiceImpl implements ContentService {
 		return PaginationDto.from(page, contents);
 	}
 
-	// 리딩 컨텐츠 뷰 페이지 조회
+	// 리딩 컨텐츠 프리뷰 페이지 조회
 	@Override
 	@Transactional(readOnly = true)
 	public PaginationInfo<ContentInfo.ViewContent> getViewContents(ContentCommand.GetReadingView command) {
 		return contentReader.findReadingViewPage(command);
 	}
 
-	// 리스닝 컨텐츠 뷰 페이지 조회
+	// 리스닝 컨텐츠 프리뷰 페이지 조회
 	@Override
 	@Transactional(readOnly = true)
 	public PaginationInfo<ContentInfo.ViewContent> getViewContents(ContentCommand.GetListeningView command) {
