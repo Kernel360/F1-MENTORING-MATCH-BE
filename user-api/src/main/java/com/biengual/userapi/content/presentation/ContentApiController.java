@@ -52,7 +52,6 @@ public class ContentApiController {
 		return ResponseEntityFactory.toResponseEntity(CONTENT_CREATE_SUCCESS);
 	}
 
-	// TODO: request 매핑이 안되는 버그 있음
 	/**
 	 * 컨텐츠 활성화, 비활성화
 	 */
