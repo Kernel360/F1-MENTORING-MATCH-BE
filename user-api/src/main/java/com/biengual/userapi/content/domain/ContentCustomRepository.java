@@ -38,22 +38,6 @@ public class ContentCustomRepository {
 
     }
 
-    public String findTitleById(Long contentId) {
-        return queryFactory
-            .select(contentEntity.title)
-            .from(contentEntity)
-            .where(contentEntity.contentStatus.eq(ContentStatus.ACTIVATED).and(contentEntity.id.eq(contentId)))
-            .fetchFirst();
-    }
-
-    public ContentStatus findContentStatusById(Long contentId) {
-        return queryFactory
-            .select(contentEntity.contentStatus)
-            .from(contentEntity)
-            .where(contentEntity.id.eq(contentId))
-            .fetchFirst();
-    }
-
     public String findMongoIdByContentId(Long contentId) {
         return queryFactory
             .select(contentEntity.mongoContentId)
