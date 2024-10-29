@@ -57,6 +57,6 @@ public interface BookmarkDtoMapper {
 	@Mapping(target = "bookmarkDetail", source = "bookmark.detail")
 	@Mapping(target = "contentId", source = "bookmark.scriptIndex")
 	@Mapping(target = "contentTitle", source = "title")
-	BookmarkInfo.MyList buildMyList(BookmarkEntity bookmark, ContentType contentType, String title);
+	BookmarkInfo.MyList buildMyList(BookmarkEntity bookmark, ContentType contentType, String title, Boolean isActive);
 
 }

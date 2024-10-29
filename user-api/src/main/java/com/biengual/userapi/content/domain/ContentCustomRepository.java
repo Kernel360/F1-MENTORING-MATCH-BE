@@ -46,6 +46,14 @@ public class ContentCustomRepository {
             .fetchFirst();
     }
 
+    public ContentStatus findContentStatusById(Long contentId) {
+        return queryFactory
+            .select(contentEntity.contentStatus)
+            .from(contentEntity)
+            .where(contentEntity.id.eq(contentId))
+            .fetchFirst();
+    }
+
     public String findMongoIdByContentId(Long contentId) {
         return queryFactory
             .select(contentEntity.mongoContentId)

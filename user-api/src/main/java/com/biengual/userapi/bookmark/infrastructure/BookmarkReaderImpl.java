@@ -2,10 +2,13 @@ package com.biengual.userapi.bookmark.infrastructure;
 
 import com.biengual.core.annotation.DataProvider;
 import com.biengual.core.domain.entity.bookmark.BookmarkEntity;
-import com.biengual.userapi.bookmark.domain.*;
+import com.biengual.core.enums.ContentStatus;
+import com.biengual.userapi.bookmark.domain.BookmarkCommand;
+import com.biengual.userapi.bookmark.domain.BookmarkCustomRepository;
+import com.biengual.userapi.bookmark.domain.BookmarkInfo;
+import com.biengual.userapi.bookmark.domain.BookmarkReader;
 import com.biengual.userapi.bookmark.presentation.BookmarkDtoMapper;
 import com.biengual.userapi.content.domain.ContentCustomRepository;
-
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -32,7 +35,8 @@ public class BookmarkReaderImpl implements BookmarkReader {
 			.map(bookmark -> bookmarkDtoMapper.buildMyList(
 				bookmark,
 				contentCustomRepository.findContentTypeById(bookmark.getScriptIndex()),
-				contentCustomRepository.findTitleById(bookmark.getScriptIndex())
+				contentCustomRepository.findTitleById(bookmark.getScriptIndex()),
+				contentCustomRepository.findContentStatusById(bookmark.getScriptIndex()) == ContentStatus.ACTIVATED
 			)).toList();
 	}
 

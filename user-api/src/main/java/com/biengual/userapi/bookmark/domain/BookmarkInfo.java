@@ -38,7 +38,8 @@ public class BookmarkInfo {
 		Long contentId,
 		String contentTitle,
 		LocalDateTime createdAt,
-		LocalDateTime updatedAt
+		LocalDateTime updatedAt,
+		Boolean isActive
 	) {
 	}
 
