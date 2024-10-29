@@ -14,7 +14,7 @@ public interface ContentService {
 
 	PaginationInfo<ContentInfo.ViewContent> getViewContents(ContentCommand.GetListeningView command);
 
-	ContentInfo.Detail getScriptsOfContent(Long contentId);
+	ContentInfo.Detail getScriptsOfContent(ContentCommand.GetDetail command);
 
 	void createContent(ContentCommand.Create command);
 
