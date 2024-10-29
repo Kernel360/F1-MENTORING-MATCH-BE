@@ -1,7 +1,7 @@
 package com.biengual.userapi.content.presentation;
 
-import com.biengual.userapi.content.domain.ContentStatus;
-import com.biengual.userapi.content.domain.ContentType;
+import com.biengual.core.enums.ContentStatus;
+import com.biengual.core.enums.ContentType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 

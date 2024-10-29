@@ -1,22 +1,24 @@
 package com.biengual.userapi.content.infrastructure;
 
-import static com.biengual.userapi.message.error.code.ContentErrorCode.*;
-
-import java.util.List;
-
+import com.biengual.core.annotation.DataProvider;
+import com.biengual.core.domain.document.content.ContentDocument;
+import com.biengual.core.domain.document.content.script.Script;
+import com.biengual.core.domain.entity.bookmark.BookmarkEntity;
+import com.biengual.core.domain.entity.content.ContentEntity;
+import com.biengual.core.enums.ContentStatus;
+import com.biengual.core.response.error.exception.CommonException;
+import com.biengual.core.util.PaginationInfo;
 import com.biengual.userapi.bookmark.domain.BookmarkCustomRepository;
-import com.biengual.userapi.bookmark.domain.BookmarkEntity;
 import com.biengual.userapi.content.domain.*;
 import com.biengual.userapi.content.presentation.ContentDtoMapper;
-import com.biengual.userapi.script.domain.entity.Script;
+import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 
-import com.biengual.userapi.annotation.DataProvider;
-import com.biengual.userapi.message.error.exception.CommonException;
-import com.biengual.userapi.util.PaginationInfo;
+import java.util.List;
 
-import lombok.RequiredArgsConstructor;
+import static com.biengual.core.response.error.code.ContentErrorCode.CONTENT_IS_DEACTIVATED;
+import static com.biengual.core.response.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
 
 @DataProvider
 @RequiredArgsConstructor

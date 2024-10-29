@@ -1,8 +1,9 @@
 package com.biengual.userapi.content.domain;
 
-import com.biengual.userapi.util.PaginationInfo;
-
 import java.util.List;
+
+import com.biengual.core.domain.entity.content.ContentEntity;
+import com.biengual.core.util.PaginationInfo;
 
 /**
  * Content 도메인의 DataProvider 계층의 인터페이스

@@ -22,7 +22,7 @@ public class SwaggerConfig {
 	private Info apiInfo() {
 		return new Info()
 			.title("API Test") // API Title
-			.description("Swagger UI for English Challenge userapi") // API Description
+			.description("Swagger UI for Biengual") // API Description
 			.version("1.0.0"); // API Version
 	}
 

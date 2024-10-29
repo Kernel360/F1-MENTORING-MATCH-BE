@@ -1,12 +1,16 @@
 package com.biengual.userapi.content.domain;
 
-import com.biengual.userapi.category.domain.CategoryEntity;
-import com.biengual.userapi.script.domain.entity.Script;
 import lombok.Builder;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+
+import com.biengual.core.domain.document.content.ContentDocument;
+import com.biengual.core.domain.document.content.script.Script;
+import com.biengual.core.domain.entity.category.CategoryEntity;
+import com.biengual.core.domain.entity.content.ContentEntity;
+import com.biengual.core.enums.ContentType;
 
 public class ContentCommand {
 

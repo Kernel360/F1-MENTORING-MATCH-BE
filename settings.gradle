@@ -1,2 +1,3 @@
 rootProject.name = 'platform'
 include 'user-api'
+include 'biengual-core'

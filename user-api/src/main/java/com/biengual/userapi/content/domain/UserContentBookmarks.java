@@ -1,7 +1,9 @@
 package com.biengual.userapi.content.domain;
 
-import com.biengual.userapi.bookmark.domain.BookmarkEntity;
-import com.biengual.userapi.script.domain.entity.Script;
+
+
+import com.biengual.core.domain.document.content.script.Script;
+import com.biengual.core.domain.entity.bookmark.BookmarkEntity;
 
 import java.util.List;
 import java.util.Map;

@@ -1,13 +1,13 @@
 package com.biengual.userapi.content.presentation;
 
+import com.biengual.core.domain.document.content.script.Script;
+import com.biengual.core.domain.document.content.script.YoutubeScript;
+import com.biengual.core.domain.entity.content.ContentEntity;
+import com.biengual.core.enums.ContentType;
+import com.biengual.core.util.PaginationInfo;
 import com.biengual.userapi.content.domain.ContentCommand;
-import com.biengual.userapi.content.domain.ContentEntity;
 import com.biengual.userapi.content.domain.ContentInfo;
-import com.biengual.userapi.content.domain.ContentType;
-import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
-import com.biengual.userapi.script.domain.entity.Script;
-import com.biengual.userapi.script.domain.entity.YoutubeScript;
-import com.biengual.userapi.util.PaginationInfo;
+import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
 import org.mapstruct.*;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

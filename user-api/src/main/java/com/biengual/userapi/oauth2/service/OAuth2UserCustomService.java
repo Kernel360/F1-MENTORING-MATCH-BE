@@ -1,8 +1,8 @@
 package com.biengual.userapi.oauth2.service;
 
-import com.biengual.userapi.oauth2.domain.info.OAuth2UserInfo;
-import com.biengual.userapi.oauth2.domain.info.OAuth2UserInfoFactory;
-import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
+import com.biengual.userapi.oauth2.info.OAuth2UserInfo;
+import com.biengual.userapi.oauth2.info.OAuth2UserInfoFactory;
+import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
