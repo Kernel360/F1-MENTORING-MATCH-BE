@@ -122,12 +122,12 @@ public class ContentReaderImpl implements ContentReader {
 			List<ContentInfo.UserScript> userScripts = userContentBookmarks.getUserScripts(scripts);
 
 			return contentDtoMapper.buildDetail(content, userScripts);
-		} else {
-			List<ContentInfo.UserScript> guestScripts = scripts.stream()
-				.map(ContentInfo.UserScript::of)
-				.toList();
-
-			return contentDtoMapper.buildDetail(content, guestScripts);
 		}
+
+		List<ContentInfo.UserScript> guestScripts = scripts.stream()
+			.map(ContentInfo.UserScript::of)
+			.toList();
+
+		return contentDtoMapper.buildDetail(content, guestScripts);
 	}
 }
