@@ -1,5 +1,6 @@
 package com.biengual.userapi.core.config;
 
+import com.biengual.userapi.core.util.ScriptConverter;
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;

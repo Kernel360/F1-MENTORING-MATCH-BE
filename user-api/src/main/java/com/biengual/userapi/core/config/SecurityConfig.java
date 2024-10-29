@@ -1,5 +1,6 @@
 package com.biengual.userapi.core.config;
 
+import com.biengual.userapi.core.filter.TokenAuthenticationFilter;
 import com.biengual.userapi.core.oauth2.OAuth2FailureHandler;
 import com.biengual.userapi.core.oauth2.OAuth2SuccessHandler;
 import com.biengual.userapi.core.jwt.TokenProvider;

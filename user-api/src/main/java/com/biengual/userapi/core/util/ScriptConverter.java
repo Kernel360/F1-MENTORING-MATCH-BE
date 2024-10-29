@@ -1,4 +1,4 @@
-package com.biengual.userapi.core.config;
+package com.biengual.userapi.core.util;
 
 import com.biengual.userapi.core.domain.entity.content.document.script.BaseScript;
 import com.biengual.userapi.core.domain.entity.content.document.script.CNNScript;

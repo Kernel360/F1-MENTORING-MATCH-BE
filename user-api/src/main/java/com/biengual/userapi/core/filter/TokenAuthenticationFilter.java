@@ -1,4 +1,4 @@
-package com.biengual.userapi.core.config;
+package com.biengual.userapi.core.filter;
 
 import com.biengual.userapi.core.response.error.exception.CommonException;
 import com.biengual.userapi.core.jwt.TokenProvider;
