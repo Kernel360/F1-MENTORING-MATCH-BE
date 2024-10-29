@@ -1,6 +1,6 @@
 package com.biengual.userapi.bookmark.presentation;
 
-import static com.biengual.userapi.core.response.success.BookmarkSuccessCode.*;
+import static com.biengual.core.response.success.BookmarkSuccessCode.*;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.biengual.core.response.ResponseEntityFactory;
+import com.biengual.core.swagger.SwaggerVoidReturn;
 import com.biengual.userapi.bookmark.application.BookmarkFacade;
 import com.biengual.userapi.bookmark.domain.BookmarkCommand;
 import com.biengual.userapi.bookmark.domain.BookmarkInfo;
-import com.biengual.userapi.core.response.ResponseEntityFactory;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
-import com.biengual.userapi.core.swagger.SwaggerVoidReturn;
 import com.biengual.userapi.bookmark.presentation.swagger.SwaggerBookmarkList;
 import com.biengual.userapi.bookmark.presentation.swagger.SwaggerBookmarkMyList;
 

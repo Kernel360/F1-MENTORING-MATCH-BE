@@ -1,7 +1,8 @@
 package com.biengual.userapi.category.domain;
 
 
-import static com.biengual.userapi.core.domain.entity.category.QCategoryEntity.*;
+
+import static com.biengual.core.domain.entity.category.QCategoryEntity.*;
 
 import java.util.List;
 

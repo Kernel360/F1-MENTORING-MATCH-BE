@@ -1,13 +1,15 @@
 package com.biengual.userapi.user.domain;
 
-import static com.biengual.userapi.core.domain.entity.user.QUserCategoryEntity.*;
+import static com.biengual.core.domain.entity.user.QUserCategoryEntity.*;
+
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 /**
  * User 비지니스 로직에 사용하는 QueryDsl Repository

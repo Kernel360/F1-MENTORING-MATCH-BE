@@ -1,6 +1,6 @@
 package com.biengual.userapi.content.presentation;
 
-import com.biengual.userapi.core.enums.ContentType;
+import com.biengual.core.enums.ContentType;
 
 public class ContentRequestDto {
 

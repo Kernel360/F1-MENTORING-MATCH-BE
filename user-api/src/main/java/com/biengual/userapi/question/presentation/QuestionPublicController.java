@@ -1,6 +1,6 @@
 package com.biengual.userapi.question.presentation;
 
-import static com.biengual.userapi.core.response.success.QuestionSuccessCode.*;
+import static com.biengual.core.response.success.QuestionSuccessCode.*;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.biengual.userapi.core.response.ResponseEntityFactory;
+import com.biengual.core.response.ResponseEntityFactory;
 import com.biengual.userapi.question.application.QuestionFacade;
 import com.biengual.userapi.question.domain.QuestionInfo;
 import com.biengual.userapi.question.presentation.swagger.SwaggerQuestionView;

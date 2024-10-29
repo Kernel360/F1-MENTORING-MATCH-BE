@@ -1,7 +1,5 @@
 package com.biengual.userapi.oauth2.info;
 
-import com.biengual.userapi.core.domain.entity.user.UserEntity;
-import com.biengual.userapi.core.enums.Role;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,6 +9,9 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+
+import com.biengual.core.domain.entity.user.UserEntity;
+import com.biengual.core.enums.Role;
 
 @Getter
 @Builder

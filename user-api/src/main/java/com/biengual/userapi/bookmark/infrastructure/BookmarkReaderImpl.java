@@ -1,10 +1,10 @@
 package com.biengual.userapi.bookmark.infrastructure;
 
-import com.biengual.userapi.core.annotation.DataProvider;
+import com.biengual.core.annotation.DataProvider;
+import com.biengual.core.domain.entity.bookmark.BookmarkEntity;
 import com.biengual.userapi.bookmark.domain.*;
 import com.biengual.userapi.bookmark.presentation.BookmarkDtoMapper;
 import com.biengual.userapi.content.domain.ContentCustomRepository;
-import com.biengual.userapi.core.domain.entity.bookmark.BookmarkEntity;
 
 import lombok.RequiredArgsConstructor;
 

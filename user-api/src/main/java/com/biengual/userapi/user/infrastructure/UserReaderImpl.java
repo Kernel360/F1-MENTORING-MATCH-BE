@@ -1,20 +1,21 @@
 package com.biengual.userapi.user.infrastructure;
 
-import com.biengual.userapi.core.annotation.DataProvider;
-import com.biengual.userapi.core.response.error.exception.CommonException;
-import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
-import com.biengual.userapi.user.domain.UserInfo;
-import com.biengual.userapi.user.domain.UserReader;
-import com.biengual.userapi.core.domain.entity.user.UserEntity;
-import com.biengual.userapi.user.presentation.UserDtoMapper;
-import com.biengual.userapi.user.domain.UserCategoryCustomRepository;
-import com.biengual.userapi.user.domain.UserCustomRepository;
-import com.biengual.userapi.user.domain.UserRepository;
-import lombok.RequiredArgsConstructor;
+import static com.biengual.core.response.error.code.UserErrorCode.*;
 
 import java.util.List;
 
-import static com.biengual.userapi.core.response.error.code.UserErrorCode.USER_NOT_FOUND;
+import com.biengual.core.annotation.DataProvider;
+import com.biengual.core.domain.entity.user.UserEntity;
+import com.biengual.core.response.error.exception.CommonException;
+import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
+import com.biengual.userapi.user.domain.UserCategoryCustomRepository;
+import com.biengual.userapi.user.domain.UserCustomRepository;
+import com.biengual.userapi.user.domain.UserInfo;
+import com.biengual.userapi.user.domain.UserReader;
+import com.biengual.userapi.user.domain.UserRepository;
+import com.biengual.userapi.user.presentation.UserDtoMapper;
+
+import lombok.RequiredArgsConstructor;
 
 @DataProvider
 @RequiredArgsConstructor
@@ -36,12 +37,17 @@ public class UserReaderImpl implements UserReader {
     public UserEntity findUser(OAuth2UserPrincipal principal) {
         UserEntity user = userRepository.findByEmail(principal.getEmail())
             .orElseGet(() -> {
-                UserEntity newUser = UserEntity.createByOAuthUser(principal);
+                UserEntity newUser = UserEntity.createByOAuthUser(
+                    principal.getUsername(),
+                    principal.getEmail(),
+                    principal.getProvider(),
+                    principal.getProviderId()
+                );
 
                 return userRepository.save(newUser);
             });
 
-        user.updateAfterOAuth2Login(principal);
+        user.updateAfterOAuth2Login(principal.getUsername(), principal.getProvider(), principal.getProviderId());
 
         return user;
     }

@@ -54,3 +54,4 @@ docker-compose.yml
 /src/main/resources/google_cloud_api_key.json
 /logs/*
 /user-api/logs/*
+/biengual-core/gradle/

@@ -1,13 +1,14 @@
 package com.biengual.userapi.user.domain;
 
-import com.biengual.userapi.core.domain.entity.category.CategoryEntity;
-import com.biengual.userapi.core.enums.Gender;
-import com.biengual.userapi.core.domain.entity.user.UserCategoryEntity;
 
 import lombok.Builder;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import com.biengual.core.domain.entity.category.CategoryEntity;
+import com.biengual.core.domain.entity.user.UserCategoryEntity;
+import com.biengual.core.enums.Gender;
 
 public class UserCommand {
 

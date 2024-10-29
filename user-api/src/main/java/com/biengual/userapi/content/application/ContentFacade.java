@@ -1,11 +1,12 @@
 package com.biengual.userapi.content.application;
 
-import com.biengual.userapi.core.annotation.Facade;
+import com.biengual.core.annotation.Facade;
+import com.biengual.core.util.PaginationInfo;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.content.domain.ContentService;
 import com.biengual.userapi.crawling.domain.CrawlingService;
-import com.biengual.userapi.core.util.PaginationInfo;
+
 import lombok.RequiredArgsConstructor;
 
 @Facade

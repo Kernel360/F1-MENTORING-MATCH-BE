@@ -1,8 +1,9 @@
 package com.biengual.userapi.content.domain;
 
-import static com.biengual.userapi.core.domain.entity.content.QContentEntity.*;
-import static com.biengual.userapi.core.domain.entity.scrap.QScrapEntity.*;
-import static com.biengual.userapi.core.response.error.code.ContentErrorCode.*;
+
+import static com.biengual.core.domain.entity.content.QContentEntity.*;
+import static com.biengual.core.domain.entity.scrap.QScrapEntity.*;
+import static com.biengual.core.response.error.code.ContentErrorCode.*;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -17,10 +18,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
-import com.biengual.userapi.core.domain.entity.content.QContentEntity;
-import com.biengual.userapi.core.enums.ContentStatus;
-import com.biengual.userapi.core.enums.ContentType;
-import com.biengual.userapi.core.response.error.exception.CommonException;
+import com.biengual.core.domain.entity.content.QContentEntity;
+import com.biengual.core.enums.ContentStatus;
+import com.biengual.core.enums.ContentType;
+import com.biengual.core.response.error.exception.CommonException;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Path;

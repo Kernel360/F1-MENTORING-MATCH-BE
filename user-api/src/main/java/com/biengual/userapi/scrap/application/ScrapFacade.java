@@ -1,6 +1,6 @@
 package com.biengual.userapi.scrap.application;
 
-import com.biengual.userapi.core.annotation.Facade;
+import com.biengual.core.annotation.Facade;
 import com.biengual.userapi.scrap.domain.ScrapCommand;
 import com.biengual.userapi.scrap.domain.ScrapInfo;
 import com.biengual.userapi.scrap.domain.ScrapService;

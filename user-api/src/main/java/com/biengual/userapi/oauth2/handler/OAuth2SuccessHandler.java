@@ -1,28 +1,30 @@
 package com.biengual.userapi.oauth2.handler;
 
-import com.biengual.userapi.core.annotation.LoginLogging;
-import com.biengual.userapi.token.service.TokenProvider;
-import com.biengual.userapi.core.response.error.exception.CommonException;
-import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
-import com.biengual.userapi.oauth2.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
-import com.biengual.userapi.token.service.RefreshTokenService;
-import com.biengual.userapi.user.domain.UserService;
-import com.biengual.userapi.core.domain.entity.user.UserEntity;
-import com.biengual.userapi.core.enums.UserStatus;
-import com.biengual.userapi.core.util.CookieUtil;
-import com.biengual.userapi.core.util.HttpServletResponseUtil;
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
 
-import java.io.IOException;
+import com.biengual.core.annotation.LoginLogging;
+import com.biengual.core.domain.entity.user.UserEntity;
+import com.biengual.core.enums.UserStatus;
+import com.biengual.core.response.error.exception.CommonException;
+import com.biengual.core.util.CookieUtil;
+import com.biengual.core.util.HttpServletResponseUtil;
+import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
+import com.biengual.userapi.oauth2.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
+import com.biengual.userapi.token.service.RefreshTokenService;
+import com.biengual.userapi.token.service.TokenProvider;
+import com.biengual.userapi.user.domain.UserService;
+
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component

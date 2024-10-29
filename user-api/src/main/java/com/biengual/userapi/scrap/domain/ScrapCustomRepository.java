@@ -1,12 +1,12 @@
 package com.biengual.userapi.scrap.domain;
 
-import static com.biengual.userapi.core.domain.entity.scrap.QScrapEntity.*;
+import static com.biengual.core.domain.entity.scrap.QScrapEntity.*;
 
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.biengual.userapi.core.domain.entity.scrap.ScrapEntity;
+import com.biengual.core.domain.entity.scrap.ScrapEntity;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;

@@ -4,32 +4,42 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.6'
 }
 
-group = 'com.biengual'
-version = '0.0.1-SNAPSHOT'
-
-java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
-	}
-}
-
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
-}
-
 repositories {
 	mavenCentral()
 }
 
-dependencies {
+springBoot {
+	mainClass.set("com.biengual.userapi.UserApiApplication")
 }
 
-tasks.named('bootJar') {
-	enabled = false
-}
+subprojects {
+	group = 'com.biengual'
+	version = '0.0.1-SNAPSHOT'
 
-tasks.named('jar') {
-	enabled = false
+	apply plugin: 'java'
+	apply plugin: 'java-library'
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
+
+	dependencies {
+	}
+
+	configurations {
+		compileOnly {
+			extendsFrom annotationProcessor
+		}
+	}
+
+	repositories {
+		mavenCentral()
+	}
+
+	tasks.named('bootJar') {
+		enabled = false
+	}
+
+	tasks.named('jar') {
+		enabled = false
+	}
+
 }

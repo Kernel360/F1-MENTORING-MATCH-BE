@@ -1,11 +1,11 @@
 package com.biengual.userapi.user.presentation;
 
-import static com.biengual.userapi.core.response.success.UserSuccessCode.*;
+import static com.biengual.core.response.success.UserSuccessCode.*;
 
-import com.biengual.userapi.core.response.ResponseEntityFactory;
+import com.biengual.core.response.ResponseEntityFactory;
+import com.biengual.core.swagger.SwaggerBooleanReturn;
+import com.biengual.core.swagger.SwaggerVoidReturn;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
-import com.biengual.userapi.core.swagger.SwaggerBooleanReturn;
-import com.biengual.userapi.core.swagger.SwaggerVoidReturn;
 import com.biengual.userapi.user.presentation.swagger.SwaggerUserMyPage;
 import com.biengual.userapi.user.presentation.swagger.SwaggerUserMyTime;
 import com.biengual.userapi.user.application.UserFacade;

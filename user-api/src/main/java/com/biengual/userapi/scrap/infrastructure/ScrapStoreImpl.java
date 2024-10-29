@@ -1,12 +1,12 @@
 package com.biengual.userapi.scrap.infrastructure;
 
-import static com.biengual.userapi.core.response.error.code.ContentErrorCode.*;
-import static com.biengual.userapi.core.response.error.code.ScrapErrorCode.*;
+import static com.biengual.core.response.error.code.ContentErrorCode.*;
+import static com.biengual.core.response.error.code.ScrapErrorCode.*;
 
+import com.biengual.core.annotation.DataProvider;
+import com.biengual.core.domain.entity.scrap.ScrapEntity;
+import com.biengual.core.response.error.exception.CommonException;
 import com.biengual.userapi.content.domain.ContentRepository;
-import com.biengual.userapi.core.annotation.DataProvider;
-import com.biengual.userapi.core.domain.entity.scrap.ScrapEntity;
-import com.biengual.userapi.core.response.error.exception.CommonException;
 import com.biengual.userapi.scrap.domain.ScrapCommand;
 import com.biengual.userapi.scrap.domain.ScrapCustomRepository;
 import com.biengual.userapi.scrap.domain.ScrapRepository;

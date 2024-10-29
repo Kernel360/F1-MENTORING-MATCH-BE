@@ -1,21 +1,21 @@
 package com.biengual.userapi.content.infrastructure;
 
-import static com.biengual.userapi.core.response.error.code.ContentErrorCode.*;
+import static com.biengual.core.response.error.code.ContentErrorCode.*;
 
 import java.util.List;
 
 import org.springframework.data.domain.Page;
 
-import com.biengual.userapi.core.annotation.DataProvider;
+import com.biengual.core.annotation.DataProvider;
+import com.biengual.core.domain.entity.content.ContentEntity;
+import com.biengual.core.enums.ContentStatus;
+import com.biengual.core.response.error.exception.CommonException;
+import com.biengual.core.util.PaginationInfo;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentCustomRepository;
-import com.biengual.userapi.core.domain.entity.content.ContentEntity;
 import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.content.domain.ContentReader;
 import com.biengual.userapi.content.domain.ContentRepository;
-import com.biengual.userapi.core.enums.ContentStatus;
-import com.biengual.userapi.core.response.error.exception.CommonException;
-import com.biengual.userapi.core.util.PaginationInfo;
 
 import lombok.RequiredArgsConstructor;
 

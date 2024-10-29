@@ -1,6 +1,6 @@
 package com.biengual.userapi.user.application;
 
-import com.biengual.userapi.core.annotation.Facade;
+import com.biengual.core.annotation.Facade;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
 import com.biengual.userapi.user.domain.UserCommand;
 import com.biengual.userapi.user.domain.UserInfo;

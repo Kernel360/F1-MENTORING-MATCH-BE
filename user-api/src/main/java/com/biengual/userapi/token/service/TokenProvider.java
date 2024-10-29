@@ -1,11 +1,14 @@
 package com.biengual.userapi.token.service;
 
-import com.biengual.userapi.core.jwt.JwtProperties;
-import com.biengual.userapi.core.response.error.exception.CommonException;
+import static com.biengual.core.response.error.code.TokenErrorCode.*;
+import static com.biengual.core.response.error.code.UserErrorCode.*;
+
+import com.biengual.core.domain.entity.user.UserEntity;
+import com.biengual.core.enums.UserStatus;
+import com.biengual.core.jwt.JwtProperties;
+import com.biengual.core.response.error.exception.CommonException;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
 import com.biengual.userapi.user.domain.UserReader;
-import com.biengual.userapi.core.domain.entity.user.UserEntity;
-import com.biengual.userapi.core.enums.UserStatus;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,10 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
 import java.util.Date;
 
-import static com.biengual.userapi.core.response.error.code.TokenErrorCode.TOKEN_EXPIRED;
-import static com.biengual.userapi.core.response.error.code.TokenErrorCode.TOKEN_INVALID;
-import static com.biengual.userapi.core.response.error.code.UserErrorCode.USER_FAIL_DEACTIVATE;
-import static com.biengual.userapi.core.response.error.code.UserErrorCode.USER_FAIL_SUSPEND;
 
 @Service
 @RequiredArgsConstructor
