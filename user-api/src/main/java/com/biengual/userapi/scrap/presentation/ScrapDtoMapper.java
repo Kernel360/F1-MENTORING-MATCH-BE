@@ -1,9 +1,7 @@
 package com.biengual.userapi.scrap.presentation;
 
-import org.mapstruct.InjectionStrategy;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
+import com.biengual.core.enums.ContentStatus;
+import org.mapstruct.*;
 
 import com.biengual.core.domain.entity.content.ContentEntity;
 import com.biengual.core.domain.entity.scrap.ScrapEntity;
@@ -47,8 +45,16 @@ public interface ScrapDtoMapper {
 	@Mapping(target = "contentType", source = "content.contentType")
 	@Mapping(target = "preScripts", source = "content.preScripts")
 	@Mapping(target = "thumbnailUrl", source = "content.thumbnailUrl")
+	@Mapping(target = "isActive", source = "content.contentStatus", qualifiedByName = "toIsActive")
 	ScrapInfo.View buildView(ScrapEntity scrap);
 
 	@Mapping(target = "content", source = "content")
 	ScrapEntity buildEntity(Long userId, ContentEntity content);
+
+	// Internal Method =================================================================================================
+
+	@Named("toIsActive")
+	default Boolean toIsActive(ContentStatus contentStatus) {
+		return contentStatus == ContentStatus.ACTIVATED;
+	}
 }

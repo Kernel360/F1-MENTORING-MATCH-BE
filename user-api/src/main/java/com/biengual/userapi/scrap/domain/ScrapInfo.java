@@ -17,7 +17,8 @@ public class ScrapInfo {
 		ContentType contentType,
 		LocalDateTime createdAt,
 		String preScripts,
-		String thumbnailUrl
+		String thumbnailUrl,
+		Boolean isActive
 	) {
 	}
 
