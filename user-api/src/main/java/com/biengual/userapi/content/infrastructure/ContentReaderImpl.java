@@ -9,6 +9,7 @@ import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.response.error.exception.CommonException;
 import com.biengual.core.util.PaginationInfo;
 import com.biengual.userapi.bookmark.domain.BookmarkCustomRepository;
+import com.biengual.userapi.bookmark.domain.BookmarkRepository;
 import com.biengual.userapi.content.domain.*;
 import com.biengual.userapi.content.presentation.ContentDtoMapper;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class ContentReaderImpl implements ContentReader {
 	private final ContentRepository contentRepository;
 	private final ContentCustomRepository contentCustomRepository;
 	private final ContentDocumentRepository contentDocumentRepository;
-	private final BookmarkCustomRepository bookmarkCustomRepository;
+	private final BookmarkRepository bookmarkRepository;
 
 	// 스크랩 많은 순 컨텐츠 프리뷰 조회
 	@Override
@@ -117,7 +118,8 @@ public class ContentReaderImpl implements ContentReader {
 		List<Script> scripts = contentDocument.getScripts();
 
 		if (command.userId() != null) {
-			List<BookmarkEntity> bookmarks = bookmarkCustomRepository.findBookmarks(command.userId());
+			List<BookmarkEntity> bookmarks =
+				bookmarkRepository.findAllByUserIdAndScriptIndex(command.userId(), command.contentId());
 			UserContentBookmarks userContentBookmarks = new UserContentBookmarks(bookmarks);
 			List<ContentInfo.UserScript> userScripts = userContentBookmarks.getUserScripts(scripts);
 
