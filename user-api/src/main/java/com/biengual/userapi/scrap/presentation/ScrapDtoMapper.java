@@ -38,6 +38,9 @@ public interface ScrapDtoMapper {
 	// Response <- Info
 	ScrapResponseDto.ViewListRes ofViewRes(ScrapInfo.ViewInfo allScraps);
 
+	@Mapping(target = "isActive", source = "contentStatus", qualifiedByName = "toIsActive")
+	ScrapResponseDto.View ofView(ScrapInfo.View view);
+
 	// Entity <-> Info, Info <-> Info
 	@Mapping(target = "scrapId", source = "id")
 	@Mapping(target = "contentId", source = "content.id")
@@ -45,7 +48,7 @@ public interface ScrapDtoMapper {
 	@Mapping(target = "contentType", source = "content.contentType")
 	@Mapping(target = "preScripts", source = "content.preScripts")
 	@Mapping(target = "thumbnailUrl", source = "content.thumbnailUrl")
-	@Mapping(target = "isActive", source = "content.contentStatus", qualifiedByName = "toIsActive")
+	@Mapping(target = "contentStatus", source = "content.contentStatus")
 	ScrapInfo.View buildView(ScrapEntity scrap);
 
 	@Mapping(target = "content", source = "content")
