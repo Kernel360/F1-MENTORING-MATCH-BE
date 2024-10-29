@@ -1,6 +1,6 @@
 package com.biengual.userapi.bookmark.domain;
 
-import com.biengual.userapi.core.entity.bookmark.BookmarkEntity;
+import com.biengual.userapi.core.domain.entity.bookmark.BookmarkEntity;
 
 public class BookmarkCommand {
 

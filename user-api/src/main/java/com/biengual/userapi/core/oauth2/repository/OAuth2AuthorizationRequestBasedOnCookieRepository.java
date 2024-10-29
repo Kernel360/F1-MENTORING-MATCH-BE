@@ -1,6 +1,6 @@
 package com.biengual.userapi.core.oauth2.repository;
 
-import com.biengual.userapi.core.common.util.CookieUtil;
+import com.biengual.userapi.core.util.CookieUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

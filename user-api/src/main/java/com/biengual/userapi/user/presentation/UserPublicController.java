@@ -1,9 +1,9 @@
 package com.biengual.userapi.user.presentation;
 
-import static com.biengual.userapi.core.message.response.UserResponseCode.*;
+import static com.biengual.userapi.core.response.success.UserSuccessCode.*;
 
-import com.biengual.userapi.core.message.ResponseEntityFactory;
-import com.biengual.userapi.core.oauth2.domain.info.OAuth2UserPrincipal;
+import com.biengual.userapi.core.response.ResponseEntityFactory;
+import com.biengual.userapi.core.domain.info.oauth2.OAuth2UserPrincipal;
 import com.biengual.userapi.core.swagger.SwaggerBooleanReturn;
 import com.biengual.userapi.core.swagger.SwaggerVoidReturn;
 import com.biengual.userapi.user.presentation.swagger.SwaggerUserMyPage;

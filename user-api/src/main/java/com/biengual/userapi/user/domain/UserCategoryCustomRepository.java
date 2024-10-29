@@ -1,6 +1,7 @@
 package com.biengual.userapi.user.domain;
 
-import com.biengual.userapi.core.entity.user.QUserCategoryEntity;
+import static com.biengual.userapi.core.domain.entity.user.QUserCategoryEntity.*;
+
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +20,6 @@ public class UserCategoryCustomRepository {
     private final JPAQueryFactory queryFactory;
     // user의 관심 Category 들을 조회하기 위한 쿼리
     public List<UserInfo.MyCategory> findAllMyCategories(Long userId) {
-        QUserCategoryEntity userCategoryEntity = QUserCategoryEntity.userCategoryEntity;
-
         return queryFactory.select(
                 Projections.constructor(
                     UserInfo.MyCategory.class,
@@ -37,8 +36,6 @@ public class UserCategoryCustomRepository {
 
     // user가 이미 관심 등록한 Category Id들을 조회하기 위한 쿼리
     public List<Long> findAllMyRegisteredCategoryId(Long userId) {
-        QUserCategoryEntity userCategoryEntity = QUserCategoryEntity.userCategoryEntity;
-
         return queryFactory.select(userCategoryEntity.category.id)
             .from(userCategoryEntity)
             .where(userCategoryEntity.userId.eq(userId))
@@ -47,8 +44,6 @@ public class UserCategoryCustomRepository {
 
     // user가 관심을 취소한 Category Id들을 삭제하기 위한 쿼리
     public void deleteAllByUserIdAndCategoryIdIn(Long userId, List<Long> categoryIds) {
-        QUserCategoryEntity userCategoryEntity = QUserCategoryEntity.userCategoryEntity;
-
         queryFactory.delete(userCategoryEntity)
             .where(userCategoryEntity.userId.eq(userId)
                 .and(userCategoryEntity.category.id.in(categoryIds)))

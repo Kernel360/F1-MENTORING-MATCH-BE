@@ -1,9 +1,9 @@
 package com.biengual.userapi.core.config;
 
-import com.biengual.userapi.core.message.error.exception.CommonException;
-import com.biengual.userapi.core.oauth2.TokenProvider;
-import com.biengual.userapi.core.common.util.CookieUtil;
-import com.biengual.userapi.core.common.util.HttpServletResponseUtil;
+import com.biengual.userapi.core.response.error.exception.CommonException;
+import com.biengual.userapi.core.jwt.TokenProvider;
+import com.biengual.userapi.core.util.CookieUtil;
+import com.biengual.userapi.core.util.HttpServletResponseUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;

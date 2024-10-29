@@ -2,7 +2,7 @@ package com.biengual.userapi.question.presentation;
 
 import java.util.List;
 
-import com.biengual.userapi.core.common.enums.QuestionType;
+import com.biengual.userapi.core.enums.QuestionType;
 
 import lombok.Builder;
 

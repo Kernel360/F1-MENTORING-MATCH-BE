@@ -1,7 +1,7 @@
 package com.biengual.userapi.core.aop;
 
-import com.biengual.userapi.core.message.ApiCustomResponse;
-import com.biengual.userapi.core.oauth2.domain.info.OAuth2UserPrincipal;
+import com.biengual.userapi.core.response.ApiCustomResponse;
+import com.biengual.userapi.core.domain.info.oauth2.OAuth2UserPrincipal;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import static com.biengual.userapi.core.message.status.UserServiceStatus.USER_LOGIN_SUCCESS;
+import static com.biengual.userapi.core.response.status.UserServiceStatus.USER_LOGIN_SUCCESS;
 
 /**
  * 로그 남기는 것을 AOP로 관리하기 위한 클래스

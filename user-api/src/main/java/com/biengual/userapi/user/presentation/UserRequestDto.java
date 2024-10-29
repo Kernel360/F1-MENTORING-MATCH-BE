@@ -3,7 +3,7 @@ package com.biengual.userapi.user.presentation;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.biengual.userapi.core.common.enums.Gender;
+import com.biengual.userapi.core.enums.Gender;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 

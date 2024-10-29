@@ -1,7 +1,7 @@
 package com.biengual.userapi.core.oauth2;
 
-import com.biengual.userapi.core.message.error.code.UserErrorCode;
-import com.biengual.userapi.core.common.util.HttpServletResponseUtil;
+import com.biengual.userapi.core.response.error.code.UserErrorCode;
+import com.biengual.userapi.core.util.HttpServletResponseUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

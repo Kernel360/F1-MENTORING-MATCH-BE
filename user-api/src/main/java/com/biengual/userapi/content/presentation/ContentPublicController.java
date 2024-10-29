@@ -10,8 +10,8 @@ import com.biengual.userapi.content.presentation.swagger.SwaggerContentReadingPr
 import com.biengual.userapi.content.presentation.swagger.SwaggerContentReadingView;
 import com.biengual.userapi.content.presentation.swagger.SwaggerContentScrapPreview;
 import com.biengual.userapi.content.presentation.swagger.SwaggerContentSearchPreview;
-import com.biengual.userapi.core.message.ResponseEntityFactory;
-import com.biengual.userapi.core.common.util.PaginationInfo;
+import com.biengual.userapi.core.response.ResponseEntityFactory;
+import com.biengual.userapi.core.util.PaginationInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -29,7 +29,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static com.biengual.userapi.core.constant.BadRequestMessageConstant.BLANK_CONTENT_KEYWORD_ERROR_MESSAGE;
-import static com.biengual.userapi.core.message.response.ContentResponseCode.CONTENT_VIEW_SUCCESS;
+import static com.biengual.userapi.core.response.success.ContentSuccessCode.CONTENT_VIEW_SUCCESS;
 
 @Validated
 @RestController

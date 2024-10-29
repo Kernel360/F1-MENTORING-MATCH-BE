@@ -1,9 +1,9 @@
 package com.biengual.userapi.core.config;
 
-import com.biengual.userapi.core.entity.content.script.BaseScript;
-import com.biengual.userapi.core.entity.content.script.CNNScript;
-import com.biengual.userapi.core.entity.content.script.Script;
-import com.biengual.userapi.core.entity.content.script.YoutubeScript;
+import com.biengual.userapi.core.domain.entity.content.document.script.BaseScript;
+import com.biengual.userapi.core.domain.entity.content.document.script.CNNScript;
+import com.biengual.userapi.core.domain.entity.content.document.script.Script;
+import com.biengual.userapi.core.domain.entity.content.document.script.YoutubeScript;
 import org.bson.Document;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;

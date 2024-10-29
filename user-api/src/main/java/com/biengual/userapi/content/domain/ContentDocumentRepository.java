@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 import java.util.Optional;
 
-import com.biengual.userapi.core.entity.content.ContentDocument;
+import com.biengual.userapi.core.domain.entity.content.document.ContentDocument;
 
 /**
  * ContentDocument의 Repository 계층의 인터페이스

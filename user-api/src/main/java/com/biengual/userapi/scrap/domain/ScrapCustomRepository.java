@@ -1,11 +1,12 @@
 package com.biengual.userapi.scrap.domain;
 
+import static com.biengual.userapi.core.domain.entity.scrap.QScrapEntity.*;
+
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.biengual.userapi.core.entity.scrap.QScrapEntity;
-import com.biengual.userapi.core.entity.scrap.ScrapEntity;
+import com.biengual.userapi.core.domain.entity.scrap.ScrapEntity;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -16,8 +17,6 @@ public class ScrapCustomRepository {
     private final JPAQueryFactory queryFactory;
 
     public List<ScrapEntity> findAllByUserId(Long userId) {
-        QScrapEntity scrapEntity = QScrapEntity.scrapEntity;
-
         return queryFactory.select(scrapEntity)
             .from(scrapEntity)
             .orderBy(scrapEntity.createdAt.desc())
@@ -26,8 +25,6 @@ public class ScrapCustomRepository {
     }
 
     public void deleteScrap(ScrapCommand.Delete command) {
-        QScrapEntity scrapEntity = QScrapEntity.scrapEntity;
-
         queryFactory.delete(scrapEntity)
             .where(scrapEntity.userId.eq(command.userId()))
             .where(scrapEntity.content.id.eq(command.contentId()))
@@ -36,8 +33,6 @@ public class ScrapCustomRepository {
     }
 
     public boolean existsScrap(Long userId, Long contentId) {
-        QScrapEntity scrapEntity = QScrapEntity.scrapEntity;
-
         return queryFactory.select(scrapEntity)
             .from(scrapEntity)
             .where(scrapEntity.userId.eq(userId))

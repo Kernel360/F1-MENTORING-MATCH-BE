@@ -1,6 +1,6 @@
 package com.biengual.userapi.user.presentation;
 
-import com.biengual.userapi.core.common.enums.Gender;
+import com.biengual.userapi.core.enums.Gender;
 import lombok.Builder;
 
 import java.time.LocalDate;

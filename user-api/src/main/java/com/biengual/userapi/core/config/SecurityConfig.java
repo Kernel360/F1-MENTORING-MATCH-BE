@@ -2,7 +2,7 @@ package com.biengual.userapi.core.config;
 
 import com.biengual.userapi.core.oauth2.OAuth2FailureHandler;
 import com.biengual.userapi.core.oauth2.OAuth2SuccessHandler;
-import com.biengual.userapi.core.oauth2.TokenProvider;
+import com.biengual.userapi.core.jwt.TokenProvider;
 import com.biengual.userapi.core.oauth2.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import com.biengual.userapi.core.oauth2.service.OAuth2UserCustomService;
 import lombok.RequiredArgsConstructor;

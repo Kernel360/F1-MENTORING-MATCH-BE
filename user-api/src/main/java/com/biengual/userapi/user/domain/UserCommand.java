@@ -1,8 +1,8 @@
 package com.biengual.userapi.user.domain;
 
-import com.biengual.userapi.core.entity.category.CategoryEntity;
-import com.biengual.userapi.core.common.enums.Gender;
-import com.biengual.userapi.core.entity.user.UserCategoryEntity;
+import com.biengual.userapi.core.domain.entity.category.CategoryEntity;
+import com.biengual.userapi.core.enums.Gender;
+import com.biengual.userapi.core.domain.entity.user.UserCategoryEntity;
 
 import lombok.Builder;
 

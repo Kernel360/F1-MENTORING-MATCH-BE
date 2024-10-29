@@ -1,15 +1,16 @@
 package com.biengual.userapi.core.oauth2;
 
 import com.biengual.userapi.core.annotation.LoginLogging;
-import com.biengual.userapi.core.message.error.exception.CommonException;
-import com.biengual.userapi.core.oauth2.domain.info.OAuth2UserPrincipal;
+import com.biengual.userapi.core.jwt.TokenProvider;
+import com.biengual.userapi.core.response.error.exception.CommonException;
+import com.biengual.userapi.core.domain.info.oauth2.OAuth2UserPrincipal;
 import com.biengual.userapi.core.oauth2.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
-import com.biengual.userapi.core.oauth2.service.RefreshTokenService;
+import com.biengual.userapi.core.jwt.service.RefreshTokenService;
 import com.biengual.userapi.user.domain.UserService;
-import com.biengual.userapi.core.entity.user.UserEntity;
-import com.biengual.userapi.core.common.enums.UserStatus;
-import com.biengual.userapi.core.common.util.CookieUtil;
-import com.biengual.userapi.core.common.util.HttpServletResponseUtil;
+import com.biengual.userapi.core.domain.entity.user.UserEntity;
+import com.biengual.userapi.core.enums.UserStatus;
+import com.biengual.userapi.core.util.CookieUtil;
+import com.biengual.userapi.core.util.HttpServletResponseUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

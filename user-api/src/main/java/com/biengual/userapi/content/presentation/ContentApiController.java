@@ -1,6 +1,6 @@
 package com.biengual.userapi.content.presentation;
 
-import static com.biengual.userapi.core.message.response.ContentResponseCode.*;
+import static com.biengual.userapi.core.response.success.ContentSuccessCode.*;
 
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.biengual.userapi.content.application.ContentFacade;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentInfo;
-import com.biengual.userapi.core.message.ResponseEntityFactory;
+import com.biengual.userapi.core.response.ResponseEntityFactory;
 import com.biengual.userapi.core.swagger.SwaggerVoidReturn;
 import com.biengual.userapi.content.presentation.swagger.SwaggerContentAdminView;
-import com.biengual.userapi.core.common.util.PaginationInfo;
+import com.biengual.userapi.core.util.PaginationInfo;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

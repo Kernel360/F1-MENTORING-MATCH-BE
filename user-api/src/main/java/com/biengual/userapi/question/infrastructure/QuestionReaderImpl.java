@@ -1,12 +1,12 @@
 package com.biengual.userapi.question.infrastructure;
 
 import com.biengual.userapi.core.annotation.DataProvider;
-import com.biengual.userapi.core.entity.content.ContentDocument;
+import com.biengual.userapi.core.domain.entity.content.document.ContentDocument;
 import com.biengual.userapi.content.domain.ContentDocumentRepository;
-import com.biengual.userapi.core.entity.content.ContentEntity;
+import com.biengual.userapi.core.domain.entity.content.entity.ContentEntity;
 import com.biengual.userapi.content.domain.ContentRepository;
-import com.biengual.userapi.core.message.error.exception.CommonException;
-import com.biengual.userapi.core.entity.question.QuestionDocument;
+import com.biengual.userapi.core.response.error.exception.CommonException;
+import com.biengual.userapi.core.domain.entity.question.document.QuestionDocument;
 import com.biengual.userapi.question.domain.QuestionInfo;
 import com.biengual.userapi.question.domain.QuestionReader;
 import com.biengual.userapi.question.domain.QuestionRepository;
@@ -16,8 +16,8 @@ import org.bson.types.ObjectId;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.biengual.userapi.core.message.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
-import static com.biengual.userapi.core.message.error.code.QuestionErrorCode.QUESTION_NOT_FOUND;
+import static com.biengual.userapi.core.response.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
+import static com.biengual.userapi.core.response.error.code.QuestionErrorCode.QUESTION_NOT_FOUND;
 
 @DataProvider
 @RequiredArgsConstructor

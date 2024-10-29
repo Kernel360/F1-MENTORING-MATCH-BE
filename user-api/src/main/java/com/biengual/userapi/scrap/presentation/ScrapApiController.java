@@ -1,6 +1,6 @@
 package com.biengual.userapi.scrap.presentation;
 
-import static com.biengual.userapi.core.message.response.ScrapResponseCode.*;
+import static com.biengual.userapi.core.response.success.ScrapSuccessCode.*;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.biengual.userapi.core.message.ResponseEntityFactory;
-import com.biengual.userapi.core.oauth2.domain.info.OAuth2UserPrincipal;
+import com.biengual.userapi.core.response.ResponseEntityFactory;
+import com.biengual.userapi.core.domain.info.oauth2.OAuth2UserPrincipal;
 import com.biengual.userapi.scrap.application.ScrapFacade;
 import com.biengual.userapi.scrap.domain.ScrapCommand;
 import com.biengual.userapi.scrap.domain.ScrapInfo;
