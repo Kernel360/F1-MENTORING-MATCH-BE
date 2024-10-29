@@ -1,4 +1,4 @@
-package com.biengual.userapi.core.domain.entity.question.document;
+package com.biengual.userapi.core.domain.entity.question;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 

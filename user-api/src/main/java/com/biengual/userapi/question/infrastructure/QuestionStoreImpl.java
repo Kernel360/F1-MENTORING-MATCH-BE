@@ -20,7 +20,7 @@ import com.biengual.userapi.content.domain.ContentRepository;
 import com.biengual.userapi.core.enums.ContentStatus;
 import com.biengual.userapi.core.response.error.exception.CommonException;
 import com.biengual.userapi.question.domain.QuestionCommand;
-import com.biengual.userapi.core.domain.entity.question.document.QuestionDocument;
+import com.biengual.userapi.core.domain.entity.question.QuestionDocument;
 import com.biengual.userapi.question.domain.QuestionRepository;
 import com.biengual.userapi.question.domain.QuestionStore;
 import com.biengual.userapi.core.enums.QuestionType;
