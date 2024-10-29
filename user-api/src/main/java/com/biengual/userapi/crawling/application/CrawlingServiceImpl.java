@@ -1,13 +1,13 @@
 package com.biengual.userapi.crawling.application;
 
-import static com.biengual.userapi.core.response.error.code.ContentErrorCode.*;
+import static com.biengual.core.response.error.code.ContentErrorCode.*;
 
 import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
 
+import com.biengual.core.enums.ContentType;
+import com.biengual.core.response.error.exception.CommonException;
 import com.biengual.userapi.content.domain.ContentCommand;
-import com.biengual.userapi.core.enums.ContentType;
-import com.biengual.userapi.core.response.error.exception.CommonException;
 import com.biengual.userapi.crawling.domain.CrawlingService;
 import com.biengual.userapi.crawling.domain.CrawlingStore;
 

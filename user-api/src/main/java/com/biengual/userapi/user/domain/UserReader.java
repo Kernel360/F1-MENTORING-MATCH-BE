@@ -1,6 +1,6 @@
 package com.biengual.userapi.user.domain;
 
-import com.biengual.userapi.core.domain.entity.user.UserEntity;
+import com.biengual.core.domain.entity.user.UserEntity;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
 
 /**

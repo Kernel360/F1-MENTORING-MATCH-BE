@@ -1,13 +1,13 @@
 package com.biengual.userapi.bookmark.domain;
 
 
-import static com.biengual.userapi.core.domain.entity.bookmark.QBookmarkEntity.*;
+import static com.biengual.core.domain.entity.bookmark.QBookmarkEntity.*;
 
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.biengual.userapi.core.domain.entity.bookmark.BookmarkEntity;
+import com.biengual.core.domain.entity.bookmark.BookmarkEntity;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;

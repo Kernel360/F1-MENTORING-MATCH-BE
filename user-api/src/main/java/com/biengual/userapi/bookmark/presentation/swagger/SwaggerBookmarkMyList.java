@@ -1,7 +1,7 @@
 package com.biengual.userapi.bookmark.presentation.swagger;
 
+import com.biengual.core.swagger.SwaggerReturnInterface;
 import com.biengual.userapi.bookmark.presentation.BookmarkResponseDto;
-import com.biengual.userapi.core.swagger.SwaggerReturnInterface;
 
 public class SwaggerBookmarkMyList
 	extends SwaggerReturnInterface<BookmarkResponseDto.MyListRes> {

@@ -2,9 +2,9 @@ package com.biengual.userapi.content.domain;
 
 import java.util.List;
 
-import com.biengual.userapi.core.enums.ContentStatus;
-import com.biengual.userapi.core.enums.ContentType;
-import com.biengual.userapi.core.domain.document.content.script.Script;
+import com.biengual.core.domain.document.content.script.Script;
+import com.biengual.core.enums.ContentStatus;
+import com.biengual.core.enums.ContentType;
 
 import lombok.Builder;
 

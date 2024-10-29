@@ -3,7 +3,7 @@ package com.biengual.userapi.scrap.presentation;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.biengual.userapi.core.enums.ContentType;
+import com.biengual.core.enums.ContentType;
 
 import lombok.Builder;
 

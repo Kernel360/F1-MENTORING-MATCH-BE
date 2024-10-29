@@ -5,6 +5,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.biengual.core.domain.document.content.script.Script;
+import com.biengual.core.domain.entity.content.ContentEntity;
+import com.biengual.core.util.PaginationInfo;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentDocumentReader;
 import com.biengual.userapi.content.domain.ContentInfo;
@@ -12,9 +15,6 @@ import com.biengual.userapi.content.domain.ContentReader;
 import com.biengual.userapi.content.domain.ContentService;
 import com.biengual.userapi.content.domain.ContentStore;
 import com.biengual.userapi.content.presentation.ContentDtoMapper;
-import com.biengual.userapi.core.util.PaginationInfo;
-import com.biengual.userapi.core.domain.entity.content.ContentEntity;
-import com.biengual.userapi.core.domain.document.content.script.Script;
 
 import lombok.RequiredArgsConstructor;
 

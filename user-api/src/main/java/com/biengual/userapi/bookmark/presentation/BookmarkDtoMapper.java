@@ -1,9 +1,9 @@
 package com.biengual.userapi.bookmark.presentation;
 
+import com.biengual.core.domain.entity.bookmark.BookmarkEntity;
+import com.biengual.core.enums.ContentType;
 import com.biengual.userapi.bookmark.domain.BookmarkCommand;
-import com.biengual.userapi.core.domain.entity.bookmark.BookmarkEntity;
 import com.biengual.userapi.bookmark.domain.BookmarkInfo;
-import com.biengual.userapi.core.enums.ContentType;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;

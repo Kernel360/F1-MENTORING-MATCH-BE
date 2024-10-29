@@ -1,12 +1,12 @@
 package com.biengual.userapi.content.domain;
 
-import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.repository.MongoRepository;
-
 import java.util.List;
 import java.util.Optional;
 
-import com.biengual.userapi.core.domain.document.content.ContentDocument;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+import com.biengual.core.domain.document.content.ContentDocument;
 
 /**
  * ContentDocument의 Repository 계층의 인터페이스

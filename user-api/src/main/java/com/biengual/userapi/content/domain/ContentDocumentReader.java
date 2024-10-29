@@ -1,8 +1,8 @@
 package com.biengual.userapi.content.domain;
 
-import com.biengual.userapi.core.domain.document.content.script.Script;
-
 import java.util.List;
+
+import com.biengual.core.domain.document.content.script.Script;
 
 /**
  * Content 도메인의 DataProvider 계층의 인터페이스

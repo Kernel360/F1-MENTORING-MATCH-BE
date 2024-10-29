@@ -1,6 +1,6 @@
 package com.biengual.userapi.bookmark.application;
 
-import com.biengual.userapi.core.annotation.Facade;
+import com.biengual.core.annotation.Facade;
 import com.biengual.userapi.bookmark.domain.BookmarkCommand;
 import com.biengual.userapi.bookmark.domain.BookmarkInfo;
 import com.biengual.userapi.bookmark.domain.BookmarkService;

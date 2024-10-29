@@ -1,17 +1,22 @@
 package com.biengual.userapi.content.presentation;
 
-import com.biengual.userapi.content.domain.ContentCommand;
-import com.biengual.userapi.core.domain.entity.content.ContentEntity;
-import com.biengual.userapi.content.domain.ContentInfo;
-import com.biengual.userapi.core.enums.ContentType;
-import com.biengual.userapi.core.domain.document.content.script.Script;
-import com.biengual.userapi.core.util.PaginationInfo;
-import org.mapstruct.*;
+import java.util.List;
+
+import org.mapstruct.InjectionStrategy;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+import org.mapstruct.ReportingPolicy;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import java.util.List;
+import com.biengual.core.domain.document.content.script.Script;
+import com.biengual.core.domain.entity.content.ContentEntity;
+import com.biengual.core.enums.ContentType;
+import com.biengual.core.util.PaginationInfo;
+import com.biengual.userapi.content.domain.ContentCommand;
+import com.biengual.userapi.content.domain.ContentInfo;
 
 /**
  * do~ : Command <- Request

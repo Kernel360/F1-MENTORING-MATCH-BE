@@ -1,10 +1,11 @@
 package com.biengual.userapi.bookmark.domain;
 
-import com.biengual.userapi.core.enums.ContentType;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import com.biengual.core.enums.ContentType;
 
 public class BookmarkInfo {
 

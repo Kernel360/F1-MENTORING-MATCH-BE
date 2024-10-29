@@ -1,15 +1,16 @@
 package com.biengual.userapi.user.presentation;
 
+import static com.biengual.core.constant.BadRequestMessageConstant.*;
+import static com.biengual.core.constant.RestrictionConstant.*;
+
 import java.time.LocalDate;
 import java.util.List;
 
-import com.biengual.userapi.core.enums.Gender;
+import com.biengual.core.enums.Gender;
+
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-import static com.biengual.userapi.core.constant.BadRequestMessageConstant.MAX_CATEGORY_SELECTION_ERROR_MESSAGE;
-import static com.biengual.userapi.core.constant.BadRequestMessageConstant.NULL_CATEGORY_LIST_ERROR_MESSAGE;
-import static com.biengual.userapi.core.constant.RestrictionConstant.MAX_CATEGORY_SELECTION_LIMIT;
 
 public class UserRequestDto {
 

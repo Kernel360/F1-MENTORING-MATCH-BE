@@ -1,8 +1,8 @@
 package com.biengual.userapi.crawling.presentation;
 
-import com.biengual.userapi.core.domain.document.content.script.Script;
-
 import java.util.List;
+
+import com.biengual.core.domain.document.content.script.Script;
 
 public class CrawlingResponseDto {
 

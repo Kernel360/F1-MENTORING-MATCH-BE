@@ -1,6 +1,6 @@
 package com.biengual.userapi.crawling.infrastructure;
 
-import static com.biengual.userapi.core.response.error.code.CrawlingErrorCode.*;
+import static com.biengual.core.response.error.code.CrawlingErrorCode.*;
 
 import java.io.IOException;
 import java.time.Duration;
@@ -29,13 +29,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.biengual.core.domain.document.content.script.CNNScript;
+import com.biengual.core.domain.document.content.script.Script;
+import com.biengual.core.domain.document.content.script.YoutubeScript;
+import com.biengual.core.enums.ContentType;
+import com.biengual.core.response.error.exception.CommonException;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentCustomRepository;
-import com.biengual.userapi.core.enums.ContentType;
-import com.biengual.userapi.core.domain.document.content.script.CNNScript;
-import com.biengual.userapi.core.domain.document.content.script.Script;
-import com.biengual.userapi.core.domain.document.content.script.YoutubeScript;
-import com.biengual.userapi.core.response.error.exception.CommonException;
 import com.biengual.userapi.crawling.application.TranslateService;
 import com.biengual.userapi.crawling.domain.CrawlingStore;
 import com.biengual.userapi.crawling.presentation.CrawlingResponseDto;
