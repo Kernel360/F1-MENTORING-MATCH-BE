@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.biengual.userapi.core.response.ResponseEntityFactory;
-import com.biengual.userapi.core.domain.info.oauth2.OAuth2UserPrincipal;
+import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
 import com.biengual.userapi.scrap.application.ScrapFacade;
 import com.biengual.userapi.scrap.domain.ScrapCommand;
 import com.biengual.userapi.scrap.domain.ScrapInfo;

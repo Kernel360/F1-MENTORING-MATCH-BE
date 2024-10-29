@@ -5,8 +5,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
-import com.biengual.userapi.core.domain.entity.content.entity.ContentEntity;
-import com.biengual.userapi.core.domain.info.oauth2.OAuth2UserPrincipal;
+import com.biengual.userapi.core.domain.entity.content.ContentEntity;
+import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
 import com.biengual.userapi.scrap.domain.ScrapCommand;
 import com.biengual.userapi.core.domain.entity.scrap.ScrapEntity;
 import com.biengual.userapi.scrap.domain.ScrapInfo;

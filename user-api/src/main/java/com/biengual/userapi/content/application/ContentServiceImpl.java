@@ -13,8 +13,8 @@ import com.biengual.userapi.content.domain.ContentService;
 import com.biengual.userapi.content.domain.ContentStore;
 import com.biengual.userapi.content.presentation.ContentDtoMapper;
 import com.biengual.userapi.core.util.PaginationInfo;
-import com.biengual.userapi.core.domain.entity.content.entity.ContentEntity;
-import com.biengual.userapi.core.domain.entity.content.document.script.Script;
+import com.biengual.userapi.core.domain.entity.content.ContentEntity;
+import com.biengual.userapi.core.domain.document.content.script.Script;
 
 import lombok.RequiredArgsConstructor;
 

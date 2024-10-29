@@ -13,9 +13,9 @@ import java.util.Set;
 import org.bson.types.ObjectId;
 
 import com.biengual.userapi.core.annotation.DataProvider;
-import com.biengual.userapi.core.domain.entity.content.document.ContentDocument;
+import com.biengual.userapi.core.domain.document.content.ContentDocument;
 import com.biengual.userapi.content.domain.ContentDocumentRepository;
-import com.biengual.userapi.core.domain.entity.content.entity.ContentEntity;
+import com.biengual.userapi.core.domain.entity.content.ContentEntity;
 import com.biengual.userapi.content.domain.ContentRepository;
 import com.biengual.userapi.core.enums.ContentStatus;
 import com.biengual.userapi.core.response.error.exception.CommonException;

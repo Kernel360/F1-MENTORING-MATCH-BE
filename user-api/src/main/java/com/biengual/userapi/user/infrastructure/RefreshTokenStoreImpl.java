@@ -1,7 +1,7 @@
 package com.biengual.userapi.user.infrastructure;
 
 import com.biengual.userapi.core.annotation.DataProvider;
-import com.biengual.userapi.core.jwt.repository.RefreshTokenRepository;
+import com.biengual.userapi.token.repository.RefreshTokenRepository;
 import com.biengual.userapi.user.domain.RefreshTokenStore;
 import lombok.RequiredArgsConstructor;
 

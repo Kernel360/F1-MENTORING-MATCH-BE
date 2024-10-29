@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.biengual.userapi.core.enums.ContentStatus;
 import com.biengual.userapi.core.enums.ContentType;
-import com.biengual.userapi.core.domain.entity.content.document.script.Script;
+import com.biengual.userapi.core.domain.document.content.script.Script;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.Builder;

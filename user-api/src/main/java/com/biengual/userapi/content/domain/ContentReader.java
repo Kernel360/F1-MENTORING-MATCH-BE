@@ -1,7 +1,7 @@
 package com.biengual.userapi.content.domain;
 
 import com.biengual.userapi.core.util.PaginationInfo;
-import com.biengual.userapi.core.domain.entity.content.entity.ContentEntity;
+import com.biengual.userapi.core.domain.entity.content.ContentEntity;
 
 import java.util.List;
 

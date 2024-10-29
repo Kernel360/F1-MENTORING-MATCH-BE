@@ -3,7 +3,7 @@ package com.biengual.userapi.core.domain.entity.question;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.biengual.userapi.core.enums.QuestionType;
-import com.biengual.userapi.core.domain.entity.MongoBaseDocument;
+import com.biengual.userapi.core.domain.document.MongoBaseDocument;
 
 import lombok.AccessLevel;
 import lombok.Builder;

@@ -1,7 +1,7 @@
 package com.biengual.userapi.core.aop;
 
 import com.biengual.userapi.core.response.ApiCustomResponse;
-import com.biengual.userapi.core.domain.info.oauth2.OAuth2UserPrincipal;
+import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;

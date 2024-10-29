@@ -1,7 +1,7 @@
 package com.biengual.userapi.core.domain.entity.scrap;
 
 import com.biengual.userapi.core.domain.entity.BaseEntity;
-import com.biengual.userapi.core.domain.entity.content.entity.ContentEntity;
+import com.biengual.userapi.core.domain.entity.content.ContentEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;

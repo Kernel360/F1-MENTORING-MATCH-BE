@@ -1,11 +1,11 @@
 package com.biengual.userapi.content.infrastructure;
 
 import com.biengual.userapi.core.annotation.DataProvider;
-import com.biengual.userapi.core.domain.entity.content.document.ContentDocument;
+import com.biengual.userapi.core.domain.document.content.ContentDocument;
 import com.biengual.userapi.content.domain.ContentDocumentReader;
 import com.biengual.userapi.content.domain.ContentDocumentRepository;
 import com.biengual.userapi.core.response.error.exception.CommonException;
-import com.biengual.userapi.core.domain.entity.content.document.script.Script;
+import com.biengual.userapi.core.domain.document.content.script.Script;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 

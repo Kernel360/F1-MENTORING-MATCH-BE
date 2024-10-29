@@ -1,6 +1,6 @@
 package com.biengual.userapi.content.domain;
 
-import static com.biengual.userapi.core.domain.entity.content.entity.QContentEntity.*;
+import static com.biengual.userapi.core.domain.entity.content.QContentEntity.*;
 import static com.biengual.userapi.core.domain.entity.scrap.QScrapEntity.*;
 import static com.biengual.userapi.core.response.error.code.ContentErrorCode.*;
 
@@ -17,7 +17,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
-import com.biengual.userapi.core.domain.entity.content.entity.QContentEntity;
+import com.biengual.userapi.core.domain.entity.content.QContentEntity;
 import com.biengual.userapi.core.enums.ContentStatus;
 import com.biengual.userapi.core.enums.ContentType;
 import com.biengual.userapi.core.response.error.exception.CommonException;

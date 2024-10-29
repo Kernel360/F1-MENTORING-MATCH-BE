@@ -3,7 +3,7 @@ package com.biengual.userapi.core.domain.entity.user;
 import com.biengual.userapi.core.domain.entity.BaseEntity;
 import com.biengual.userapi.core.domain.entity.bookmark.BookmarkEntity;
 import com.biengual.userapi.core.domain.entity.scrap.ScrapEntity;
-import com.biengual.userapi.core.domain.info.oauth2.OAuth2UserPrincipal;
+import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
 import com.biengual.userapi.core.enums.Gender;
 import com.biengual.userapi.core.enums.Role;
 import com.biengual.userapi.core.enums.UserStatus;

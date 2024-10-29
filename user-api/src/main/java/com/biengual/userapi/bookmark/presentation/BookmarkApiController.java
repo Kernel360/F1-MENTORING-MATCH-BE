@@ -17,7 +17,7 @@ import com.biengual.userapi.bookmark.application.BookmarkFacade;
 import com.biengual.userapi.bookmark.domain.BookmarkCommand;
 import com.biengual.userapi.bookmark.domain.BookmarkInfo;
 import com.biengual.userapi.core.response.ResponseEntityFactory;
-import com.biengual.userapi.core.domain.info.oauth2.OAuth2UserPrincipal;
+import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
 import com.biengual.userapi.core.swagger.SwaggerVoidReturn;
 import com.biengual.userapi.bookmark.presentation.swagger.SwaggerBookmarkList;
 import com.biengual.userapi.bookmark.presentation.swagger.SwaggerBookmarkMyList;

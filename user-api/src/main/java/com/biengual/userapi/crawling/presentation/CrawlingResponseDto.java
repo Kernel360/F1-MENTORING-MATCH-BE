@@ -1,6 +1,6 @@
 package com.biengual.userapi.crawling.presentation;
 
-import com.biengual.userapi.core.domain.entity.content.document.script.Script;
+import com.biengual.userapi.core.domain.document.content.script.Script;
 
 import java.util.List;
 

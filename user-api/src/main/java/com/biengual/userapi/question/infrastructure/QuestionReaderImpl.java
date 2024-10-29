@@ -1,9 +1,9 @@
 package com.biengual.userapi.question.infrastructure;
 
 import com.biengual.userapi.core.annotation.DataProvider;
-import com.biengual.userapi.core.domain.entity.content.document.ContentDocument;
+import com.biengual.userapi.core.domain.document.content.ContentDocument;
 import com.biengual.userapi.content.domain.ContentDocumentRepository;
-import com.biengual.userapi.core.domain.entity.content.entity.ContentEntity;
+import com.biengual.userapi.core.domain.entity.content.ContentEntity;
 import com.biengual.userapi.content.domain.ContentRepository;
 import com.biengual.userapi.core.response.error.exception.CommonException;
 import com.biengual.userapi.core.domain.entity.question.QuestionDocument;

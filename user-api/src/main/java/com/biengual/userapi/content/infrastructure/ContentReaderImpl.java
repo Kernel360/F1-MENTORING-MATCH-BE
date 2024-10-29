@@ -9,7 +9,7 @@ import org.springframework.data.domain.Page;
 import com.biengual.userapi.core.annotation.DataProvider;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentCustomRepository;
-import com.biengual.userapi.core.domain.entity.content.entity.ContentEntity;
+import com.biengual.userapi.core.domain.entity.content.ContentEntity;
 import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.content.domain.ContentReader;
 import com.biengual.userapi.content.domain.ContentRepository;
