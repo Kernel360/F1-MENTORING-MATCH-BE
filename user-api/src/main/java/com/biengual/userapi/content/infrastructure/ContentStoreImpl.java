@@ -13,6 +13,7 @@ import static com.biengual.userapi.message.error.code.ContentErrorCode.CONTENT_N
 @DataProvider
 @RequiredArgsConstructor
 public class ContentStoreImpl implements ContentStore {
+	private final ContentCustomRepository contentCustomRepository;
 	private final ContentRepository contentRepository;
 	private final ContentDocumentRepository contentDocumentRepository;
 	private final CategoryRepository categoryRepository;
@@ -38,7 +39,12 @@ public class ContentStoreImpl implements ContentStore {
 		contentRepository.save(content);
 	}
 
-	// Internal Methods=================================================================================================
+	@Override
+	public void increaseHits(Long contentId) {
+		contentCustomRepository.increaseHitsByContentId(contentId);
+	}
+
+    // Internal Methods=================================================================================================
 
 	private CategoryEntity getCategoryEntity(ContentCommand.Create command) {
 		if (categoryRepository.existsByName(command.category())) {
