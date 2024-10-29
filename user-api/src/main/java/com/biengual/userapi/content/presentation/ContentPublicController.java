@@ -1,30 +1,13 @@
 package com.biengual.userapi.content.presentation;
 
-import static com.biengual.core.constant.BadRequestMessageConstant.*;
-import static com.biengual.core.response.success.ContentSuccessCode.*;
-
-import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.biengual.core.response.ResponseEntityFactory;
 import com.biengual.core.util.PaginationInfo;
 import com.biengual.userapi.content.application.ContentFacade;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentInfo;
-import com.biengual.userapi.content.presentation.swagger.SwaggerContentDetail;
-import com.biengual.userapi.content.presentation.swagger.SwaggerContentListeningPreview;
-import com.biengual.userapi.content.presentation.swagger.SwaggerContentListeningView;
-import com.biengual.userapi.content.presentation.swagger.SwaggerContentReadingPreview;
-import com.biengual.userapi.content.presentation.swagger.SwaggerContentReadingView;
-import com.biengual.userapi.content.presentation.swagger.SwaggerContentScrapPreview;
-import com.biengual.userapi.content.presentation.swagger.SwaggerContentSearchPreview;
-
+import com.biengual.userapi.content.domain.ContentService;
+import com.biengual.userapi.content.presentation.swagger.*;
+import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -36,6 +19,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import static com.biengual.core.constant.BadRequestMessageConstant.BLANK_CONTENT_KEYWORD_ERROR_MESSAGE;
+import static com.biengual.core.response.success.ContentSuccessCode.CONTENT_VIEW_SUCCESS;
 
 
 @Validated
@@ -47,6 +38,7 @@ public class ContentPublicController {
 
 	private final ContentDtoMapper contentDtoMapper;
 	private final ContentFacade contentFacade;
+	private final ContentService contentService;
 
 	@GetMapping("/preview/scrap-count")
 	@Operation(summary = "스크랩을 많이 한 컨텐츠 조회", description = "스크랩 수가 많은 순으로 정렬된 컨텐츠 목록을 조회합니다.")
@@ -218,9 +210,13 @@ public class ContentPublicController {
 		@ApiResponse(responseCode = "500", description = "서버 에러", content = @Content)
 	})
 	public ResponseEntity<Object> getDetailContent(
-		@PathVariable Long contentId
-	) {
-		ContentInfo.Detail info = contentFacade.getDetailContent(contentId);
+		@PathVariable Long contentId,
+		@AuthenticationPrincipal OAuth2UserPrincipal principal
+		) {
+		// TODO: 로그인 유무에 따라 다른 DTO 응답을 보여준다고 하면,
+		//  하나의 DTO로 관리하는 것이 좋은지 분리하는 것이 좋은지? 아니면 권한 기준으로 컨트롤러 분리가 가능하다면 분리?
+		ContentCommand.GetDetail command = contentDtoMapper.doGetDetail(contentId, principal);
+		ContentInfo.Detail info = contentService.getScriptsOfContent(command);
 		ContentResponseDto.DetailRes response = contentDtoMapper.ofDetailRes(info);
 
 		return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);

@@ -1,39 +1,28 @@
 package com.biengual.userapi.content.domain;
 
-
-import static com.biengual.core.domain.entity.content.QContentEntity.*;
-import static com.biengual.core.domain.entity.scrap.QScrapEntity.*;
-import static com.biengual.core.response.error.code.ContentErrorCode.*;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-
+import com.biengual.core.domain.entity.content.QContentEntity;
+import com.biengual.core.enums.ContentStatus;
+import com.biengual.core.enums.ContentType;
+import com.biengual.core.response.error.exception.CommonException;
+import com.querydsl.core.types.*;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.PathBuilder;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
-import com.biengual.core.domain.entity.content.QContentEntity;
-import com.biengual.core.enums.ContentStatus;
-import com.biengual.core.enums.ContentType;
-import com.biengual.core.response.error.exception.CommonException;
-import com.querydsl.core.types.Order;
-import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Path;
-import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.PathBuilder;
-import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.lang.reflect.Field;
+import java.util.*;
 
-import lombok.RequiredArgsConstructor;
+import static com.biengual.core.domain.entity.content.QContentEntity.contentEntity;
+import static com.biengual.core.domain.entity.scrap.QScrapEntity.scrapEntity;
+import static com.biengual.core.response.error.code.ContentErrorCode.CONTENT_SORT_COL_NOT_FOUND;
 
 @Repository
 @RequiredArgsConstructor
@@ -71,6 +60,14 @@ public class ContentCustomRepository {
             .where(contentEntity.url.eq(url))
             .fetchFirst() != null;
     }
+
+	// 상세 조회에 따른 조회수 + 1 을 위하 쿼리
+	public void increaseHitsByContentId(Long contentId) {
+		queryFactory.update(contentEntity)
+			.set(contentEntity.hits, contentEntity.hits.add(1))
+			.where(contentEntity.id.eq(contentId))
+			.execute();
+	}
 
     // 스크랩을 많이 한 컨텐츠를 조회하기 위한 쿼리
     public List<ContentInfo.PreviewContent> findContentsByScrapCount(Integer size) {

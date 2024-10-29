@@ -1,29 +1,33 @@
 package com.biengual.userapi.content.infrastructure;
 
-import static com.biengual.core.response.error.code.ContentErrorCode.*;
-
-import java.util.List;
-
-import org.springframework.data.domain.Page;
-
 import com.biengual.core.annotation.DataProvider;
+import com.biengual.core.domain.document.content.ContentDocument;
+import com.biengual.core.domain.document.content.script.Script;
+import com.biengual.core.domain.entity.bookmark.BookmarkEntity;
 import com.biengual.core.domain.entity.content.ContentEntity;
 import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.response.error.exception.CommonException;
 import com.biengual.core.util.PaginationInfo;
-import com.biengual.userapi.content.domain.ContentCommand;
-import com.biengual.userapi.content.domain.ContentCustomRepository;
-import com.biengual.userapi.content.domain.ContentInfo;
-import com.biengual.userapi.content.domain.ContentReader;
-import com.biengual.userapi.content.domain.ContentRepository;
-
+import com.biengual.userapi.bookmark.domain.BookmarkCustomRepository;
+import com.biengual.userapi.content.domain.*;
+import com.biengual.userapi.content.presentation.ContentDtoMapper;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
+import org.springframework.data.domain.Page;
+
+import java.util.List;
+
+import static com.biengual.core.response.error.code.ContentErrorCode.CONTENT_IS_DEACTIVATED;
+import static com.biengual.core.response.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
 
 @DataProvider
 @RequiredArgsConstructor
 public class ContentReaderImpl implements ContentReader {
+	private final ContentDtoMapper contentDtoMapper;
 	private final ContentRepository contentRepository;
 	private final ContentCustomRepository contentCustomRepository;
+	private final ContentDocumentRepository contentDocumentRepository;
+	private final BookmarkCustomRepository bookmarkCustomRepository;
 
 	// 스크랩 많은 순 컨텐츠 프리뷰 조회
 	@Override
@@ -76,19 +80,6 @@ public class ContentReaderImpl implements ContentReader {
 		);
 	}
 
-	// script를 제외한 컨텐츠 디테일 조회
-	@Override
-	public ContentEntity findActiveContent(Long contentId) {
-		ContentEntity content = contentRepository.findById(contentId)
-			.orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
-
-		if (!content.getContentStatus().equals(ContentStatus.ACTIVATED)) {
-			throw new CommonException(CONTENT_IS_DEACTIVATED);
-		}
-
-		return content;
-	}
-
 	// 어드민 페이지 리딩 컨텐츠 조회 - DEACTIVATED 포함
 	@Override
 	public PaginationInfo<ContentInfo.Admin> findReadingAdmin(ContentCommand.GetReadingView command) {
@@ -106,5 +97,37 @@ public class ContentReaderImpl implements ContentReader {
 		);
 		return PaginationInfo.from(page);
 
+	}
+
+	// TODO: 로직 개선해볼 것
+	// 로그인 여부에 따른 컨텐츠 디테일 조회
+	@Override
+	public ContentInfo.Detail findActiveContentWithScripts(ContentCommand.GetDetail command) {
+		ContentEntity content = contentRepository.findById(command.contentId())
+			.orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
+
+		if (!content.getContentStatus().equals(ContentStatus.ACTIVATED)) {
+			throw new CommonException(CONTENT_IS_DEACTIVATED);
+		}
+
+		ContentDocument contentDocument =
+			contentDocumentRepository.findContentDocumentById(new ObjectId(content.getMongoContentId()))
+				.orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
+
+		List<Script> scripts = contentDocument.getScripts();
+
+		if (command.userId() != null) {
+			List<BookmarkEntity> bookmarks = bookmarkCustomRepository.findBookmarks(command.userId());
+			UserContentBookmarks userContentBookmarks = new UserContentBookmarks(bookmarks);
+			List<ContentInfo.UserScript> userScripts = userContentBookmarks.getUserScripts(scripts);
+
+			return contentDtoMapper.buildDetail(content, userScripts);
+		}
+
+		List<ContentInfo.UserScript> guestScripts = scripts.stream()
+			.map(ContentInfo.UserScript::of)
+			.toList();
+
+		return contentDtoMapper.buildDetail(content, guestScripts);
 	}
 }

@@ -1,30 +1,16 @@
 package com.biengual.userapi.content.application;
 
-import java.util.List;
-
+import com.biengual.core.util.PaginationInfo;
+import com.biengual.userapi.content.domain.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.biengual.core.domain.document.content.script.Script;
-import com.biengual.core.domain.entity.content.ContentEntity;
-import com.biengual.core.util.PaginationInfo;
-import com.biengual.userapi.content.domain.ContentCommand;
-import com.biengual.userapi.content.domain.ContentDocumentReader;
-import com.biengual.userapi.content.domain.ContentInfo;
-import com.biengual.userapi.content.domain.ContentReader;
-import com.biengual.userapi.content.domain.ContentService;
-import com.biengual.userapi.content.domain.ContentStore;
-import com.biengual.userapi.content.presentation.ContentDtoMapper;
-
-import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class ContentServiceImpl implements ContentService {
-    private final ContentDtoMapper contentDtoMapper;
     private final ContentReader contentReader;
     private final ContentStore contentStore;
-    private final ContentDocumentReader contentDocumentReader;
 
     // 검색 조건에 맞는 컨텐츠 프리뷰 페이지 조회
     @Override
@@ -92,18 +78,15 @@ public class ContentServiceImpl implements ContentService {
         contentStore.modifyContentStatus(contentId);
     }
 
-    // TODO: 멘토님에게 DataProvider의 영역에 대한 답변을 들어볼 것
-    // 컨텐츠 디테일 조회
-    @Override
-    @Transactional    // hit 증가 로직 있어서 readOnly 생략
-    public ContentInfo.Detail getScriptsOfContent(Long contentId) {
-        ContentEntity content = contentReader.findActiveContent(contentId);
+	// 컨텐츠 디테일 조회
+	@Override
+	@Transactional    // hit 증가 로직 있어서 readOnly 생략
+	public ContentInfo.Detail getScriptsOfContent(ContentCommand.GetDetail command) {
+		ContentInfo.Detail info = contentReader.findActiveContentWithScripts(command);
 
-        List<Script> scripts = contentDocumentReader.findScripts(content.getMongoContentId());
+		// TODO: 추후 레디스로 바꿀 예정
+		contentStore.increaseHits(command.contentId());
 
-        // TODO: 추후 레디스로 바꿀 예정
-        content.updateHits();
-
-        return contentDtoMapper.buildDetail(content, scripts);
-    }
+		return info;
+	}
 }

@@ -1,22 +1,19 @@
 package com.biengual.userapi.content.presentation;
 
-import java.util.List;
-
-import org.mapstruct.InjectionStrategy;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
-import org.mapstruct.ReportingPolicy;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-
 import com.biengual.core.domain.document.content.script.Script;
+import com.biengual.core.domain.document.content.script.YoutubeScript;
 import com.biengual.core.domain.entity.content.ContentEntity;
 import com.biengual.core.enums.ContentType;
 import com.biengual.core.util.PaginationInfo;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentInfo;
+import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
+import org.mapstruct.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
+import java.util.List;
 
 /**
  * do~ : Command <- Request
@@ -57,6 +54,9 @@ public interface ContentDtoMapper {
 	@Mapping(target = "contentType", constant = "LISTENING")
 	ContentCommand.GetListeningPreview doGetListeningPreview(Integer size, String sort);
 
+	@Mapping(target = "userId", source = "principal.id")
+	ContentCommand.GetDetail doGetDetail(Long contentId, OAuth2UserPrincipal principal);
+
 	// Response <- Info
     @Mapping(target = "contentByScrapCount", source = "previewContents")
     ContentResponseDto.ScrapPreviewContentsRes ofScrapPreviewContentsRes(ContentInfo.PreviewContents previewContents);
@@ -88,6 +88,12 @@ public interface ContentDtoMapper {
 
 	ContentResponseDto.DetailRes ofDetailRes(ContentInfo.Detail detail);
 
+	@Mapping(target = "startTimeInSecond", source = "userScript.script", qualifiedByName = "mapStartTimeInSecond")
+	@Mapping(target = "durationInSecond", source = "userScript.script", qualifiedByName = "mapDurationInSecond")
+	@Mapping(target = "enScript", source = "userScript.script.enScript")
+	@Mapping(target = "koScript", source = "userScript.script.koScript")
+	ContentResponseDto.UserScript ofUserScript(ContentInfo.UserScript userScript);
+
 	@Mapping(target = "pageNumber", source = "pageNumber", qualifiedByName = "toResPageNumber")
 	ContentResponseDto.AdminListRes ofAdminListRes(PaginationInfo<ContentInfo.Admin> adminPaginationInfo);
 
@@ -95,8 +101,8 @@ public interface ContentDtoMapper {
 	@Mapping(target = "contentId", source = "content.id")
 	@Mapping(target = "videoUrl", source = "content", qualifiedByName = "toVideoUrl")
 	@Mapping(target = "category", source = "content.category.name")
-	@Mapping(target = "scriptList", source = "scripts")
-	ContentInfo.Detail buildDetail(ContentEntity content, List<Script> scripts);
+	@Mapping(target = "scriptList", source = "userScripts")
+	ContentInfo.Detail buildDetail(ContentEntity content, List<ContentInfo.UserScript> userScripts);
 
 	// Internal Method =================================================================================================
 
@@ -113,5 +119,21 @@ public interface ContentDtoMapper {
 	@Named("toVideoUrl")
 	default String toVideoUrl(ContentEntity content) {
 		return content.getContentType().equals(ContentType.LISTENING) ? content.getUrl() : null;
+	}
+
+	@Named("mapStartTimeInSecond")
+	default Double mapStartTimeInSecond(Script script) {
+		if (script instanceof YoutubeScript) {
+			return ((YoutubeScript) script).getStartTimeInSecond();
+		}
+		return null;
+	}
+
+	@Named("mapDurationInSecond")
+	default Double mapDurationInSecond(Script script) {
+		if (script instanceof YoutubeScript) {
+			return ((YoutubeScript) script).getDurationInSecond();
+		}
+		return null;
 	}
 }
