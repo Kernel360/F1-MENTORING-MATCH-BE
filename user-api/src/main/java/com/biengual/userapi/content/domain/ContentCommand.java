@@ -1,7 +1,10 @@
 package com.biengual.userapi.content.domain;
 
-import com.biengual.userapi.category.domain.CategoryEntity;
-import com.biengual.userapi.script.domain.entity.Script;
+import com.biengual.userapi.core.entity.category.CategoryEntity;
+import com.biengual.userapi.core.common.enums.ContentType;
+import com.biengual.userapi.core.entity.content.ContentDocument;
+import com.biengual.userapi.core.entity.content.ContentEntity;
+import com.biengual.userapi.core.entity.content.script.Script;
 import lombok.Builder;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Pageable;

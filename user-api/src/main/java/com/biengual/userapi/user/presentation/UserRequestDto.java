@@ -3,13 +3,13 @@ package com.biengual.userapi.user.presentation;
 import java.time.LocalDate;
 import java.util.List;
 
-import com.biengual.userapi.user.domain.enums.Gender;
+import com.biengual.userapi.core.common.enums.Gender;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-import static com.biengual.userapi.common.constant.BadRequestMessageConstant.MAX_CATEGORY_SELECTION_ERROR_MESSAGE;
-import static com.biengual.userapi.common.constant.BadRequestMessageConstant.NULL_CATEGORY_LIST_ERROR_MESSAGE;
-import static com.biengual.userapi.common.constant.RestrictionConstant.MAX_CATEGORY_SELECTION_LIMIT;
+import static com.biengual.userapi.core.constant.BadRequestMessageConstant.MAX_CATEGORY_SELECTION_ERROR_MESSAGE;
+import static com.biengual.userapi.core.constant.BadRequestMessageConstant.NULL_CATEGORY_LIST_ERROR_MESSAGE;
+import static com.biengual.userapi.core.constant.RestrictionConstant.MAX_CATEGORY_SELECTION_LIMIT;
 
 public class UserRequestDto {
 

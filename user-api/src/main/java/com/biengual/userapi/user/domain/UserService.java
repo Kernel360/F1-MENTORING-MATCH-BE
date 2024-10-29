@@ -1,6 +1,7 @@
 package com.biengual.userapi.user.domain;
 
-import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
+import com.biengual.userapi.core.entity.user.UserEntity;
+import com.biengual.userapi.core.oauth2.domain.info.OAuth2UserPrincipal;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 

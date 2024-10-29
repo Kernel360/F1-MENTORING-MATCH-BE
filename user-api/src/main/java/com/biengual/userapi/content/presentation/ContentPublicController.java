@@ -3,9 +3,15 @@ package com.biengual.userapi.content.presentation;
 import com.biengual.userapi.content.application.ContentFacade;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentInfo;
-import com.biengual.userapi.message.ResponseEntityFactory;
-import com.biengual.userapi.swagger.content.*;
-import com.biengual.userapi.util.PaginationInfo;
+import com.biengual.userapi.content.presentation.swagger.SwaggerContentDetail;
+import com.biengual.userapi.content.presentation.swagger.SwaggerContentListeningPreview;
+import com.biengual.userapi.content.presentation.swagger.SwaggerContentListeningView;
+import com.biengual.userapi.content.presentation.swagger.SwaggerContentReadingPreview;
+import com.biengual.userapi.content.presentation.swagger.SwaggerContentReadingView;
+import com.biengual.userapi.content.presentation.swagger.SwaggerContentScrapPreview;
+import com.biengual.userapi.content.presentation.swagger.SwaggerContentSearchPreview;
+import com.biengual.userapi.core.message.ResponseEntityFactory;
+import com.biengual.userapi.core.common.util.PaginationInfo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -22,8 +28,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import static com.biengual.userapi.common.constant.BadRequestMessageConstant.BLANK_CONTENT_KEYWORD_ERROR_MESSAGE;
-import static com.biengual.userapi.message.response.ContentResponseCode.CONTENT_VIEW_SUCCESS;
+import static com.biengual.userapi.core.constant.BadRequestMessageConstant.BLANK_CONTENT_KEYWORD_ERROR_MESSAGE;
+import static com.biengual.userapi.core.message.response.ContentResponseCode.CONTENT_VIEW_SUCCESS;
 
 @Validated
 @RestController

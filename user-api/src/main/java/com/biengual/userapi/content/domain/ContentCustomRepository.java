@@ -1,6 +1,6 @@
 package com.biengual.userapi.content.domain;
 
-import static com.biengual.userapi.message.error.code.ContentErrorCode.*;
+import static com.biengual.userapi.core.message.error.code.ContentErrorCode.*;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -15,8 +15,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
-import com.biengual.userapi.message.error.exception.CommonException;
-import com.biengual.userapi.scrap.domain.QScrapEntity;
+import com.biengual.userapi.core.common.enums.ContentStatus;
+import com.biengual.userapi.core.common.enums.ContentType;
+import com.biengual.userapi.core.entity.content.QContentEntity;
+import com.biengual.userapi.core.entity.scrap.QScrapEntity;
+import com.biengual.userapi.core.message.error.exception.CommonException;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Path;

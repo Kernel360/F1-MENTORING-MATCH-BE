@@ -1,6 +1,6 @@
 package com.biengual.userapi.crawling.application;
 
-import static com.biengual.userapi.message.error.code.CrawlingErrorCode.*;
+import static com.biengual.userapi.core.message.error.code.CrawlingErrorCode.*;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -11,7 +11,7 @@ import java.util.Objects;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.biengual.userapi.message.error.exception.CommonException;
+import com.biengual.userapi.core.message.error.exception.CommonException;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;

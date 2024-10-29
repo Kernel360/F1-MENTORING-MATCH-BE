@@ -1,6 +1,6 @@
 package com.biengual.userapi.bookmark.presentation;
 
-import com.biengual.userapi.content.domain.ContentType;
+import com.biengual.userapi.core.common.enums.ContentType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
 

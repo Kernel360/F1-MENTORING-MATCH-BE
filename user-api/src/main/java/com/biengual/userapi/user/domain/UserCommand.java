@@ -1,7 +1,9 @@
 package com.biengual.userapi.user.domain;
 
-import com.biengual.userapi.category.domain.CategoryEntity;
-import com.biengual.userapi.user.domain.enums.Gender;
+import com.biengual.userapi.core.entity.category.CategoryEntity;
+import com.biengual.userapi.core.common.enums.Gender;
+import com.biengual.userapi.core.entity.user.UserCategoryEntity;
+
 import lombok.Builder;
 
 import java.time.LocalDate;

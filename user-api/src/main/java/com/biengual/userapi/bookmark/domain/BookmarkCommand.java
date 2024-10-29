@@ -1,5 +1,7 @@
 package com.biengual.userapi.bookmark.domain;
 
+import com.biengual.userapi.core.entity.bookmark.BookmarkEntity;
+
 public class BookmarkCommand {
 
 	public record GetByContents(

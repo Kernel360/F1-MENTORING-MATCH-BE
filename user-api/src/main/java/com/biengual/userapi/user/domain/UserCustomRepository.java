@@ -1,5 +1,6 @@
 package com.biengual.userapi.user.domain;
 
+import com.biengual.userapi.core.entity.user.QUserEntity;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;

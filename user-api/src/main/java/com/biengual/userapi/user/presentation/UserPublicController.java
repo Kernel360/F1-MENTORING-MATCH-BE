@@ -1,11 +1,13 @@
 package com.biengual.userapi.user.presentation;
 
-import com.biengual.userapi.message.ResponseEntityFactory;
-import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
-import com.biengual.userapi.swagger.SwaggerBooleanReturn;
-import com.biengual.userapi.swagger.SwaggerVoidReturn;
-import com.biengual.userapi.swagger.user.SwaggerUserMyPage;
-import com.biengual.userapi.swagger.user.SwaggerUserMyTime;
+import static com.biengual.userapi.core.message.response.UserResponseCode.*;
+
+import com.biengual.userapi.core.message.ResponseEntityFactory;
+import com.biengual.userapi.core.oauth2.domain.info.OAuth2UserPrincipal;
+import com.biengual.userapi.core.swagger.SwaggerBooleanReturn;
+import com.biengual.userapi.core.swagger.SwaggerVoidReturn;
+import com.biengual.userapi.user.presentation.swagger.SwaggerUserMyPage;
+import com.biengual.userapi.user.presentation.swagger.SwaggerUserMyTime;
 import com.biengual.userapi.user.application.UserFacade;
 import com.biengual.userapi.user.domain.UserCommand;
 import com.biengual.userapi.user.domain.UserInfo;
@@ -22,8 +24,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import static com.biengual.userapi.message.response.UserResponseCode.*;
 
 @RestController
 @RequestMapping("/api/user")

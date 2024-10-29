@@ -1,7 +1,7 @@
 package com.biengual.userapi.question.infrastructure;
 
-import static com.biengual.userapi.message.error.code.ContentErrorCode.*;
-import static com.biengual.userapi.question.domain.QuestionDocument.*;
+import static com.biengual.userapi.core.entity.question.QuestionDocument.*;
+import static com.biengual.userapi.core.message.error.code.ContentErrorCode.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,18 +13,18 @@ import java.util.Set;
 
 import org.bson.types.ObjectId;
 
-import com.biengual.userapi.annotation.DataProvider;
-import com.biengual.userapi.content.domain.ContentDocument;
+import com.biengual.userapi.core.annotation.DataProvider;
+import com.biengual.userapi.core.entity.content.ContentDocument;
 import com.biengual.userapi.content.domain.ContentDocumentRepository;
-import com.biengual.userapi.content.domain.ContentEntity;
+import com.biengual.userapi.core.entity.content.ContentEntity;
 import com.biengual.userapi.content.domain.ContentRepository;
-import com.biengual.userapi.content.domain.ContentStatus;
-import com.biengual.userapi.message.error.exception.CommonException;
+import com.biengual.userapi.core.common.enums.ContentStatus;
+import com.biengual.userapi.core.message.error.exception.CommonException;
 import com.biengual.userapi.question.domain.QuestionCommand;
-import com.biengual.userapi.question.domain.QuestionDocument;
+import com.biengual.userapi.core.entity.question.QuestionDocument;
 import com.biengual.userapi.question.domain.QuestionRepository;
 import com.biengual.userapi.question.domain.QuestionStore;
-import com.biengual.userapi.question.domain.QuestionType;
+import com.biengual.userapi.core.common.enums.QuestionType;
 
 import lombok.RequiredArgsConstructor;
 

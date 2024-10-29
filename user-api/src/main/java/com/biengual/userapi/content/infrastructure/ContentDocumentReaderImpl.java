@@ -1,17 +1,17 @@
 package com.biengual.userapi.content.infrastructure;
 
-import com.biengual.userapi.annotation.DataProvider;
-import com.biengual.userapi.content.domain.ContentDocument;
+import com.biengual.userapi.core.annotation.DataProvider;
+import com.biengual.userapi.core.entity.content.ContentDocument;
 import com.biengual.userapi.content.domain.ContentDocumentReader;
 import com.biengual.userapi.content.domain.ContentDocumentRepository;
-import com.biengual.userapi.message.error.exception.CommonException;
-import com.biengual.userapi.script.domain.entity.Script;
+import com.biengual.userapi.core.message.error.exception.CommonException;
+import com.biengual.userapi.core.entity.content.script.Script;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 
 import java.util.List;
 
-import static com.biengual.userapi.message.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
+import static com.biengual.userapi.core.message.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
 
 @DataProvider
 @RequiredArgsConstructor

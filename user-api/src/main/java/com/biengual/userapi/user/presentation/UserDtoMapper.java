@@ -1,6 +1,6 @@
 package com.biengual.userapi.user.presentation;
 
-import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
+import com.biengual.userapi.core.oauth2.domain.info.OAuth2UserPrincipal;
 import com.biengual.userapi.user.domain.UserCommand;
 import com.biengual.userapi.user.domain.UserInfo;
 import org.mapstruct.InjectionStrategy;

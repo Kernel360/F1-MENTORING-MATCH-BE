@@ -1,14 +1,17 @@
 package com.biengual.userapi.content.infrastructure;
 
-import com.biengual.userapi.annotation.DataProvider;
-import com.biengual.userapi.category.domain.CategoryEntity;
-import com.biengual.userapi.category.repository.CategoryRepository;
+import com.biengual.userapi.core.annotation.DataProvider;
+import com.biengual.userapi.core.entity.category.CategoryEntity;
+import com.biengual.userapi.category.domain.CategoryRepository;
 import com.biengual.userapi.content.domain.*;
-import com.biengual.userapi.message.error.exception.CommonException;
+import com.biengual.userapi.core.common.enums.ContentStatus;
+import com.biengual.userapi.core.entity.content.ContentDocument;
+import com.biengual.userapi.core.entity.content.ContentEntity;
+import com.biengual.userapi.core.message.error.exception.CommonException;
 import lombok.RequiredArgsConstructor;
 
-import static com.biengual.userapi.message.error.code.CategoryErrorCode.CATEGORY_NOT_FOUND;
-import static com.biengual.userapi.message.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
+import static com.biengual.userapi.core.message.error.code.CategoryErrorCode.CATEGORY_NOT_FOUND;
+import static com.biengual.userapi.core.message.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
 
 @DataProvider
 @RequiredArgsConstructor

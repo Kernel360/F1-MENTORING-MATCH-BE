@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.biengual.userapi.core.entity.bookmark.BookmarkEntity;
+import com.biengual.userapi.core.entity.bookmark.QBookmarkEntity;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;

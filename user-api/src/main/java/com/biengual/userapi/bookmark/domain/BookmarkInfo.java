@@ -1,6 +1,6 @@
 package com.biengual.userapi.bookmark.domain;
 
-import com.biengual.userapi.content.domain.ContentType;
+import com.biengual.userapi.core.common.enums.ContentType;
 import lombok.Builder;
 
 import java.time.LocalDateTime;

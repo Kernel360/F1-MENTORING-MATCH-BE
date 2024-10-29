@@ -2,8 +2,8 @@ package com.biengual.userapi.category.presentation;
 
 import com.biengual.userapi.category.application.CategoryFacade;
 import com.biengual.userapi.category.domain.CategoryInfo;
-import com.biengual.userapi.message.ResponseEntityFactory;
-import com.biengual.userapi.swagger.category.SwaggerCategory;
+import com.biengual.userapi.core.message.ResponseEntityFactory;
+import com.biengual.userapi.category.presentation.swagger.SwaggerCategory;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.biengual.userapi.message.response.CategoryResponseCode.CATEGORY_FOUND_SUCCESS;
+import static com.biengual.userapi.core.message.response.CategoryResponseCode.CATEGORY_FOUND_SUCCESS;
 
 /**
  * 카테고리 공통 API

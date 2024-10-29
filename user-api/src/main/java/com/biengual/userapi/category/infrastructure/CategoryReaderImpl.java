@@ -1,9 +1,9 @@
 package com.biengual.userapi.category.infrastructure;
 
-import com.biengual.userapi.annotation.DataProvider;
+import com.biengual.userapi.core.annotation.DataProvider;
 import com.biengual.userapi.category.domain.CategoryInfo;
 import com.biengual.userapi.category.domain.CategoryReader;
-import com.biengual.userapi.category.repository.CategoryCustomRepository;
+import com.biengual.userapi.category.domain.CategoryCustomRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;

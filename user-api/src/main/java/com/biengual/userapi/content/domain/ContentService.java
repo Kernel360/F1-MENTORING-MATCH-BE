@@ -1,6 +1,6 @@
 package com.biengual.userapi.content.domain;
 
-import com.biengual.userapi.util.PaginationInfo;
+import com.biengual.userapi.core.common.util.PaginationInfo;
 
 /**
  * Content 도메인의 Service 계층의 인터페이스
