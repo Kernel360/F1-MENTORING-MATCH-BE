@@ -42,6 +42,19 @@ public class ContentInfo {
 	}
 
 	@Builder
+	public record UserScript(
+		Script script,
+		Boolean isHighlighted,
+		String description
+	) {
+		public static UserScript of(Script script) {
+			return UserScript.builder()
+				.script(script)
+				.build();
+		}
+	}
+
+	@Builder
 	public record Detail(
 		Long contentId,
 		ContentType contentType,
@@ -50,7 +63,7 @@ public class ContentInfo {
 		String thumbnailUrl,
 		String videoUrl,
 		Integer hits,
-		List<Script> scriptList
+		List<UserScript> scriptList
 	) {
 	}
 

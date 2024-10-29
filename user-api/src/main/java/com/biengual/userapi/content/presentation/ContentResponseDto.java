@@ -1,15 +1,25 @@
 package com.biengual.userapi.content.presentation;
 
-import java.util.List;
-
 import com.biengual.userapi.content.domain.ContentStatus;
 import com.biengual.userapi.content.domain.ContentType;
-import com.biengual.userapi.script.domain.entity.Script;
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import lombok.Builder;
 
+import java.util.List;
+
 public class ContentResponseDto {
+	@Builder
+	public record UserScript(
+		@JsonInclude(JsonInclude.Include.NON_NULL)
+		Double startTimeInSecond,
+		@JsonInclude(JsonInclude.Include.NON_NULL)
+		Double durationInSecond,
+		String enScript,
+		String koScript,
+		Boolean isHighlighted,
+		String description
+	) {
+	}
 
 	@Builder
 	public record DetailRes(
@@ -21,7 +31,7 @@ public class ContentResponseDto {
 		@JsonInclude(JsonInclude.Include.NON_NULL)
 		String videoUrl,
 		Integer hits,
-		List<Script> scriptList
+		List<UserScript> scriptList
 	) {
 	}
 

@@ -89,4 +89,11 @@ public class ContentCommand {
 		ContentType contentType
 	) {
 	}
+
+	@Builder
+	public record GetDetail(
+		Long contentId,
+		Long userId
+	) {
+	}
 }
