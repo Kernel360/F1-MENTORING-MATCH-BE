@@ -1,11 +1,11 @@
 package com.biengual.userapi.content.presentation;
 
 import com.biengual.userapi.content.domain.ContentCommand;
-import com.biengual.userapi.content.domain.ContentEntity;
+import com.biengual.userapi.core.domain.entity.content.ContentEntity;
 import com.biengual.userapi.content.domain.ContentInfo;
-import com.biengual.userapi.content.domain.ContentType;
-import com.biengual.userapi.script.domain.entity.Script;
-import com.biengual.userapi.util.PaginationInfo;
+import com.biengual.userapi.core.enums.ContentType;
+import com.biengual.userapi.core.domain.document.content.script.Script;
+import com.biengual.userapi.core.util.PaginationInfo;
 import org.mapstruct.*;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

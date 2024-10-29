@@ -1,12 +1,12 @@
 package com.biengual.userapi.user.infrastructure;
 
-import com.biengual.userapi.annotation.DataProvider;
-import com.biengual.userapi.category.domain.CategoryEntity;
-import com.biengual.userapi.category.repository.CategoryRepository;
-import com.biengual.userapi.message.error.exception.CommonException;
-import com.biengual.userapi.user.domain.UserCategoryEntity;
+import com.biengual.userapi.core.annotation.DataProvider;
+import com.biengual.userapi.core.domain.entity.category.CategoryEntity;
+import com.biengual.userapi.category.domain.CategoryRepository;
+import com.biengual.userapi.core.response.error.exception.CommonException;
+import com.biengual.userapi.core.domain.entity.user.UserCategoryEntity;
 import com.biengual.userapi.user.domain.UserCommand;
-import com.biengual.userapi.user.domain.UserEntity;
+import com.biengual.userapi.core.domain.entity.user.UserEntity;
 import com.biengual.userapi.user.domain.UserStore;
 import com.biengual.userapi.user.domain.UserCategoryCustomRepository;
 import com.biengual.userapi.user.domain.UserCategoryRepository;
@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-import static com.biengual.userapi.message.error.code.UserErrorCode.USER_NOT_FOUND;
+import static com.biengual.userapi.core.response.error.code.UserErrorCode.USER_NOT_FOUND;
 
 @DataProvider
 @RequiredArgsConstructor

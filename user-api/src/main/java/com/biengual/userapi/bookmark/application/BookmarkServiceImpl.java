@@ -1,6 +1,6 @@
 package com.biengual.userapi.bookmark.application;
 
-import static com.biengual.userapi.message.error.code.BookmarkErrorCode.*;
+import static com.biengual.userapi.core.response.error.code.BookmarkErrorCode.*;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +10,7 @@ import com.biengual.userapi.bookmark.domain.BookmarkInfo;
 import com.biengual.userapi.bookmark.domain.BookmarkReader;
 import com.biengual.userapi.bookmark.domain.BookmarkService;
 import com.biengual.userapi.bookmark.domain.BookmarkStore;
-import com.biengual.userapi.message.error.exception.CommonException;
+import com.biengual.userapi.core.response.error.exception.CommonException;
 
 import lombok.RequiredArgsConstructor;
 

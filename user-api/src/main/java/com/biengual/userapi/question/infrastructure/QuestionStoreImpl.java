@@ -1,7 +1,6 @@
 package com.biengual.userapi.question.infrastructure;
 
-import static com.biengual.userapi.message.error.code.ContentErrorCode.*;
-import static com.biengual.userapi.question.domain.QuestionDocument.*;
+import static com.biengual.userapi.core.response.error.code.ContentErrorCode.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -13,18 +12,18 @@ import java.util.Set;
 
 import org.bson.types.ObjectId;
 
-import com.biengual.userapi.annotation.DataProvider;
-import com.biengual.userapi.content.domain.ContentDocument;
+import com.biengual.userapi.core.annotation.DataProvider;
+import com.biengual.userapi.core.domain.document.content.ContentDocument;
 import com.biengual.userapi.content.domain.ContentDocumentRepository;
-import com.biengual.userapi.content.domain.ContentEntity;
+import com.biengual.userapi.core.domain.entity.content.ContentEntity;
 import com.biengual.userapi.content.domain.ContentRepository;
-import com.biengual.userapi.content.domain.ContentStatus;
-import com.biengual.userapi.message.error.exception.CommonException;
+import com.biengual.userapi.core.enums.ContentStatus;
+import com.biengual.userapi.core.response.error.exception.CommonException;
 import com.biengual.userapi.question.domain.QuestionCommand;
-import com.biengual.userapi.question.domain.QuestionDocument;
+import com.biengual.userapi.core.domain.entity.question.QuestionDocument;
 import com.biengual.userapi.question.domain.QuestionRepository;
 import com.biengual.userapi.question.domain.QuestionStore;
-import com.biengual.userapi.question.domain.QuestionType;
+import com.biengual.userapi.core.enums.QuestionType;
 
 import lombok.RequiredArgsConstructor;
 
@@ -125,7 +124,7 @@ public class QuestionStoreImpl implements QuestionStore {
 
 	private String saveToMongo(String question, String questionKo, String word, QuestionType type) {
 
-		QuestionDocument questionDocument = of(question, questionKo, word, type);
+		QuestionDocument questionDocument = QuestionDocument.of(question, questionKo, word, type);
 		questionRepository.save(questionDocument);
 
 		return questionDocument.getId().toString();

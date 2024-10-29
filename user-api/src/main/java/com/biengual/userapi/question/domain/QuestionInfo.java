@@ -2,6 +2,8 @@ package com.biengual.userapi.question.domain;
 
 import java.util.List;
 
+import com.biengual.userapi.core.enums.QuestionType;
+
 import lombok.Builder;
 
 public class QuestionInfo {

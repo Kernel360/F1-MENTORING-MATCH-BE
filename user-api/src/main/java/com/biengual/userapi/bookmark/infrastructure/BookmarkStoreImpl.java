@@ -1,19 +1,20 @@
 package com.biengual.userapi.bookmark.infrastructure;
 
-import com.biengual.userapi.annotation.DataProvider;
+import com.biengual.userapi.core.annotation.DataProvider;
 import com.biengual.userapi.bookmark.domain.*;
 import com.biengual.userapi.bookmark.presentation.BookmarkDtoMapper;
-import com.biengual.userapi.content.domain.ContentDocument;
+import com.biengual.userapi.core.domain.document.content.ContentDocument;
 import com.biengual.userapi.content.domain.ContentDocumentRepository;
-import com.biengual.userapi.content.domain.ContentType;
+import com.biengual.userapi.core.enums.ContentType;
 import com.biengual.userapi.content.domain.ContentCustomRepository;
-import com.biengual.userapi.message.error.exception.CommonException;
-import com.biengual.userapi.script.domain.entity.YoutubeScript;
+import com.biengual.userapi.core.domain.entity.bookmark.BookmarkEntity;
+import com.biengual.userapi.core.response.error.exception.CommonException;
+import com.biengual.userapi.core.domain.document.content.script.YoutubeScript;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 
-import static com.biengual.userapi.message.error.code.BookmarkErrorCode.BOOKMARK_NOT_FOUND;
-import static com.biengual.userapi.message.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
+import static com.biengual.userapi.core.response.error.code.BookmarkErrorCode.BOOKMARK_NOT_FOUND;
+import static com.biengual.userapi.core.response.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
 
 @DataProvider
 @RequiredArgsConstructor

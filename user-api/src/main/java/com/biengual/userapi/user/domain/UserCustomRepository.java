@@ -1,5 +1,7 @@
 package com.biengual.userapi.user.domain;
 
+import static com.biengual.userapi.core.domain.entity.user.QUserEntity.*;
+
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +21,6 @@ public class UserCustomRepository {
 
     // 서비스에 사용하는 user 정보를 조회하기 위한 쿼리
     public Optional<UserInfo.MyInfoExceptMyCategories> findMyInfoExceptMyCategories(Long userId) {
-        QUserEntity userEntity = QUserEntity.userEntity;
-
         UserInfo.MyInfoExceptMyCategories myInfoExceptMyCategories = queryFactory.select(
                 Projections.constructor(
                     UserInfo.MyInfoExceptMyCategories.class,
@@ -41,8 +41,6 @@ public class UserCustomRepository {
 
     // user의 생성 날짜 및 수정 날짜를 조회하는 쿼리
     public Optional<UserInfo.MySignUpTime> findMySignUpTime(Long userId) {
-        QUserEntity userEntity = QUserEntity.userEntity;
-
         UserInfo.MySignUpTime mySignUpTime = queryFactory.select(
                 Projections.constructor(
                     UserInfo.MySignUpTime.class,

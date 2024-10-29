@@ -1,6 +1,6 @@
 package com.biengual.userapi.question.application;
 
-import com.biengual.userapi.annotation.Facade;
+import com.biengual.userapi.core.annotation.Facade;
 import com.biengual.userapi.question.domain.QuestionCommand;
 import com.biengual.userapi.question.domain.QuestionInfo;
 import com.biengual.userapi.question.domain.QuestionService;
