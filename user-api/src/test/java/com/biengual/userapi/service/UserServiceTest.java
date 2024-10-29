@@ -19,9 +19,9 @@ import org.mockito.MockitoAnnotations;
 import com.biengual.userapi.exception.user.UserNotFoundException;
 import com.biengual.userapi.user.presentation.UserRequestDto;
 import com.biengual.userapi.user.presentation.UserResponseDto;
-import com.biengual.userapi.user.domain.UserEntity;
-import com.biengual.userapi.user.domain.enums.Gender;
-import com.biengual.userapi.user.domain.enums.UserStatus;
+import com.biengual.userapi.core.entity.user.UserEntity;
+import com.biengual.userapi.core.common.enums.Gender;
+import com.biengual.userapi.core.common.enums.UserStatus;
 import com.biengual.userapi.user.domain.UserRepository;
 
 class UserServiceTest {

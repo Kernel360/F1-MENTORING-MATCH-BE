@@ -1,8 +1,9 @@
 package com.biengual.userapi.content.domain;
 
-import com.biengual.userapi.util.PaginationInfo;
-
 import java.util.List;
+
+import com.biengual.core.domain.entity.content.ContentEntity;
+import com.biengual.core.util.PaginationInfo;
 
 /**
  * Content 도메인의 DataProvider 계층의 인터페이스
@@ -22,9 +23,9 @@ public interface ContentReader {
 
     List<ContentInfo.PreviewContent> findListeningPreview(ContentCommand.GetListeningPreview command);
 
-    ContentEntity findActiveContent(Long contentId);
-
     PaginationInfo<ContentInfo.Admin> findReadingAdmin(ContentCommand.GetReadingView command);
 
     PaginationInfo<ContentInfo.Admin> findListeningAdmin(ContentCommand.GetListeningView command);
+
+    ContentInfo.Detail findActiveContentWithScripts(ContentCommand.GetDetail command);
 }

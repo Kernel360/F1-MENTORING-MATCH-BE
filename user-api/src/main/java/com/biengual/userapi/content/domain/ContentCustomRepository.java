@@ -1,397 +1,378 @@
 package com.biengual.userapi.content.domain;
 
-import static com.biengual.userapi.message.error.code.ContentErrorCode.*;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-
+import com.biengual.core.domain.entity.content.QContentEntity;
+import com.biengual.core.enums.ContentStatus;
+import com.biengual.core.enums.ContentType;
+import com.biengual.core.response.error.exception.CommonException;
+import com.querydsl.core.types.*;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.PathBuilder;
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
-import com.biengual.userapi.message.error.exception.CommonException;
-import com.biengual.userapi.scrap.domain.QScrapEntity;
-import com.querydsl.core.types.Order;
-import com.querydsl.core.types.OrderSpecifier;
-import com.querydsl.core.types.Path;
-import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.PathBuilder;
-import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.lang.reflect.Field;
+import java.util.*;
 
-import lombok.RequiredArgsConstructor;
+import static com.biengual.core.domain.entity.content.QContentEntity.contentEntity;
+import static com.biengual.core.domain.entity.scrap.QScrapEntity.scrapEntity;
+import static com.biengual.core.response.error.code.ContentErrorCode.CONTENT_SORT_COL_NOT_FOUND;
 
 @Repository
 @RequiredArgsConstructor
 public class ContentCustomRepository {
-	private final JPAQueryFactory queryFactory;
+    private final JPAQueryFactory queryFactory;
 
-	public ContentType findContentTypeById(Long contentId) {
-		QContentEntity contentEntity = QContentEntity.contentEntity;
+    public ContentType findContentTypeById(Long contentId) {
+        return queryFactory
+            .select(contentEntity.contentType)
+            .from(contentEntity)
+            .where(contentEntity.id.eq(contentId))
+            .fetchFirst();
 
-		return queryFactory
-			.select(contentEntity.contentType)
-			.from(contentEntity)
+    }
+
+    public String findTitleById(Long contentId) {
+        return queryFactory
+            .select(contentEntity.title)
+            .from(contentEntity)
+            .where(contentEntity.contentStatus.eq(ContentStatus.ACTIVATED).and(contentEntity.id.eq(contentId)))
+            .fetchFirst();
+    }
+
+    public String findMongoIdByContentId(Long contentId) {
+        return queryFactory
+            .select(contentEntity.mongoContentId)
+            .from(contentEntity)
+            .where(contentEntity.contentStatus.eq(ContentStatus.ACTIVATED).and(contentEntity.id.eq(contentId)))
+            .fetchOne();
+    }
+
+    public boolean existsByUrl(String url) {
+        return queryFactory
+            .from(contentEntity)
+            .where(contentEntity.url.eq(url))
+            .fetchFirst() != null;
+    }
+
+	// 상세 조회에 따른 조회수 + 1 을 위하 쿼리
+	public void increaseHitsByContentId(Long contentId) {
+		queryFactory.update(contentEntity)
+			.set(contentEntity.hits, contentEntity.hits.add(1))
 			.where(contentEntity.id.eq(contentId))
-			.fetchFirst();
-
+			.execute();
 	}
 
-	public String findTitleById(Long contentId) {
-		QContentEntity contentEntity = QContentEntity.contentEntity;
+    // 스크랩을 많이 한 컨텐츠를 조회하기 위한 쿼리
+    public List<ContentInfo.PreviewContent> findContentsByScrapCount(Integer size) {
+        // 정렬된 커버링 인덱스
+        List<Long> contentIds = queryFactory.select(scrapEntity.content.id)
+            .from(scrapEntity)
+            .where(scrapEntity.content.contentStatus.eq(ContentStatus.ACTIVATED))
+            .groupBy(scrapEntity.content.id)
+            .orderBy(scrapEntity.id.count().desc())
+            .limit(size)
+            .fetch();
 
-		return queryFactory
-			.select(contentEntity.title)
-			.from(contentEntity)
-			.where(contentEntity.contentStatus.eq(ContentStatus.ACTIVATED).and(contentEntity.id.eq(contentId)))
-			.fetchFirst();
-	}
+        // contentIds가 비어있는 경우 빈 리스트 반환
+        if (contentIds.isEmpty()) {
+            return Collections.emptyList();
+        }
 
-	public String findMongoIdByContentId(Long contentId) {
-		QContentEntity contentEntity = QContentEntity.contentEntity;
+        List<ContentInfo.PreviewContent> unalignedScrapPreview = queryFactory.select(
+                Projections.constructor(
+                    ContentInfo.PreviewContent.class,
+                    contentEntity.id,
+                    contentEntity.title,
+                    contentEntity.thumbnailUrl,
+                    contentEntity.contentType,
+                    contentEntity.preScripts,
+                    contentEntity.category.name,
+                    contentEntity.hits
+                )
+            )
+            .from(contentEntity)
+            .where(contentEntity.id.in(contentIds))
+            .fetch();
 
-		return queryFactory
-			.select(contentEntity.mongoContentId)
-			.from(contentEntity)
-			.where(contentEntity.contentStatus.eq(ContentStatus.ACTIVATED).and(contentEntity.id.eq(contentId)))
-			.fetchOne();
-	}
+        // TODO: DB에서 정렬된 채로 가져올 수 있는 방법이 있다면?
+        // 정렬된 커버링 인덱스의 순서에 따라 정렬
+        return contentIds.stream()
+            .map(id -> unalignedScrapPreview.stream()
+                .filter(content -> content.contentId().equals(id))
+                .findFirst()
+                .orElse(null))
+            .filter(Objects::nonNull)
+            .toList();
+    }
 
-	public boolean existsByUrl(String url) {
-		QContentEntity contentEntity = QContentEntity.contentEntity;
+    // 검색 조건에 맞는 컨텐츠를 조회하기 위한 쿼리
+    public Page<ContentInfo.PreviewContent> findPreviewPageBySearch(Pageable pageable, String keyword) {
+        BooleanExpression predicate = getSearchPredicate(keyword);
 
-		return queryFactory
-			.from(contentEntity)
-			.where(contentEntity.url.eq(url))
-			.fetchFirst() != null;
-	}
+        return findPreviewPage(pageable, predicate);
+    }
 
-	// 스크랩을 많이 한 컨텐츠를 조회하기 위한 쿼리
-	public List<ContentInfo.PreviewContent> findContentsByScrapCount(Integer size) {
-		QScrapEntity scrapEntity = QScrapEntity.scrapEntity;
-		QContentEntity contentEntity = QContentEntity.contentEntity;
+    // 컨텐츠 프리뷰 페이지 조회하기 위한 쿼리
+    public Page<ContentInfo.ViewContent> findViewPageByContentTypeAndCategoryId(
+        Pageable pageable, ContentType contentType, Long categoryId
+    ) {
+        BooleanExpression predicate = getViewPredicate(contentType, categoryId);
 
-		// 정렬된 커버링 인덱스
-		List<Long> contentIds = queryFactory.select(scrapEntity.content.id)
-			.from(scrapEntity)
-			.where(scrapEntity.content.contentStatus.eq(ContentStatus.ACTIVATED))
-			.groupBy(scrapEntity.content.id)
-			.orderBy(scrapEntity.id.count().desc())
-			.limit(size)
-			.fetch();
+        List<OrderSpecifier<?>> orderSpecifiers = getOrderSpecifiers(pageable);
 
-		// contentIds가 비어있는 경우 빈 리스트 반환
-		if (contentIds.isEmpty()) {
-			return Collections.emptyList();
-		}
+        return findViewPage(pageable, predicate, orderSpecifiers);
+    }
 
-		List<ContentInfo.PreviewContent> unalignedScrapPreview = queryFactory.select(
-				Projections.constructor(
-					ContentInfo.PreviewContent.class,
-					contentEntity.id,
-					contentEntity.title,
-					contentEntity.thumbnailUrl,
-					contentEntity.contentType,
-					contentEntity.preScripts,
-					contentEntity.category.name,
-					contentEntity.hits
-				)
-			)
-			.from(contentEntity)
-			.where(contentEntity.id.in(contentIds))
-			.fetch();
+    // 컨텐츠 프리뷰 조회하기 위한 쿼리
+    public List<ContentInfo.PreviewContent> findPreviewBySizeAndSortAndContentType(
+        Integer size, String sort, ContentType contentType
+    ) {
+        BooleanExpression predicate = getPreviewPredicate(contentType);
 
-		// TODO: DB에서 정렬된 채로 가져올 수 있는 방법이 있다면?
-		// 정렬된 커버링 인덱스의 순서에 따라 정렬
-		return contentIds.stream()
-			.map(id -> unalignedScrapPreview.stream()
-				.filter(content -> content.contentId().equals(id))
-				.findFirst()
-				.orElse(null))
-			.filter(Objects::nonNull)
-			.toList();
-	}
+        List<OrderSpecifier<?>> orderSpecifiers = getOrderSpecifiers(sort);
 
-	// 검색 조건에 맞는 컨텐츠를 조회하기 위한 쿼리
-	public Page<ContentInfo.PreviewContent> findPreviewPageBySearch(Pageable pageable, String keyword) {
-		QContentEntity contentEntity = QContentEntity.contentEntity;
+        return findPreview(size, predicate, orderSpecifiers);
+    }
 
-		BooleanExpression predicate = getSearchPredicate(keyword, contentEntity);
+    // 어드민 컨텐츠 페이지네이션 조회를 위한 쿼리
+    public Page<ContentInfo.Admin> findContentDetailForAdmin(
+        Pageable pageable, ContentType contentType, Long categoryId
+    ) {
+        BooleanExpression predicate = getAdminViewPredicate(contentType, categoryId);
 
-		return findPreviewPage(pageable, predicate, contentEntity);
-	}
+        List<OrderSpecifier<?>> orderSpecifiers = getOrderSpecifiers(pageable);
 
-	// 컨텐츠 프리뷰 페이지 조회하기 위한 쿼리
-	public Page<ContentInfo.ViewContent> findViewPageByContentTypeAndCategoryId(
-		Pageable pageable, ContentType contentType, Long categoryId
-	) {
-		QContentEntity contentEntity = QContentEntity.contentEntity;
+        return findAdminViewPage(pageable, predicate, orderSpecifiers);
+    }
 
-		BooleanExpression predicate = getViewPredicate(contentType, categoryId, contentEntity);
+    // Internal Method =================================================================================================
 
-		List<OrderSpecifier<?>> orderSpecifiers = getOrderSpecifiers(pageable);
+    // TODO: Predicate를 사용하지 않는 경우에는 Override? 아니면 null로 입력?
+    // Preview Page를 위한 공통 Pagination 쿼리
+    private Page<ContentInfo.PreviewContent> findPreviewPage(Pageable pageable, Predicate predicate) {
+        List<ContentInfo.PreviewContent> contents = queryFactory
+            .select(
+                Projections.constructor(
+                    ContentInfo.PreviewContent.class,
+                    contentEntity.id,
+                    contentEntity.title,
+                    contentEntity.thumbnailUrl,
+                    contentEntity.contentType,
+                    contentEntity.preScripts,
+                    contentEntity.category.name,
+                    contentEntity.hits
+                )
+            )
+            .from(contentEntity)
+            .where(predicate)
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
 
-		return findViewPage(pageable, predicate, orderSpecifiers, contentEntity);
-	}
+        JPAQuery<Long> countQuery = queryFactory
+            .select(contentEntity.id.count())
+            .from(contentEntity)
+            .where(predicate);
 
-	// 컨텐츠 프리뷰 조회하기 위한 쿼리
-	public List<ContentInfo.PreviewContent> findPreviewBySizeAndSortAndContentType(
-		Integer size, String sort, ContentType contentType
-	) {
-		QContentEntity contentEntity = QContentEntity.contentEntity;
+        return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchOne);
+    }
 
-		BooleanExpression predicate = getPreviewPredicate(contentType, contentEntity);
+    // TODO: Predicate를 사용하지 않는 경우에는 Override? 아니면 null로 입력?
+    // View Page를 위한 공통 Pagination 쿼리
+    private Page<ContentInfo.ViewContent> findViewPage(
+        Pageable pageable, Predicate predicate, List<OrderSpecifier<?>> orderSpecifiers
+    ) {
+        List<ContentInfo.ViewContent> contents = queryFactory
+            .select(
+                Projections.constructor(
+                    ContentInfo.ViewContent.class,
+                    contentEntity.id,
+                    contentEntity.title,
+                    contentEntity.thumbnailUrl,
+                    contentEntity.contentType,
+                    contentEntity.preScripts,
+                    contentEntity.category.name,
+                    contentEntity.hits
+                )
+            )
+            .from(contentEntity)
+            .where(predicate)
+            .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
 
-		List<OrderSpecifier<?>> orderSpecifiers = getOrderSpecifiers(sort, contentEntity);
+        JPAQuery<Long> countQuery = queryFactory
+            .select(contentEntity.id.count())
+            .from(contentEntity)
+            .where(predicate);
 
-		return findPreview(size, predicate, orderSpecifiers, contentEntity);
-	}
+        return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchOne);
+    }
 
-	// 어드민 컨텐츠 페이지네이션 조회를 위한 쿼리
-	public Page<ContentInfo.Admin> findContentDetailForAdmin(
-		Pageable pageable, ContentType contentType, Long categoryId
-	) {
-		QContentEntity contentEntity = QContentEntity.contentEntity;
+    // TODO: Predicate를 사용하지 않는 경우에는 Override? 아니면 null로 입력?
+    // Preview를 위한 공통 쿼리
+    private List<ContentInfo.PreviewContent> findPreview(
+        Integer size, Predicate predicate, List<OrderSpecifier<?>> orderSpecifiers
+    ) {
+        return queryFactory
+            .select(
+                Projections.constructor(
+                    ContentInfo.PreviewContent.class,
+                    contentEntity.id,
+                    contentEntity.title,
+                    contentEntity.thumbnailUrl,
+                    contentEntity.contentType,
+                    contentEntity.preScripts,
+                    contentEntity.category.name,
+                    contentEntity.hits
+                )
+            )
+            .from(contentEntity)
+            .where(predicate)
+            .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
+            .limit(size)
+            .fetch();
+    }
 
-		BooleanExpression predicate = getAdminViewPredicate(contentType, categoryId, contentEntity);
+    // Public API에서 사용하는 공통 Predicate
+    private BooleanExpression getPublicContentsPredicate() {
+        return contentEntity.contentStatus.eq(ContentStatus.ACTIVATED);
+    }
 
-		List<OrderSpecifier<?>> orderSpecifiers = getOrderSpecifiers(pageable);
+    // keyword 검색 비지니스 로직
+    private List<String> splitAndLimitWords(String keyword) {
+        return Arrays.stream(keyword.strip().replace(',', ' ').split("\\s+"))
+            .limit(10)
+            .toList();
+    }
 
-		return findAdminViewPage(pageable, predicate, orderSpecifiers, contentEntity);
-	}
+    // 각 word에 대한 Predicate
+    private BooleanExpression getWordPredicate(String word) {
+        return contentEntity.title.containsIgnoreCase(word)
+            .or(contentEntity.preScripts.containsIgnoreCase(word));
+    }
 
-	// Internal Method =================================================================================================
+    // 최종 검색 Predicate
+    private BooleanExpression getSearchPredicate(String keyword) {
+        BooleanExpression baseExpression = getPublicContentsPredicate();
 
-	// TODO: Predicate를 사용하지 않는 경우에는 Override? 아니면 null로 입력?
-	// Preview Page를 위한 공통 Pagination 쿼리
-	private Page<ContentInfo.PreviewContent> findPreviewPage(Pageable pageable, Predicate predicate,
-		QContentEntity contentEntity) {
-		List<ContentInfo.PreviewContent> contents = queryFactory
-			.select(
-				Projections.constructor(
-					ContentInfo.PreviewContent.class,
-					contentEntity.id,
-					contentEntity.title,
-					contentEntity.thumbnailUrl,
-					contentEntity.contentType,
-					contentEntity.preScripts,
-					contentEntity.category.name,
-					contentEntity.hits
-				)
-			)
-			.from(contentEntity)
-			.where(predicate)
-			.offset(pageable.getOffset())
-			.limit(pageable.getPageSize())
-			.fetch();
+        List<String> selectedSearchWords = splitAndLimitWords(keyword);
 
-		JPAQuery<Long> countQuery = queryFactory
-			.select(contentEntity.id.count())
-			.from(contentEntity)
-			.where(predicate);
+        BooleanExpression searchExpression = selectedSearchWords.stream()
+            .map(word -> getWordPredicate(word))
+            .reduce(BooleanExpression::or)
+            .orElse(null);
 
-		return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchOne);
-	}
+        return baseExpression.and(searchExpression);
+    }
 
-	// TODO: Predicate를 사용하지 않는 경우에는 Override? 아니면 null로 입력?
-	// View Page를 위한 공통 Pagination 쿼리
-	private Page<ContentInfo.ViewContent> findViewPage(
-		Pageable pageable, Predicate predicate, List<OrderSpecifier<?>> orderSpecifiers, QContentEntity contentEntity
-	) {
-		List<ContentInfo.ViewContent> contents = queryFactory
-			.select(
-				Projections.constructor(
-					ContentInfo.ViewContent.class,
-					contentEntity.id,
-					contentEntity.title,
-					contentEntity.thumbnailUrl,
-					contentEntity.contentType,
-					contentEntity.preScripts,
-					contentEntity.category.name,
-					contentEntity.hits
-				)
-			)
-			.from(contentEntity)
-			.where(predicate)
-			.orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
-			.offset(pageable.getOffset())
-			.limit(pageable.getPageSize())
-			.fetch();
+    // 컨텐츠 뷰 Predicate
+    private BooleanExpression getViewPredicate(ContentType contentType, Long categoryId) {
+        BooleanExpression baseExpression = getPublicContentsPredicate();
 
-		JPAQuery<Long> countQuery = queryFactory
-			.select(contentEntity.id.count())
-			.from(contentEntity)
-			.where(predicate);
+        BooleanExpression viewExpression = contentEntity.contentType.eq(contentType)
+            .and(categoryId != null ? contentEntity.category.id.eq(categoryId) : null);
 
-		return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchOne);
-	}
+        return baseExpression.and(viewExpression);
+    }
 
-	// TODO: Predicate를 사용하지 않는 경우에는 Override? 아니면 null로 입력?
-	// Preview를 위한 공통 쿼리
-	private List<ContentInfo.PreviewContent> findPreview(
-		Integer size, Predicate predicate, List<OrderSpecifier<?>> orderSpecifiers, QContentEntity contentEntity
-	) {
-		return queryFactory
-			.select(
-				Projections.constructor(
-					ContentInfo.PreviewContent.class,
-					contentEntity.id,
-					contentEntity.title,
-					contentEntity.thumbnailUrl,
-					contentEntity.contentType,
-					contentEntity.preScripts,
-					contentEntity.category.name,
-					contentEntity.hits
-				)
-			)
-			.from(contentEntity)
-			.where(predicate)
-			.orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
-			.limit(size)
-			.fetch();
-	}
+    // 어드민 컨텐츠 뷰 Predicate - 컨텐츠 뷰 Predicate 에서 ACTIVATED/DEACTIVATED 확인하는 부분 빠짐
+    private BooleanExpression getAdminViewPredicate(
+        ContentType contentType, Long categoryId
+    ) {
 
-	// Public API에서 사용하는 공통 Predicate
-	private BooleanExpression getPublicContentsPredicate(QContentEntity contentEntity) {
-		return contentEntity.contentStatus.eq(ContentStatus.ACTIVATED);
-	}
+        return contentEntity.contentType.eq(contentType)
+            .and(categoryId != null ? contentEntity.category.id.eq(categoryId) : null);
+    }
 
-	// keyword 검색 비지니스 로직
-	private List<String> splitAndLimitWords(String keyword) {
-		return Arrays.stream(keyword.strip().replace(',', ' ').split("\\s+"))
-			.limit(10)
-			.toList();
-	}
+    // 컨텐츠 프리뷰 Predicate
+    private BooleanExpression getPreviewPredicate(ContentType contentType) {
+        BooleanExpression baseExpression = getPublicContentsPredicate();
 
-	// 각 word에 대한 Predicate
-	private BooleanExpression getWordPredicate(String word, QContentEntity contentEntity) {
-		return contentEntity.title.containsIgnoreCase(word)
-			.or(contentEntity.preScripts.containsIgnoreCase(word));
-	}
+        BooleanExpression previewExpression = contentEntity.contentType.eq(contentType);
 
-	// 최종 검색 Predicate
-	private BooleanExpression getSearchPredicate(String keyword, QContentEntity contentEntity) {
-		BooleanExpression baseExpression = getPublicContentsPredicate(contentEntity);
+        return baseExpression.and(previewExpression);
+    }
 
-		List<String> selectedSearchWords = splitAndLimitWords(keyword);
+    // TODO: 정렬 가능 필드 범위가 정해지면 Dto 단계에서 검증할 것
+    // Pageable OrderSpecifiers
+    private List<OrderSpecifier<?>> getOrderSpecifiers(Pageable pageable) {
+        List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
 
-		BooleanExpression searchExpression = selectedSearchWords.stream()
-			.map(word -> getWordPredicate(word, contentEntity))
-			.reduce(BooleanExpression::or)
-			.orElse(null);
+        for (Sort.Order order : pageable.getSort()) {
+            try {
+                QContentEntity.class.getDeclaredField(order.getProperty());
+            } catch (NoSuchFieldException e) {
+                throw new CommonException(CONTENT_SORT_COL_NOT_FOUND);
+            }
 
-		return baseExpression.and(searchExpression);
-	}
+            PathBuilder pathBuilder = new PathBuilder(QContentEntity.class, "contentEntity");
+            orderSpecifiers.add(new OrderSpecifier(
+                order.isAscending() ? Order.ASC : Order.DESC,
+                pathBuilder.get(order.getProperty())
+            ));
+        }
 
-	// 컨텐츠 뷰 Predicate
-	private BooleanExpression getViewPredicate(ContentType contentType, Long categoryId, QContentEntity contentEntity) {
-		BooleanExpression baseExpression = getPublicContentsPredicate(contentEntity);
+        return orderSpecifiers;
+    }
 
-		BooleanExpression viewExpression = contentEntity.contentType.eq(contentType)
-			.and(categoryId != null ? contentEntity.category.id.eq(categoryId) : null);
+    // TODO: 정렬 가능 필드 범위가 정해지면 Dto 단계에서 검증할 것
+    // Field OrderSpecifiers
+    private List<OrderSpecifier<?>> getOrderSpecifiers(String sort) {
+        List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
 
-		return baseExpression.and(viewExpression);
-	}
+        Field field;
+        try {
+            field = contentEntity.getClass().getField(sort);
+        } catch (NoSuchFieldException e) {
+            throw new CommonException(CONTENT_SORT_COL_NOT_FOUND);
+        }
 
-	// 어드민 컨텐츠 뷰 Predicate - 컨텐츠 뷰 Predicate 에서 ACTIVATED/DEACTIVATED 확인하는 부분 빠짐
-	private BooleanExpression getAdminViewPredicate(
-		ContentType contentType, Long categoryId, QContentEntity contentEntity
-	) {
+        Path<Object> path = Expressions.path(Object.class, contentEntity, field.getName());
 
-		return contentEntity.contentType.eq(contentType)
-			.and(categoryId != null ? contentEntity.category.id.eq(categoryId) : null);
-	}
+        orderSpecifiers.add(new OrderSpecifier(Order.DESC, path));
 
-	// 컨텐츠 프리뷰 Predicate
-	private BooleanExpression getPreviewPredicate(ContentType contentType, QContentEntity contentEntity) {
-		BooleanExpression baseExpression = getPublicContentsPredicate(contentEntity);
+        return orderSpecifiers;
+    }
 
-		BooleanExpression previewExpression = contentEntity.contentType.eq(contentType);
+    // Admin view를 위한 공통 쿼리
+    private Page<ContentInfo.Admin> findAdminViewPage(
+        Pageable pageable, BooleanExpression predicate, List<OrderSpecifier<?>> orderSpecifiers
+    ) {
+        List<ContentInfo.Admin> contents = queryFactory
+            .select(
+                Projections.constructor(
+                    ContentInfo.Admin.class,
+                    contentEntity.id,
+                    contentEntity.title,
+                    contentEntity.category.name,
+                    contentEntity.contentType,
+                    contentEntity.hits,
+                    contentEntity.numOfQuiz,
+                    contentEntity.contentStatus
+                )
+            )
+            .from(contentEntity)
+            .where(predicate)
+            .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
 
-		return baseExpression.and(previewExpression);
-	}
+        JPAQuery<Long> countQuery = queryFactory
+            .select(contentEntity.id.count())
+            .from(contentEntity)
+            .where(predicate);
 
-	// TODO: 정렬 가능 필드 범위가 정해지면 Dto 단계에서 검증할 것
-	// Pageable OrderSpecifiers
-	private List<OrderSpecifier<?>> getOrderSpecifiers(Pageable pageable) {
-		List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
-
-		for (Sort.Order order : pageable.getSort()) {
-			try {
-				QContentEntity.class.getDeclaredField(order.getProperty());
-			} catch (NoSuchFieldException e) {
-				throw new CommonException(CONTENT_SORT_COL_NOT_FOUND);
-			}
-
-			PathBuilder pathBuilder = new PathBuilder(QContentEntity.class, "contentEntity");
-			orderSpecifiers.add(new OrderSpecifier(
-				order.isAscending() ? Order.ASC : Order.DESC,
-				pathBuilder.get(order.getProperty())
-			));
-		}
-
-		return orderSpecifiers;
-	}
-
-	// TODO: 정렬 가능 필드 범위가 정해지면 Dto 단계에서 검증할 것
-	// Field OrderSpecifiers
-	private List<OrderSpecifier<?>> getOrderSpecifiers(String sort, QContentEntity contentEntity) {
-		List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
-
-		Field field;
-		try {
-			field = contentEntity.getClass().getField(sort);
-		} catch (NoSuchFieldException e) {
-			throw new CommonException(CONTENT_SORT_COL_NOT_FOUND);
-		}
-
-		Path<Object> path = Expressions.path(Object.class, contentEntity, field.getName());
-
-		orderSpecifiers.add(new OrderSpecifier(Order.DESC, path));
-
-		return orderSpecifiers;
-	}
-
-	// Admin view를 위한 공통 쿼리
-	private Page<ContentInfo.Admin> findAdminViewPage(
-		Pageable pageable, BooleanExpression predicate,
-		List<OrderSpecifier<?>> orderSpecifiers, QContentEntity contentEntity
-	) {
-		List<ContentInfo.Admin> contents = queryFactory
-			.select(
-				Projections.constructor(
-					ContentInfo.Admin.class,
-					contentEntity.id,
-					contentEntity.title,
-					contentEntity.category.name,
-					contentEntity.contentType,
-					contentEntity.hits,
-					contentEntity.numOfQuiz,
-					contentEntity.contentStatus
-				)
-			)
-			.from(contentEntity)
-			.where(predicate)
-			.orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
-			.offset(pageable.getOffset())
-			.limit(pageable.getPageSize())
-			.fetch();
-
-		JPAQuery<Long> countQuery = queryFactory
-			.select(contentEntity.id.count())
-			.from(contentEntity)
-			.where(predicate);
-
-		return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchOne);
-	}
+        return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchOne);
+    }
 
 }

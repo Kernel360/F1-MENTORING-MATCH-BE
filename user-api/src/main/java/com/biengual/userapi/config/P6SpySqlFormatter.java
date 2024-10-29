@@ -2,11 +2,11 @@ package com.biengual.userapi.config;
 
 import java.sql.SQLException;
 import java.util.Locale;
-import static org.springframework.util.StringUtils.hasText;
 
 import org.hibernate.engine.jdbc.internal.FormatStyle;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import com.p6spy.engine.common.ConnectionInformation;
 import com.p6spy.engine.event.JdbcEventListener;
@@ -37,7 +37,7 @@ public class P6SpySqlFormatter extends JdbcEventListener implements MessageForma
 	}
 
 	private String format(String category, String sql) {
-		if (hasText(sql) && isStatement(category)) {
+		if (StringUtils.hasText(sql) && isStatement(category)) {
 			if (isDdl(trim(sql))) {
 				return FormatStyle.DDL.getFormatter().format(sql);
 			}

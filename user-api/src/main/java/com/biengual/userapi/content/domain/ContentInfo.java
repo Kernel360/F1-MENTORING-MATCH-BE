@@ -2,7 +2,9 @@ package com.biengual.userapi.content.domain;
 
 import java.util.List;
 
-import com.biengual.userapi.script.domain.entity.Script;
+import com.biengual.core.domain.document.content.script.Script;
+import com.biengual.core.enums.ContentStatus;
+import com.biengual.core.enums.ContentType;
 
 import lombok.Builder;
 
@@ -42,6 +44,19 @@ public class ContentInfo {
 	}
 
 	@Builder
+	public record UserScript(
+		Script script,
+		Boolean isHighlighted,
+		String description
+	) {
+		public static UserScript of(Script script) {
+			return UserScript.builder()
+				.script(script)
+				.build();
+		}
+	}
+
+	@Builder
 	public record Detail(
 		Long contentId,
 		ContentType contentType,
@@ -50,7 +65,7 @@ public class ContentInfo {
 		String thumbnailUrl,
 		String videoUrl,
 		Integer hits,
-		List<Script> scriptList
+		List<UserScript> scriptList
 	) {
 	}
 

@@ -1,8 +1,9 @@
 package com.biengual.userapi.user.application;
 
-import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
+import com.biengual.core.domain.entity.user.UserEntity;
+import com.biengual.core.util.CookieUtil;
+import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
 import com.biengual.userapi.user.domain.*;
-import com.biengual.userapi.util.CookieUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

@@ -1,11 +1,12 @@
 package com.biengual.userapi.content.application;
 
-import com.biengual.userapi.annotation.Facade;
+import com.biengual.core.annotation.Facade;
+import com.biengual.core.util.PaginationInfo;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.content.domain.ContentService;
 import com.biengual.userapi.crawling.domain.CrawlingService;
-import com.biengual.userapi.util.PaginationInfo;
+
 import lombok.RequiredArgsConstructor;
 
 @Facade
@@ -51,11 +52,6 @@ public class ContentFacade {
 	// 리스닝 컨텐츠 프리뷰 조회
 	public ContentInfo.PreviewContents getListeningPreview(ContentCommand.GetListeningPreview command) {
 		return contentService.getPreviewContents(command);
-	}
-
-	// 컨텐츠 디테일 조회
-	public ContentInfo.Detail getDetailContent(Long contentId) {
-		return contentService.getScriptsOfContent(contentId);
 	}
 
 	// 어드민 페이지 리딩 컨텐츠 조회

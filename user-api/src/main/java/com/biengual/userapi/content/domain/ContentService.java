@@ -1,6 +1,6 @@
 package com.biengual.userapi.content.domain;
 
-import com.biengual.userapi.util.PaginationInfo;
+import com.biengual.core.util.PaginationInfo;
 
 /**
  * Content 도메인의 Service 계층의 인터페이스
@@ -14,7 +14,7 @@ public interface ContentService {
 
 	PaginationInfo<ContentInfo.ViewContent> getViewContents(ContentCommand.GetListeningView command);
 
-	ContentInfo.Detail getScriptsOfContent(Long contentId);
+	ContentInfo.Detail getScriptsOfContent(ContentCommand.GetDetail command);
 
 	void createContent(ContentCommand.Create command);
 
