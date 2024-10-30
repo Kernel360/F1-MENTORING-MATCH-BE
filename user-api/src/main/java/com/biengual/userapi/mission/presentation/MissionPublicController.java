@@ -51,7 +51,7 @@ public class MissionPublicController {
         OAuth2UserPrincipal principal
     ) {
         MissionInfo.StatusInfo info = missionService.getMissionStatus(principal.getId());
-        Status.Response response = missionDtoMapper.ofStatus(info);
+        StatusDto.Response response = missionDtoMapper.ofStatus(info);
 
         return ResponseEntityFactory.toResponseEntity(MISSION_STATUS_CHECK_SUCCESS, response);
     }
@@ -69,7 +69,7 @@ public class MissionPublicController {
         @AuthenticationPrincipal
         OAuth2UserPrincipal principal,
         @RequestBody
-        Update.Request request
+        UpdateDto.Request request
     ) {
         MissionCommand.Update command = missionDtoMapper.doUpdate(principal, request);
 

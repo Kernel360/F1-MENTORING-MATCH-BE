@@ -1,5 +1,7 @@
 package com.biengual.userapi.mission.infrastructure;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import com.biengual.core.annotation.DataProvider;
 import com.biengual.core.domain.entity.mission.MissionEntity;
 import com.biengual.userapi.mission.domain.MissionCommand;
@@ -24,6 +26,7 @@ public class MissionStoreImpl implements MissionStore {
     }
 
     @Override
+    @Transactional
     public void resetMission() {
         missionCustomRepository.resetMission();
     }

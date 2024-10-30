@@ -8,6 +8,5 @@ public class MissionCommand {
         boolean memo,
         boolean quiz
     ) {
-
     }
 }

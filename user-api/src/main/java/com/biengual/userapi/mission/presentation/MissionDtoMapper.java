@@ -27,10 +27,10 @@ public interface MissionDtoMapper {
 
     // Command <- Request
     @Mapping(target = "missionId", source = "principal.id")
-    MissionCommand.Update doUpdate(OAuth2UserPrincipal principal, Update.Request request);
+    MissionCommand.Update doUpdate(OAuth2UserPrincipal principal, UpdateDto.Request request);
 
     // Response <- Info
-    Status.Response ofStatus(MissionInfo.StatusInfo info);
+    StatusDto.Response ofStatus(MissionInfo.StatusInfo info);
 
 
     // Entity <-> Info, Info <-> Info

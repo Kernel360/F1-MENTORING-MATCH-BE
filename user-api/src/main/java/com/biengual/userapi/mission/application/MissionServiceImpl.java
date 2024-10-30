@@ -1,6 +1,5 @@
 package com.biengual.userapi.mission.application;
 
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,14 +35,4 @@ public class MissionServiceImpl implements MissionService {
         missionStore.updateMissionComplete(command);
     }
 
-    /**
-     * 미션 리셋 : 04:00 기준
-     */
-    @Override
-    @Transactional
-    @Scheduled(cron = "0 0 4 * * *")
-    public void resetMission() {
-        // TODO: 미션 리셋 전에 저장해서 이후 대시보드에 보여줘야 하는지 결정되지 않음
-        missionStore.resetMission();
-    }
 }

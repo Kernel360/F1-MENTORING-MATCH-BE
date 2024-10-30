@@ -1,10 +1,15 @@
 package com.biengual.userapi.mission.presentation;
 
-public class Update {
+import jakarta.validation.constraints.NotNull;
+
+public class UpdateDto {
 
     public record Request(
+        @NotNull
         boolean oneContent,
+        @NotNull
         boolean memo,
+        @NotNull
         boolean quiz
     ) {
     }
