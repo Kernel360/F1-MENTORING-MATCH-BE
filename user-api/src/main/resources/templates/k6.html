@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title>k6 Runner</title>
+</head>
+<body>
+<h1>Run k6 Script</h1>
+<form th:action="@{k6/run}" method="post">
+    <label for="script">Select Script:</label>
+    <select id="script" name="script">
+        <option value="test1.js">Test 1</option>
+        <option value="test2.js">Test 2</option>
+        <!-- 더 많은 스크립트를 추가할 수 있음 -->
+    </select>
+    <button type="submit">Run</button>
+</form>
+<div th:if="${result}">
+    <h2>Result:</h2>
+    <pre th:text="${result}"></pre>
+</div>
+</body>
+</html>
