@@ -57,16 +57,13 @@ public class MissionCustomRepository {
             .where(missionEntity.userId.eq(command.userId()));
 
         if (command.oneContent()) {
-            clause.where(missionEntity.oneContent.isFalse())
-                .set(missionEntity.oneContent, true);
+            clause.set(missionEntity.oneContent, true);
         }
         if (command.bookmark()) {
-            clause.where(missionEntity.bookmark.isFalse())
-                .set(missionEntity.bookmark, true);
+            clause.set(missionEntity.bookmark, true);
         }
         if (command.quiz()) {
-            clause.where(missionEntity.quiz.isFalse())
-                .set(missionEntity.quiz, true);
+            clause.set(missionEntity.quiz, true);
         }
 
         clause.execute();
