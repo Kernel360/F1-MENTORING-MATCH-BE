@@ -1,7 +1,8 @@
 package com.biengual.userapi.aop;
 
-import com.biengual.userapi.message.ApiCustomResponse;
-import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
+import com.biengual.core.response.ApiCustomResponse;
+import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import static com.biengual.userapi.message.status.UserServiceStatus.USER_LOGIN_SUCCESS;
+import static com.biengual.core.response.status.UserServiceStatus.USER_LOGIN_SUCCESS;
 
 /**
  * 로그 남기는 것을 AOP로 관리하기 위한 클래스
@@ -39,7 +40,7 @@ public class LoggingAspect {
     @Pointcut("@within(org.springframework.stereotype.Service)")
     private void service() {}
 
-    @Pointcut("@annotation(com.biengual.userapi.annotation.LoginLogging)")
+    @Pointcut("@annotation(com.biengual.core.annotation.LoginLogging)")
     private void login() {}
 
     // ApiCustomResponse 형식으로 ResponseEntity를 반환하는 RestController의 정상 응답에 대한 로그

@@ -1,11 +1,12 @@
 package com.biengual.userapi.user.presentation;
 
-import com.biengual.userapi.user.domain.enums.Gender;
-import lombok.Builder;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import com.biengual.core.enums.Gender;
+
+import lombok.Builder;
 
 public class UserResponseDto {
 

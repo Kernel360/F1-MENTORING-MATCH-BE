@@ -1,11 +1,12 @@
 package com.biengual.userapi.bookmark.domain;
 
+import com.biengual.core.enums.ContentStatus;
+import lombok.Builder;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.biengual.userapi.content.domain.enums.ContentType;
-
-import lombok.Builder;
+import com.biengual.core.enums.ContentType;
 
 public class BookmarkInfo {
 
@@ -38,7 +39,8 @@ public class BookmarkInfo {
 		Long contentId,
 		String contentTitle,
 		LocalDateTime createdAt,
-		LocalDateTime updatedAt
+		LocalDateTime updatedAt,
+		ContentStatus contentStatus
 	) {
 	}
 

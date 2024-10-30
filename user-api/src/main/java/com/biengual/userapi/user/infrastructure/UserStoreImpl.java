@@ -1,21 +1,22 @@
 package com.biengual.userapi.user.infrastructure;
 
-import com.biengual.userapi.annotation.DataProvider;
-import com.biengual.userapi.category.domain.entity.CategoryEntity;
-import com.biengual.userapi.category.repository.CategoryRepository;
-import com.biengual.userapi.message.error.exception.CommonException;
-import com.biengual.userapi.user.domain.UserCategoryEntity;
-import com.biengual.userapi.user.domain.UserCommand;
-import com.biengual.userapi.user.domain.UserEntity;
-import com.biengual.userapi.user.domain.UserStore;
-import com.biengual.userapi.user.repository.UserCategoryCustomRepository;
-import com.biengual.userapi.user.repository.UserCategoryRepository;
-import com.biengual.userapi.user.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
+import static com.biengual.core.response.error.code.UserErrorCode.*;
 
 import java.util.List;
 
-import static com.biengual.userapi.message.error.code.UserErrorCode.USER_NOT_FOUND;
+import com.biengual.core.annotation.DataProvider;
+import com.biengual.core.domain.entity.category.CategoryEntity;
+import com.biengual.core.domain.entity.user.UserCategoryEntity;
+import com.biengual.core.domain.entity.user.UserEntity;
+import com.biengual.core.response.error.exception.CommonException;
+import com.biengual.userapi.category.domain.CategoryRepository;
+import com.biengual.userapi.user.domain.UserCategoryCustomRepository;
+import com.biengual.userapi.user.domain.UserCategoryRepository;
+import com.biengual.userapi.user.domain.UserCommand;
+import com.biengual.userapi.user.domain.UserRepository;
+import com.biengual.userapi.user.domain.UserStore;
+
+import lombok.RequiredArgsConstructor;
 
 @DataProvider
 @RequiredArgsConstructor
@@ -33,7 +34,9 @@ public class UserStoreImpl implements UserStore {
             .orElseThrow(() -> new CommonException(USER_NOT_FOUND));
 
         // UserEntity Dirty Checking
-        user.updateMyInfo(command);
+        user.updateMyInfo(
+            command.username(), command.nickname(), command.phoneNumber(), command.birth(), command.gender()
+        );
 
         // user가 이미 관심 카테고리로 등록한 CategoryIds List
         List<Long> alreadyRegisteredMyCategoryIds =

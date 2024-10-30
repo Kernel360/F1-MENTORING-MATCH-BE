@@ -1,21 +1,17 @@
 package com.biengual.userapi.bookmark.presentation;
 
-import org.mapstruct.InjectionStrategy;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
-
+import com.biengual.core.domain.entity.bookmark.BookmarkEntity;
+import com.biengual.core.enums.ContentStatus;
 import com.biengual.userapi.bookmark.domain.BookmarkCommand;
-import com.biengual.userapi.bookmark.domain.BookmarkEntity;
 import com.biengual.userapi.bookmark.domain.BookmarkInfo;
-import com.biengual.userapi.content.domain.enums.ContentType;
-import com.biengual.userapi.oauth2.domain.info.OAuth2UserPrincipal;
+import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
+import org.mapstruct.*;
 
 /**
  * do~ : Command <- Request
  * of~ : Response <- Info
  * build~ :  Entity <-> Info, Info <-> Info
- *
+ * <p>
  * BookmarkDto 와 Info, Command 간의 Mapper
  *
  * @author 김영래
@@ -46,7 +42,10 @@ public interface BookmarkDtoMapper {
 	// Response <- Info
 	BookmarkResponseDto.ContentListRes ofContentListRes(BookmarkInfo.PositionInfo positionInfos);
 
-	BookmarkResponseDto.MyListRes ofMyListRes(BookmarkInfo.MyListInfo myList);
+	BookmarkResponseDto.MyListRes ofMyListRes(BookmarkInfo.MyListInfo myListInfo);
+
+	@Mapping(target = "isActive", source = "contentStatus", qualifiedByName = "toIsActive")
+	BookmarkResponseDto.MyList ofMyList(BookmarkInfo.MyList myList);
 
 	BookmarkResponseDto.ContentList ofContentList(BookmarkInfo.Position position);
 
@@ -54,10 +53,10 @@ public interface BookmarkDtoMapper {
 	@Mapping(target = "bookmarkId", source = "id")
 	BookmarkInfo.Position buildPosition(BookmarkEntity bookmark);
 
-	@Mapping(target = "bookmarkId", source = "bookmark.id")
-	@Mapping(target = "bookmarkDetail", source = "bookmark.detail")
-	@Mapping(target = "contentId", source = "bookmark.scriptIndex")
-	@Mapping(target = "contentTitle", source = "title")
-	BookmarkInfo.MyList buildMyList(BookmarkEntity bookmark, ContentType contentType, String title);
+	// Internal Method =================================================================================================
 
+	@Named("toIsActive")
+	default Boolean toIsActive(ContentStatus contentStatus) {
+		return contentStatus == ContentStatus.ACTIVATED;
+	}
 }

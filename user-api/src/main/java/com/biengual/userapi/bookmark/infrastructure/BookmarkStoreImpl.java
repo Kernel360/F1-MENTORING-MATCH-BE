@@ -1,65 +1,52 @@
 package com.biengual.userapi.bookmark.infrastructure;
 
-import com.biengual.userapi.annotation.DataProvider;
+import static com.biengual.core.response.error.code.BookmarkErrorCode.*;
+import static com.biengual.core.response.error.code.ContentErrorCode.*;
+
+import com.biengual.core.annotation.DataProvider;
+import com.biengual.core.domain.document.content.ContentDocument;
+import com.biengual.core.domain.document.content.script.YoutubeScript;
+import com.biengual.core.domain.entity.bookmark.BookmarkEntity;
+import com.biengual.core.enums.ContentType;
+import com.biengual.core.response.error.exception.CommonException;
 import com.biengual.userapi.bookmark.domain.*;
 import com.biengual.userapi.bookmark.presentation.BookmarkDtoMapper;
-import com.biengual.userapi.content.domain.entity.ContentDocument;
-import com.biengual.userapi.content.domain.enums.ContentType;
-import com.biengual.userapi.content.repository.ContentRepository;
-import com.biengual.userapi.content.repository.ContentScriptRepository;
-import com.biengual.userapi.message.error.exception.CommonException;
-import com.biengual.userapi.script.domain.entity.YoutubeScript;
-import com.biengual.userapi.user.domain.UserEntity;
-import com.biengual.userapi.user.repository.UserRepository;
+import com.biengual.userapi.content.domain.ContentDocumentRepository;
+import com.biengual.userapi.content.domain.ContentCustomRepository;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 
-import java.util.Objects;
-
-import static com.biengual.userapi.message.error.code.BookmarkErrorCode.BOOKMARK_NOT_FOUND;
-import static com.biengual.userapi.message.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
-import static com.biengual.userapi.message.error.code.UserErrorCode.USER_NOT_FOUND;
 
 @DataProvider
 @RequiredArgsConstructor
 public class BookmarkStoreImpl implements BookmarkStore {
 	private final BookmarkRepository bookmarkRepository;
-	private final UserRepository userRepository;
-	private final ContentRepository contentRepository;
-	private final ContentScriptRepository contentScriptRepository;
+	private final BookmarkCustomRepository bookmarkCustomRepository;
+	private final ContentDocumentRepository contentDocumentRepository;
+	private final ContentCustomRepository contentCustomRepository;
 	private final BookmarkDtoMapper bookmarkDtoMapper;
 
 	@Override
 	public void deleteBookmark(BookmarkCommand.Delete command) {
-		bookmarkRepository.deleteBookmark(command.userId(), command.bookmarkId());
+		bookmarkCustomRepository.deleteBookmark(command);
 	}
 
 	@Override
 	public void saveBookmark(BookmarkCommand.Create command) {
-		// TODO: user -> command.userId() 로 수정 필요함, updateUserBookmark 로직도 수정 필요
-		UserEntity user = userRepository.findById(command.userId())
-			.orElseThrow(() -> new CommonException(USER_NOT_FOUND));
-
-		ContentDocument content = contentScriptRepository.findContentDocumentById(
-			new ObjectId(contentRepository.findMongoIdByContentId(command.contentId()))
+		ContentDocument content = contentDocumentRepository.findContentDocumentById(
+			new ObjectId(contentCustomRepository.findMongoIdByContentId(command.contentId()))
 		).orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
 
 		BookmarkEntity bookmark
 			= command.toEntity(extractDetail(command, content), extractStartTime(command, content));
 
 		bookmarkRepository.save(bookmark);
-		user.updateUserBookmark(bookmark);
 	}
 
 	@Override
 	public BookmarkInfo.Position updateBookmark(BookmarkCommand.Update command) {
-		UserEntity user = userRepository.findById(command.userId())
-			.orElseThrow(() -> new CommonException(USER_NOT_FOUND));
 
-		BookmarkEntity bookmark = user.getBookmarks()
-			.stream()
-			.filter(bookmark1 -> Objects.equals(bookmark1.getId(), command.bookmarkId()))
-			.findFirst()
+		BookmarkEntity bookmark = bookmarkRepository.findByIdAndUserId(command.bookmarkId(), command.userId())
 			.orElseThrow(() -> new CommonException(BOOKMARK_NOT_FOUND));
 
 		bookmark.updateDescription(command.description());
@@ -76,7 +63,7 @@ public class BookmarkStoreImpl implements BookmarkStore {
 	}
 
 	private Double extractStartTime(BookmarkCommand.Create command, ContentDocument content) {
-		if (contentRepository.findContentTypeById(command.contentId()).equals(ContentType.READING)) {
+		if (contentCustomRepository.findContentTypeById(command.contentId()).equals(ContentType.READING)) {
 			return null;
 		}
 

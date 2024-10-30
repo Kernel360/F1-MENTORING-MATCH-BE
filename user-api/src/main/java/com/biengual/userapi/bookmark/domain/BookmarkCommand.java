@@ -1,5 +1,7 @@
 package com.biengual.userapi.bookmark.domain;
 
+import com.biengual.core.domain.entity.bookmark.BookmarkEntity;
+
 public class BookmarkCommand {
 
 	public record GetByContents(
@@ -27,6 +29,7 @@ public class BookmarkCommand {
 				.description(this.description)
 				.detail(detail)
 				.startTimeInSecond(startTime)
+				.userId(this.userId)
 				.build();
 		}
 	}

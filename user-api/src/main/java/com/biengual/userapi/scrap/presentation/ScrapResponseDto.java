@@ -3,7 +3,7 @@ package com.biengual.userapi.scrap.presentation;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.biengual.userapi.content.domain.enums.ContentType;
+import com.biengual.core.enums.ContentType;
 
 import lombok.Builder;
 
@@ -16,7 +16,8 @@ public class ScrapResponseDto {
 		ContentType contentType,
 		LocalDateTime createdAt,
 		String preScripts,
-		String thumbnailUrl
+		String thumbnailUrl,
+		Boolean isActive
 	) {
 	}
 

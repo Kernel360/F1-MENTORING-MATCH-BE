@@ -22,6 +22,8 @@ dependencies {
      * If any dependency is added, please classify by using comments for others.
      * If some dependency is not suitable classification, anyone can change that.
      */
+    implementation project(':biengual-core')
+
     // Spring Boot
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -38,17 +40,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 
-    // TODO 추후에도 서버 Login 화면 주석처리 상태에도 정상적으로 동작하면 삭제할 것
-    // 서버 Login 화면
-//    implementation 'org.springframework.boot:spring-boot-starter-groovy-templates'
-//    implementation 'org.webjars:webjars-locator-core'
-
     // Swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
-
-    //MapStruct
-    implementation 'org.mapstruct:mapstruct:1.4.2.Final'
-    annotationProcessor "org.mapstruct:mapstruct-processor:1.4.2.Final"
 
     // JWT OAuth
     implementation 'io.jsonwebtoken:jjwt:0.9.1' //자바 jwt  라이브러리
@@ -63,6 +56,11 @@ dependencies {
 
     // Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // TODO 추후에도 서버 Login 화면 주석처리 상태에도 정상적으로 동작하면 삭제할 것
+    // 서버 Login 화면
+//    implementation 'org.springframework.boot:spring-boot-starter-groovy-templates'
+//    implementation 'org.webjars:webjars-locator-core'
 
     // Querydsl
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
@@ -99,6 +97,9 @@ dependencies {
     // Flyway
     implementation 'org.flywaydb:flyway-core'
     implementation 'org.flywaydb:flyway-mysql'
+
+    // StringUtils
+    implementation 'org.apache.commons:commons-lang3:3.17.0'
 
     // Stanford CoreNLP
     implementation 'edu.stanford.nlp:stanford-corenlp:4.5.4'

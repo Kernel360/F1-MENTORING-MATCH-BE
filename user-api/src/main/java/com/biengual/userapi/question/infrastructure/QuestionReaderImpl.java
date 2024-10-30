@@ -1,33 +1,31 @@
 package com.biengual.userapi.question.infrastructure;
 
-import static com.biengual.userapi.message.error.code.ContentErrorCode.*;
-import static com.biengual.userapi.message.error.code.QuestionErrorCode.*;
+import static com.biengual.core.response.error.code.ContentErrorCode.*;
+import static com.biengual.core.response.error.code.QuestionErrorCode.*;
+
+import com.biengual.core.annotation.DataProvider;
+import com.biengual.core.domain.document.content.ContentDocument;
+import com.biengual.core.domain.entity.content.ContentEntity;
+import com.biengual.core.domain.entity.question.QuestionDocument;
+import com.biengual.core.response.error.exception.CommonException;
+import com.biengual.userapi.content.domain.ContentDocumentRepository;
+import com.biengual.userapi.content.domain.ContentRepository;
+import com.biengual.userapi.question.domain.QuestionInfo;
+import com.biengual.userapi.question.domain.QuestionReader;
+import com.biengual.userapi.question.domain.QuestionRepository;
+import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bson.types.ObjectId;
-
-import com.biengual.userapi.annotation.DataProvider;
-import com.biengual.userapi.content.domain.entity.ContentDocument;
-import com.biengual.userapi.content.domain.entity.ContentEntity;
-import com.biengual.userapi.content.domain.enums.ContentStatus;
-import com.biengual.userapi.content.repository.ContentRepository;
-import com.biengual.userapi.content.repository.ContentScriptRepository;
-import com.biengual.userapi.message.error.exception.CommonException;
-import com.biengual.userapi.question.domain.QuestionDocument;
-import com.biengual.userapi.question.domain.QuestionInfo;
-import com.biengual.userapi.question.domain.QuestionReader;
-import com.biengual.userapi.question.domain.QuestionRepository;
-
-import lombok.RequiredArgsConstructor;
 
 @DataProvider
 @RequiredArgsConstructor
 public class QuestionReaderImpl implements QuestionReader {
 	private final QuestionRepository questionRepository;
 	private final ContentRepository contentRepository;
-	private final ContentScriptRepository contentScriptRepository;
+	private final ContentDocumentRepository contentDocumentRepository;
 
 	@Override
 	public List<QuestionInfo.Detail> getQuestions(Long contentId) {
@@ -56,7 +54,7 @@ public class QuestionReaderImpl implements QuestionReader {
 		ContentEntity content = contentRepository.findById(contentId)
 			.orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
 
-		return contentScriptRepository.findById(new ObjectId(content.getMongoContentId()))
+		return contentDocumentRepository.findById(new ObjectId(content.getMongoContentId()))
 			.orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
 	}
 }
