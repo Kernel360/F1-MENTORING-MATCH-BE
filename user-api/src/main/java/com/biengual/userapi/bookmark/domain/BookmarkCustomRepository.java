@@ -43,7 +43,6 @@ public class BookmarkCustomRepository {
             .fetchFirst() != null;
     }
 
-    // TODO: 최신순의 기준이 생성시간? 수정시간?
     // 나의 전체 북마크 조회 기능을 위한 쿼리
     public List<BookmarkInfo.MyList> findBookmarkMyListByUserId(Long userId) {
         return queryFactory
