@@ -5,7 +5,8 @@ public class Status {
     public record Response(
         boolean oneContent,
         boolean memo,
-        boolean quiz
+        boolean quiz,
+        Integer count
     ) {
     }
 }

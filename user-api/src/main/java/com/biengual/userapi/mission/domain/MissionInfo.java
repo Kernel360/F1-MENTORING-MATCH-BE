@@ -5,7 +5,8 @@ public class MissionInfo {
     public record StatusInfo(
         boolean oneContent,
         boolean memo,
-        boolean quiz
+        boolean quiz,
+        Integer count
     ) {
     }
 }

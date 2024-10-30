@@ -9,6 +9,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.querydsl.jpa.impl.JPAUpdateClause;
 
@@ -39,6 +41,11 @@ public class MissionCustomRepository {
     }
 
     public Optional<MissionInfo.StatusInfo> findMissionStatusByUserId(Long userId) {
+        NumberExpression<Integer> count = new CaseBuilder()
+            .when(missionEntity.oneContent.isTrue()).then(1).otherwise(0)
+            .add(new CaseBuilder().when(missionEntity.memo.isTrue()).then(1).otherwise(0))
+            .add(new CaseBuilder().when(missionEntity.quiz.isTrue()).then(1).otherwise(0));
+
         return Optional.ofNullable(
             queryFactory
                 .select(
@@ -46,7 +53,8 @@ public class MissionCustomRepository {
                         MissionInfo.StatusInfo.class,
                         missionEntity.oneContent,
                         missionEntity.memo,
-                        missionEntity.quiz
+                        missionEntity.quiz,
+                        count
                     )
                 )
                 .from(missionEntity)
