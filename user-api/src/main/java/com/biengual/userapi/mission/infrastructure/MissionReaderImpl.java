@@ -28,8 +28,4 @@ public class MissionReaderImpl implements MissionReader {
         return missionRepository.existsById(userId);
     }
 
-    @Override
-    public boolean checkMissionDate(Long userId) {
-        return missionCustomRepository.checkMissionDate(userId);
-    }
 }

@@ -2,8 +2,6 @@ package com.biengual.userapi.mission.domain;
 
 import static com.biengual.core.domain.entity.mission.QMissionEntity.*;
 
-import java.time.LocalDate;
-import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
@@ -28,16 +26,6 @@ public class MissionCustomRepository {
             .set(missionEntity.memo, false)
             .set(missionEntity.quiz, false)
             .execute();
-    }
-
-    public boolean checkMissionDate(Long userId) {
-        return !Objects.equals(
-            queryFactory
-                .select(missionEntity.missionDate)
-                .from(missionEntity)
-                .where(missionEntity.id.eq(userId))
-                .fetchFirst(), LocalDate.now()
-        );
     }
 
     public Optional<MissionInfo.StatusInfo> findMissionStatusByUserId(Long userId) {
