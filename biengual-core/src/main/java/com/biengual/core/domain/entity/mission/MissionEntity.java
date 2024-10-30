@@ -50,6 +50,12 @@ public class MissionEntity {
         this.userId = userId;
     }
 
+    public static MissionEntity createByUserId(Long userId){
+        return MissionEntity.builder()
+            .userId(userId)
+            .build();
+    }
+
     @PrePersist
     protected void onCreate() {
         oneContent = false;
