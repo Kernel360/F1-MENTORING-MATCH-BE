@@ -1,6 +1,7 @@
 package com.biengual.core.domain.entity.mission;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -37,7 +38,7 @@ public class MissionEntity {
     private boolean quiz;
 
     @Column(name = "mission_date", nullable = false)
-    private LocalDate missionDate;
+    private LocalDateTime missionDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "mission_status", nullable = false)
@@ -53,6 +54,6 @@ public class MissionEntity {
         oneContent = false;
         memo = false;
         quiz = false;
-        missionDate = LocalDate.now();
+        missionDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
     }
 }

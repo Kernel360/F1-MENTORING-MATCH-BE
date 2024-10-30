@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS `mission`
     `one_content`    BOOLEAN                          NOT NULL DEFAULT false,
     `memo`           BOOLEAN                          NOT NULL DEFAULT false,
     `quiz`           BOOLEAN                          NOT NULL DEFAULT false,
-    `mission_date`   DATE                             NOT NULL,
+    `mission_date`   DATETIME                         NOT NULL,
     `mission_status` enum ('IN_PROGRESS', 'COMPLETE') NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
@@ -14,6 +14,6 @@ CREATE TABLE IF NOT EXISTS `mission`
 
 -- Populate mission table for existing users
 INSERT INTO `mission` (id, one_content, memo, quiz, mission_date, mission_status)
-SELECT u.id, false, false, false, CURDATE(), 'IN_PROGRESS'
+SELECT u.id, false, false, false, CURRENT_TIME(), 'IN_PROGRESS'
 FROM `user` u
 WHERE u.id NOT IN (SELECT id FROM `mission`);
