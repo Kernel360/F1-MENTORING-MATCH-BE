@@ -3,6 +3,7 @@ package com.biengual.userapi.scrap.domain;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.enums.ContentType;
 
 import lombok.Builder;
@@ -17,7 +18,8 @@ public class ScrapInfo {
 		ContentType contentType,
 		LocalDateTime createdAt,
 		String preScripts,
-		String thumbnailUrl
+		String thumbnailUrl,
+		ContentStatus contentStatus
 	) {
 	}
 
