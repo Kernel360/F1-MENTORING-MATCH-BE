@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum MissionSuccessCode implements SuccessCode {
     MISSION_STATUS_CHECK_SUCCESS(HttpStatus.OK, MissionServiceStatus.MISSION_STATUS_CHECK_SUCCESS, "미션 상태 확인 성공"),
+    MISSION_STATUS_UPDATE_SUCCESS(HttpStatus.OK, MissionServiceStatus.MISSION_STATUS_UPDATE_SUCCESS, "미션 업데이트 성공")
     ;
 
     private final HttpStatus code;

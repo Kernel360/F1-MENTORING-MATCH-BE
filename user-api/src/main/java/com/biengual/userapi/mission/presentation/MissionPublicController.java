@@ -5,10 +5,14 @@ import static com.biengual.core.response.success.MissionSuccessCode.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.biengual.core.response.ResponseEntityFactory;
+import com.biengual.core.swagger.SwaggerVoidReturn;
+import com.biengual.userapi.mission.domain.MissionCommand;
 import com.biengual.userapi.mission.domain.MissionInfo;
 import com.biengual.userapi.mission.domain.MissionService;
 import com.biengual.userapi.mission.presentation.swagger.SwaggerMissionStatus;
@@ -52,4 +56,25 @@ public class MissionPublicController {
         return ResponseEntityFactory.toResponseEntity(MISSION_STATUS_CHECK_SUCCESS, response);
     }
 
+    @PutMapping("/status")
+    @Operation(summary = "유저 - 미션 완료 요청", description = "회원이 미션 완료 요청을 보냅니다")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "미션 완료 요청 성공",
+            content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerVoidReturn.class))}
+        ),
+        @ApiResponse(responseCode = "500", description = "서버 에러", content = @Content(mediaType = "application/json"))
+    })
+    public ResponseEntity<Object> updateMissionComplete(
+        @AuthenticationPrincipal
+        OAuth2UserPrincipal principal,
+        @RequestBody
+        Update.Request request
+    ) {
+        MissionCommand.Update command = missionDtoMapper.doUpdate(principal, request);
+
+        missionService.updateMissionComplete(command);
+
+        return ResponseEntityFactory.toResponseEntity(MISSION_STATUS_UPDATE_SUCCESS);
+    }
 }

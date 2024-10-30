@@ -2,9 +2,12 @@ package com.biengual.userapi.mission.presentation;
 
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
+import com.biengual.userapi.mission.domain.MissionCommand;
 import com.biengual.userapi.mission.domain.MissionInfo;
+import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
 
 /**
  * do~ : Command <- Request
@@ -23,9 +26,11 @@ import com.biengual.userapi.mission.domain.MissionInfo;
 public interface MissionDtoMapper {
 
     // Command <- Request
-    Status.Response ofStatus(MissionInfo.StatusInfo info);
+    @Mapping(target = "missionId", source = "principal.id")
+    MissionCommand.Update doUpdate(OAuth2UserPrincipal principal, Update.Request request);
 
     // Response <- Info
+    Status.Response ofStatus(MissionInfo.StatusInfo info);
 
 
     // Entity <-> Info, Info <-> Info

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.querydsl.jpa.impl.JPAUpdateClause;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,15 +19,13 @@ import lombok.RequiredArgsConstructor;
 public class MissionCustomRepository {
     private final JPAQueryFactory queryFactory;
 
-    public void resetMission(Long userId) {
+    public void resetMission() {
         queryFactory
             .update(missionEntity)
             .set(missionEntity.oneContent, false)
             .set(missionEntity.memo, false)
             .set(missionEntity.quiz, false)
-            .where(missionEntity.id.eq(userId))
             .execute();
-
     }
 
     public boolean checkMissionDate(Long userId) {
@@ -54,5 +53,26 @@ public class MissionCustomRepository {
                 .where(missionEntity.id.eq(userId))
                 .fetchFirst()
         );
+    }
+
+    public void completeMission(MissionCommand.Update command) {
+        JPAUpdateClause clause = queryFactory
+            .update(missionEntity)
+            .where(missionEntity.id.eq(command.missionId()));
+
+        if (command.oneContent()) {
+            clause.where(missionEntity.oneContent.isFalse())
+                .set(missionEntity.oneContent, true);
+        }
+        if (command.memo()) {
+            clause.where(missionEntity.memo.isFalse())
+                .set(missionEntity.memo, true);
+        }
+        if (command.quiz()) {
+            clause.where(missionEntity.quiz.isFalse())
+                .set(missionEntity.quiz, true);
+        }
+
+        clause.execute();
     }
 }

@@ -2,6 +2,7 @@ package com.biengual.userapi.mission.infrastructure;
 
 import com.biengual.core.annotation.DataProvider;
 import com.biengual.core.domain.entity.mission.MissionEntity;
+import com.biengual.userapi.mission.domain.MissionCommand;
 import com.biengual.userapi.mission.domain.MissionCustomRepository;
 import com.biengual.userapi.mission.domain.MissionRepository;
 import com.biengual.userapi.mission.domain.MissionStore;
@@ -23,7 +24,12 @@ public class MissionStoreImpl implements MissionStore {
     }
 
     @Override
-    public void resetMission(Long userId) {
-        missionCustomRepository.resetMission(userId);
+    public void resetMission() {
+        missionCustomRepository.resetMission();
+    }
+
+    @Override
+    public void updateMissionComplete(MissionCommand.Update command) {
+        missionCustomRepository.completeMission(command);
     }
 }

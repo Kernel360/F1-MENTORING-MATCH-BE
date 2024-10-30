@@ -1,8 +1,10 @@
 package com.biengual.userapi.mission.application;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.biengual.userapi.mission.domain.MissionCommand;
 import com.biengual.userapi.mission.domain.MissionInfo;
 import com.biengual.userapi.mission.domain.MissionReader;
 import com.biengual.userapi.mission.domain.MissionService;
@@ -25,6 +27,22 @@ public class MissionServiceImpl implements MissionService {
         return missionReader.getMissionsStatus(userId);
     }
 
+    /**
+     * 미션 상태 업데이트
+     */
+    @Override
+    @Transactional
+    public void updateMissionComplete(MissionCommand.Update command) {
+        missionStore.updateMissionComplete(command);
+    }
 
-
+    /**
+     * 미션 리셋 : 04:00 기준
+     */
+    @Override
+    @Transactional
+    @Scheduled(cron = "0 0 4 * * *")
+    public void resetMission() {
+        missionStore.resetMission();
+    }
 }
