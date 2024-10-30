@@ -1,0 +1,29 @@
+package com.biengual.userapi.mission.infrastructure;
+
+import com.biengual.core.annotation.DataProvider;
+import com.biengual.core.domain.entity.mission.MissionEntity;
+import com.biengual.userapi.mission.domain.MissionCustomRepository;
+import com.biengual.userapi.mission.domain.MissionRepository;
+import com.biengual.userapi.mission.domain.MissionStore;
+
+import lombok.RequiredArgsConstructor;
+
+@DataProvider
+@RequiredArgsConstructor
+public class MissionStoreImpl implements MissionStore {
+    private final MissionRepository missionRepository;
+    private final MissionCustomRepository missionCustomRepository;
+
+    @Override
+    public void createMission(Long userId) {
+        MissionEntity mission = MissionEntity.builder()
+            .userId(userId)
+            .build();
+        missionRepository.save(mission);
+    }
+
+    @Override
+    public void resetMission(Long userId) {
+        missionCustomRepository.resetMission(userId);
+    }
+}
