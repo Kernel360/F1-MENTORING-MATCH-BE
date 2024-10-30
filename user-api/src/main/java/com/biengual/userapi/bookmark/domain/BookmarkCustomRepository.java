@@ -64,7 +64,7 @@ public class BookmarkCustomRepository {
             .from(bookmarkEntity)
             .leftJoin(contentEntity).on(bookmarkEntity.scriptIndex.eq(contentEntity.id))
             .where(bookmarkEntity.userId.eq(userId))
-            .orderBy(bookmarkEntity.createdAt.desc())
+            .orderBy(bookmarkEntity.updatedAt.desc())
             .fetch();
     }
 }
