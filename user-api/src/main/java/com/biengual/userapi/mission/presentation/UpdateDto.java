@@ -8,7 +8,7 @@ public class UpdateDto {
         @NotNull
         boolean oneContent,
         @NotNull
-        boolean memo,
+        boolean bookmark,
         @NotNull
         boolean quiz
     ) {

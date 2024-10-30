@@ -23,7 +23,7 @@ public class MissionCustomRepository {
         queryFactory
             .update(missionEntity)
             .set(missionEntity.oneContent, false)
-            .set(missionEntity.memo, false)
+            .set(missionEntity.bookmark, false)
             .set(missionEntity.quiz, false)
             .execute();
     }
@@ -31,7 +31,7 @@ public class MissionCustomRepository {
     public Optional<MissionInfo.StatusInfo> findMissionStatusByUserId(Long userId) {
         NumberExpression<Integer> count = new CaseBuilder()
             .when(missionEntity.oneContent.isTrue()).then(1).otherwise(0)
-            .add(new CaseBuilder().when(missionEntity.memo.isTrue()).then(1).otherwise(0))
+            .add(new CaseBuilder().when(missionEntity.bookmark.isTrue()).then(1).otherwise(0))
             .add(new CaseBuilder().when(missionEntity.quiz.isTrue()).then(1).otherwise(0));
 
         return Optional.ofNullable(
@@ -40,7 +40,7 @@ public class MissionCustomRepository {
                     Projections.constructor(
                         MissionInfo.StatusInfo.class,
                         missionEntity.oneContent,
-                        missionEntity.memo,
+                        missionEntity.bookmark,
                         missionEntity.quiz,
                         count
                     )
@@ -60,9 +60,9 @@ public class MissionCustomRepository {
             clause.where(missionEntity.oneContent.isFalse())
                 .set(missionEntity.oneContent, true);
         }
-        if (command.memo()) {
-            clause.where(missionEntity.memo.isFalse())
-                .set(missionEntity.memo, true);
+        if (command.bookmark()) {
+            clause.where(missionEntity.bookmark.isFalse())
+                .set(missionEntity.bookmark, true);
         }
         if (command.quiz()) {
             clause.where(missionEntity.quiz.isFalse())

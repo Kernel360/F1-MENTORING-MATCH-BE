@@ -5,7 +5,7 @@ public class MissionCommand {
     public record Update(
         Long missionId,
         boolean oneContent,
-        boolean memo,
+        boolean bookmark,
         boolean quiz
     ) {
     }

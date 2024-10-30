@@ -32,7 +32,7 @@ public class MissionEntity {
     private boolean oneContent;
 
     @Column(nullable = false)
-    private boolean memo;
+    private boolean bookmark;
 
     @Column(nullable = false)
     private boolean quiz;
@@ -52,7 +52,7 @@ public class MissionEntity {
     @PrePersist
     protected void onCreate() {
         oneContent = false;
-        memo = false;
+        bookmark = false;
         quiz = false;
         missionDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
     }

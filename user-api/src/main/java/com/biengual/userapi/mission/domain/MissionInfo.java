@@ -4,7 +4,7 @@ public class MissionInfo {
 
     public record StatusInfo(
         boolean oneContent,
-        boolean memo,
+        boolean bookmark,
         boolean quiz,
         Integer count
     ) {
