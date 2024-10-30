@@ -26,7 +26,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MissionEntity {
     @Id // userId 를 PK로 사용
-    private Long id;
+    @Column(name = "id")
+    private Long userId;
 
     @Column(name = "one_content", nullable = false)
     private boolean oneContent;
@@ -46,7 +47,7 @@ public class MissionEntity {
 
     @Builder
     public MissionEntity(Long userId) {
-        this.id = userId;
+        this.userId = userId;
     }
 
     @PrePersist
