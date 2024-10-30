@@ -43,6 +43,7 @@ public class MissionServiceImpl implements MissionService {
     @Transactional
     @Scheduled(cron = "0 0 4 * * *")
     public void resetMission() {
+        // TODO: 미션 리셋 전에 저장해서 이후 대시보드에 보여줘야 하는지 결정되지 않음
         missionStore.resetMission();
     }
 }
