@@ -26,7 +26,7 @@ import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
 public interface MissionDtoMapper {
 
     // Command <- Request
-    @Mapping(target = "missionId", source = "principal.id")
+    @Mapping(target = "userId", source = "principal.id")
     MissionCommand.Update doUpdate(OAuth2UserPrincipal principal, UpdateDto.Request request);
 
     // Response <- Info

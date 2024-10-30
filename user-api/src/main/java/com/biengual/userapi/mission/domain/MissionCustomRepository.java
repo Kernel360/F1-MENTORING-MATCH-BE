@@ -54,7 +54,7 @@ public class MissionCustomRepository {
     public void completeMission(MissionCommand.Update command) {
         JPAUpdateClause clause = queryFactory
             .update(missionEntity)
-            .where(missionEntity.userId.eq(command.missionId()));
+            .where(missionEntity.userId.eq(command.userId()));
 
         if (command.oneContent()) {
             clause.where(missionEntity.oneContent.isFalse())
