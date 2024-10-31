@@ -3,21 +3,23 @@ package com.biengual.userapi.question.infrastructure;
 import static com.biengual.core.response.error.code.ContentErrorCode.*;
 import static com.biengual.core.response.error.code.QuestionErrorCode.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bson.types.ObjectId;
+
 import com.biengual.core.annotation.DataProvider;
 import com.biengual.core.domain.document.content.ContentDocument;
+import com.biengual.core.domain.document.question.QuestionDocument;
 import com.biengual.core.domain.entity.content.ContentEntity;
-import com.biengual.core.domain.entity.question.QuestionDocument;
 import com.biengual.core.response.error.exception.CommonException;
 import com.biengual.userapi.content.domain.ContentDocumentRepository;
 import com.biengual.userapi.content.domain.ContentRepository;
 import com.biengual.userapi.question.domain.QuestionInfo;
 import com.biengual.userapi.question.domain.QuestionReader;
 import com.biengual.userapi.question.domain.QuestionRepository;
-import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
 
-import java.util.ArrayList;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 
 @DataProvider
