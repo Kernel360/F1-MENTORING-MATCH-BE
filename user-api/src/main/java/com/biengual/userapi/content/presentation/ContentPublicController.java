@@ -93,7 +93,6 @@ public class ContentPublicController {
 		return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
 	}
 
-	// TODO: Approve가 된다면 Page 내용을 담는 key 값 변경 사항을 프론트에게 공유해야 합니다.
 	@GetMapping("/preview/paginated-reading")
 	@Operation(summary = "리딩 컨텐츠 프리뷰 페이지 조회", description = "페이지네이션을 적용하여 리딩 컨텐츠 목록을 조회합니다.")
 	@ApiResponses(value = {
@@ -125,7 +124,6 @@ public class ContentPublicController {
 		return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
 	}
 
-	// TODO: Approve가 된다면 Page 내용을 담는 key 값 변경 사항을 프론트에게 공유해야 합니다.
 	@GetMapping("/preview/paginated-listening")
 	@Operation(summary = "리스닝 컨텐츠 프리뷰 페이지 조회", description = "페이지네이션을 적용하여 리스닝 컨텐츠 목록을 조회합니다.")
 	@ApiResponses(value = {

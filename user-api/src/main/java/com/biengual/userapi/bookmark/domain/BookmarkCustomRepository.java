@@ -19,8 +19,8 @@ import lombok.RequiredArgsConstructor;
 public class BookmarkCustomRepository {
     private final JPAQueryFactory queryFactory;
 
-    public void deleteBookmark(BookmarkCommand.Delete command) {
-        queryFactory.delete(bookmarkEntity)
+    public long deleteBookmark(BookmarkCommand.Delete command) {
+        return queryFactory.delete(bookmarkEntity)
             .where(bookmarkEntity.userId.eq(command.userId()))
             .where(bookmarkEntity.id.eq(command.bookmarkId()))
             .execute();

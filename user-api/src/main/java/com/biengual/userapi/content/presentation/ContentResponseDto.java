@@ -16,6 +16,7 @@ public class ContentResponseDto {
 		Double durationInSecond,
 		String enScript,
 		String koScript,
+		Long bookmarkId,
 		Boolean isHighlighted,
 		String description
 	) {
