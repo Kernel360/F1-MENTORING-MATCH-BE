@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -83,7 +82,7 @@ public class NLPAnalyzer {
     public String[] extractKeywords(String text, Set<String> posTags) {
         Annotation document = new Annotation(text.toLowerCase());
         pipeline.annotate(document);
-        List<String> keywords = new ArrayList<>();
+        Set<String> keywords = new HashSet<>();
 
         for (CoreMap sentenceAnnotation : document.get(CoreAnnotations.SentencesAnnotation.class)) {
             for (CoreLabel token : sentenceAnnotation.get(CoreAnnotations.TokensAnnotation.class)) {
