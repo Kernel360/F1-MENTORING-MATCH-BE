@@ -18,6 +18,8 @@ import java.util.Set;
  * NLP 분석기
  * 단어 또는 문장 분석, 각 단어 간 유사도 분석 가능
  *
+ * 유사도 알고리즘은 코사인 유사도 사용
+ *
  * @author 문찬욱
  */
 @Component
@@ -28,8 +30,22 @@ public class NLPAnalyzer {
 
     private static final List<String> SENTENCE_POS_TAGS = List.of("NN", "VB", "JJ");
 
-    // 문장과 단어 간 코사인 유사도 계산
-    public double sentenceWordCosineSimilarity(String sentence, String word) {
+    // 문장들과 단어 간 유사도 계산
+    public double sentencesWordSimilarity(List<String> sentences, String word) {
+        double similarity = 0.0;
+
+        for (String sentence : sentences) {
+            similarity += sentenceWordSimilarity(sentence, word);
+        }
+
+        // 평균 계산
+        return similarity / sentences.size();
+    }
+
+
+
+    // 문장과 단어 간 유사도 계산
+    public double sentenceWordSimilarity(String sentence, String word) {
 
         // 단어 벡터 가져오기
         double[] wordVector = word2Vec.getWordVector(word);
