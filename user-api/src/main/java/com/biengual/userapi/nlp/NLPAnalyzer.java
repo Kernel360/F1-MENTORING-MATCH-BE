@@ -26,8 +26,10 @@ public class NLPAnalyzer {
     private final StanfordCoreNLP pipeline;
     private final Word2Vec word2Vec;
 
+    private static final List<String> SENTENCE_POS_TAGS = List.of("NN", "VB", "JJ");
+
     // 문장과 단어 간 코사인 유사도 계산
-    public double sentenceWordCosineSimilarity(String sentence, String word, Set<String> posTags) {
+    public double sentenceWordCosineSimilarity(String sentence, String word) {
 
         // 단어 벡터 가져오기
         double[] wordVector = word2Vec.getWordVector(word);
@@ -35,8 +37,8 @@ public class NLPAnalyzer {
             return 0.0;
         }
 
-        // 문장을 단어로 분리
-        String[] keywords = extractKeywords(sentence, posTags);
+        // 문장에서 keyword 추출
+        String[] keywords = extractKeywords(sentence, createPosTags(SENTENCE_POS_TAGS));
 
         // 코사인 유사도 계산을 위해 문장 벡터를 단어 벡터와 차원을 동일하게 만듦
         double[] sentenceVector = new double[wordVector.length];
