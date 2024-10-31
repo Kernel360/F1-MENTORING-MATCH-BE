@@ -58,4 +58,5 @@ public class MissionHistoryEntity extends BaseEntity {
             .mission(mission)
             .build();
     }
+
 }
