@@ -24,14 +24,6 @@ public class ScrapCustomRepository {
             .fetch();
     }
 
-    public List<Long> findAllIdsByUserId(Long userId) {
-        return queryFactory
-            .select(scrapEntity.id)
-            .from(scrapEntity)
-            .where(scrapEntity.userId.eq(userId))
-            .fetch();
-    }
-
     public void deleteScrap(ScrapCommand.Delete command) {
         queryFactory.delete(scrapEntity)
             .where(scrapEntity.userId.eq(command.userId()))

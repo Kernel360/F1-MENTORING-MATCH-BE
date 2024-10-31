@@ -26,10 +26,6 @@ public class ScrapReaderImpl implements ScrapReader {
             .toList();
     }
 
-    @Override
-    public List<Long> findAllIdsByUserId(Long userId) {
-        return scrapCustomRepository.findAllIdsByUserId(userId);
-    }
 
     @Override
     public boolean existsScrap(ScrapCommand.GetByContents command) {
