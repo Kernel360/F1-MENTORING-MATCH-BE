@@ -36,12 +36,11 @@ public class CategoryClassifier {
         String mostCategory = "Unknown";
 
         for (String category : categories) {
-            for (String sentence : sentences) {
-                double similarity = nlpAnalyzer.sentenceWordCosineSimilarity(sentence, category);
-                if (mostSimilarity < similarity) {
-                    mostSimilarity = similarity;
-                    mostCategory = category;
-                }
+            double similarity = nlpAnalyzer.sentencesWordSimilarity(sentences, category);
+
+            if (mostSimilarity < similarity) {
+                mostSimilarity = similarity;
+                mostCategory = category;
             }
         }
 
