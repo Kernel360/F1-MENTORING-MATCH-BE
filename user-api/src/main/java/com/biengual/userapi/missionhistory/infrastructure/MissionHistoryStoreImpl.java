@@ -20,8 +20,9 @@ public class MissionHistoryStoreImpl implements MissionHistoryStore {
     @Override
     public void saveMissionsBeforeReset() {
         List<MissionEntity> missions = missionRepository.findAll();
-         missions.stream()
+        List<MissionHistoryEntity> histories = missions.stream()
             .map(MissionHistoryEntity::createByMissionEntity)
-             .forEach(missionHistoryRepository::save);
+            .toList();
+        missionHistoryRepository.saveAll(histories);
     }
 }
