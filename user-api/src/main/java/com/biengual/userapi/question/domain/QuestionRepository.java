@@ -1,6 +1,6 @@
 package com.biengual.userapi.question.domain;
 
-import com.biengual.core.domain.entity.question.QuestionDocument;
+import com.biengual.core.domain.document.question.QuestionDocument;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
