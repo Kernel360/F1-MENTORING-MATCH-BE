@@ -1,4 +1,4 @@
-package com.biengual.core.domain.entity.question;
+package com.biengual.core.domain.document.question;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 

@@ -15,7 +15,7 @@ import org.bson.types.ObjectId;
 import com.biengual.core.annotation.DataProvider;
 import com.biengual.core.domain.document.content.ContentDocument;
 import com.biengual.core.domain.entity.content.ContentEntity;
-import com.biengual.core.domain.entity.question.QuestionDocument;
+import com.biengual.core.domain.document.question.QuestionDocument;
 import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.enums.QuestionType;
 import com.biengual.core.response.error.exception.CommonException;
