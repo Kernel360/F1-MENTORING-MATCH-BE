@@ -1,10 +1,8 @@
 package com.biengual.core.domain.entity.mission;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-
 import org.hibernate.annotations.DynamicUpdate;
 
+import com.biengual.core.domain.entity.BaseEntity;
 import com.biengual.core.enums.MissionStatus;
 
 import jakarta.persistence.Column;
@@ -24,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MissionEntity {
+public class MissionEntity extends BaseEntity {
     @Id // userId 를 PK로 사용
     @Column(name = "id")
     private Long userId;
@@ -37,9 +35,6 @@ public class MissionEntity {
 
     @Column(nullable = false)
     private boolean quiz;
-
-    @Column(name = "mission_date", nullable = false)
-    private LocalDateTime missionDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "mission_status", nullable = false)
@@ -61,6 +56,5 @@ public class MissionEntity {
         oneContent = false;
         bookmark = false;
         quiz = false;
-        missionDate = LocalDateTime.now(ZoneId.of("Asia/Seoul"));
     }
 }

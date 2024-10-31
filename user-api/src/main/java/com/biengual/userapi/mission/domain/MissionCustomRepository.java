@@ -2,10 +2,13 @@ package com.biengual.userapi.mission.domain;
 
 import static com.biengual.core.domain.entity.mission.QMissionEntity.*;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
+import com.biengual.core.enums.MissionStatus;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.NumberExpression;
@@ -25,6 +28,9 @@ public class MissionCustomRepository {
             .set(missionEntity.oneContent, false)
             .set(missionEntity.bookmark, false)
             .set(missionEntity.quiz, false)
+            .set(missionEntity.createdAt, LocalDateTime.now(ZoneId.of("Asia/Seoul")))
+            .set(missionEntity.updatedAt, LocalDateTime.now(ZoneId.of("Asia/Seoul")))
+            .set(missionEntity.missionStatus, MissionStatus.IN_PROGRESS)
             .execute();
     }
 
