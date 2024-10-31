@@ -17,7 +17,7 @@ public class MissionHistoryStoreImpl implements MissionHistoryStore {
     private final MissionRepository missionRepository;
     private final MissionHistoryRepository missionHistoryRepository;
 
-    @Override
+    @Override   // TODO: 데이터 마트 사용 검토
     public void saveMissionsBeforeReset() {
         List<MissionEntity> missions = missionRepository.findAll();
         List<MissionHistoryEntity> histories = missions.stream()
