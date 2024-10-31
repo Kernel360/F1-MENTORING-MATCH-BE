@@ -25,6 +25,7 @@ public class UserContentBookmarks {
                 BookmarkEntity bookmark = bookmarkMapBySentenceIndex.get((long) i);
                 return ContentInfo.UserScript.builder()
                     .script(scripts.get(i))
+                    .bookmarkId(bookmark != null ? bookmark.getId() : null)
                     .isHighlighted(bookmark != null)
                     .description(bookmark != null ? bookmark.getDescription() : null)
                     .build();

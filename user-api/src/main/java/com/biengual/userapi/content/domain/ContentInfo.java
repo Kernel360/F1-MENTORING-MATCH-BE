@@ -46,6 +46,7 @@ public class ContentInfo {
 	@Builder
 	public record UserScript(
 		Script script,
+		Long bookmarkId,
 		Boolean isHighlighted,
 		String description
 	) {
