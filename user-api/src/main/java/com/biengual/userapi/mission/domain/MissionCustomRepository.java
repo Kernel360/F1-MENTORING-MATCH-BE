@@ -28,7 +28,6 @@ public class MissionCustomRepository {
             .set(missionEntity.oneContent, false)
             .set(missionEntity.bookmark, false)
             .set(missionEntity.quiz, false)
-            .set(missionEntity.createdAt, LocalDateTime.now(ZoneId.of("Asia/Seoul")))
             .set(missionEntity.updatedAt, LocalDateTime.now(ZoneId.of("Asia/Seoul")))
             .set(missionEntity.missionStatus, MissionStatus.IN_PROGRESS)
             .execute();
