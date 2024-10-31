@@ -1,11 +1,12 @@
 package com.biengual.userapi.content.presentation;
 
+import java.util.List;
+
 import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.enums.ContentType;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Builder;
 
-import java.util.List;
+import lombok.Builder;
 
 public class ContentResponseDto {
 	@Builder
@@ -43,7 +44,8 @@ public class ContentResponseDto {
 		ContentType contentType,
 		String preScripts,     // description
 		String category,
-		Integer hits
+		Integer hits,
+		Boolean isScrapped
 	) {
 	}
 
@@ -71,7 +73,8 @@ public class ContentResponseDto {
 		ContentType contentType,
 		String preScripts,
 		String category,
-		Integer hits
+		Integer hits,
+		Boolean isScrapped
 	) {
 	}
 
