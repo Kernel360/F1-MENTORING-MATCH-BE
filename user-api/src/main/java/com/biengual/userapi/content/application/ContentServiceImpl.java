@@ -64,7 +64,7 @@ public class ContentServiceImpl implements ContentService {
     // 스크랩 많은 순 컨텐츠 프리뷰 조회
     @Override
     @Transactional(readOnly = true)
-    public ContentInfo.PreviewContents getContentsByScrapCount(ContentCommand.CountScrap command) {
+    public ContentInfo.PreviewContents getContentsByScrapCount(ContentCommand.GetScrapPreview command) {
         return ContentInfo.PreviewContents.of(contentReader.findContentsByScrapCount(command));
     }
 

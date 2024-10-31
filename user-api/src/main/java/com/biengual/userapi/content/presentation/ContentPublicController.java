@@ -69,7 +69,7 @@ public class ContentPublicController {
         @AuthenticationPrincipal
         OAuth2UserPrincipal principal
     ) {
-        ContentCommand.CountScrap command = contentDtoMapper.doCountScrap(size, principal.getId());
+        ContentCommand.GetScrapPreview command = contentDtoMapper.doGetScrapPreview(size, principal.getId());
         ContentInfo.PreviewContents info = contentFacade.getContentsByScrapCount(command);
         ContentResponseDto.ScrapPreviewContentsRes response = contentDtoMapper.ofScrapPreviewContentsRes(info);
 

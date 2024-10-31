@@ -107,7 +107,8 @@ public class ContentCommand {
 	) {
 	}
 
-	public record CountScrap(
+	@Builder
+	public record GetScrapPreview(
 		Integer size,
 		Long userId
 	) {

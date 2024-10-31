@@ -25,7 +25,7 @@ public class ContentFacade {
     }
 
     // 스크랩 많은 순 컨텐츠 프리뷰 조회
-    public ContentInfo.PreviewContents getContentsByScrapCount(ContentCommand.CountScrap command) {
+    public ContentInfo.PreviewContents getContentsByScrapCount(ContentCommand.GetScrapPreview command) {
         return contentService.getContentsByScrapCount(command);
     }
 

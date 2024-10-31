@@ -64,7 +64,7 @@ public interface ContentDtoMapper {
 	@Mapping(target = "userId", source = "principal.id")
 	ContentCommand.GetDetail doGetDetail(Long contentId, OAuth2UserPrincipal principal);
 
-	ContentCommand.CountScrap doCountScrap(Integer size, Long userId);
+	ContentCommand.GetScrapPreview doGetScrapPreview(Integer size, Long userId);
 
 	// Response <- Info
     @Mapping(target = "contentByScrapCount", source = "previewContents")

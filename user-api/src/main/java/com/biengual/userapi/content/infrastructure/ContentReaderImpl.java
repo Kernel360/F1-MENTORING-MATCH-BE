@@ -38,7 +38,7 @@ public class ContentReaderImpl implements ContentReader {
 
 	// 스크랩 많은 순 컨텐츠 프리뷰 조회
 	@Override
-	public List<ContentInfo.PreviewContent> findContentsByScrapCount(ContentCommand.CountScrap command) {
+	public List<ContentInfo.PreviewContent> findContentsByScrapCount(ContentCommand.GetScrapPreview command) {
 		return contentCustomRepository.findContentsByScrapCount(command.size(), command.userId());
 	}
 

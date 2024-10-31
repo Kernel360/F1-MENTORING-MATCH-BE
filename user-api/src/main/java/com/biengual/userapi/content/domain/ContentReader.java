@@ -10,7 +10,7 @@ import com.biengual.core.util.PaginationInfo;
  * @author 문찬욱
  */
 public interface ContentReader {
-    List<ContentInfo.PreviewContent> findContentsByScrapCount(ContentCommand.CountScrap command);
+    List<ContentInfo.PreviewContent> findContentsByScrapCount(ContentCommand.GetScrapPreview command);
 
     PaginationInfo<ContentInfo.PreviewContent> findPreviewPageBySearch(ContentCommand.Search command);
 
