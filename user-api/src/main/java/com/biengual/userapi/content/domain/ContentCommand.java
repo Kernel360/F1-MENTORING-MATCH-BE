@@ -81,6 +81,21 @@ public class ContentCommand {
 		Long userId
 	) {
 	}
+	@Builder
+	public record GetAdminReadingView(
+		Pageable pageable,
+		ContentType contentType,
+		Long categoryId
+	) {
+	}
+
+	@Builder
+	public record GetAdminListeningView(
+		Pageable pageable,
+		ContentType contentType,
+		Long categoryId
+	) {
+	}
 
 	@Builder
 	public record GetReadingPreview(

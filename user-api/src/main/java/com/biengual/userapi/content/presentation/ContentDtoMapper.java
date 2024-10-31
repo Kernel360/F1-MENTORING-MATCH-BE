@@ -53,8 +53,7 @@ public interface ContentDtoMapper {
 
 	@Mapping(target = "pageable", expression = "java(toPageable(page, size, direction, sort))")
 	@Mapping(target = "contentType", constant = "READING")
-	@Mapping(target = "userId", ignore = true)
-	ContentCommand.GetReadingView doGetReadingView(
+	ContentCommand.GetAdminReadingView doGetAdminReadingView(
 		Integer page, Integer size, Sort.Direction direction, String sort, Long categoryId
 	);
 
@@ -67,8 +66,7 @@ public interface ContentDtoMapper {
 
 	@Mapping(target = "pageable", expression = "java(toPageable(page, size, direction, sort))")
 	@Mapping(target = "contentType", constant = "LISTENING")
-	@Mapping(target = "userId", ignore = true)
-	ContentCommand.GetListeningView doGetListeningView(
+	ContentCommand.GetAdminListeningView doGetAdminListeningView(
 		Integer page, Integer size, Sort.Direction direction, String sort, Long categoryId
 	);
 

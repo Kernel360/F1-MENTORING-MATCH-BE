@@ -89,7 +89,7 @@ public class ContentReaderImpl implements ContentReader {
 
 	// 어드민 페이지 리딩 컨텐츠 조회 - DEACTIVATED 포함
 	@Override
-	public PaginationInfo<ContentInfo.Admin> findReadingAdmin(ContentCommand.GetReadingView command) {
+	public PaginationInfo<ContentInfo.Admin> findReadingAdmin(ContentCommand.GetAdminReadingView command) {
 		Page<ContentInfo.Admin> page = contentCustomRepository.findContentDetailForAdmin(
 			command.pageable(), command.contentType(), command.categoryId()
 		);
@@ -98,7 +98,7 @@ public class ContentReaderImpl implements ContentReader {
 
 	// 어드민 페이지 리스닝 컨텐츠 조회 - DEACTIVATED 포함
 	@Override
-	public PaginationInfo<ContentInfo.Admin> findListeningAdmin(ContentCommand.GetListeningView command) {
+	public PaginationInfo<ContentInfo.Admin> findListeningAdmin(ContentCommand.GetAdminListeningView command) {
 		Page<ContentInfo.Admin> page = contentCustomRepository.findContentDetailForAdmin(
 			command.pageable(), command.contentType(), command.categoryId()
 		);

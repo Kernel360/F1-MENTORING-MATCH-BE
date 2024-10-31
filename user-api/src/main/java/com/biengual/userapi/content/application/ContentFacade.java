@@ -55,12 +55,12 @@ public class ContentFacade {
     }
 
     // 어드민 페이지 리딩 컨텐츠 조회
-    public PaginationInfo<ContentInfo.Admin> getAdminReadingView(ContentCommand.GetReadingView command) {
+    public PaginationInfo<ContentInfo.Admin> getAdminReadingView(ContentCommand.GetAdminReadingView command) {
         return contentService.getAdminView(command);
     }
 
     // 어드민 페이지 리스닝 컨텐츠 조회
-    public PaginationInfo<ContentInfo.Admin> getAdminListening(ContentCommand.GetListeningView command) {
+    public PaginationInfo<ContentInfo.Admin> getAdminListening(ContentCommand.GetAdminListeningView command) {
         return contentService.getAdminView(command);
     }
 }

@@ -22,9 +22,9 @@ public interface ContentReader {
 
     List<ContentInfo.PreviewContent> findListeningPreview(ContentCommand.GetListeningPreview command);
 
-    PaginationInfo<ContentInfo.Admin> findReadingAdmin(ContentCommand.GetReadingView command);
+    PaginationInfo<ContentInfo.Admin> findReadingAdmin(ContentCommand.GetAdminReadingView command);
 
-    PaginationInfo<ContentInfo.Admin> findListeningAdmin(ContentCommand.GetListeningView command);
+    PaginationInfo<ContentInfo.Admin> findListeningAdmin(ContentCommand.GetAdminListeningView command);
 
     ContentInfo.Detail findActiveContentWithScripts(ContentCommand.GetDetail command);
 }

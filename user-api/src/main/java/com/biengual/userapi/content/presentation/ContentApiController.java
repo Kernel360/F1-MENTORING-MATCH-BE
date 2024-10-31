@@ -116,8 +116,8 @@ public class ContentApiController {
         @RequestParam(required = false, defaultValue = "DESC") Sort.Direction direction,
         @RequestParam(required = false) Long categoryId
         ) {
-        ContentCommand.GetReadingView command =
-            contentDtoMapper.doGetReadingView(page, size, direction, sort, categoryId);
+        ContentCommand.GetAdminReadingView command =
+            contentDtoMapper.doGetAdminReadingView(page, size, direction, sort, categoryId);
         PaginationInfo<ContentInfo.Admin> info = contentFacade.getAdminReadingView(command);
         ContentResponseDto.AdminListRes response = contentDtoMapper.ofAdminListRes(info);
 
@@ -147,8 +147,8 @@ public class ContentApiController {
         @RequestParam(required = false, defaultValue = "DESC") Sort.Direction direction,
         @RequestParam(required = false) Long categoryId
     ) {
-        ContentCommand.GetListeningView command =
-            contentDtoMapper.doGetListeningView(page, size, direction, sort, categoryId);
+        ContentCommand.GetAdminListeningView command =
+            contentDtoMapper.doGetAdminListeningView(page, size, direction, sort, categoryId);
         PaginationInfo<ContentInfo.Admin> info = contentFacade.getAdminListening(command);
         ContentResponseDto.AdminListRes response = contentDtoMapper.ofAdminListRes(info);
 
