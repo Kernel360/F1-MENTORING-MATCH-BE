@@ -69,7 +69,7 @@ public class ContentPublicController {
         @AuthenticationPrincipal
         OAuth2UserPrincipal principal
     ) {
-        ContentCommand.GetScrapPreview command = contentDtoMapper.doGetScrapPreview(size, principal.getId());
+        ContentCommand.GetScrapPreview command = contentDtoMapper.doGetScrapPreview(size, principal);
         ContentInfo.PreviewContents info = contentFacade.getContentsByScrapCount(command);
         ContentResponseDto.ScrapPreviewContentsRes response = contentDtoMapper.ofScrapPreviewContentsRes(info);
 
@@ -103,7 +103,7 @@ public class ContentPublicController {
         OAuth2UserPrincipal principal
     ) {
         ContentCommand.Search command = contentDtoMapper.doSearch(
-            page, size, direction, sort, searchWords, principal.getId()
+            page, size, direction, sort, searchWords, principal
         );
         PaginationInfo<ContentInfo.PreviewContent> info = contentFacade.search(command);
         ContentResponseDto.SearchPreviewContentsRes response = contentDtoMapper.ofSearchPreviewContentsRes(info);
@@ -137,7 +137,7 @@ public class ContentPublicController {
         OAuth2UserPrincipal principal
     ) {
         ContentCommand.GetReadingView command =
-            contentDtoMapper.doGetReadingView(page, size, direction, sort, categoryId, principal.getId());
+            contentDtoMapper.doGetReadingView(page, size, direction, sort, categoryId, principal);
         PaginationInfo<ContentInfo.ViewContent> info = contentFacade.getReadingView(command);
         ContentResponseDto.ReadingViewContentsRes response = contentDtoMapper.ofReadingViewContentsRes(info);
 
@@ -170,7 +170,7 @@ public class ContentPublicController {
         OAuth2UserPrincipal principal
     ) {
         ContentCommand.GetListeningView command =
-            contentDtoMapper.doGetListeningView(page, size, direction, sort, categoryId, principal.getId());
+            contentDtoMapper.doGetListeningView(page, size, direction, sort, categoryId, principal);
         PaginationInfo<ContentInfo.ViewContent> info = contentFacade.getListeningView(command);
         ContentResponseDto.ListeningViewContentsRes response = contentDtoMapper.ofListeningViewContentsRes(info);
 
@@ -192,7 +192,7 @@ public class ContentPublicController {
         @AuthenticationPrincipal
         OAuth2UserPrincipal principal
     ) {
-        ContentCommand.GetReadingPreview command = contentDtoMapper.doGetReadingPreview(size, sort, principal.getId());
+        ContentCommand.GetReadingPreview command = contentDtoMapper.doGetReadingPreview(size, sort, principal);
         ContentInfo.PreviewContents info = contentFacade.getReadingPreview(command);
         ContentResponseDto.ReadingPreviewContentsRes response = contentDtoMapper.ofReadingPreviewContentsRes(info);
 
@@ -214,8 +214,7 @@ public class ContentPublicController {
         @AuthenticationPrincipal
         OAuth2UserPrincipal principal
     ) {
-        ContentCommand.GetListeningPreview command = contentDtoMapper.doGetListeningPreview(size, sort,
-            principal.getId());
+        ContentCommand.GetListeningPreview command = contentDtoMapper.doGetListeningPreview(size, sort, principal);
         ContentInfo.PreviewContents info = contentFacade.getListeningPreview(command);
         ContentResponseDto.ListeningPreviewContentsRes response = contentDtoMapper.ofListeningPreviewContentsRes(info);
 

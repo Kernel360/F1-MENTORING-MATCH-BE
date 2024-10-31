@@ -39,32 +39,38 @@ public interface ContentDtoMapper {
 	ContentCommand.CrawlingContent doCrawlingContent(ContentRequestDto.CreateReq request);
 
 	@Mapping(target = "pageable", expression = "java(toPageable(page, size, direction, sort))")
+	@Mapping(target = "userId", source = "principal.id")
 	ContentCommand.Search doSearch(
-		Integer page, Integer size, Sort.Direction direction, String sort, String keyword, Long userId
+		Integer page, Integer size, Sort.Direction direction, String sort, String keyword, OAuth2UserPrincipal principal
 	);
 
 	@Mapping(target = "pageable", expression = "java(toPageable(page, size, direction, sort))")
 	@Mapping(target = "contentType", constant = "READING")
+	@Mapping(target = "userId", source = "principal.id")
 	ContentCommand.GetReadingView doGetReadingView(
-		Integer page, Integer size, Sort.Direction direction, String sort, Long categoryId, Long userId
+		Integer page, Integer size, Sort.Direction direction, String sort, Long categoryId, OAuth2UserPrincipal principal
 	);
 
 	@Mapping(target = "pageable", expression = "java(toPageable(page, size, direction, sort))")
 	@Mapping(target = "contentType", constant = "LISTENING")
+	@Mapping(target = "userId", source = "principal.id")
 	ContentCommand.GetListeningView doGetListeningView(
-		Integer page, Integer size, Sort.Direction direction, String sort, Long categoryId, Long userId
+		Integer page, Integer size, Sort.Direction direction, String sort, Long categoryId, OAuth2UserPrincipal principal
 	);
 
 	@Mapping(target = "contentType", constant = "READING")
-	ContentCommand.GetReadingPreview doGetReadingPreview(Integer size, String sort, Long userId);
+	@Mapping(target = "userId", source = "principal.id")
+	ContentCommand.GetReadingPreview doGetReadingPreview(Integer size, String sort, OAuth2UserPrincipal principal);
 
 	@Mapping(target = "contentType", constant = "LISTENING")
-	ContentCommand.GetListeningPreview doGetListeningPreview(Integer size, String sort, Long userId);
+	@Mapping(target = "userId", source = "principal.id")
+	ContentCommand.GetListeningPreview doGetListeningPreview(Integer size, String sort, OAuth2UserPrincipal principal);
 
 	@Mapping(target = "userId", source = "principal.id")
 	ContentCommand.GetDetail doGetDetail(Long contentId, OAuth2UserPrincipal principal);
 
-	ContentCommand.GetScrapPreview doGetScrapPreview(Integer size, Long userId);
+	@Mapping(target = "userId", source = "principal.id")
+	ContentCommand.GetScrapPreview doGetScrapPreview(Integer size, OAuth2UserPrincipal principal);
 
 	// Response <- Info
     @Mapping(target = "contentByScrapCount", source = "previewContents")
