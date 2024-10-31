@@ -17,7 +17,7 @@ public class StanfordCoreNLPConfig {
     @Bean
     public StanfordCoreNLP stanfordCoreNLP() {
         Properties props = new Properties();
-        props.setProperty("annotators", "tokenize, ssplit, pos, lemma, ner, parse, sentiment");
+        props.setProperty("annotators", "tokenize, ssplit, pos, lemma");
         props.setProperty("ner.useSUTime", "false");
         return new StanfordCoreNLP(props);
     }
