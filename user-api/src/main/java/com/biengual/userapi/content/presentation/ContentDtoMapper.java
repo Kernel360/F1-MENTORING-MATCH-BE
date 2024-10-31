@@ -52,10 +52,24 @@ public interface ContentDtoMapper {
 	);
 
 	@Mapping(target = "pageable", expression = "java(toPageable(page, size, direction, sort))")
+	@Mapping(target = "contentType", constant = "READING")
+	@Mapping(target = "userId", ignore = true)
+	ContentCommand.GetReadingView doGetReadingView(
+		Integer page, Integer size, Sort.Direction direction, String sort, Long categoryId
+	);
+
+	@Mapping(target = "pageable", expression = "java(toPageable(page, size, direction, sort))")
 	@Mapping(target = "contentType", constant = "LISTENING")
 	@Mapping(target = "userId", source = "principal.id")
 	ContentCommand.GetListeningView doGetListeningView(
 		Integer page, Integer size, Sort.Direction direction, String sort, Long categoryId, OAuth2UserPrincipal principal
+	);
+
+	@Mapping(target = "pageable", expression = "java(toPageable(page, size, direction, sort))")
+	@Mapping(target = "contentType", constant = "LISTENING")
+	@Mapping(target = "userId", ignore = true)
+	ContentCommand.GetListeningView doGetListeningView(
+		Integer page, Integer size, Sort.Direction direction, String sort, Long categoryId
 	);
 
 	@Mapping(target = "contentType", constant = "READING")
