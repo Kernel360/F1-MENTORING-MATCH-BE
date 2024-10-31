@@ -56,3 +56,4 @@ docker-compose.yml
 /user-api/logs/*
 /biengual-core/gradle/
 /user-api/src/main/java/com/biengual/userapi/test/*
+/glove.6B.50d.txt

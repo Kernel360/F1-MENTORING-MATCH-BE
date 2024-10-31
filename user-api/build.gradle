@@ -102,8 +102,12 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.17.0'
 
     // Stanford CoreNLP
-    implementation 'edu.stanford.nlp:stanford-corenlp:4.5.4'
-    implementation 'edu.stanford.nlp:stanford-corenlp:4.5.4:models'
+    implementation 'edu.stanford.nlp:stanford-corenlp:4.5.5'
+    implementation 'edu.stanford.nlp:stanford-corenlp:4.5.5:models'
+
+    // Word2Vec
+    implementation 'org.deeplearning4j:deeplearning4j-nlp:1.0.0-M2.1'
+    implementation 'org.nd4j:nd4j-native-platform:1.0.0-M2.1'
 }
 
 def querydslDir = "$buildDir/generated/querydsl"
