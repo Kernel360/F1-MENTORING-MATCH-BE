@@ -1,16 +1,24 @@
 package com.biengual.userapi.content.application;
 
-import com.biengual.core.util.PaginationInfo;
-import com.biengual.userapi.content.domain.*;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.biengual.core.util.PaginationInfo;
+import com.biengual.userapi.content.domain.ContentCommand;
+import com.biengual.userapi.content.domain.ContentInfo;
+import com.biengual.userapi.content.domain.ContentReader;
+import com.biengual.userapi.content.domain.ContentService;
+import com.biengual.userapi.content.domain.ContentStore;
+import com.biengual.userapi.scrap.domain.ScrapReader;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class ContentServiceImpl implements ContentService {
     private final ContentReader contentReader;
     private final ContentStore contentStore;
+    private final ScrapReader scrapReader;
 
     // 검색 조건에 맞는 컨텐츠 프리뷰 페이지 조회
     @Override
@@ -56,8 +64,8 @@ public class ContentServiceImpl implements ContentService {
     // 스크랩 많은 순 컨텐츠 프리뷰 조회
     @Override
     @Transactional(readOnly = true)
-    public ContentInfo.PreviewContents getContentsByScrapCount(Integer size) {
-        return ContentInfo.PreviewContents.of(contentReader.findContentsByScrapCount(size));
+    public ContentInfo.PreviewContents getContentsByScrapCount(ContentCommand.CountScrap command) {
+        return ContentInfo.PreviewContents.of(contentReader.findContentsByScrapCount(command));
     }
 
     // 어드민 페이지 리딩 컨텐츠 조회 - DEACTIVATED 포함

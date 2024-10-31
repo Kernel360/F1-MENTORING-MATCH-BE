@@ -1,5 +1,12 @@
 package com.biengual.userapi.content.infrastructure;
 
+import static com.biengual.core.response.error.code.ContentErrorCode.*;
+
+import java.util.List;
+
+import org.bson.types.ObjectId;
+import org.springframework.data.domain.Page;
+
 import com.biengual.core.annotation.DataProvider;
 import com.biengual.core.domain.document.content.ContentDocument;
 import com.biengual.core.domain.document.content.script.Script;
@@ -8,18 +15,17 @@ import com.biengual.core.domain.entity.content.ContentEntity;
 import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.response.error.exception.CommonException;
 import com.biengual.core.util.PaginationInfo;
-import com.biengual.userapi.bookmark.domain.BookmarkCustomRepository;
 import com.biengual.userapi.bookmark.domain.BookmarkRepository;
-import com.biengual.userapi.content.domain.*;
+import com.biengual.userapi.content.domain.ContentCommand;
+import com.biengual.userapi.content.domain.ContentCustomRepository;
+import com.biengual.userapi.content.domain.ContentDocumentRepository;
+import com.biengual.userapi.content.domain.ContentInfo;
+import com.biengual.userapi.content.domain.ContentReader;
+import com.biengual.userapi.content.domain.ContentRepository;
+import com.biengual.userapi.content.domain.UserContentBookmarks;
 import com.biengual.userapi.content.presentation.ContentDtoMapper;
+
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
-import org.springframework.data.domain.Page;
-
-import java.util.List;
-
-import static com.biengual.core.response.error.code.ContentErrorCode.CONTENT_IS_DEACTIVATED;
-import static com.biengual.core.response.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
 
 @DataProvider
 @RequiredArgsConstructor
@@ -32,15 +38,15 @@ public class ContentReaderImpl implements ContentReader {
 
 	// 스크랩 많은 순 컨텐츠 프리뷰 조회
 	@Override
-	public List<ContentInfo.PreviewContent> findContentsByScrapCount(Integer size) {
-		return contentCustomRepository.findContentsByScrapCount(size);
+	public List<ContentInfo.PreviewContent> findContentsByScrapCount(ContentCommand.CountScrap command) {
+		return contentCustomRepository.findContentsByScrapCount(command.size(), command.userId());
 	}
 
 	// 검색 조건에 맞는 컨텐츠 프리뷰 페이지 조회
 	@Override
 	public PaginationInfo<ContentInfo.PreviewContent> findPreviewPageBySearch(ContentCommand.Search command) {
 		Page<ContentInfo.PreviewContent> page =
-			contentCustomRepository.findPreviewPageBySearch(command.pageable(), command.keyword());
+			contentCustomRepository.findPreviewPageBySearch(command.pageable(), command.keyword(), command.userId());
 
 		return PaginationInfo.from(page);
 	}
@@ -49,7 +55,7 @@ public class ContentReaderImpl implements ContentReader {
 	@Override
 	public PaginationInfo<ContentInfo.ViewContent> findReadingViewPage(ContentCommand.GetReadingView command) {
 		Page<ContentInfo.ViewContent> page = contentCustomRepository.findViewPageByContentTypeAndCategoryId(
-			command.pageable(), command.contentType(), command.categoryId()
+			command.pageable(), command.contentType(), command.categoryId(), command.userId()
 		);
 
 		return PaginationInfo.from(page);
@@ -59,7 +65,7 @@ public class ContentReaderImpl implements ContentReader {
 	@Override
 	public PaginationInfo<ContentInfo.ViewContent> findListeningViewPage(ContentCommand.GetListeningView command) {
 		Page<ContentInfo.ViewContent> page = contentCustomRepository.findViewPageByContentTypeAndCategoryId(
-			command.pageable(), command.contentType(), command.categoryId()
+			command.pageable(), command.contentType(), command.categoryId(), command.userId()
 		);
 
 		return PaginationInfo.from(page);
@@ -69,7 +75,7 @@ public class ContentReaderImpl implements ContentReader {
 	@Override
 	public List<ContentInfo.PreviewContent> findReadingPreview(ContentCommand.GetReadingPreview command) {
 		return contentCustomRepository.findPreviewBySizeAndSortAndContentType(
-			command.size(), command.sort(), command.contentType()
+			command.size(), command.sort(), command.contentType(), command.userId()
 		);
 	}
 
@@ -77,7 +83,7 @@ public class ContentReaderImpl implements ContentReader {
 	@Override
 	public List<ContentInfo.PreviewContent> findListeningPreview(ContentCommand.GetListeningPreview command) {
 		return contentCustomRepository.findPreviewBySizeAndSortAndContentType(
-			command.size(), command.sort(), command.contentType()
+			command.size(), command.sort(), command.contentType(), command.userId()
 		);
 	}
 

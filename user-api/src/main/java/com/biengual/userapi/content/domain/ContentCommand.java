@@ -1,16 +1,17 @@
 package com.biengual.userapi.content.domain;
 
-import lombok.Builder;
+import java.util.List;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 import com.biengual.core.domain.document.content.ContentDocument;
 import com.biengual.core.domain.document.content.script.Script;
 import com.biengual.core.domain.entity.category.CategoryEntity;
 import com.biengual.core.domain.entity.content.ContentEntity;
 import com.biengual.core.enums.ContentType;
+
+import lombok.Builder;
 
 public class ContentCommand {
 
@@ -58,7 +59,8 @@ public class ContentCommand {
 	@Builder
 	public record Search(
 		Pageable pageable,
-		String keyword
+		String keyword,
+		Long userId
 	) {
 	}
 
@@ -66,7 +68,8 @@ public class ContentCommand {
 	public record GetReadingView(
 		Pageable pageable,
 		ContentType contentType,
-		Long categoryId
+		Long categoryId,
+		Long userId
 	) {
 	}
 
@@ -74,7 +77,8 @@ public class ContentCommand {
 	public record GetListeningView(
 		Pageable pageable,
 		ContentType contentType,
-		Long categoryId
+		Long categoryId,
+		Long userId
 	) {
 	}
 
@@ -82,7 +86,8 @@ public class ContentCommand {
 	public record GetReadingPreview(
 		Integer size,
 		String sort,
-		ContentType contentType
+		ContentType contentType,
+		Long userId
 	) {
 	}
 
@@ -90,13 +95,20 @@ public class ContentCommand {
 	public record GetListeningPreview(
 		Integer size,
 		String sort,
-		ContentType contentType
+		ContentType contentType,
+		Long userId
 	) {
 	}
 
 	@Builder
 	public record GetDetail(
 		Long contentId,
+		Long userId
+	) {
+	}
+
+	public record CountScrap(
+		Integer size,
 		Long userId
 	) {
 	}

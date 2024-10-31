@@ -1,5 +1,16 @@
 package com.biengual.userapi.content.presentation;
 
+import java.util.List;
+
+import org.mapstruct.InjectionStrategy;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+import org.mapstruct.ReportingPolicy;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
 import com.biengual.core.domain.document.content.script.Script;
 import com.biengual.core.domain.document.content.script.YoutubeScript;
 import com.biengual.core.domain.entity.content.ContentEntity;
@@ -8,12 +19,6 @@ import com.biengual.core.util.PaginationInfo;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
-import org.mapstruct.*;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-
-import java.util.List;
 
 /**
  * do~ : Command <- Request
@@ -34,28 +39,32 @@ public interface ContentDtoMapper {
 	ContentCommand.CrawlingContent doCrawlingContent(ContentRequestDto.CreateReq request);
 
 	@Mapping(target = "pageable", expression = "java(toPageable(page, size, direction, sort))")
-	ContentCommand.Search doSearch(Integer page, Integer size, Sort.Direction direction, String sort, String keyword);
+	ContentCommand.Search doSearch(
+		Integer page, Integer size, Sort.Direction direction, String sort, String keyword, Long userId
+	);
 
 	@Mapping(target = "pageable", expression = "java(toPageable(page, size, direction, sort))")
 	@Mapping(target = "contentType", constant = "READING")
 	ContentCommand.GetReadingView doGetReadingView(
-		Integer page, Integer size, Sort.Direction direction, String sort, Long categoryId
+		Integer page, Integer size, Sort.Direction direction, String sort, Long categoryId, Long userId
 	);
 
 	@Mapping(target = "pageable", expression = "java(toPageable(page, size, direction, sort))")
 	@Mapping(target = "contentType", constant = "LISTENING")
 	ContentCommand.GetListeningView doGetListeningView(
-		Integer page, Integer size, Sort.Direction direction, String sort, Long categoryId
+		Integer page, Integer size, Sort.Direction direction, String sort, Long categoryId, Long userId
 	);
 
 	@Mapping(target = "contentType", constant = "READING")
-	ContentCommand.GetReadingPreview doGetReadingPreview(Integer size, String sort);
+	ContentCommand.GetReadingPreview doGetReadingPreview(Integer size, String sort, Long userId);
 
 	@Mapping(target = "contentType", constant = "LISTENING")
-	ContentCommand.GetListeningPreview doGetListeningPreview(Integer size, String sort);
+	ContentCommand.GetListeningPreview doGetListeningPreview(Integer size, String sort, Long userId);
 
 	@Mapping(target = "userId", source = "principal.id")
 	ContentCommand.GetDetail doGetDetail(Long contentId, OAuth2UserPrincipal principal);
+
+	ContentCommand.CountScrap doCountScrap(Integer size, Long userId);
 
 	// Response <- Info
     @Mapping(target = "contentByScrapCount", source = "previewContents")
