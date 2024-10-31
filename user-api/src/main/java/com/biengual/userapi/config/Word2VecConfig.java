@@ -2,6 +2,7 @@ package com.biengual.userapi.config;
 
 import org.deeplearning4j.models.embeddings.loader.WordVectorSerializer;
 import org.deeplearning4j.models.word2vec.Word2Vec;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -16,11 +17,12 @@ import java.io.File;
  */
 @Configuration
 public class Word2VecConfig {
-    private static final String MODEL_FILE_PATH = "glove.6B.50d.txt";
+    @Value("${nlp.model.word2vec}")
+    public String modelPath;
 
     @Bean
     public Word2Vec word2Vec() {
-        File modelFile = new File(MODEL_FILE_PATH);
+        File modelFile = new File(modelPath);
         return WordVectorSerializer.readWord2VecModel(modelFile);
     }
 }

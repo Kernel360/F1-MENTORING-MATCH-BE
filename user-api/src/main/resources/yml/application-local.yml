@@ -51,3 +51,7 @@ spring:
             authorization-grant-type: authorization_code
       success:
         redirect-uri: ${OAUTH2_SUCCESS_LOCAL_REDIRECTION_PATH}
+
+nlp:
+  model:
+    word2vec: ${WORD2VEC_MODEL_FILE_PATH}
