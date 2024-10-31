@@ -26,6 +26,7 @@ public class ScrapReaderImpl implements ScrapReader {
             .toList();
     }
 
+
     @Override
     public boolean existsScrap(ScrapCommand.GetByContents command) {
         return scrapCustomRepository.existsScrap(command.userId(), command.contentId());

@@ -24,9 +24,9 @@ public interface ContentService {
 
 	ContentInfo.PreviewContents getPreviewContents(ContentCommand.GetListeningPreview command);
 
-    ContentInfo.PreviewContents getContentsByScrapCount(Integer size);
+    ContentInfo.PreviewContents getContentsByScrapCount(ContentCommand.GetScrapPreview command);
 
-	PaginationInfo<ContentInfo.Admin> getAdminView(ContentCommand.GetReadingView command);
+	PaginationInfo<ContentInfo.Admin> getAdminView(ContentCommand.GetAdminReadingView command);
 
-	PaginationInfo<ContentInfo.Admin> getAdminView(ContentCommand.GetListeningView command);
+	PaginationInfo<ContentInfo.Admin> getAdminView(ContentCommand.GetAdminListeningView command);
 }
