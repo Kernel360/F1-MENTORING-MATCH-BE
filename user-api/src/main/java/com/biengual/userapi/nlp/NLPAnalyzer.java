@@ -26,8 +26,43 @@ public class NLPAnalyzer {
     private final StanfordCoreNLP pipeline;
     private final Word2Vec word2Vec;
 
+    // 문장과 단어 간 코사인 유사도 계산
+    public double sentenceWordCosineSimilarity(String sentence, String word, Set<String> posTags) {
+
+        // 단어 벡터 가져오기
+        double[] wordVector = word2Vec.getWordVector(word);
+        if (wordVector == null) {
+            return 0.0;
+        }
+
+        // 문장을 단어로 분리
+        String[] keywords = extractKeywords(sentence, posTags);
+
+        // 코사인 유사도 계산을 위해 문장 벡터를 단어 벡터와 차원을 동일하게 만듦
+        double[] sentenceVector = new double[wordVector.length];
+
+        // 문장 벡터 계산 (단어 벡터의 평균)
+        for (String keyword : keywords) {
+            double[] keywordVector = getWordVector(keyword);
+            if (keywordVector != null) {
+                for (int i = 0; i < sentenceVector.length; i++) {
+                    sentenceVector[i] += keywordVector[i];
+                }
+            }
+        }
+
+        // 평균 계산
+        for (int i = 0; i < sentenceVector.length; i++) {
+            sentenceVector[i] /= keywords.length;
+        }
+
+        // 코사인 유사도 계산
+        return cosineSimilarity(sentenceVector, wordVector);
+    }
+
+
     // text에서 품사 태그를 포함하는 word를 keyword로 추출
-    public List<String> extractKeywords(String text, Set<String> posTags) {
+    public String[] extractKeywords(String text, Set<String> posTags) {
         Annotation document = new Annotation(text.toLowerCase());
         pipeline.annotate(document);
         List<String> keywords = new ArrayList<>();
@@ -41,7 +76,7 @@ public class NLPAnalyzer {
                 }
             }
         }
-        return keywords;
+        return keywords.toArray(new String[0]);
     }
 
     // 품사 태그 생성
