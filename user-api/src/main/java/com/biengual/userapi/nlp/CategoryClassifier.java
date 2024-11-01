@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Set;
 
+import static com.biengual.core.constant.ServiceConstant.UNKNOWN_CATEGORY_NAME;
+
 /**
  * category 분류기
  *
@@ -22,10 +24,14 @@ public class CategoryClassifier {
 
     // category 분류
     public String process(String categoryText, List<String> sentences) {
+        if (categoryText == null || categoryText.equals(UNKNOWN_CATEGORY_NAME)) {
+            return UNKNOWN_CATEGORY_NAME;
+        }
+
         String[] categories = extractNounLemma(categoryText);
 
         if (categories.length == 0) {
-            return "Unknown";
+            return UNKNOWN_CATEGORY_NAME;
         }
 
         if (categories.length == 1) {
@@ -33,7 +39,7 @@ public class CategoryClassifier {
         }
 
         double mostSimilarity = 0.0;
-        String mostCategory = "Unknown";
+        String mostCategory = UNKNOWN_CATEGORY_NAME;
 
         for (String category : categories) {
             double similarity = nlpAnalyzer.sentencesWordSimilarity(sentences, category);
