@@ -29,7 +29,7 @@ public class CategoryClassifier {
         }
 
         if (categories.length == 1) {
-            return categories[0];
+            return capitalizeFirstLetter(categories[0]);
         }
 
         double mostSimilarity = 0.0;
@@ -44,7 +44,7 @@ public class CategoryClassifier {
             }
         }
 
-        return mostCategory;
+        return capitalizeFirstLetter(mostCategory);
 
     }
 
@@ -56,5 +56,13 @@ public class CategoryClassifier {
     // category 품사 태그 생성
     private Set<String> createCategoryPosTags() {
         return nlpAnalyzer.createPosTags(CATEGORY_POS_TAGS);
+    }
+
+    // 맨 앞글자 대문자로 변환
+    private String capitalizeFirstLetter(String text) {
+        if (text == null || text.isEmpty()) {
+            return text;
+        }
+        return text.substring(0, 1).toUpperCase() + text.substring(1).toLowerCase();
     }
 }
