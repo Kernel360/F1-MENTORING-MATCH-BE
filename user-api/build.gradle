@@ -129,6 +129,7 @@ tasks.named('test') {
 }
 
 tasks.named('bootJar') {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     enabled = true
 }
 
