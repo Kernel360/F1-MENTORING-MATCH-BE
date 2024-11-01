@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -27,7 +28,7 @@ public class NLPAnalyzer {
     private final StanfordCoreNLP pipeline;
     private final Word2Vec word2Vec;
 
-    private static final List<String> SENTENCE_POS_TAGS = List.of("NN", "VB", "JJ");
+    private static final List<String> SENTENCE_POS_TAGS = List.of("NN", "VB");
 
     // 문장들과 단어 간 유사도 계산
     public double sentencesWordSimilarity(List<String> sentences, String word) {
@@ -55,8 +56,13 @@ public class NLPAnalyzer {
         // 문장에서 keyword 추출
         String[] keywords = extractKeywords(sentence, createPosTags(SENTENCE_POS_TAGS));
 
+        if (keywords.length == 0) {
+            return 0.0;
+        }
+
         // 코사인 유사도 계산을 위해 문장 벡터를 단어 벡터와 차원을 동일하게 만듦
         double[] sentenceVector = new double[wordVector.length];
+        Arrays.fill(sentenceVector, 0.0);
 
         // 문장 벡터 계산 (단어 벡터의 평균)
         for (String keyword : keywords) {
@@ -88,7 +94,8 @@ public class NLPAnalyzer {
             for (CoreLabel token : sentenceAnnotation.get(CoreAnnotations.TokensAnnotation.class)) {
                 String pos = token.get(CoreAnnotations.PartOfSpeechAnnotation.class);
                 String lemma = token.get(CoreAnnotations.LemmaAnnotation.class);
-                if (posTags.stream().anyMatch(pos::startsWith)) {
+
+                if (posTags.contains(pos)) {
                     keywords.add(lemma);
                 }
             }
