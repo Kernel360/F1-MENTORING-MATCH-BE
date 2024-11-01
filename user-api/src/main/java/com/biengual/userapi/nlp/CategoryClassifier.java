@@ -1,6 +1,7 @@
 package com.biengual.userapi.nlp;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class CategoryClassifier {
 
     // category 분류
     public String process(String categoryText, List<String> sentences) {
-        if (categoryText == null || categoryText.equals(UNKNOWN_CATEGORY_NAME)) {
+        if (StringUtils.isBlank(categoryText) || categoryText.equals(UNKNOWN_CATEGORY_NAME)) {
             return UNKNOWN_CATEGORY_NAME;
         }
 
@@ -34,8 +35,10 @@ public class CategoryClassifier {
             return UNKNOWN_CATEGORY_NAME;
         }
 
+        CategoryCustomDictionary categoryCustomDictionary = new CategoryCustomDictionary();
+
         if (categories.length == 1) {
-            return capitalizeFirstLetter(categories[0]);
+            return capitalizeFirstLetter(categoryCustomDictionary.replace(categories[0]));
         }
 
         double mostSimilarity = 0.0;
@@ -50,7 +53,7 @@ public class CategoryClassifier {
             }
         }
 
-        return capitalizeFirstLetter(mostCategory);
+        return capitalizeFirstLetter(categoryCustomDictionary.replace(mostCategory));
 
     }
 
@@ -64,11 +67,16 @@ public class CategoryClassifier {
         return nlpAnalyzer.createPosTags(CATEGORY_POS_TAGS);
     }
 
-    // 맨 앞글자 대문자로 변환
-    private String capitalizeFirstLetter(String text) {
-        if (text == null || text.isEmpty()) {
-            return text;
+    // 분류된 category 이름 반환
+    private String capitalizeFirstLetter(String category) {
+        if (StringUtils.isBlank(category)) {
+            return UNKNOWN_CATEGORY_NAME;
         }
-        return text.substring(0, 1).toUpperCase() + text.substring(1).toLowerCase();
+
+        CategoryCustomDictionary categoryCustomDictionary = new CategoryCustomDictionary();
+
+        categoryCustomDictionary.replace(category);
+
+        return category.substring(0, 1).toUpperCase() + category.substring(1).toLowerCase();
     }
 }
