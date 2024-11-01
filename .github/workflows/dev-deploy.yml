@@ -79,7 +79,7 @@ jobs:
             
             sudo docker run -d \
               -v ./biengual/user/logs:/biengual/logs \
-              -v ./biengual/word2vec/glove.6B.50d.txt:/biengual/glove.6B.50d.txt \
+              -v ./biengual/word2vec/word2vec.txt:/biengual/word2vec.txt \
               -e PROFILES=dev \
               -p 8080:8080 \
               --name ${{ secrets.DOCKERHUB_CONTAINERNAME }} \
