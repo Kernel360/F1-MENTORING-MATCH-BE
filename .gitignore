@@ -57,3 +57,5 @@ docker-compose.yml
 /biengual-core/gradle/
 /user-api/src/main/java/com/biengual/userapi/test/*
 /glove.6B.50d.txt
+/word2vec.test.txt
+/word2vec.txt
