@@ -2,11 +2,7 @@ package com.biengual.userapi.content.presentation;
 
 import java.util.List;
 
-import org.mapstruct.InjectionStrategy;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -128,8 +124,16 @@ public interface ContentDtoMapper {
 	@Mapping(target = "contentId", source = "content.id")
 	@Mapping(target = "videoUrl", source = "content", qualifiedByName = "toVideoUrl")
 	@Mapping(target = "category", source = "content.category.name")
+	@Mapping(target = "isScrapped", constant = "false")
 	@Mapping(target = "scriptList", source = "userScripts")
 	ContentInfo.Detail buildDetail(ContentEntity content, List<ContentInfo.UserScript> userScripts);
+
+	@Mapping(target = "contentId", source = "content.id")
+	@Mapping(target = "videoUrl", source = "content", qualifiedByName = "toVideoUrl")
+	@Mapping(target = "category", source = "content.category.name")
+	@Mapping(target = "isScrapped", source = "isScrapped")
+	@Mapping(target = "scriptList", source = "userScripts")
+	ContentInfo.Detail buildDetail(ContentEntity content, Boolean isScrapped, List<ContentInfo.UserScript> userScripts);
 
 	// Internal Method =================================================================================================
 

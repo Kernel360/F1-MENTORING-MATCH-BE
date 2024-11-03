@@ -57,6 +57,7 @@ public class ScrapApiController {
 		return ResponseEntityFactory.toResponseEntity(SCRAP_VIEW_SUCCESS, response);
 	}
 
+	@Deprecated
 	@GetMapping("/check")
 	@Operation(summary = "스크랩 확인", description = "스크랩 했는지 확인합니다.")
 	@ApiResponses(value = {@ApiResponse(responseCode = "200", description = "스크랩 성공",
