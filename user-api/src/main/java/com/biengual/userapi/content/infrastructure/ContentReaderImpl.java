@@ -4,6 +4,7 @@ import static com.biengual.core.response.error.code.ContentErrorCode.*;
 
 import java.util.List;
 
+import com.biengual.userapi.scrap.domain.ScrapCustomRepository;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 
@@ -35,6 +36,7 @@ public class ContentReaderImpl implements ContentReader {
 	private final ContentCustomRepository contentCustomRepository;
 	private final ContentDocumentRepository contentDocumentRepository;
 	private final BookmarkRepository bookmarkRepository;
+	private final ScrapCustomRepository scrapCustomRepository;
 
 	// 스크랩 많은 순 컨텐츠 프리뷰 조회
 	@Override
@@ -129,7 +131,9 @@ public class ContentReaderImpl implements ContentReader {
 			UserContentBookmarks userContentBookmarks = new UserContentBookmarks(bookmarks);
 			List<ContentInfo.UserScript> userScripts = userContentBookmarks.getUserScripts(scripts);
 
-			return contentDtoMapper.buildDetail(content, userScripts);
+			boolean isScrapped = scrapCustomRepository.existsScrap(command.userId(), command.contentId());
+
+			return contentDtoMapper.buildDetail(content, isScrapped, userScripts);
 		}
 
 		List<ContentInfo.UserScript> guestScripts = scripts.stream()

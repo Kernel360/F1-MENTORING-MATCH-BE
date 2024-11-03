@@ -33,6 +33,7 @@ public class ContentResponseDto {
 		@JsonInclude(JsonInclude.Include.NON_NULL)
 		String videoUrl,
 		Integer hits,
+		Boolean isScrapped,
 		List<UserScript> scriptList
 	) {
 	}
