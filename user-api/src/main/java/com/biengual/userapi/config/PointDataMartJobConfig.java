@@ -4,7 +4,6 @@ import java.util.Collections;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
@@ -28,11 +27,8 @@ import com.biengual.userapi.pointhistory.domain.PointHistoryRepository;
 
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Configuration
-@EnableBatchProcessing
 @RequiredArgsConstructor
 public class PointDataMartJobConfig {
     private final JobRepository jobRepository;
