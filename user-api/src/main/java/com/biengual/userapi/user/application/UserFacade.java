@@ -23,7 +23,7 @@ public class UserFacade {
         UserEntity user =  userService.getUserByOAuthUser(principal);
 
         // 유저 그날의 첫 로그인 포인트 업데이트
-        pointService.updatePointFirstDailyLogin(user.getId());
+        pointService.updatePointFirstDailyLogin(user);
 
         return user;
     }
