@@ -85,7 +85,7 @@ public class PointDataMartJobConfig {
         return new RepositoryItemReaderBuilder<PointHistoryEntity>()
             .name("pointHistoryReader")
             .repository(pointHistoryRepository)
-            .methodName("findByProcessedFalseAndCreatedAtAfter")
+            .methodName("findByCreatedAtAfterAndProcessedIsFalse")
             .pageSize(100)
             .sorts(Collections.singletonMap("id", Sort.Direction.ASC))
             .arguments(Arrays.asList(createdAtString, PageRequest.of(0, 100)))
