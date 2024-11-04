@@ -71,7 +71,7 @@ public class ContentFacade {
     public ContentInfo.Detail viewContentAndUpdatePointIfNeed(ContentCommand.GetDetail command) {
         if (contentService.checkContentNeedPoint(command)) {
             pointService.updatePoint(command.userId(), PointReason.VIEW_RECENT_CONTENT);
-            contentService.updateAccess(command.contentId(), command.userId());
+            // contentService.updateAccess(command.contentId(), command.userId());
         }
 
         return contentService.getScriptsOfContent(command);

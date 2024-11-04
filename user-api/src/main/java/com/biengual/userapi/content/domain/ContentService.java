@@ -30,7 +30,5 @@ public interface ContentService {
 
     PaginationInfo<ContentInfo.Admin> getAdminView(ContentCommand.GetAdminListeningView command);
 
-    void updateAccess(Long contentId, Long userId);
-
     boolean checkContentNeedPoint(ContentCommand.GetDetail command);
 }

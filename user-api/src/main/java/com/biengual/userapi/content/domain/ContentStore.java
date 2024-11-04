@@ -12,6 +12,4 @@ public interface ContentStore {
 
     void increaseHits(Long contentId);
 
-    void updateContentAccess(Long contentId, Long userId);
-
 }

@@ -97,12 +97,6 @@ public class ContentServiceImpl implements ContentService {
     }
 
     @Override
-    @Transactional
-    public void updateAccess(Long contentId, Long userId) {
-        contentStore.updateContentAccess(contentId, userId);
-    }
-
-    @Override
     @Transactional(readOnly = true)
     public boolean checkContentNeedPoint(ContentCommand.GetDetail command) {
         return contentReader.checkContentNeedPoint(command);

@@ -18,7 +18,6 @@ import com.biengual.core.util.PaginationInfo;
 import com.biengual.userapi.content.application.ContentFacade;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentInfo;
-import com.biengual.userapi.content.domain.ContentService;
 import com.biengual.userapi.content.presentation.swagger.SwaggerContentDetail;
 import com.biengual.userapi.content.presentation.swagger.SwaggerContentListeningPreview;
 import com.biengual.userapi.content.presentation.swagger.SwaggerContentListeningView;
@@ -49,7 +48,6 @@ public class ContentPublicController {
 
     private final ContentDtoMapper contentDtoMapper;
     private final ContentFacade contentFacade;
-    private final ContentService contentService;
 
     @GetMapping("/preview/scrap-count")
     @Operation(summary = "스크랩을 많이 한 컨텐츠 조회", description = "스크랩 수가 많은 순으로 정렬된 컨텐츠 목록을 조회합니다.")

@@ -19,7 +19,6 @@ import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.response.error.exception.CommonException;
 import com.biengual.core.util.PaginationInfo;
 import com.biengual.userapi.bookmark.domain.BookmarkRepository;
-import com.biengual.userapi.content.domain.ContentAccessDocumentRepository;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentCustomRepository;
 import com.biengual.userapi.content.domain.ContentDocumentRepository;
@@ -41,7 +40,6 @@ public class ContentReaderImpl implements ContentReader {
     private final ContentDocumentRepository contentDocumentRepository;
     private final BookmarkRepository bookmarkRepository;
     private final ScrapCustomRepository scrapCustomRepository;
-    private final ContentAccessDocumentRepository contentAccessDocumentRepository;
 
     // 스크랩 많은 순 컨텐츠 프리뷰 조회
     @Override
@@ -151,7 +149,7 @@ public class ContentReaderImpl implements ContentReader {
     // 컨텐츠 상세 조회 시 포인트 필요한지 확인 : 현재는 5일 이내 컨텐츠 기준
     @Override
     public boolean checkContentNeedPoint(ContentCommand.GetDetail command) {
-        boolean access = this.findUserAccessAboutContent(command);
+        boolean access = true;
         boolean date = this.findExpiredDateOfContent(command.contentId());
 
         return !(access && date);
@@ -165,12 +163,6 @@ public class ContentReaderImpl implements ContentReader {
                 LocalDate.now(),
                 contentCustomRepository.findCreatedAtOfContentById(contentId).toLocalDate()
             )) <= PERIOD_FOR_POINT_CONTENT_ACCESS;
-    }
-
-    private boolean findUserAccessAboutContent(ContentCommand.GetDetail command) {
-        return contentAccessDocumentRepository.findByContentId(command.contentId())
-            .map(document -> document.getAccessedUsers().contains(command.userId()))
-            .orElse(true);
     }
 
 }

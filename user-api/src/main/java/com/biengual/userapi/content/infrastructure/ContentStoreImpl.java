@@ -4,14 +4,12 @@ import static com.biengual.core.response.error.code.CategoryErrorCode.*;
 import static com.biengual.core.response.error.code.ContentErrorCode.*;
 
 import com.biengual.core.annotation.DataProvider;
-import com.biengual.core.domain.document.content.ContentAccessDocument;
 import com.biengual.core.domain.document.content.ContentDocument;
 import com.biengual.core.domain.entity.category.CategoryEntity;
 import com.biengual.core.domain.entity.content.ContentEntity;
 import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.response.error.exception.CommonException;
 import com.biengual.userapi.category.domain.CategoryRepository;
-import com.biengual.userapi.content.domain.ContentAccessDocumentRepository;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentCustomRepository;
 import com.biengual.userapi.content.domain.ContentDocumentRepository;
@@ -26,7 +24,6 @@ public class ContentStoreImpl implements ContentStore {
     private final ContentCustomRepository contentCustomRepository;
     private final ContentRepository contentRepository;
     private final ContentDocumentRepository contentDocumentRepository;
-    private final ContentAccessDocumentRepository contentAccessDocumentRepository;
     private final CategoryRepository categoryRepository;
 
     @Override
@@ -39,7 +36,7 @@ public class ContentStoreImpl implements ContentStore {
         ContentEntity content = command.toEntity(contentDocument.getId(), command.contentType(), category);
         contentRepository.save(content);
 
-        contentAccessDocumentRepository.save(command.toAccessDocument(content.getId()));
+        // contentAccessDocumentRepository.save(command.toAccessDocument(content.getId()));
     }
 
     @Override
@@ -55,15 +52,6 @@ public class ContentStoreImpl implements ContentStore {
     @Override
     public void increaseHits(Long contentId) {
         contentCustomRepository.increaseHitsByContentId(contentId);
-    }
-
-    @Override
-    public void updateContentAccess(Long contentId, Long userId) {
-        ContentAccessDocument document = contentAccessDocumentRepository.findByContentId(contentId)
-            .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
-
-        document.addAccessedUser(userId);
-        contentAccessDocumentRepository.save(document);
     }
 
     // Internal Methods=================================================================================================

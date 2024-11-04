@@ -5,7 +5,6 @@ import java.util.List;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Pageable;
 
-import com.biengual.core.domain.document.content.ContentAccessDocument;
 import com.biengual.core.domain.document.content.ContentDocument;
 import com.biengual.core.domain.document.content.script.Script;
 import com.biengual.core.domain.entity.category.CategoryEntity;
@@ -34,12 +33,6 @@ public class ContentCommand {
 		public ContentDocument toDocument() {
 			return ContentDocument.builder()
 				.scriptList(script)
-				.build();
-		}
-
-		public ContentAccessDocument toAccessDocument(Long contentId){
-			return ContentAccessDocument.builder()
-				.contentId(contentId)
 				.build();
 		}
 
