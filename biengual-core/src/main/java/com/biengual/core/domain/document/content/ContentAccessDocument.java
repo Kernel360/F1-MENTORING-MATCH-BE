@@ -35,7 +35,7 @@ public class ContentAccessDocument {
     public ContentAccessDocument(Long contentId) {
         this.contentId = contentId;
         this.accessedUsers = new HashSet<>();
-        this.createdAt = Date.from(Instant.now().plusSeconds(30));
+        this.createdAt = Date.from(Instant.now().plusSeconds(432000));
     }
 
     public void addAccessedUser(Long userId) {
