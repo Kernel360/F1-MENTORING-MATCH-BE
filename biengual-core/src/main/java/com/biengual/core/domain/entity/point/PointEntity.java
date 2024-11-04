@@ -37,7 +37,7 @@ public class PointEntity extends BaseEntity {
     @Builder
     public PointEntity(Long userId, PointReason pointReason) {
         this.userId = userId;
-        this.currentPoint = (long)pointReason.getValue();
+        this.currentPoint = pointReason.getValue();
     }
 
     public static PointEntity createByUserId(Long userId) {

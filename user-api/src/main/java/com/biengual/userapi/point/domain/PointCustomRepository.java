@@ -14,7 +14,7 @@ public class PointCustomRepository {
     private final JPAQueryFactory queryFactory;
 
     // 포인트 업데이트를 위한 쿼리
-    public void updatePoint(Long userId, int value) {
+    public void updatePoint(Long userId, Long value) {
         queryFactory
             .update(pointEntity)
             .set(pointEntity.currentPoint, pointEntity.currentPoint.add(value))

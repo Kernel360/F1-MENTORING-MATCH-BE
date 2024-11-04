@@ -5,19 +5,19 @@ import lombok.Getter;
 @Getter
 public enum PointReason {
     // +
-    FIRST_SIGN_UP(100),
-    DAILY_QUIZ(7),
-    DAILY_MISSION(8),
-    DAILY_CONTENT(9),
-    FIRST_DAILY_LOG_IN(10),
+    FIRST_SIGN_UP(100L),
+    DAILY_QUIZ(7L),
+    DAILY_MISSION(8L),
+    DAILY_CONTENT(9L),
+    FIRST_DAILY_LOG_IN(10L),
 
     // -
-    VIEW_RECENT_CONTENT(-10),
-    VIEW_QUIZ_HINT(-5);
+    VIEW_RECENT_CONTENT(-10L),
+    VIEW_QUIZ_HINT(-5L);
 
-    private final int value;
+    private final Long value;
 
-    PointReason(int value) {
+    PointReason(Long value) {
         this.value = value;
     }
 }

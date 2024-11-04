@@ -34,23 +34,23 @@ public class PointDataMart extends BaseEntity {
     @Column(name = "user_id", nullable = false, columnDefinition = "bigint")
     private Long userId;
 
-    @Column(nullable = false, columnDefinition = "int")
-    private Integer totalPointsEarned;
+    @Column(nullable = false, columnDefinition = "bigint")
+    private Long totalPointsEarned;
 
-    @Column(nullable = false, columnDefinition = "int")
-    private Integer totalPointsSpent;
+    @Column(nullable = false, columnDefinition = "bigint")
+    private Long totalPointsSpent;
 
-    @Column(nullable = false, columnDefinition = "int")
-    private Integer lastProcessedBalance;
+    @Column(nullable = false, columnDefinition = "bigint")
+    private Long lastProcessedBalance;
 
     @Builder
     private PointDataMart(
-        Long userId, Integer totalPointsEarned, Integer totalPointsSpent, Integer lastProcessedBalance
+        Long userId, Long totalPointsEarned, Long totalPointsSpent, Long lastProcessedBalance
     ) {
         this.userId = userId;
-        this.totalPointsEarned = Optional.ofNullable(totalPointsEarned).orElse(0);
-        this.totalPointsSpent = Optional.ofNullable(totalPointsSpent).orElse(0);
-        this.lastProcessedBalance = Optional.ofNullable(lastProcessedBalance).orElse(0);
+        this.totalPointsEarned = Optional.ofNullable(totalPointsEarned).orElse(0L);
+        this.totalPointsSpent = Optional.ofNullable(totalPointsSpent).orElse(0L);
+        this.lastProcessedBalance = Optional.ofNullable(lastProcessedBalance).orElse(0L);
     }
 
     public static PointDataMart createPointDataMart(Long userId) {

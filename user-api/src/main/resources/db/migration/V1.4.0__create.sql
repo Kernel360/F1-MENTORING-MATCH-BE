@@ -15,8 +15,8 @@ CREATE TABLE IF NOT EXISTS `point_history`
 (
     `id`            BIGINT                                                                                                                                NOT NULL AUTO_INCREMENT,
     `user_id`       BIGINT                                                                                                                                NOT NULL,
-    `point_change`  INT                                                                                                                                   NOT NULL,
-    `point_balance` INT                                                                                                                                   NOT NULL,
+    `point_change`  BIGINT                                                                                                                                NOT NULL,
+    `point_balance` BIGINT                                                                                                                                NOT NULL,
     `reason`        ENUM ('FIRST_SIGN_UP', 'DAILY_QUIZ', 'DAILY_MISSION', 'DAILY_CONTENT', 'VIEW_RECENT_CONTENT', 'VIEW_QUIZ_HINT', 'FIRST_DAILY_LOG_IN') NOT NULL,
     `processed`     BOOLEAN                                                                                                                               NOT NULL DEFAULT FALSE,
     `created_at`    DATETIME(6)                                                                                                                                    DEFAULT NULL,
@@ -31,9 +31,9 @@ CREATE TABLE IF NOT EXISTS `point_data_mart`
 (
     `id`                     BIGINT NOT NULL AUTO_INCREMENT,
     `user_id`                BIGINT NOT NULL,
-    `total_points_earned`    INT    NOT NULL DEFAULT 0,
-    `total_points_spent`     INT    NOT NULL DEFAULT 0,
-    `last_processed_balance` INT    NOT NULL DEFAULT 0,
+    `total_points_earned`    BIGINT NOT NULL DEFAULT 0,
+    `total_points_spent`     BIGINT NOT NULL DEFAULT 0,
+    `last_processed_balance` BIGINT NOT NULL DEFAULT 0,
     `created_at`             DATETIME(6)     DEFAULT NULL,
     `updated_at`             DATETIME(6)     DEFAULT NULL,
     PRIMARY KEY (`id`)
