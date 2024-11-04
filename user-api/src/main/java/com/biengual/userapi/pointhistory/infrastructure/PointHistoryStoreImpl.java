@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 @DataProvider
 @RequiredArgsConstructor
-public class PointHistoryWriterImpl implements PointHistoryStore {
+public class PointHistoryStoreImpl implements PointHistoryStore {
     private final PointHistoryRepository pointHistoryRepository;
 
     // 포인트 변동 내역을 PointHistory에 저장

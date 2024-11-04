@@ -1,10 +1,5 @@
 package com.biengual.userapi.content.application;
 
-import static com.biengual.core.constant.RestrictionConstant.*;
-
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -101,14 +96,15 @@ public class ContentServiceImpl implements ContentService {
         return info;
     }
 
-    // 컨텐츠 상세 조회 시 포인트 필요한지 확인 : 현재는 5일 이내 컨텐츠 기준
+    @Override
+    @Transactional
+    public void updateAccess(Long contentId, Long userId) {
+        contentStore.updateContentAccess(contentId, userId);
+    }
+
     @Override
     @Transactional(readOnly = true)
     public boolean checkContentNeedPoint(ContentCommand.GetDetail command) {
-        return Math.abs(
-            ChronoUnit.DAYS.between(
-                LocalDate.now(),
-                contentReader.findCreatedAtOfContentById(command.contentId()).toLocalDate()
-            )) <= PERIOD_FOR_POINT_CONTENT_ACCESS;
+        return contentReader.checkContentNeedPoint(command);
     }
 }

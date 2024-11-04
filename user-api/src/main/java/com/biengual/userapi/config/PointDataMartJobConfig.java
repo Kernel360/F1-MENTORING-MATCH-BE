@@ -1,9 +1,14 @@
 package com.biengual.userapi.config;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.Collections;
 
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
@@ -14,6 +19,7 @@ import org.springframework.batch.item.data.builder.RepositoryItemReaderBuilder;
 import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
 import org.springframework.batch.item.support.CompositeItemWriter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +35,7 @@ import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
+@EnableBatchProcessing
 @RequiredArgsConstructor
 public class PointDataMartJobConfig {
     private final JobRepository jobRepository;
@@ -56,7 +63,9 @@ public class PointDataMartJobConfig {
     public Step pointDataMartStep() {
         return new StepBuilder("pointDataMartStep", jobRepository)
             .<PointHistoryEntity, PointDataMart>chunk(1000, transactionManager)
-            .reader(pointHistoryReader())
+            .reader(pointHistoryReader(
+                LocalDateTime.of(LocalDate.now().minusDays(5), LocalTime.of(0, 0))
+            ))
             .processor(pointDataMartProcessor())
             .writer(pointDataMartWriter())
             .build();
@@ -64,18 +73,22 @@ public class PointDataMartJobConfig {
 
     /**
      * pointHistoryRepository.findByProcessedFalse 를 사용하여 PointHistoryEntity 조회
-     * 처리 되지 않은 포인트 내역(`processed = false` 인 항목) 조회
+     * 처리 되지 않은 포인트 내역(어제 00시 이후이고 `processed = false` 인 항목) 조회
+     * 날짜로만 확인하면 시간이 무조건 일정하다는 보장이 없음
      */
     @Bean
     @StepScope
-    public RepositoryItemReader<PointHistoryEntity> pointHistoryReader() {
+    public RepositoryItemReader<PointHistoryEntity> pointHistoryReader(
+        @Value("#{jobParameters['createdAt']}") LocalDateTime createdAtString
+    ) {
+
         return new RepositoryItemReaderBuilder<PointHistoryEntity>()
             .name("pointHistoryReader")
             .repository(pointHistoryRepository)
-            .methodName("findByProcessedFalse")
+            .methodName("findByProcessedFalseAndCreatedAtAfter")
             .pageSize(100)
             .sorts(Collections.singletonMap("id", Sort.Direction.ASC))
-            .arguments(Collections.singletonList(PageRequest.of(0, 100)))
+            .arguments(Arrays.asList(createdAtString, PageRequest.of(0, 100)))
             .build();
     }
 
@@ -87,8 +100,13 @@ public class PointDataMartJobConfig {
         return history -> {
             PointDataMart dataMart = pointDataMartRepository.findByUserId(history.getUserId())
                 .orElseGet(() -> PointDataMart.createPointDataMart(history.getUserId()));
-            dataMart.updateByPointHistory(history);
-            history.updateProcessed(true);
+
+            if (history.getCreatedAt().isAfter(
+                LocalDateTime.of(LocalDate.now(), LocalTime.of(1, 0)))
+            ) {
+                dataMart.updateByPointHistory(history);
+                history.updateProcessed(true);
+            }
 
             return dataMart;
         };

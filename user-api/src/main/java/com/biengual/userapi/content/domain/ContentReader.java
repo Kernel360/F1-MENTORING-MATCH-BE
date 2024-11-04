@@ -1,6 +1,5 @@
 package com.biengual.userapi.content.domain;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import com.biengual.core.util.PaginationInfo;
@@ -29,5 +28,5 @@ public interface ContentReader {
 
     ContentInfo.Detail findActiveContentWithScripts(ContentCommand.GetDetail command);
 
-    LocalDateTime findCreatedAtOfContentById(Long contentId);
+    boolean checkContentNeedPoint(ContentCommand.GetDetail command);
 }

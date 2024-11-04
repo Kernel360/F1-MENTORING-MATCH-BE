@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 @DataProvider
 @RequiredArgsConstructor
-public class PointWriterImpl implements PointStore {
+public class PointStoreImpl implements PointStore {
     private final PointRepository pointRepository;
     private final PointCustomRepository pointCustomRepository;
 
