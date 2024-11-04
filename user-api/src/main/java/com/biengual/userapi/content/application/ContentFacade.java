@@ -69,10 +69,8 @@ public class ContentFacade {
 
     // 컨텐츠 상세 조회 및 최근 컨텐츠인 경우 포인트 소모
     public ContentInfo.Detail viewContentAndUpdatePointIfNeed(ContentCommand.GetDetail command) {
-        if (contentService.checkContentNeedPoint(command)) {
-            pointService.updatePoint(command.userId(), PointReason.VIEW_RECENT_CONTENT);
-            // contentService.updateAccess(command.contentId(), command.userId());
-        }
+        pointService.updatePoint(command, PointReason.VIEW_RECENT_CONTENT);
+        // contentService.updateAccess(command.contentId(), command.userId());
 
         return contentService.getScriptsOfContent(command);
     }

@@ -49,9 +49,6 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
             UserEntity user = userFacade.getUserByOAuthUser(principal);
 
-            // 오늘 첫 로그인일 경우 포인트 추가
-            userFacade.updateLoginPoint(user.getId());
-
             String refreshToken = tokenProvider.generateRefreshToken(user);
             cookieUtil.addRefreshTokenCookie(request, response, refreshToken);
 

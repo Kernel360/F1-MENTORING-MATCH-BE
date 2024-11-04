@@ -95,10 +95,4 @@ public class ContentServiceImpl implements ContentService {
 
         return info;
     }
-
-    @Override
-    @Transactional(readOnly = true)
-    public boolean checkContentNeedPoint(ContentCommand.GetDetail command) {
-        return contentReader.checkContentNeedPoint(command);
-    }
 }

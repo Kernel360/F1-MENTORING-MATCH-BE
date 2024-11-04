@@ -20,7 +20,12 @@ public class UserFacade {
 
     // 회원가입 및 로그인
     public UserEntity getUserByOAuthUser(OAuth2UserPrincipal principal) {
-        return userService.getUserByOAuthUser(principal);
+        UserEntity user =  userService.getUserByOAuthUser(principal);
+
+        // 유저 그날의 첫 로그인 포인트 업데이트
+        pointService.updatePointFirstDailyLogin(user.getId());
+
+        return user;
     }
 
     // 본인 정보 조회
@@ -46,10 +51,5 @@ public class UserFacade {
     // 유저 로그인 상태 확인
     public boolean getLoginStatus(OAuth2UserPrincipal principal) {
         return userService.getLoginStatus(principal);
-    }
-
-    // 유저 그날의 첫 로그인 포인트 업데이트
-    public void updateLoginPoint(Long userId) {
-        pointService.updatePointFirstDailyLogin(userId);
     }
 }

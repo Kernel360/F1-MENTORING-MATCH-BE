@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.biengual.core.enums.PointReason;
+import com.biengual.userapi.content.domain.ContentCommand;
+import com.biengual.userapi.content.domain.ContentReader;
 import com.biengual.userapi.point.domain.PointService;
 import com.biengual.userapi.point.domain.PointStore;
 import com.biengual.userapi.pointhistory.domain.PointHistoryStore;
@@ -21,12 +23,15 @@ public class PointServiceImpl implements PointService {
     private final PointHistoryStore pointHistoryStore;
     private final UserReader userReader;
     private final UserStore userStore;
+    private final ContentReader contentReader;
 
     @Override
     @Transactional
-    public void updatePoint(Long userId, PointReason reason) {
-        Long currentPoint = pointStore.updateCurrentPointByPointReason(userId, reason);
-        pointHistoryStore.recordPointHistory(userId, reason, currentPoint);
+    public void updatePoint(ContentCommand.GetDetail command, PointReason reason) {
+        if(contentReader.checkContentNeedPoint(command)){
+            Long currentPoint = pointStore.updateCurrentPointByPointReason(command.userId(), reason);
+            pointHistoryStore.recordPointHistory(command.userId(), reason, currentPoint);
+        }
     }
 
     @Override
