@@ -23,18 +23,17 @@ public class PointStoreImpl implements PointStore {
         PointEntity point = pointRepository.findById(userId)
             .orElseThrow(() -> new CommonException(POINT_NOT_FOUND));
 
-        if (verifyUpdatePoint(point.getCurrentPoint(), reason)) {
-            throw new CommonException(POINT_NEVER_MINUS);
-        }
+        verifyUpdatePoint(point.getCurrentPoint(), reason);
 
         pointCustomRepository.updatePoint(userId, reason.getValue());
 
         return point.getCurrentPoint();
     }
 
-
     // Internal Methods ===============================================================================================
-    private boolean verifyUpdatePoint(Long currentPoint, PointReason reason) {
-        return (currentPoint + reason.getValue()) < 0;
+    private void verifyUpdatePoint(Long currentPoint, PointReason reason) {
+        if (currentPoint + reason.getValue() < 0) {
+            throw new CommonException(POINT_NEVER_MINUS);
+        }
     }
 }
