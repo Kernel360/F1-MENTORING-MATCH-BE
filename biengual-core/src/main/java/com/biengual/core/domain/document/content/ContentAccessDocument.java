@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @TypeAlias("content_access")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ContentAccessDocument {
-    @Indexed(expireAfterSeconds = 30) // 5일 = 5 * 24 * 60 * 60 초
+    @Indexed(expireAfterSeconds = 432000) // 5일 = 5 * 24 * 60 * 60 초
     protected Date createdAt;
 
     @LastModifiedDate
