@@ -18,7 +18,6 @@ CREATE TABLE IF NOT EXISTS `point_history`
     `point_change`  BIGINT                                                                                                                                NOT NULL,
     `point_balance` BIGINT                                                                                                                                NOT NULL,
     `reason`        ENUM ('FIRST_SIGN_UP', 'DAILY_QUIZ', 'DAILY_MISSION', 'DAILY_CONTENT', 'VIEW_RECENT_CONTENT', 'VIEW_QUIZ_HINT', 'FIRST_DAILY_LOG_IN') NOT NULL,
-    `processed`     BOOLEAN                                                                                                                               NOT NULL DEFAULT FALSE,
     `created_at`    DATETIME(6)                                                                                                                                    DEFAULT NULL,
     `updated_at`    DATETIME(6)                                                                                                                                    DEFAULT NULL,
     PRIMARY KEY (`id`)
@@ -49,8 +48,8 @@ FROM `user` u
 WHERE p.id IS NULL;
 
 -- Populate point_history table for existing users (initial grant of points for sign up)
-INSERT INTO `point_history` (user_id, point_change, point_balance, reason, processed, created_at, updated_at)
-SELECT u.id, 100, 100, 'FIRST_SIGN_UP', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+INSERT INTO `point_history` (user_id, point_change, point_balance, reason, created_at, updated_at)
+SELECT u.id, 100, 100, 'FIRST_SIGN_UP', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 FROM `user` u
          LEFT JOIN `point_history` ph ON u.id = ph.user_id AND ph.reason = 'FIRST_SIGN_UP'
 WHERE ph.id IS NULL;
@@ -62,9 +61,3 @@ SELECT u.id, 100, 0, 100, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 FROM `user` u
          LEFT JOIN `point_data_mart` pdm ON u.id = pdm.user_id
 WHERE pdm.id IS NULL;
-
--- Update initial point history and ensure processing status for point_history entries
-UPDATE `point_history`
-SET processed = TRUE
-WHERE reason = 'FIRST_SIGN_UP'
-  AND user_id IN (SELECT id FROM `user`);
