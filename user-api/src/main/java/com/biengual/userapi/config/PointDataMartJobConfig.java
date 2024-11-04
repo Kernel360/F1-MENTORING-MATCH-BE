@@ -55,7 +55,7 @@ public class PointDataMartJobConfig {
     @Bean
     public Step pointDataMartStep() {
         return new StepBuilder("pointDataMartStep", jobRepository)
-            .<PointHistoryEntity, PointDataMart>chunk(100, transactionManager)
+            .<PointHistoryEntity, PointDataMart>chunk(1000, transactionManager)
             .reader(pointHistoryReader())
             .processor(pointDataMartProcessor())
             .writer(pointDataMartWriter())
