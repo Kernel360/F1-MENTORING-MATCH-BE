@@ -41,9 +41,6 @@ public class PointHistoryEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private PointReason reason;
 
-    @Column(nullable = false)
-    private boolean processed;
-
     @Builder
     private PointHistoryEntity(
         Long userId, Long pointChange, Long pointBalance, PointReason reason
@@ -52,7 +49,6 @@ public class PointHistoryEntity extends BaseEntity {
         this.pointChange = pointChange;
         this.pointBalance = pointBalance;
         this.reason = reason;
-        this.processed = false;
     }
 
     public static PointHistoryEntity createPointHistory(
@@ -64,10 +60,6 @@ public class PointHistoryEntity extends BaseEntity {
             .pointBalance(currentBalance)
             .reason(reason)
             .build();
-    }
-
-    public void updateProcessed(boolean processed) {
-        this.processed = processed;
     }
 
 }

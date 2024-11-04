@@ -104,7 +104,6 @@ public class PointDataMartJobConfig {
                 LocalDateTime.of(LocalDate.now(), LocalTime.of(1, 0)))
             ) {
                 dataMart.updateByPointHistory(history);
-                history.updateProcessed(true);
             }
 
             return dataMart;
