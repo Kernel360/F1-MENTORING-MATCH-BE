@@ -50,7 +50,7 @@ public class PointDataMartJobConfig {
 
     /**
      * chunk 기반 Step 처리
-     * 한 번에 100개의 아이템 처리
+     * 한 번에 1000개의 아이템 처리
      */
     @Bean
     public Step pointDataMartStep() {
