@@ -73,22 +73,21 @@ public class PointDataMartJobConfig {
 
     /**
      * pointHistoryRepository.findByProcessedFalse 를 사용하여 PointHistoryEntity 조회
-     * 처리 되지 않은 포인트 내역(어제 00시 이후이고 `processed = false` 인 항목) 조회
-     * 날짜로만 확인하면 시간이 무조건 일정하다는 보장이 없음
+     * 처리 되지 않은 포인트 내역(어제 00시 이후인 항목) 조회
      */
     @Bean
     @StepScope
     public RepositoryItemReader<PointHistoryEntity> pointHistoryReader(
-        @Value("#{jobParameters['createdAt']}") LocalDateTime createdAtString
+        @Value("#{jobParameters['createdAt']}") LocalDateTime createdAt
     ) {
 
         return new RepositoryItemReaderBuilder<PointHistoryEntity>()
             .name("pointHistoryReader")
             .repository(pointHistoryRepository)
-            .methodName("findByCreatedAtAfterAndProcessedIsFalse")
+            .methodName("findByCreatedAtAfter")
             .pageSize(100)
             .sorts(Collections.singletonMap("id", Sort.Direction.ASC))
-            .arguments(Arrays.asList(createdAtString, PageRequest.of(0, 100)))
+            .arguments(Arrays.asList(createdAt, PageRequest.of(0, 100)))
             .build();
     }
 
