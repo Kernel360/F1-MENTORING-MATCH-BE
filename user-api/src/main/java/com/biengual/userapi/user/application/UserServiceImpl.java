@@ -8,6 +8,8 @@ import com.biengual.core.util.CookieUtil;
 import com.biengual.userapi.mission.domain.MissionReader;
 import com.biengual.userapi.mission.domain.MissionStore;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
+import com.biengual.userapi.point.domain.PointReader;
+import com.biengual.userapi.point.domain.PointStore;
 import com.biengual.userapi.user.domain.RefreshTokenStore;
 import com.biengual.userapi.user.domain.UserCommand;
 import com.biengual.userapi.user.domain.UserInfo;
@@ -28,7 +30,8 @@ public class UserServiceImpl implements UserService {
     private final RefreshTokenStore refreshTokenStore;
     private final MissionStore missionStore;
     private final MissionReader missionReader;
-
+    private final PointReader pointReader;
+    private final PointStore pointStore;
 
     // 본인 정보 조회
     @Override
@@ -51,15 +54,15 @@ public class UserServiceImpl implements UserService {
         return userReader.findMySignUpTime(userId);
     }
 
-    // OAuth 유저 회원가입, 로그인 처리 및 미션 생성 TODO: 포인트 생성도 여기에 포함될수도?
+    // OAuth 유저 회원가입, 로그인 처리 및 미션 생성
     @Override
     @Transactional
     public UserEntity getUserByOAuthUser(OAuth2UserPrincipal principal) {
         UserEntity user = userReader.findUser(principal);
 
-        if(!missionReader.existsMission(user.getId())){
-            missionStore.createMission(user.getId());
-        }
+        // 미션 및 포인트 엔티티 생성되지 않은 경우 생성
+        missionReader.findMission(user.getId());
+        pointReader.findPoint(user.getId());
 
         return user;
     }

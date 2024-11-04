@@ -2,6 +2,7 @@ package com.biengual.userapi.user.domain;
 
 import static com.biengual.core.domain.entity.user.QUserEntity.*;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
@@ -55,5 +56,25 @@ public class UserCustomRepository {
             .fetchOne();
 
         return Optional.ofNullable(mySignUpTime);
+    }
+
+    // 마지막 로그인 시간을 조회하는 쿼리
+    public Optional<LocalDateTime> findLastLoginTime(Long userId) {
+        return Optional.ofNullable(
+            queryFactory
+                .select(userEntity.lastLoginTime)
+                .from(userEntity)
+                .where(userEntity.id.eq(userId))
+                .fetchOne()
+        );
+    }
+
+    // 마지막 로그인 시간 업데이트하는 쿼리
+    public void updateLastLoginTime(Long userId) {
+        queryFactory
+            .update(userEntity)
+            .set(userEntity.lastLoginTime, LocalDateTime.now())
+            .where(userEntity.id.eq(userId))
+            .execute();
     }
 }

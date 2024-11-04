@@ -13,6 +13,7 @@ import com.biengual.userapi.category.domain.CategoryRepository;
 import com.biengual.userapi.user.domain.UserCategoryCustomRepository;
 import com.biengual.userapi.user.domain.UserCategoryRepository;
 import com.biengual.userapi.user.domain.UserCommand;
+import com.biengual.userapi.user.domain.UserCustomRepository;
 import com.biengual.userapi.user.domain.UserRepository;
 import com.biengual.userapi.user.domain.UserStore;
 
@@ -25,6 +26,7 @@ public class UserStoreImpl implements UserStore {
     private final CategoryRepository categoryRepository;
     private final UserCategoryRepository userCategoryRepository;
     private final UserCategoryCustomRepository userCategoryCustomRepository;
+    private final UserCustomRepository userCustomRepository;
 
     // 본인 정보 수정
     @Override
@@ -45,6 +47,11 @@ public class UserStoreImpl implements UserStore {
         saveAdditionalMyCategories(alreadyRegisteredMyCategoryIds, command);
 
         deleteRemovalMyCategoryIds(alreadyRegisteredMyCategoryIds, command);
+    }
+
+    @Override
+    public void updateLastLoginTime(Long userId) {
+        userCustomRepository.updateLastLoginTime(userId);
     }
 
     // user의 관심 Category 목록에 추가

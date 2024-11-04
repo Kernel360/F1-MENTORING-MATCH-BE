@@ -2,6 +2,7 @@ package com.biengual.userapi.user.infrastructure;
 
 import static com.biengual.core.response.error.code.UserErrorCode.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.biengual.core.annotation.DataProvider;
@@ -68,6 +69,13 @@ public class UserReaderImpl implements UserReader {
     @Override
     public UserInfo.MySignUpTime findMySignUpTime(Long userId) {
         return userCustomRepository.findMySignUpTime(userId)
+            .orElseThrow(() -> new CommonException(USER_NOT_FOUND));
+    }
+
+    // 마지막 로그인 시간 조회
+    @Override
+    public LocalDateTime findLastLoginTime(Long userId) {
+        return userCustomRepository.findLastLoginTime(userId)
             .orElseThrow(() -> new CommonException(USER_NOT_FOUND));
     }
 }

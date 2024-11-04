@@ -1,5 +1,7 @@
 package com.biengual.userapi.user.domain;
 
+import java.time.LocalDateTime;
+
 import com.biengual.core.domain.entity.user.UserEntity;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
 
@@ -16,4 +18,6 @@ public interface UserReader {
     UserInfo.MyInfo findMyInfo(Long userId);
 
     UserInfo.MySignUpTime findMySignUpTime(Long userId);
+
+    LocalDateTime findLastLoginTime(Long userId);
 }

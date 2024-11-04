@@ -1,12 +1,13 @@
 package com.biengual.core.domain.entity.user;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.hibernate.annotations.DynamicUpdate;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.DynamicUpdate;
 
 import com.biengual.core.domain.entity.BaseEntity;
 import com.biengual.core.domain.entity.bookmark.BookmarkEntity;
@@ -79,6 +80,9 @@ public class UserEntity extends BaseEntity {
     @Column(nullable = false, columnDefinition = "varchar(255)")
     private String providerId;
 
+    @Column(name = "last_login_time", nullable = false)
+    private LocalDateTime lastLoginTime;
+
     @OneToMany
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     private List<BookmarkEntity> bookmarks = new ArrayList<>();
@@ -102,6 +106,7 @@ public class UserEntity extends BaseEntity {
         this.userStatus = userStatus;
         this.provider = provider;
         this.providerId = providerId;
+        this.lastLoginTime = LocalDateTime.now();
     }
 
     public static UserEntity createByOAuthUser(

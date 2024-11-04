@@ -1,11 +1,13 @@
 package com.biengual.userapi.content.application;
 
 import com.biengual.core.annotation.Facade;
+import com.biengual.core.enums.PointReason;
 import com.biengual.core.util.PaginationInfo;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.content.domain.ContentService;
 import com.biengual.userapi.crawling.domain.CrawlingService;
+import com.biengual.userapi.point.domain.PointService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -14,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class ContentFacade {
     private final CrawlingService crawlingService;
     private final ContentService contentService;
+    private final PointService pointService;
 
     public void createContent(ContentCommand.CrawlingContent command) {
         ContentCommand.Create createContent = crawlingService.getCrawlingDetail(command);
@@ -63,4 +66,14 @@ public class ContentFacade {
     public PaginationInfo<ContentInfo.Admin> getAdminListening(ContentCommand.GetAdminListeningView command) {
         return contentService.getAdminView(command);
     }
+
+    // 컨텐츠 상세 조회 및 최근 컨텐츠인 경우 포인트 소모
+    public ContentInfo.Detail viewContentAndUpdatePointIfNeed(ContentCommand.GetDetail command) {
+        if(contentService.checkContentNeedPoint(command)){
+            pointService.updatePoint(command.userId(), PointReason.VIEW_RECENT_CONTENT);
+        }
+
+        return contentService.getScriptsOfContent(command);
+    }
+
 }

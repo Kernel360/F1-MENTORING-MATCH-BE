@@ -1,5 +1,10 @@
 package com.biengual.userapi.content.application;
 
+import static com.biengual.core.constant.RestrictionConstant.*;
+
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,7 +14,6 @@ import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.content.domain.ContentReader;
 import com.biengual.userapi.content.domain.ContentService;
 import com.biengual.userapi.content.domain.ContentStore;
-import com.biengual.userapi.scrap.domain.ScrapReader;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 public class ContentServiceImpl implements ContentService {
     private final ContentReader contentReader;
     private final ContentStore contentStore;
-    private final ScrapReader scrapReader;
 
     // 검색 조건에 맞는 컨텐츠 프리뷰 페이지 조회
     @Override
@@ -86,15 +89,26 @@ public class ContentServiceImpl implements ContentService {
         contentStore.modifyContentStatus(contentId);
     }
 
-	// 컨텐츠 디테일 조회
-	@Override
-	@Transactional    // hit 증가 로직 있어서 readOnly 생략
-	public ContentInfo.Detail getScriptsOfContent(ContentCommand.GetDetail command) {
-		ContentInfo.Detail info = contentReader.findActiveContentWithScripts(command);
+    // 컨텐츠 디테일 조회
+    @Override
+    @Transactional    // hit 증가 로직 있어서 readOnly 생략
+    public ContentInfo.Detail getScriptsOfContent(ContentCommand.GetDetail command) {
+        ContentInfo.Detail info = contentReader.findActiveContentWithScripts(command);
 
-		// TODO: 추후 레디스로 바꿀 예정
-		contentStore.increaseHits(command.contentId());
+        // TODO: 추후 레디스로 바꿀 예정
+        contentStore.increaseHits(command.contentId());
 
-		return info;
-	}
+        return info;
+    }
+
+    // 컨텐츠 상세 조회 시 포인트 필요한지 확인 : 현재는 5일 이내 컨텐츠 기준
+    @Override
+    @Transactional(readOnly = true)
+    public boolean checkContentNeedPoint(ContentCommand.GetDetail command) {
+        return Math.abs(
+            ChronoUnit.DAYS.between(
+                LocalDate.now(),
+                contentReader.findCreatedAtOfContentById(command.contentId()).toLocalDate()
+            )) <= PERIOD_FOR_POINT_CONTENT_ACCESS;
+    }
 }

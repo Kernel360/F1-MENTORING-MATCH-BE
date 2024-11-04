@@ -240,7 +240,7 @@ public class ContentPublicController {
         // TODO: 로그인 유무에 따라 다른 DTO 응답을 보여준다고 하면,
         //  하나의 DTO로 관리하는 것이 좋은지 분리하는 것이 좋은지? 아니면 권한 기준으로 컨트롤러 분리가 가능하다면 분리?
         ContentCommand.GetDetail command = contentDtoMapper.doGetDetail(contentId, principal);
-        ContentInfo.Detail info = contentService.getScriptsOfContent(command);
+        ContentInfo.Detail info = contentFacade.viewContentAndUpdatePointIfNeed(command);
         ContentResponseDto.DetailRes response = contentDtoMapper.ofDetailRes(info);
 
         return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);

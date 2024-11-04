@@ -2,9 +2,9 @@ package com.biengual.userapi.content.infrastructure;
 
 import static com.biengual.core.response.error.code.ContentErrorCode.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-import com.biengual.userapi.scrap.domain.ScrapCustomRepository;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 
@@ -25,6 +25,7 @@ import com.biengual.userapi.content.domain.ContentReader;
 import com.biengual.userapi.content.domain.ContentRepository;
 import com.biengual.userapi.content.domain.UserContentBookmarks;
 import com.biengual.userapi.content.presentation.ContentDtoMapper;
+import com.biengual.userapi.scrap.domain.ScrapCustomRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -142,4 +143,10 @@ public class ContentReaderImpl implements ContentReader {
 
 		return contentDtoMapper.buildDetail(content, guestScripts);
 	}
+
+	// 컨텐츠 생성 날짜 조회
+    @Override
+    public LocalDateTime findCreatedAtOfContentById(Long contentId) {
+        return contentCustomRepository.findCreatedAtOfContentById(contentId);
+    }
 }

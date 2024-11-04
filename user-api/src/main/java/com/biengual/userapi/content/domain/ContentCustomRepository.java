@@ -5,6 +5,7 @@ import static com.biengual.core.domain.entity.scrap.QScrapEntity.*;
 import static com.biengual.core.response.error.code.ContentErrorCode.*;
 
 import java.lang.reflect.Field;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -386,6 +387,15 @@ public class ContentCustomRepository {
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchOne);
     }
 
+    // 컨텐츠 생성 날짜 조회를 위한 쿼리
+    public LocalDateTime findCreatedAtOfContentById(Long contentId) {
+        return queryFactory
+            .select(contentEntity.createdAt)
+            .from(contentEntity)
+            .where(contentEntity.id.eq(contentId))
+            .fetchOne();
+    }
+
     // isScrapped를 col로 받기 위한 확인하는 쿼리, 비로그인 상태 시 false 리턴
     private Expression<?> getIsScrappedByUserId(Long userId) {
         return userId != null ?
@@ -397,4 +407,5 @@ public class ContentCustomRepository {
                 .exists()
             : Expressions.constant(false);
     }
+
 }
