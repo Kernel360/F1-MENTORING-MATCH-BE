@@ -7,7 +7,6 @@ import com.biengual.core.response.error.exception.CommonException;
 import com.biengual.userapi.mission.domain.MissionCustomRepository;
 import com.biengual.userapi.mission.domain.MissionInfo;
 import com.biengual.userapi.mission.domain.MissionReader;
-import com.biengual.userapi.mission.domain.MissionRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,17 +14,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MissionReaderImpl implements MissionReader {
     private final MissionCustomRepository missionCustomRepository;
-    private final MissionRepository missionRepository;
 
+    // userId(PK) 로 미션 상태 조회
     @Override
     public MissionInfo.StatusInfo getMissionsStatus(Long userId) {
         return missionCustomRepository.findMissionStatusByUserId(userId)
             .orElseThrow(() -> new CommonException(MISSION_NOT_FOUND));
-    }
-
-    @Override
-    public boolean existsMission(Long userId) {
-        return missionRepository.existsById(userId);
     }
 
 }

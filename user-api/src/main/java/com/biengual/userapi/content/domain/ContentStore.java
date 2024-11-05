@@ -6,9 +6,10 @@ package com.biengual.userapi.content.domain;
  * @author 문찬욱
  */
 public interface ContentStore {
-	void createContent(ContentCommand.Create command);
+    void createContent(ContentCommand.Create command);
 
-	void modifyContentStatus(Long contentId);
+    void modifyContentStatus(Long contentId);
 
-	void increaseHits(Long contentId);
+    void increaseHits(Long contentId);
+
 }

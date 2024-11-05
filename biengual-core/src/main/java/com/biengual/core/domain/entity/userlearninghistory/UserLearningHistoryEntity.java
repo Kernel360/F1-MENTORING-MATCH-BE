@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -25,15 +24,15 @@ public class UserLearningHistoryEntity extends BaseEntity {
     @Column(nullable = false, columnDefinition = "bigint")
     private Long contentId;
 
-    @Column(nullable = false, precision = 5, scale = 2)
-    private BigDecimal learningRate;
+    @Column(nullable = false, columnDefinition = "tinyint")
+    private Integer learningRate;
 
     @Column(nullable = false)
     private LocalDateTime recentLearningTime;
 
     @Builder
     public UserLearningHistoryEntity(
-        Long userId, Long contentId, BigDecimal learningRate, LocalDateTime recentLearningTime
+        Long userId, Long contentId, Integer learningRate, LocalDateTime recentLearningTime
     ) {
         this.userId = userId;
         this.contentId = contentId;
@@ -41,16 +40,8 @@ public class UserLearningHistoryEntity extends BaseEntity {
         this.recentLearningTime = recentLearningTime;
     }
 
-    public static UserLearningHistoryEntity createNewHistory(Long userId, Long contentId) {
-        return UserLearningHistoryEntity.builder()
-            .userId(userId)
-            .contentId(contentId)
-            .learningRate(BigDecimal.ZERO)
-            .recentLearningTime(LocalDateTime.now())
-            .build();
-    }
-
-    public void record(BigDecimal learningRate) {
+    public void record(Integer learningRate) {
         this.learningRate = learningRate;
+        this.recentLearningTime = LocalDateTime.now();
     }
 }

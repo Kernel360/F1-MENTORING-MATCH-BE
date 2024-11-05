@@ -69,6 +69,7 @@ public class ContentInfo {
         String videoUrl,
         Integer hits,
         Boolean isScrapped,
+        Integer learningRate,
         List<UserScript> scriptList
     ) {
     }
