@@ -13,6 +13,7 @@ import java.util.List;
 public class DashboardReaderImpl implements DashboardReader {
     private final UserLearningHistoryCustomRepository userLearningHistoryCustomRepository;
 
+    // 최근 학습 컨텐츠 조회
     @Override
     public List<DashboardInfo.RecentLearning> findRecentLearning(Long userId) {
         return userLearningHistoryCustomRepository.findRecentLearningTop8ByUserId(userId);
