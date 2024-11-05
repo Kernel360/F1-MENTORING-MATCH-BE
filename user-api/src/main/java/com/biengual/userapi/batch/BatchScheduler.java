@@ -22,7 +22,7 @@ public class BatchScheduler {
     @Scheduled(cron = "00 00 01 * * ?") // 매일 새벽 1시에 실행
     public void runPointDataMartJob() throws Exception {
         JobParameters jobParameters = new JobParametersBuilder()
-            .addString("createdAt", LocalDateTime.now().minusDays(5).toString())
+            .addString("createdAt", LocalDateTime.now().minusDays(1).toString())
             .addLong("time", System.currentTimeMillis())
             .toJobParameters();
         jobLauncher.run(pointDataMartJob, jobParameters);
