@@ -2,10 +2,12 @@ package com.biengual.userapi.user.domain;
 
 import static com.biengual.core.domain.entity.user.QUserEntity.*;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
+import com.biengual.core.enums.PointReason;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -55,5 +57,32 @@ public class UserCustomRepository {
             .fetchOne();
 
         return Optional.ofNullable(mySignUpTime);
+    }
+
+    // 마지막 로그인 시간 업데이트하는 쿼리
+    public void updateLastLoginTime(Long userId) {
+        queryFactory
+            .update(userEntity)
+            .set(userEntity.lastLoginTime, LocalDateTime.now())
+            .where(userEntity.id.eq(userId))
+            .execute();
+    }
+
+    // 유저 포인트 업데이트 쿼리
+    public void updatePointByPointReason(Long userId, PointReason reason) {
+        queryFactory
+            .update(userEntity)
+            .set(userEntity.currentPoint, userEntity.currentPoint.add(reason.getValue()))
+            .where(userEntity.id.eq(userId))
+            .execute();
+    }
+
+    // 유저 포인트 조회 쿼리
+    public Long findUserPointByUserId(Long userId) {
+        return queryFactory
+            .select(userEntity.currentPoint)
+            .from(userEntity)
+            .where(userEntity.id.eq(userId))
+            .fetchFirst();
     }
 }

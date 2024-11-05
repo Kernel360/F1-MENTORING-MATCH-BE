@@ -1,6 +1,6 @@
 package com.biengual.userapi.crawling.infrastructure;
 
-import static com.biengual.core.constant.ServiceConstant.UNKNOWN_CATEGORY_NAME;
+import static com.biengual.core.constant.ServiceConstant.*;
 import static com.biengual.core.response.error.code.CrawlingErrorCode.*;
 
 import java.io.IOException;
@@ -10,7 +10,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.biengual.userapi.nlp.CategoryClassifier;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -41,6 +40,7 @@ import com.biengual.userapi.content.domain.ContentCustomRepository;
 import com.biengual.userapi.crawling.application.TranslateService;
 import com.biengual.userapi.crawling.domain.CrawlingStore;
 import com.biengual.userapi.crawling.presentation.CrawlingResponseDto;
+import com.biengual.userapi.nlp.CategoryClassifier;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
