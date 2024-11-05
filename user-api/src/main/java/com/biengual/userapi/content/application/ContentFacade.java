@@ -1,7 +1,6 @@
 package com.biengual.userapi.content.application;
 
 import com.biengual.core.annotation.Facade;
-import com.biengual.core.enums.PointReason;
 import com.biengual.core.util.PaginationInfo;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentInfo;
@@ -69,11 +68,6 @@ public class ContentFacade {
 
     // 컨텐츠 상세 조회 및 최근 컨텐츠인 경우 포인트 소모
     public ContentInfo.Detail viewContentAndUpdatePointIfNeed(ContentCommand.GetDetail command) {
-        userService.updatePointByReason(command, PointReason.VIEW_RECENT_CONTENT);
-
-        // TODO: content user 테이블 추가해서 기록하는 방식으로
-        // contentService.updateAccess(command.contentId(), command.userId());
-
         return contentService.getScriptsOfContent(command);
     }
 

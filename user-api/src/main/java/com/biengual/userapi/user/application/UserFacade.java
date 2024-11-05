@@ -18,12 +18,7 @@ public class UserFacade {
 
     // 회원가입 및 로그인
     public UserEntity getUserByOAuthUser(OAuth2UserPrincipal principal) {
-        UserEntity user =  userService.getUserByOAuthUser(principal);
-
-        // 유저 매일 첫 로그인 포인트 업데이트
-        userService.updatePointByFirstDailyLogin(user);
-
-        return user;
+        return userService.getUserByOAuthUser(principal);
     }
 
     // 본인 정보 조회

@@ -3,12 +3,15 @@ package com.biengual.userapi.content.application;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.biengual.core.enums.PointReason;
 import com.biengual.core.util.PaginationInfo;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.content.domain.ContentReader;
 import com.biengual.userapi.content.domain.ContentService;
 import com.biengual.userapi.content.domain.ContentStore;
+import com.biengual.userapi.point.domain.PointManager;
+import com.biengual.userapi.validator.PointValidator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,6 +20,8 @@ import lombok.RequiredArgsConstructor;
 public class ContentServiceImpl implements ContentService {
     private final ContentReader contentReader;
     private final ContentStore contentStore;
+    private final PointValidator pointValidator;
+    private final PointManager pointManager;
 
     // 검색 조건에 맞는 컨텐츠 프리뷰 페이지 조회
     @Override
@@ -90,6 +95,10 @@ public class ContentServiceImpl implements ContentService {
     public ContentInfo.Detail getScriptsOfContent(ContentCommand.GetDetail command) {
         ContentInfo.Detail info = contentReader.findActiveContentWithScripts(command);
 
+        if (!pointValidator.verifyContentView(command)) {
+            // TODO: content user 테이블 추가해서 기록하는 방식으로 access 업데이트
+            pointManager.updateAndSavePoint(PointReason.VIEW_RECENT_CONTENT, command.userId());
+        }
         // TODO: 추후 레디스로 바꿀 예정
         contentStore.increaseHits(command.contentId());
 
