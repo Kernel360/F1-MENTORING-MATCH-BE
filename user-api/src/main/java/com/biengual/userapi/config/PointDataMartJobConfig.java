@@ -101,9 +101,16 @@ public class PointDataMartJobConfig {
             PointDataMart dataMart = pointDataMartRepository.findByUserId(history.getUser().getId())
                 .orElseGet(() -> PointDataMart.createPointDataMart(history.getUser().getId()));
 
-            if (history.getCreatedAt().isAfter(
-                LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0))
-            )) {
+            // 어제 00 시 부터 오늘 00시 사이의 24시간 history에 데해서만 업데이트
+            if (
+                history.getCreatedAt().isAfter(
+                    LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.of(0, 0))
+                ) && (
+                    history.getCreatedAt().isBefore(
+                        LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0))
+                    )
+                )
+            ) {
                 dataMart.updateByPointHistory(history);
             }
 
