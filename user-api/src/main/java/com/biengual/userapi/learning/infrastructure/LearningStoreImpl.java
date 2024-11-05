@@ -20,7 +20,6 @@ public class LearningStoreImpl implements LearningStore {
     private final ContentRepository contentRepository;
     private final UserLearningHistoryRepository userLearningHistoryRepository;
 
-    // TODO: 새로 생기는 학습 내역인 경우 recentLearningTime에 LocalDateTime.now()를 할당하는 작업을 2번하는데, 무시할만 한가?
     // TODO: Validate를 앞단에서 하는 것이 좋은가? Validator 클래스를 만드는 것이 좋은가?
     // 학습 내역 쌓기
     @Override
@@ -29,9 +28,11 @@ public class LearningStoreImpl implements LearningStore {
 
         UserLearningHistoryEntity userLearningHistory =
             userLearningHistoryRepository.findByUserIdAndContentId(command.userId(), command.contentId())
+                .map(history -> {
+                    history.record(command.learningRate());
+                    return history;
+                })
                 .orElseGet(command::toUserLearningHistoryEntity);
-
-        userLearningHistory.record(command.learningRate());
 
         userLearningHistoryRepository.save(userLearningHistory);
     }

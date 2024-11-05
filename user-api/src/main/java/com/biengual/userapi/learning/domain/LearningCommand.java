@@ -3,6 +3,8 @@ package com.biengual.userapi.learning.domain;
 import com.biengual.core.domain.entity.userlearninghistory.UserLearningHistoryEntity;
 import lombok.Builder;
 
+import java.time.LocalDateTime;
+
 public class LearningCommand {
 
     @Builder
@@ -16,6 +18,7 @@ public class LearningCommand {
                 .userId(this.userId)
                 .contentId(this.contentId)
                 .learningRate(this.learningRate)
+                .recentLearningTime(LocalDateTime.now())
                 .build();
         }
     }
