@@ -39,4 +39,9 @@ public class UserLearningHistoryEntity extends BaseEntity {
         this.learningRate = learningRate;
         this.recentLearningTime = recentLearningTime;
     }
+
+    public void record(Integer learningRate) {
+        this.learningRate = learningRate;
+        this.recentLearningTime = LocalDateTime.now();
+    }
 }
