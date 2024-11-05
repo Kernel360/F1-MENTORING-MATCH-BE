@@ -4,7 +4,6 @@ import static com.biengual.core.constant.RestrictionConstant.*;
 import static com.biengual.core.response.error.code.ContentErrorCode.*;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -173,11 +172,9 @@ public class ContentReaderImpl implements ContentReader {
     // Internal Methods ================================================================================================
 
     private boolean verifyExpiredOfContent(Long contentId) {
-        return Math.abs(
-            ChronoUnit.DAYS.between(
-                LocalDate.now(),
-                contentCustomRepository.findCreatedAtOfContentById(contentId).toLocalDate()
-            )) <= PERIOD_FOR_POINT_CONTENT_ACCESS;
+        return LocalDate.now().minusDays(PERIOD_FOR_POINT_CONTENT_ACCESS).isBefore(
+            contentCustomRepository.findCreatedAtOfContentById(contentId).toLocalDate()
+        );
     }
 
 }
