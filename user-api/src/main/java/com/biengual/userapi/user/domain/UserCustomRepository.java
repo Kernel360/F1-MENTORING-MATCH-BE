@@ -78,7 +78,7 @@ public class UserCustomRepository {
     }
 
     // 유저 포인트 조회 쿼리
-    public Long getUserPointByUserId(Long userId) {
+    public Long findUserPointByUserId(Long userId) {
         return queryFactory
             .select(userEntity.currentPoint)
             .from(userEntity)

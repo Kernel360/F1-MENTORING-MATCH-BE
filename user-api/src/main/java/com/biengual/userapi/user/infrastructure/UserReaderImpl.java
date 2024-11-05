@@ -81,7 +81,7 @@ public class UserReaderImpl implements UserReader {
 
     @Override
     public Long findUserPoint(Long userId) {
-        return userCustomRepository.getUserPointByUserId(userId);
+        return userCustomRepository.findUserPointByUserId(userId);
     }
 
 }
