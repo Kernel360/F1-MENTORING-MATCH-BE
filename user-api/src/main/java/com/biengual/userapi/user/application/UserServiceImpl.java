@@ -84,7 +84,6 @@ public class UserServiceImpl implements UserService {
 
     // 유저 로그인 상태 확인
     @Override
-    @Transactional(readOnly = true)
     public Boolean getLoginStatus(OAuth2UserPrincipal principal) {
         return principal != null;
     }
