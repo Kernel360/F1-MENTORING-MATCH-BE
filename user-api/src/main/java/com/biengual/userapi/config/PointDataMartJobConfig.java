@@ -3,7 +3,6 @@ package com.biengual.userapi.config;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Arrays;
 import java.util.Collections;
 
 import org.springframework.batch.core.Job;
@@ -21,7 +20,6 @@ import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -88,7 +86,7 @@ public class PointDataMartJobConfig {
             .methodName("findByCreatedAtAfter")
             .pageSize(100)
             .sorts(Collections.singletonMap("id", Sort.Direction.ASC))
-            .arguments(Arrays.asList(createdAt, PageRequest.of(0, 100)))
+            .arguments(Collections.singletonList(createdAt))
             .build();
     }
 
