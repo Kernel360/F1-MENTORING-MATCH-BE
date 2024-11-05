@@ -8,6 +8,7 @@ import com.biengual.core.annotation.DataProvider;
 import com.biengual.core.domain.entity.category.CategoryEntity;
 import com.biengual.core.domain.entity.user.UserCategoryEntity;
 import com.biengual.core.domain.entity.user.UserEntity;
+import com.biengual.core.enums.PointReason;
 import com.biengual.core.response.error.exception.CommonException;
 import com.biengual.userapi.category.domain.CategoryRepository;
 import com.biengual.userapi.user.domain.UserCategoryCustomRepository;
@@ -52,6 +53,11 @@ public class UserStoreImpl implements UserStore {
     @Override
     public void updateLastLoginTime(Long userId) {
         userCustomRepository.updateLastLoginTime(userId);
+    }
+
+    @Override
+    public void updatePoint(Long userId, PointReason pointReason) {
+        userCustomRepository.updatePoint(userId, pointReason);
     }
 
     // user의 관심 Category 목록에 추가

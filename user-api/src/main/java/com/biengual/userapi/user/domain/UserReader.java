@@ -17,4 +17,5 @@ public interface UserReader {
 
     UserInfo.MySignUpTime findMySignUpTime(Long userId);
 
+    Long findUserPoint(Long userId);
 }

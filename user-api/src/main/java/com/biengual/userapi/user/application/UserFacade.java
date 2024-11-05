@@ -3,7 +3,6 @@ package com.biengual.userapi.user.application;
 import com.biengual.core.annotation.Facade;
 import com.biengual.core.domain.entity.user.UserEntity;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
-import com.biengual.userapi.point.domain.PointService;
 import com.biengual.userapi.user.domain.UserCommand;
 import com.biengual.userapi.user.domain.UserInfo;
 import com.biengual.userapi.user.domain.UserService;
@@ -16,14 +15,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserFacade {
     private final UserService userService;
-    private final PointService pointService;
 
     // 회원가입 및 로그인
     public UserEntity getUserByOAuthUser(OAuth2UserPrincipal principal) {
         UserEntity user =  userService.getUserByOAuthUser(principal);
 
-        // 유저 그날의 첫 로그인 포인트 업데이트
-        pointService.updatePointFirstDailyLogin(user);
+        // 유저 매일 첫 로그인 포인트 업데이트
+        userService.updatePointByFirstDailyLogin(user);
 
         return user;
     }

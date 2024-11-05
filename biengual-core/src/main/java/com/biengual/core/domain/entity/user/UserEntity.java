@@ -83,6 +83,9 @@ public class UserEntity extends BaseEntity {
     @Column(name = "last_login_time", nullable = false)
     private LocalDateTime lastLoginTime;
 
+    @Column(name = "current_point", nullable = false, columnDefinition = "bigint")
+    private Long currentPoint;
+
     @OneToMany
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     private List<BookmarkEntity> bookmarks = new ArrayList<>();
@@ -106,6 +109,7 @@ public class UserEntity extends BaseEntity {
         this.userStatus = userStatus;
         this.provider = provider;
         this.providerId = providerId;
+        this.currentPoint = 100L;
         this.lastLoginTime = LocalDateTime.now();
     }
 

@@ -97,8 +97,8 @@ public class PointDataMartJobConfig {
     @Bean
     public ItemProcessor<PointHistoryEntity, PointDataMart> pointDataMartProcessor() {
         return history -> {
-            PointDataMart dataMart = pointDataMartRepository.findByUserId(history.getUserId())
-                .orElseGet(() -> PointDataMart.createPointDataMart(history.getUserId()));
+            PointDataMart dataMart = pointDataMartRepository.findByUserId(history.getUser().getId())
+                .orElseGet(() -> PointDataMart.createPointDataMart(history.getUser().getId()));
 
             if (history.getCreatedAt().isAfter(
                 LocalDateTime.of(LocalDate.now(), LocalTime.of(1, 0)))

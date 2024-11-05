@@ -128,7 +128,7 @@ public class ContentReaderImpl implements ContentReader {
 
         List<Script> scripts = contentDocument.getScripts();
 
-        if (command.userId() != null) {
+        if (command.userId() != null) { // TODO: Objects.isNULL()로 하고 if 안과 밖 위치 수정
             List<BookmarkEntity> bookmarks =
                 bookmarkRepository.findAllByUserIdAndScriptIndex(command.userId(), command.contentId());
             UserContentBookmarks userContentBookmarks = new UserContentBookmarks(bookmarks);
@@ -139,6 +139,7 @@ public class ContentReaderImpl implements ContentReader {
             return contentDtoMapper.buildDetail(content, isScrapped, userScripts);
         }
 
+        // TODO: record의 이너 메서드로 ex) toResponse()
         List<ContentInfo.UserScript> guestScripts = scripts.stream()
             .map(ContentInfo.UserScript::of)
             .toList();
@@ -148,16 +149,30 @@ public class ContentReaderImpl implements ContentReader {
 
     // 컨텐츠 상세 조회 시 포인트 필요한지 확인 : 현재는 5일 이내 컨텐츠 기준
     @Override
-    public boolean checkContentNeedPoint(ContentCommand.GetDetail command) {
+    public boolean checkAlreadyReadable(ContentCommand.GetDetail command) {
         boolean access = true;
-        boolean date = this.findExpiredDateOfContent(command.contentId());
 
-        return !(access && date);
+        if (this.verifyExpiredOfContent(command.contentId())) {
+            // access 가 필요한 date인 컨텐츠에 대해 access 가 있으면 true
+            // TODO: access 로직 구현 해야 함
+            access = false;
+        }
+
+        return access;
+    }
+
+    @Override
+    public void findContentIsActivated(Long contentId) {
+        ContentEntity content = contentRepository.findById(contentId)
+            .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
+        if (content.getContentStatus().equals(ContentStatus.DEACTIVATED)) {
+            throw new CommonException(CONTENT_IS_DEACTIVATED);
+        }
     }
 
     // Internal Methods ================================================================================================
 
-    private boolean findExpiredDateOfContent(Long contentId) {
+    private boolean verifyExpiredOfContent(Long contentId) {
         return Math.abs(
             ChronoUnit.DAYS.between(
                 LocalDate.now(),

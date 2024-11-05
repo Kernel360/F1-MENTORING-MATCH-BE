@@ -1,15 +1,3 @@
--- Create point table
-CREATE TABLE IF NOT EXISTS `point`
-(
-    `id`            BIGINT NOT NULL AUTO_INCREMENT,
-    `current_point` BIGINT NOT NULL DEFAULT 0,
-    `created_at`    DATETIME(6)     DEFAULT NULL,
-    `updated_at`    DATETIME(6)     DEFAULT NULL,
-    PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci;
-
 -- Create point_history table
 CREATE TABLE IF NOT EXISTS `point_history`
 (
@@ -25,6 +13,12 @@ CREATE TABLE IF NOT EXISTS `point_history`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 
+-- FK
+ALTER TABLE `point_history`
+    ADD CONSTRAINT `fk_point_history_user`
+        FOREIGN KEY (`user_id`) REFERENCES `user`(`id`)
+            ON DELETE CASCADE;
+
 -- Create point_data_mart table
 CREATE TABLE IF NOT EXISTS `point_data_mart`
 (
@@ -39,13 +33,6 @@ CREATE TABLE IF NOT EXISTS `point_data_mart`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
-
--- Populate point table for existing users
-INSERT INTO `point` (id, current_point, created_at, updated_at)
-SELECT u.id, 100, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
-FROM `user` u
-         LEFT JOIN `point` p ON u.id = p.id
-WHERE p.id IS NULL;
 
 -- Populate point_history table for existing users (initial grant of points for sign up)
 INSERT INTO `point_history` (user_id, point_change, point_balance, reason, created_at, updated_at)

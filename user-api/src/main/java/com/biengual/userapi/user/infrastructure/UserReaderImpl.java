@@ -71,4 +71,9 @@ public class UserReaderImpl implements UserReader {
             .orElseThrow(() -> new CommonException(USER_NOT_FOUND));
     }
 
+    @Override
+    public Long findUserPoint(Long userId) {
+        return userCustomRepository.getUserPoint(userId);
+    }
+
 }

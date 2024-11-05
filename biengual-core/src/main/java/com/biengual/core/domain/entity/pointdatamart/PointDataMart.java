@@ -60,7 +60,7 @@ public class PointDataMart extends BaseEntity {
     }
 
     public void updateByPointHistory(PointHistoryEntity pointHistory) {
-        this.userId = pointHistory.getUserId();
+        this.userId = pointHistory.getUser().getId();
         if (pointHistory.getPointChange() > 0) {
             this.totalPointsEarned = (this.getTotalPointsEarned() + pointHistory.getPointChange());
         } else {

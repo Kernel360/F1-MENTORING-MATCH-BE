@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
+import com.biengual.core.enums.PointReason;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -58,17 +59,6 @@ public class UserCustomRepository {
         return Optional.ofNullable(mySignUpTime);
     }
 
-    // 마지막 로그인 시간을 조회하는 쿼리
-    public Optional<LocalDateTime> findLastLoginTime(Long userId) {
-        return Optional.ofNullable(
-            queryFactory
-                .select(userEntity.lastLoginTime)
-                .from(userEntity)
-                .where(userEntity.id.eq(userId))
-                .fetchOne()
-        );
-    }
-
     // 마지막 로그인 시간 업데이트하는 쿼리
     public void updateLastLoginTime(Long userId) {
         queryFactory
@@ -76,5 +66,23 @@ public class UserCustomRepository {
             .set(userEntity.lastLoginTime, LocalDateTime.now())
             .where(userEntity.id.eq(userId))
             .execute();
+    }
+
+    // 유저 포인트 업데이트 쿼리
+    public void updatePoint(Long userId, PointReason pointReason) {
+        queryFactory
+            .update(userEntity)
+            .set(userEntity.currentPoint, userEntity.currentPoint.add(pointReason.getValue()))
+            .where(userEntity.id.eq(userId))
+            .execute();
+    }
+
+    // 유저 포인트 조회 쿼리
+    public Long getUserPoint(Long userId) {
+        return queryFactory
+            .select(userEntity.currentPoint)
+            .from(userEntity)
+            .where(userEntity.id.eq(userId))
+            .fetchFirst();
     }
 }
