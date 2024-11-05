@@ -91,7 +91,7 @@ public class PointDataMartJobConfig {
     }
 
     /**
-     * PointHistoryEntity 에 대한 PointDataMart 조회 및 업데이트(00시 이후 항목)
+     * PointHistoryEntity 에 대한 PointDataMart 조회 및 업데이트(01시 단위 24시간 동안 항목)
      */
     @Bean
     public ItemProcessor<PointHistoryEntity, PointDataMart> pointDataMartProcessor() {
@@ -99,13 +99,13 @@ public class PointDataMartJobConfig {
             PointDataMart dataMart = pointDataMartRepository.findByUserId(history.getUser().getId())
                 .orElseGet(() -> PointDataMart.createPointDataMart(history.getUser().getId()));
 
-            // 어제 00 시 부터 오늘 00시 사이의 24시간 history에 데해서만 업데이트
+            // 어제 01 시 부터 오늘 01시 사이의 24시간 history에 대해서만 업데이트
             if (
                 history.getCreatedAt().isAfter(
-                    LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.of(0, 0))
+                    LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.of(1, 0))
                 ) && (
                     history.getCreatedAt().isBefore(
-                        LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0))
+                        LocalDateTime.of(LocalDate.now(), LocalTime.of(1, 0))
                     )
                 )
             ) {
