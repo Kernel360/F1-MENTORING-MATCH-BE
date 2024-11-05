@@ -27,4 +27,8 @@ public interface ContentReader {
     PaginationInfo<ContentInfo.Admin> findListeningAdmin(ContentCommand.GetAdminListeningView command);
 
     ContentInfo.Detail findActiveContentWithScripts(ContentCommand.GetDetail command);
+
+    boolean checkAlreadyReadable(ContentCommand.GetDetail command);
+
+    void findContentIsActivated(Long contentId);
 }

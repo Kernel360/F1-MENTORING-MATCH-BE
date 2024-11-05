@@ -10,4 +10,5 @@ public class BadRequestMessageConstant {
     public static final String MAX_CATEGORY_SELECTION_ERROR_MESSAGE = "카테고리 목록은 최대 5개 선택 가능";
     public static final String BLANK_CONTENT_KEYWORD_ERROR_MESSAGE = "컨테츠 검색 키워드 blank 허용 불가";
     public static final String NULL_MISSION_LIST_ERROR_MESSAGE = "미션 체크 목록 null 허용 불가";
+    public static final String MIN_POINT_AMOUNT_ERROR_MESSAGE = "총 포인트 음수 불가";
 }
