@@ -125,6 +125,7 @@ public interface ContentDtoMapper {
 	@Mapping(target = "videoUrl", source = "content", qualifiedByName = "toVideoUrl")
 	@Mapping(target = "category", source = "content.category.name")
 	@Mapping(target = "isScrapped", constant = "false")
+	@Mapping(target = "learningRate", ignore = true)
 	@Mapping(target = "scriptList", source = "userScripts")
 	ContentInfo.Detail buildDetail(ContentEntity content, List<ContentInfo.UserScript> userScripts);
 
@@ -132,8 +133,11 @@ public interface ContentDtoMapper {
 	@Mapping(target = "videoUrl", source = "content", qualifiedByName = "toVideoUrl")
 	@Mapping(target = "category", source = "content.category.name")
 	@Mapping(target = "isScrapped", source = "isScrapped")
+	@Mapping(target = "learningRate", source = "learningRate")
 	@Mapping(target = "scriptList", source = "userScripts")
-	ContentInfo.Detail buildDetail(ContentEntity content, Boolean isScrapped, List<ContentInfo.UserScript> userScripts);
+	ContentInfo.Detail buildDetail(
+		ContentEntity content, Boolean isScrapped, Integer learningRate, List<ContentInfo.UserScript> userScripts
+	);
 
 	// Internal Method =================================================================================================
 
