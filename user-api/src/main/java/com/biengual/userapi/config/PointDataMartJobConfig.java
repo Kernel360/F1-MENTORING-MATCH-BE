@@ -92,7 +92,7 @@ public class PointDataMartJobConfig {
     }
 
     /**
-     * PointHistoryEntity 에 대한 PointDataMart 조회 및 업데이트(`processed = true`)
+     * PointHistoryEntity 에 대한 PointDataMart 조회 및 업데이트(00시 이후 항목)
      */
     @Bean
     public ItemProcessor<PointHistoryEntity, PointDataMart> pointDataMartProcessor() {
@@ -101,7 +101,7 @@ public class PointDataMartJobConfig {
                 .orElseGet(() -> PointDataMart.createPointDataMart(history.getUser().getId()));
 
             if (history.getCreatedAt().isAfter(
-                LocalDateTime.of(LocalDate.now(), LocalTime.of(1, 0)))
+                LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0)))
             ) {
                 dataMart.updateByPointHistory(history);
             }
