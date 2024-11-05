@@ -34,6 +34,7 @@ public class ContentResponseDto {
 		String videoUrl,
 		Integer hits,
 		Boolean isScrapped,
+		Integer learningRate,
 		List<UserScript> scriptList
 	) {
 	}
