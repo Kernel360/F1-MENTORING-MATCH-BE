@@ -18,7 +18,6 @@ import org.springframework.batch.item.data.RepositoryItemReader;
 import org.springframework.batch.item.data.builder.RepositoryItemReaderBuilder;
 import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.builder.JpaItemWriterBuilder;
-import org.springframework.batch.item.support.CompositeItemWriter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,9 +48,9 @@ public class PointDataMartJobConfig {
      * Step 포함 : pointDataMartStep
      */
     @Bean
-    public Job pointDataMartJob() {
+    public Job pointDataMartJob(Step pointDataMartStep) {
         return new JobBuilder("pointDataMartJob", jobRepository)
-            .start(pointDataMartStep())
+            .start(pointDataMartStep)
             .build();
     }
 
@@ -60,27 +59,29 @@ public class PointDataMartJobConfig {
      * 한 번에 1000개의 아이템 처리
      */
     @Bean
-    public Step pointDataMartStep() {
+    public Step pointDataMartStep(
+        RepositoryItemReader<PointHistoryEntity> pointHistoryReader,
+        ItemProcessor<PointHistoryEntity, PointDataMart> pointDataMartProcessor,
+        JpaItemWriter<PointDataMart> pointDataMartWriter
+    ) {
         return new StepBuilder("pointDataMartStep", jobRepository)
             .<PointHistoryEntity, PointDataMart>chunk(1000, transactionManager)
-            .reader(pointHistoryReader(
-                LocalDateTime.of(LocalDate.now().minusDays(5), LocalTime.of(0, 0))
-            ))
-            .processor(pointDataMartProcessor())
-            .writer(pointDataMartWriter())
+            .reader(pointHistoryReader)
+            .processor(pointDataMartProcessor)
+            .writer(pointDataMartWriter)
             .build();
     }
 
     /**
-     * pointHistoryRepository.findByProcessedFalse 를 사용하여 PointHistoryEntity 조회
-     * 처리 되지 않은 포인트 내역(어제 00시 이후인 항목) 조회
+     * pointHistoryRepository.findByCreatedAtAfter 를 사용하여 PointHistoryEntity 조회
+     * 처리 되지 않은 포인트 내역(지정된 createdAt 이후인 항목) 조회
      */
     @Bean
     @StepScope
     public RepositoryItemReader<PointHistoryEntity> pointHistoryReader(
-        @Value("#{jobParameters['createdAt']}") LocalDateTime createdAt
+        @Value("#{jobParameters['createdAt']}") String createdAtParam
     ) {
-
+        LocalDateTime createdAt = LocalDateTime.parse(createdAtParam);
         return new RepositoryItemReaderBuilder<PointHistoryEntity>()
             .name("pointHistoryReader")
             .repository(pointHistoryRepository)
@@ -101,23 +102,13 @@ public class PointDataMartJobConfig {
                 .orElseGet(() -> PointDataMart.createPointDataMart(history.getUser().getId()));
 
             if (history.getCreatedAt().isAfter(
-                LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0)))
-            ) {
+                LocalDateTime.of(LocalDate.now(), LocalTime.of(0, 0))
+            )) {
                 dataMart.updateByPointHistory(history);
             }
 
             return dataMart;
         };
-    }
-
-    /**
-     * CompositeItemWriter
-     */
-    @Bean
-    public CompositeItemWriter<PointHistoryEntity> compositeItemWriter() {
-        CompositeItemWriter<PointHistoryEntity> writer = new CompositeItemWriter<>();
-        writer.setDelegates(Collections.singletonList(pointHistoryWriter()));
-        return writer;
     }
 
     /**
@@ -131,7 +122,7 @@ public class PointDataMartJobConfig {
     }
 
     /**
-     * JpaItemWriter 를 이용해 PointHistoryEntity 저장
+     * JpaItemWriter 를 이용해 PointHistoryEntity 저장 (필요 시 사용)
      */
     @Bean
     public JpaItemWriter<PointHistoryEntity> pointHistoryWriter() {
@@ -139,5 +130,4 @@ public class PointDataMartJobConfig {
             .entityManagerFactory(entityManagerFactory)
             .build();
     }
-
 }
