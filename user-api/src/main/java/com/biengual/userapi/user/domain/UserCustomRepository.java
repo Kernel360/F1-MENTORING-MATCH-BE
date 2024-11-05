@@ -69,16 +69,16 @@ public class UserCustomRepository {
     }
 
     // 유저 포인트 업데이트 쿼리
-    public void updatePoint(Long userId, PointReason pointReason) {
+    public void updatePointByPointReason(Long userId, PointReason reason) {
         queryFactory
             .update(userEntity)
-            .set(userEntity.currentPoint, userEntity.currentPoint.add(pointReason.getValue()))
+            .set(userEntity.currentPoint, userEntity.currentPoint.add(reason.getValue()))
             .where(userEntity.id.eq(userId))
             .execute();
     }
 
     // 유저 포인트 조회 쿼리
-    public Long getUserPoint(Long userId) {
+    public Long getUserPointByUserId(Long userId) {
         return queryFactory
             .select(userEntity.currentPoint)
             .from(userEntity)

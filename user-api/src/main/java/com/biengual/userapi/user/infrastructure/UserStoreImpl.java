@@ -57,7 +57,7 @@ public class UserStoreImpl implements UserStore {
 
     @Override
     public void updatePoint(Long userId, PointReason pointReason) {
-        userCustomRepository.updatePoint(userId, pointReason);
+        userCustomRepository.updatePointByPointReason(userId, pointReason);
     }
 
     // user의 관심 Category 목록에 추가

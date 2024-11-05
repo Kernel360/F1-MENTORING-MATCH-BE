@@ -63,13 +63,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserEntity getUserByOAuthUser(OAuth2UserPrincipal principal) {
-        UserEntity user = userReader.findUser(principal);
-
-        // 미션 생성되지 않은 경우 생성
-        // TODO: 로그인마다 처리해야 하기 때문에 다른 방법 있는지 고민
-        missionReader.findMission(user.getId());
-
-        return user;
+        return userReader.findUser(principal);
     }
 
     // 유저 로그아웃
