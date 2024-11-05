@@ -30,6 +30,7 @@ public class LearningPublicController {
     private final LearningDtoMapper learningDtoMapper;
     private final LearningService learningService;
 
+    // TODO: 유저가 정말 학습했는지에 대한 검증을 생각해볼 것
     @PostMapping("/progress")
     @Operation(summary = "학습률 업데이트", description = "해당 컨텐츠에 대한 학습률을 업데이트합니다.")
     @ApiResponses(value = {
@@ -37,6 +38,8 @@ public class LearningPublicController {
             @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerUserMyPage.class))}
         ),
         @ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "404", description = "컨텐츠 조회 실패", content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "403", description = "비활성화 컨텐츠", content = @Content(mediaType = "application/json")),
         @ApiResponse(responseCode = "500", description = "서버 에러", content = @Content(mediaType = "application/json"))
     })
     public ResponseEntity<Object> updateLearningRate(
