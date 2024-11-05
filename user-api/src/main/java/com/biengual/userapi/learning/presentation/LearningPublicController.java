@@ -1,6 +1,7 @@
 package com.biengual.userapi.learning.presentation;
 
 import com.biengual.core.response.ResponseEntityFactory;
+import com.biengual.userapi.learning.domain.LearningCommand;
 import com.biengual.userapi.learning.domain.LearningService;
 import com.biengual.userapi.learning.presentation.dto.UpdateLearningRateDto;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
