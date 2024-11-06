@@ -2,9 +2,11 @@ package com.biengual.userapi.content.domain;
 
 import static com.biengual.core.domain.entity.content.QContentEntity.*;
 import static com.biengual.core.domain.entity.scrap.QScrapEntity.*;
+import static com.biengual.core.domain.entity.usercontenthistory.QPaymentContentHistoryEntity.*;
 import static com.biengual.core.response.error.code.ContentErrorCode.*;
 
 import java.lang.reflect.Field;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,7 +31,9 @@ import com.querydsl.core.types.Path;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.DateTimePath;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -103,7 +107,8 @@ public class ContentCustomRepository {
                     contentEntity.preScripts,
                     contentEntity.category.name,
                     contentEntity.hits,
-                    getIsScrappedByUserId(userId)
+                    getIsScrappedByUserId(userId),
+                    getIsPointRequiredByUserId(userId, contentEntity.id)
                 )
             )
             .from(contentEntity)
@@ -177,7 +182,8 @@ public class ContentCustomRepository {
                     contentEntity.preScripts,
                     contentEntity.category.name,
                     contentEntity.hits,
-                    getIsScrappedByUserId(userId)
+                    getIsScrappedByUserId(userId),
+                    getIsPointRequiredByUserId(userId, contentEntity.id)
                 )
             )
             .from(contentEntity)
@@ -210,7 +216,8 @@ public class ContentCustomRepository {
                     contentEntity.preScripts,
                     contentEntity.category.name,
                     contentEntity.hits,
-                    getIsScrappedByUserId(userId)
+                    getIsScrappedByUserId(userId),
+                    getIsPointRequiredByUserId(userId, contentEntity.id)
                 )
             )
             .from(contentEntity)
@@ -244,7 +251,8 @@ public class ContentCustomRepository {
                     contentEntity.preScripts,
                     contentEntity.category.name,
                     contentEntity.hits,
-                    getIsScrappedByUserId(userId)
+                    getIsScrappedByUserId(userId),
+                    getIsPointRequiredByUserId(userId, contentEntity.id)
                 )
             )
             .from(contentEntity)
@@ -408,4 +416,29 @@ public class ContentCustomRepository {
             : Expressions.constant(false);
     }
 
+    // isPointRequired를 col로 받기 위해 확인하는 쿼리, 비로그인 상태 true 리턴
+    private Expression<?> getIsPointRequiredByUserId(Long userId, NumberPath<Long> contentId) {
+        return userId != null ?
+            JPAExpressions
+                .selectOne()
+                .from(paymentContentHistoryEntity)
+                .where(isContentExpired(paymentContentHistoryEntity.expiredAt)
+                    .and(paymentContentHistoryEntity.contentId.eq(contentId))
+                    .and(paymentContentHistoryEntity.userId.eq(userId)))
+                .notExists()
+            : Expressions.constant(true);
+    }
+
+    // 컨텐츠 만료 확인 로직
+    private BooleanExpression isContentExpired(DateTimePath<LocalDateTime> expiredAt) {
+        LocalDate today = LocalDate.now();
+
+        return expiredAt.isNotNull()
+            // 연 비교
+            .and(expiredAt.year().goe(today.getYear()))
+            // 월 비교
+            .and(expiredAt.month().goe(today.getMonthValue()))
+            // 일 비교
+            .and(expiredAt.dayOfMonth().gt(today.getDayOfMonth()));
+    }
 }

@@ -18,7 +18,8 @@ public class ContentInfo {
         String preScripts,
         String category,
         Integer hits,
-        Boolean isScrapped
+        Boolean isScrapped,
+        Boolean isPointRequired
     ) {
     }
 
@@ -41,7 +42,8 @@ public class ContentInfo {
         String preScripts,
         String category,
         Integer hits,
-        Boolean isScrapped
+        Boolean isScrapped,
+        Boolean isPointRequired
     ) {
     }
 
