@@ -13,5 +13,5 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonSubTypes({
 //    @JsonSubTypes.Type(value = .class, name = "")
 })
-public interface RedisObject {
+public interface RedisDto {
 }

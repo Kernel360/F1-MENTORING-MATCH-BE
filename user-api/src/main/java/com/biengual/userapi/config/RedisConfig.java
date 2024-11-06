@@ -1,6 +1,6 @@
 package com.biengual.userapi.config;
 
-import com.biengual.core.domain.redis.RedisObject;
+import com.biengual.core.domain.redis.RedisDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.json.JsonMapper;
@@ -55,20 +55,20 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, String> redisStringTemplate() {
-        RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<String, Object> redisTemplate() {
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(redisObjectMapper(), Object.class));
         return redisTemplate;
     }
 
     @Bean
-    public RedisTemplate<String, RedisObject> redisObjectTemplate() {
-        RedisTemplate<String, RedisObject> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<String, RedisDto> redisDtoTemplate() {
+        RedisTemplate<String, RedisDto> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(redisObjectMapper(), RedisObject.class));
+        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(redisObjectMapper(), RedisDto.class));
         return redisTemplate;
     }
 }
