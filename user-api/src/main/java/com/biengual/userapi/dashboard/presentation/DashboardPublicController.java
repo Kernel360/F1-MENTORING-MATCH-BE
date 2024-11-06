@@ -3,7 +3,8 @@ package com.biengual.userapi.dashboard.presentation;
 import com.biengual.core.response.ResponseEntityFactory;
 import com.biengual.userapi.dashboard.domain.DashboardInfo;
 import com.biengual.userapi.dashboard.domain.DashboardService;
-import com.biengual.userapi.mission.presentation.swagger.SwaggerMissionStatus;
+import com.biengual.userapi.dashboard.presentation.dto.GetRecentLearningDto;
+import com.biengual.userapi.dashboard.presentation.swagger.SwaggerGetRecentLearning;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -35,7 +36,7 @@ public class DashboardPublicController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "최근 학습 컨텐츠 조회 성공",
             content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerMissionStatus.class))}
+                @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerGetRecentLearning.class))}
         ),
         @ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
         @ApiResponse(responseCode = "500", description = "서버 에러", content = @Content(mediaType = "application/json"))

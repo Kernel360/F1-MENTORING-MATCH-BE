@@ -1,4 +1,4 @@
-package com.biengual.userapi.dashboard.presentation;
+package com.biengual.userapi.dashboard.presentation.dto;
 
 import com.biengual.core.enums.ContentType;
 import lombok.Builder;
