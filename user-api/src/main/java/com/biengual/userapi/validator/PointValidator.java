@@ -36,4 +36,9 @@ public class PointValidator {
 
         return contentReader.checkAlreadyReadable(command);
     }
+
+    // 미션 성공했는지 검증 - 미션은 F -> T로만 바뀜
+    public boolean verifyMission(boolean missionCommand, boolean missionInfo) {
+        return missionCommand || missionInfo;
+    }
 }
