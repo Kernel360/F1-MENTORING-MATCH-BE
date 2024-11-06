@@ -1,9 +1,8 @@
 package com.biengual.userapi.user.domain;
 
 import com.biengual.core.domain.entity.user.UserEntity;
-import com.biengual.core.enums.PointReason;
-import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -24,8 +23,4 @@ public interface UserService {
     void logout(HttpServletRequest request, HttpServletResponse response, Long userId);
 
     Boolean getLoginStatus(OAuth2UserPrincipal principal);
-
-    void updatePointByReason(ContentCommand.GetDetail command, PointReason pointReason);
-
-    void updatePointByFirstDailyLogin(UserEntity user);
 }

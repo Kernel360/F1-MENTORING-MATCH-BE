@@ -18,7 +18,8 @@ public class ContentInfo {
         String preScripts,
         String category,
         Integer hits,
-        Boolean isScrapped
+        Boolean isScrapped,
+        Boolean isPointRequired
     ) {
     }
 
@@ -41,7 +42,8 @@ public class ContentInfo {
         String preScripts,
         String category,
         Integer hits,
-        Boolean isScrapped
+        Boolean isScrapped,
+        Boolean isPointRequired
     ) {
     }
 
@@ -52,7 +54,13 @@ public class ContentInfo {
         Boolean isHighlighted,
         String description
     ) {
-        public static UserScript of(Script script) {
+        public static List<UserScript> toResponse(List<Script> scripts) {
+            return scripts.stream()
+                .map(UserScript::of)
+                .toList();
+        }
+
+        private static UserScript of(Script script) {
             return UserScript.builder()
                 .script(script)
                 .build();

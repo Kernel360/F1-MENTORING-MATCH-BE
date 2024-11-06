@@ -18,6 +18,7 @@ import com.biengual.core.util.PaginationInfo;
 import com.biengual.userapi.content.application.ContentFacade;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentInfo;
+import com.biengual.userapi.content.domain.ContentService;
 import com.biengual.userapi.content.presentation.swagger.SwaggerContentDetail;
 import com.biengual.userapi.content.presentation.swagger.SwaggerContentListeningPreview;
 import com.biengual.userapi.content.presentation.swagger.SwaggerContentListeningView;
@@ -48,6 +49,7 @@ public class ContentPublicController {
 
     private final ContentDtoMapper contentDtoMapper;
     private final ContentFacade contentFacade;
+    private final ContentService contentService;
 
     @GetMapping("/preview/scrap-count")
     @Operation(summary = "스크랩을 많이 한 컨텐츠 조회", description = "스크랩 수가 많은 순으로 정렬된 컨텐츠 목록을 조회합니다.")
@@ -239,7 +241,7 @@ public class ContentPublicController {
         // TODO: 로그인 유무에 따라 다른 DTO 응답을 보여준다고 하면,
         //  하나의 DTO로 관리하는 것이 좋은지 분리하는 것이 좋은지? 아니면 권한 기준으로 컨트롤러 분리가 가능하다면 분리?
         ContentCommand.GetDetail command = contentDtoMapper.doGetDetail(contentId, principal);
-        ContentInfo.Detail info = contentFacade.viewContentAndUpdatePointIfNeed(command);
+        ContentInfo.Detail info = contentService.getScriptsOfContent(command);
         ContentResponseDto.DetailRes response = contentDtoMapper.ofDetailRes(info);
 
         return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);

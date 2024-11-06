@@ -47,7 +47,8 @@ public class ContentResponseDto {
 		String preScripts,     // description
 		String category,
 		Integer hits,
-		Boolean isScrapped
+		Boolean isScrapped,
+		Boolean isPointRequired
 	) {
 	}
 
@@ -76,7 +77,8 @@ public class ContentResponseDto {
 		String preScripts,
 		String category,
 		Integer hits,
-		Boolean isScrapped
+		Boolean isScrapped,
+		Boolean isPointRequired
 	) {
 	}
 

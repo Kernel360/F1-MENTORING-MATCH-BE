@@ -35,8 +35,6 @@ public class ContentStoreImpl implements ContentStore {
 
         ContentEntity content = command.toEntity(contentDocument.getId(), command.contentType(), category);
         contentRepository.save(content);
-
-        // contentAccessDocumentRepository.save(command.toAccessDocument(content.getId()));
     }
 
     @Override
