@@ -435,10 +435,10 @@ public class ContentCustomRepository {
 
         return expiredAt.isNotNull()
             // 연 비교
-            .and(expiredAt.year().goe(today.getYear())
-                // 월 비교
-                .and(expiredAt.month().goe(today.getMonthValue())
-                    // 일 비교
-                    .and(expiredAt.dayOfMonth().gt(today.getDayOfMonth()))));
+            .and(expiredAt.year().goe(today.getYear()))
+            // 월 비교
+            .and(expiredAt.month().goe(today.getMonthValue()))
+            // 일 비교
+            .and(expiredAt.dayOfMonth().gt(today.getDayOfMonth()));
     }
 }
