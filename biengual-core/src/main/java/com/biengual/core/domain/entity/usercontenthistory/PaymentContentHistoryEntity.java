@@ -36,11 +36,13 @@ public class PaymentContentHistoryEntity extends BaseEntity {
     private LocalDateTime expiredAt;
 
     @Builder
-    public PaymentContentHistoryEntity(Long userId, Long contentId, LocalDateTime expiredAt) {
+    public PaymentContentHistoryEntity(Long id, Long userId, Long contentId, LocalDateTime expiredAt) {
+        this.id = id;
         this.userId = userId;
         this.contentId = contentId;
         this.expiredAt = expiredAt;
     }
+
     public static PaymentContentHistoryEntity createPaymentHistory(Long userId, Long contentId) {
         return PaymentContentHistoryEntity.builder()
             .userId(userId)
