@@ -425,8 +425,8 @@ public class ContentCustomRepository {
                 .where(isContentExpired(paymentContentHistoryEntity.expiredAt)
                     .and(paymentContentHistoryEntity.contentId.eq(contentId))
                     .and(paymentContentHistoryEntity.userId.eq(userId)))
-                .exists()
-            : Expressions.constant(false);
+                .notExists()
+            : Expressions.constant(true);
     }
 
     // 컨텐츠 만료 확인 로직
@@ -435,12 +435,10 @@ public class ContentCustomRepository {
 
         return expiredAt.isNotNull()
             // 연 비교
-            .and(expiredAt.year().gt(today.getYear())
-                .or(expiredAt.year().eq(today.getYear())
-                    // 월 비교
-                    .and(expiredAt.month().gt(today.getMonthValue())
-                        .or(expiredAt.month().eq(today.getMonthValue())
-                            // 일 비교
-                            .and(expiredAt.dayOfMonth().gt(today.getDayOfMonth()))))));
+            .and(expiredAt.year().goe(today.getYear())
+                // 월 비교
+                .and(expiredAt.month().goe(today.getMonthValue())
+                    // 일 비교
+                    .and(expiredAt.dayOfMonth().gt(today.getDayOfMonth()))));
     }
 }
