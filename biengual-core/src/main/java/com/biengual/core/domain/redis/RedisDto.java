@@ -11,7 +11,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
     include = JsonTypeInfo.As.PROPERTY,
     property = "@class")
 @JsonSubTypes({
-//    @JsonSubTypes.Type(value = .class, name = "")
+    @JsonSubTypes.Type(value = RedisTmpObject.RedisExample.class, name = "RedisExample")
 })
 public interface RedisDto {
 }
