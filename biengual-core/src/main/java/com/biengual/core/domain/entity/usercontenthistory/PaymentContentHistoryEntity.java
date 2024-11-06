@@ -36,15 +36,16 @@ public class PaymentContentHistoryEntity extends BaseEntity {
     private LocalDateTime expiredAt;
 
     @Builder
-    public PaymentContentHistoryEntity(Long userId, Long contentId) {
+    public PaymentContentHistoryEntity(Long userId, Long contentId, LocalDateTime expiredAt) {
         this.userId = userId;
         this.contentId = contentId;
-        this.expiredAt = LocalDateTime.now().plusDays(PERIOD_FOR_POINT_CONTENT_ACCESS);
+        this.expiredAt = expiredAt;
     }
     public static PaymentContentHistoryEntity createPaymentHistory(Long userId, Long contentId) {
         return PaymentContentHistoryEntity.builder()
             .userId(userId)
             .contentId(contentId)
+            .expiredAt(LocalDateTime.now().plusDays(PERIOD_FOR_POINT_CONTENT_ACCESS))
             .build();
     }
 }
