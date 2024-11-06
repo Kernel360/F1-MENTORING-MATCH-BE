@@ -46,6 +46,7 @@ public class ContentServiceImpl implements ContentService {
         return contentReader.findListeningViewPage(command);
     }
 
+    // 컨텐츠 생성 - 크롤링
     @Override
     @Transactional
     public void createContent(ContentCommand.Create command) {
@@ -85,13 +86,14 @@ public class ContentServiceImpl implements ContentService {
         return contentReader.findListeningAdmin(command);
     }
 
+    // 컨텐츠 상태 변경 ACTIVATED <-> DEACTIVATED
     @Override
     @Transactional
     public void modifyContentStatus(Long contentId) {
         contentStore.modifyContentStatus(contentId);
     }
 
-    // 컨텐츠 디테일 조회
+    // 컨텐츠 디테일 조회 및 최근 컨텐츠인 경우 포인트 소모
     @Override
     @Transactional    // hit 증가 로직 있어서 readOnly 생략
     public ContentInfo.Detail getScriptsOfContent(ContentCommand.GetDetail command) {
