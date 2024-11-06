@@ -416,7 +416,7 @@ public class ContentCustomRepository {
             : Expressions.constant(false);
     }
 
-    // isPointRequired를 col로 받기 위해 확인하는 쿼리, 비로그인 상태 false 리턴
+    // isPointRequired를 col로 받기 위해 확인하는 쿼리, 비로그인 상태 true 리턴
     private Expression<?> getIsPointRequiredByUserId(Long userId, NumberPath<Long> contentId) {
         return userId != null ?
             JPAExpressions
