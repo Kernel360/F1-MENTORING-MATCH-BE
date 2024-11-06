@@ -7,4 +7,5 @@ package com.biengual.core.constant;
  */
 public class RestrictionConstant {
     public static final int MAX_CATEGORY_SELECTION_LIMIT = 5;
+    public static final int PERIOD_FOR_POINT_CONTENT_ACCESS = 5;
 }

@@ -5,8 +5,10 @@ import static com.biengual.core.response.error.code.UserErrorCode.*;
 import java.util.List;
 
 import com.biengual.core.annotation.DataProvider;
+import com.biengual.core.domain.entity.mission.MissionEntity;
 import com.biengual.core.domain.entity.user.UserEntity;
 import com.biengual.core.response.error.exception.CommonException;
+import com.biengual.userapi.mission.domain.MissionRepository;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
 import com.biengual.userapi.user.domain.UserCategoryCustomRepository;
 import com.biengual.userapi.user.domain.UserCustomRepository;
@@ -22,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 public class UserReaderImpl implements UserReader {
     private final UserDtoMapper userDtoMapper;
     private final UserRepository userRepository;
+    private final MissionRepository missionRepository;
     private final UserCustomRepository userCustomRepository;
     private final UserCategoryCustomRepository userCategoryCustomRepository;
 
@@ -44,7 +47,12 @@ public class UserReaderImpl implements UserReader {
                     principal.getProviderId()
                 );
 
-                return userRepository.save(newUser);
+                UserEntity savedUser = userRepository.save(newUser);
+
+                MissionEntity mission = MissionEntity.createByUserId(savedUser.getId());
+                missionRepository.save(mission);
+
+                return savedUser;
             });
 
         user.updateAfterOAuth2Login(principal.getUsername(), principal.getProvider(), principal.getProviderId());
@@ -70,4 +78,10 @@ public class UserReaderImpl implements UserReader {
         return userCustomRepository.findMySignUpTime(userId)
             .orElseThrow(() -> new CommonException(USER_NOT_FOUND));
     }
+
+    @Override
+    public Long findUserPoint(Long userId) {
+        return userCustomRepository.findUserPointByUserId(userId);
+    }
+
 }

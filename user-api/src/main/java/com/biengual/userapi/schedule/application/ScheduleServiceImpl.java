@@ -20,7 +20,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      * 미션 리셋 : 04:00 기준
      */
     @Override
-    @Transactional  // TODO: 위클리 질문
+    @Transactional
     @Scheduled(cron = "00 00 04 * * *")
     public void scheduleResetMission() {
         missionHistoryStore.saveMissionsBeforeReset();

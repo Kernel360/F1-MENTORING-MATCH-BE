@@ -1,10 +1,12 @@
 package com.biengual.userapi.user.application;
 
 import com.biengual.core.annotation.Facade;
+import com.biengual.core.domain.entity.user.UserEntity;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
 import com.biengual.userapi.user.domain.UserCommand;
 import com.biengual.userapi.user.domain.UserInfo;
 import com.biengual.userapi.user.domain.UserService;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserFacade {
     private final UserService userService;
+
+    // 회원가입 및 로그인
+    public UserEntity getUserByOAuthUser(OAuth2UserPrincipal principal) {
+        return userService.getUserByOAuthUser(principal);
+    }
 
     // 본인 정보 조회
     public UserInfo.MyInfo getMyInfo(Long userId) {

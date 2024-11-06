@@ -18,7 +18,7 @@ import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
 import com.biengual.userapi.oauth2.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import com.biengual.userapi.token.service.RefreshTokenService;
 import com.biengual.userapi.token.service.TokenProvider;
-import com.biengual.userapi.user.domain.UserService;
+import com.biengual.userapi.user.application.UserFacade;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,71 +30,69 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @RequiredArgsConstructor
 public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
-	private final TokenProvider tokenProvider;
-	private final RefreshTokenService refreshTokenService;
-	private final UserService userService;
-	private final CookieUtil cookieUtil;
-	private final OAuth2AuthorizationRequestBasedOnCookieRepository oAuth2AuthorizationRequestBasedOnCookieRepository;
+    private static final String FIRST_LOGIN_REDIRECT_URL = "/login/add";
+    private final TokenProvider tokenProvider;
+    private final RefreshTokenService refreshTokenService;
+    private final UserFacade userFacade;
+    private final CookieUtil cookieUtil;
+    private final OAuth2AuthorizationRequestBasedOnCookieRepository oAuth2AuthorizationRequestBasedOnCookieRepository;
+    @Value("${spring.security.oauth2.success.redirect-uri}")
+    public String oAuth2SuccessRedirectBaseUri;
 
-	@Value("${spring.security.oauth2.success.redirect-uri}")
-	public String oAuth2SuccessRedirectBaseUri;
+    @Override
+    @LoginLogging
+    public void onAuthenticationSuccess(
+        HttpServletRequest request, HttpServletResponse response, Authentication authentication
+    ) throws IOException {
+        try {
+            OAuth2UserPrincipal principal = (OAuth2UserPrincipal)authentication.getPrincipal();
 
-	private static final String FIRST_LOGIN_REDIRECT_URL = "/login/add";
+            UserEntity user = userFacade.getUserByOAuthUser(principal);
 
-	@Override
-	@LoginLogging
-	public void onAuthenticationSuccess(
-		HttpServletRequest request, HttpServletResponse response, Authentication authentication
-	) throws IOException {
-		try {
-			OAuth2UserPrincipal principal = (OAuth2UserPrincipal)authentication.getPrincipal();
+            String refreshToken = tokenProvider.generateRefreshToken(user);
+            cookieUtil.addRefreshTokenCookie(request, response, refreshToken);
 
-			UserEntity user = userService.getUserByOAuthUser(principal);
+            String accessToken = tokenProvider.generateAccessToken(user);
+            cookieUtil.addAccessTokenCookie(request, response, accessToken);
 
-			String refreshToken = tokenProvider.generateRefreshToken(user);
-			cookieUtil.addRefreshTokenCookie(request, response, refreshToken);
+            refreshTokenService.saveRefreshToken(user, refreshToken);
 
-			String accessToken = tokenProvider.generateAccessToken(user);
-			cookieUtil.addAccessTokenCookie(request, response, accessToken);
+            // OAtuh 인증 서버에서 발급받은 access token과 return url 정보 쿠키에서 삭제
+            oAuth2AuthorizationRequestBasedOnCookieRepository.removeCookies(request, response);
 
-			refreshTokenService.saveRefreshToken(user, refreshToken);
+            Cookie returnUrlCookie = WebUtils.getCookie(request, CookieUtil.RETURN_URL_NAME);
 
-			// OAtuh 인증 서버에서 발급받은 access token과 return url 정보 쿠키에서 삭제
-			oAuth2AuthorizationRequestBasedOnCookieRepository.removeCookies(request, response);
+            response.sendRedirect(getRedirectUrlWithReturnUrlCookie(user, returnUrlCookie));
 
-			Cookie returnUrlCookie = WebUtils.getCookie(request, CookieUtil.RETURN_URL_NAME);
+        } catch (CommonException e) {
+            log.error(e.getErrorCode().getCode() + " : " + e.getErrorCode().getMessage());
 
-			response.sendRedirect(getRedirectUrlWithReturnUrlCookie(user, returnUrlCookie));
+            HttpServletResponseUtil.createErrorResponse(response, e);
+        }
 
-		} catch (CommonException e) {
-			log.error(e.getErrorCode().getCode() + " : " + e.getErrorCode().getMessage());
+        // TODO: 나머지 Exception에 대한 응답 컨벤션에 따라 추가될 수 있음 ex) Server Internal Error
+    }
 
-			HttpServletResponseUtil.createErrorResponse(response, e);
-		}
+    // Internal Methods=================================================================================================
 
-		// TODO: 나머지 Exception에 대한 응답 컨벤션에 따라 추가될 수 있음 ex) Server Internal Error
-	}
+    // 최종 리다이렉트 URL 구하는 메서드
+    private String getRedirectUrlWithReturnUrlCookie(UserEntity user, Cookie cookie) {
+        String redirectUrl = oAuth2SuccessRedirectBaseUri;
 
-	// Internal Methods=================================================================================================
+        // 첫 로그인 시 추가되는 기본 URL
+        if (user.getUserStatus() == UserStatus.USER_STATUS_CREATED) {
+            redirectUrl += FIRST_LOGIN_REDIRECT_URL;
+        }
 
-	// 최종 리다이렉트 URL 구하는 메서드
-	private String getRedirectUrlWithReturnUrlCookie(UserEntity user, Cookie cookie) {
-		String redirectUrl = oAuth2SuccessRedirectBaseUri;
+        // returnUrl 쿠키가 존재할 때 추가되는 URL
+        if (cookie != null) {
+            String additionalUrl = user.getUserStatus() == UserStatus.USER_STATUS_CREATED
+                ? "?" + cookie.getName() + "=" + cookie.getValue()
+                : cookie.getValue();
 
-		// 첫 로그인 시 추가되는 기본 URL
-		if (user.getUserStatus() == UserStatus.USER_STATUS_CREATED) {
-			redirectUrl += FIRST_LOGIN_REDIRECT_URL;
-		}
+            redirectUrl += additionalUrl;
+        }
 
-		// returnUrl 쿠키가 존재할 때 추가되는 URL
-		if (cookie != null) {
-			String additionalUrl = user.getUserStatus() == UserStatus.USER_STATUS_CREATED
-				? "?" + cookie.getName() + "=" + cookie.getValue()
-				: cookie.getValue();
-
-			redirectUrl += additionalUrl;
-		}
-
-		return redirectUrl;
-	}
+        return redirectUrl;
+    }
 }

@@ -87,6 +87,7 @@ public class ScrapApiController {
 			@Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerVoidReturn.class))
 		}
 	),
+		@ApiResponse(responseCode = "400", description = "이미 등록된 스크랩 요청", content = @Content),
 		@ApiResponse(responseCode = "404", description = "스크랩 조회 실패", content = @Content),
 		@ApiResponse(responseCode = "500", description = "서버 에러", content = @Content)
 	})

@@ -3,13 +3,16 @@ package com.biengual.userapi.content.application;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.biengual.core.enums.PointReason;
 import com.biengual.core.util.PaginationInfo;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.content.domain.ContentReader;
 import com.biengual.userapi.content.domain.ContentService;
 import com.biengual.userapi.content.domain.ContentStore;
-import com.biengual.userapi.scrap.domain.ScrapReader;
+import com.biengual.userapi.payment.domain.PaymentStore;
+import com.biengual.userapi.point.domain.PointManager;
+import com.biengual.userapi.validator.PointValidator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,7 +21,9 @@ import lombok.RequiredArgsConstructor;
 public class ContentServiceImpl implements ContentService {
     private final ContentReader contentReader;
     private final ContentStore contentStore;
-    private final ScrapReader scrapReader;
+    private final PointValidator pointValidator;
+    private final PointManager pointManager;
+    private final PaymentStore paymentStore;
 
     // 검색 조건에 맞는 컨텐츠 프리뷰 페이지 조회
     @Override
@@ -41,6 +46,7 @@ public class ContentServiceImpl implements ContentService {
         return contentReader.findListeningViewPage(command);
     }
 
+    // 컨텐츠 생성 - 크롤링
     @Override
     @Transactional
     public void createContent(ContentCommand.Create command) {
@@ -80,21 +86,26 @@ public class ContentServiceImpl implements ContentService {
         return contentReader.findListeningAdmin(command);
     }
 
+    // 컨텐츠 상태 변경 ACTIVATED <-> DEACTIVATED
     @Override
     @Transactional
     public void modifyContentStatus(Long contentId) {
         contentStore.modifyContentStatus(contentId);
     }
 
-	// 컨텐츠 디테일 조회
-	@Override
-	@Transactional    // hit 증가 로직 있어서 readOnly 생략
-	public ContentInfo.Detail getScriptsOfContent(ContentCommand.GetDetail command) {
-		ContentInfo.Detail info = contentReader.findActiveContentWithScripts(command);
+    // 컨텐츠 디테일 조회 및 최근 컨텐츠인 경우 포인트 소모
+    @Override
+    @Transactional    // hit 증가 로직 있어서 readOnly 생략
+    public ContentInfo.Detail getScriptsOfContent(ContentCommand.GetDetail command) {
+        ContentInfo.Detail info = contentReader.findActiveContentWithScripts(command);
 
-		// TODO: 추후 레디스로 바꿀 예정
-		contentStore.increaseHits(command.contentId());
+        if (!pointValidator.verifyContentView(command)) {
+            pointManager.updateAndSavePoint(PointReason.VIEW_RECENT_CONTENT, command.userId());
+            paymentStore.updatePaymentHistory(command.userId(), command.contentId());
+        }
+        // TODO: 추후 레디스로 바꿀 예정
+        contentStore.increaseHits(command.contentId());
 
-		return info;
-	}
+        return info;
+    }
 }

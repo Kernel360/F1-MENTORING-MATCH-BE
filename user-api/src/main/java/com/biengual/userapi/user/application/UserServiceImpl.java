@@ -4,16 +4,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.biengual.core.domain.entity.user.UserEntity;
+import com.biengual.core.enums.PointReason;
 import com.biengual.core.util.CookieUtil;
-import com.biengual.userapi.mission.domain.MissionReader;
-import com.biengual.userapi.mission.domain.MissionStore;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
+import com.biengual.userapi.point.domain.PointManager;
 import com.biengual.userapi.user.domain.RefreshTokenStore;
 import com.biengual.userapi.user.domain.UserCommand;
 import com.biengual.userapi.user.domain.UserInfo;
 import com.biengual.userapi.user.domain.UserReader;
 import com.biengual.userapi.user.domain.UserService;
 import com.biengual.userapi.user.domain.UserStore;
+import com.biengual.userapi.validator.PointValidator;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,9 +27,8 @@ public class UserServiceImpl implements UserService {
     private final UserReader userReader;
     private final UserStore userStore;
     private final RefreshTokenStore refreshTokenStore;
-    private final MissionStore missionStore;
-    private final MissionReader missionReader;
-
+    private final PointValidator pointValidator;
+    private final PointManager pointManager;
 
     // 본인 정보 조회
     @Override
@@ -51,15 +51,19 @@ public class UserServiceImpl implements UserService {
         return userReader.findMySignUpTime(userId);
     }
 
-    // OAuth 유저 회원가입, 로그인 처리 및 미션 생성 TODO: 포인트 생성도 여기에 포함될수도?
+    // OAuth 유저 회원가입, 로그인 처리 및 미션 생성
     @Override
     @Transactional
     public UserEntity getUserByOAuthUser(OAuth2UserPrincipal principal) {
         UserEntity user = userReader.findUser(principal);
 
-        if(!missionReader.existsMission(user.getId())){
-            missionStore.createMission(user.getId());
+        // 유저 매일 첫 로그인 포인트 업데이트
+        if (pointValidator.verifyFirstDailyLogin(user)) {
+            pointManager.updateAndSavePoint(PointReason.FIRST_DAILY_LOG_IN, user.getId());
         }
+
+        // 유저 마지막 로그인 시간 업데이트
+        userStore.updateLastLoginTime(user.getId());
 
         return user;
     }
@@ -69,7 +73,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void logout(HttpServletRequest request, HttpServletResponse response, Long userId) {
         cookieUtil.removeAccessTokenCookie(request, response);
-
         cookieUtil.removeRefreshTokenCookie(request, response);
 
         refreshTokenStore.delete(userId);
