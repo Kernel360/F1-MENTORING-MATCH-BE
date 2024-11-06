@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "point_data_mart")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PointDataMart extends BaseEntity {
-
+    // TODO: 완전히 수정해야 함
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
