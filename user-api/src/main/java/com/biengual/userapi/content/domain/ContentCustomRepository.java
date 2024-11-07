@@ -424,11 +424,11 @@ public class ContentCustomRepository {
         // 오늘 날짜 기준으로 7일 전 날짜 계산
         LocalDate fewDaysAgo = LocalDate.now().minusDays(PERIOD_FOR_POINT_CONTENT_ACCESS);
         // createdAt이 7일 이내인지 확인
-        BooleanExpression isWithinFiveDays =
+        BooleanExpression isWithinFewDays =
             Expressions.dateTemplate(LocalDate.class, "date({0})", createdAt).goe(fewDaysAgo);
 
         if (userId == null) {
-            return isWithinFiveDays;
+            return isWithinFewDays;
         }
 
         return JPAExpressions
@@ -440,7 +440,7 @@ public class ContentCustomRepository {
                     .and(paymentContentHistoryEntity.userId.eq(userId))
             )
             .notExists()
-            .and(isWithinFiveDays); // createdAt 기준 7일 확인
+            .and(isWithinFewDays); // createdAt 기준 7일 확인
     }
 
     // 컨텐츠 만료 확인 로직
