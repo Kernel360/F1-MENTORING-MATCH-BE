@@ -1,5 +1,6 @@
 package com.biengual.userapi.content.domain;
 
+import static com.biengual.core.constant.RestrictionConstant.*;
 import static com.biengual.core.domain.entity.content.QContentEntity.*;
 import static com.biengual.core.domain.entity.scrap.QScrapEntity.*;
 import static com.biengual.core.domain.entity.usercontenthistory.QPaymentContentHistoryEntity.*;
@@ -108,7 +109,7 @@ public class ContentCustomRepository {
                     contentEntity.category.name,
                     contentEntity.hits,
                     getIsScrappedByUserId(userId),
-                    getIsPointRequiredByUserId(userId, contentEntity.id)
+                    getIsPointRequiredByUserIdAndContent(userId, contentEntity.id, contentEntity.createdAt)
                 )
             )
             .from(contentEntity)
@@ -183,7 +184,7 @@ public class ContentCustomRepository {
                     contentEntity.category.name,
                     contentEntity.hits,
                     getIsScrappedByUserId(userId),
-                    getIsPointRequiredByUserId(userId, contentEntity.id)
+                    getIsPointRequiredByUserIdAndContent(userId, contentEntity.id, contentEntity.createdAt)
                 )
             )
             .from(contentEntity)
@@ -217,7 +218,7 @@ public class ContentCustomRepository {
                     contentEntity.category.name,
                     contentEntity.hits,
                     getIsScrappedByUserId(userId),
-                    getIsPointRequiredByUserId(userId, contentEntity.id)
+                    getIsPointRequiredByUserIdAndContent(userId, contentEntity.id, contentEntity.createdAt)
                 )
             )
             .from(contentEntity)
@@ -252,7 +253,7 @@ public class ContentCustomRepository {
                     contentEntity.category.name,
                     contentEntity.hits,
                     getIsScrappedByUserId(userId),
-                    getIsPointRequiredByUserId(userId, contentEntity.id)
+                    getIsPointRequiredByUserIdAndContent(userId, contentEntity.id, contentEntity.createdAt)
                 )
             )
             .from(contentEntity)
@@ -417,20 +418,33 @@ public class ContentCustomRepository {
     }
 
     // isPointRequired를 col로 받기 위해 확인하는 쿼리, 비로그인 상태 true 리턴
-    private Expression<?> getIsPointRequiredByUserId(Long userId, NumberPath<Long> contentId) {
-        return userId != null ?
-            JPAExpressions
-                .selectOne()
-                .from(paymentContentHistoryEntity)
-                .where(isContentExpired(paymentContentHistoryEntity.expiredAt)
+    private Expression<?> getIsPointRequiredByUserIdAndContent(
+        Long userId, NumberPath<Long> contentId, DateTimePath<LocalDateTime> createdAt
+    ) {
+        // 오늘 날짜 기준으로 7일 전 날짜 계산
+        LocalDate fiveDaysAgo = LocalDate.now().minusDays(PERIOD_FOR_POINT_CONTENT_ACCESS);
+        // createdAt이 7일 이내인지 확인
+        BooleanExpression isWithinFiveDays =
+            Expressions.dateTemplate(LocalDate.class, "date({0})", createdAt).goe(fiveDaysAgo);
+
+        if (userId == null) {
+            return Expressions.constant(true);
+        }
+
+        return JPAExpressions
+            .selectOne()
+            .from(paymentContentHistoryEntity)
+            .where(
+                validatePaymentHistory(paymentContentHistoryEntity.expiredAt)
                     .and(paymentContentHistoryEntity.contentId.eq(contentId))
-                    .and(paymentContentHistoryEntity.userId.eq(userId)))
-                .notExists()
-            : Expressions.constant(true);
+                    .and(paymentContentHistoryEntity.userId.eq(userId))
+            )
+            .notExists()
+            .and(isWithinFiveDays); // createdAt 기준 7일 확인
     }
 
     // 컨텐츠 만료 확인 로직
-    private BooleanExpression isContentExpired(DateTimePath<LocalDateTime> expiredAt) {
+    private BooleanExpression validatePaymentHistory(DateTimePath<LocalDateTime> expiredAt) {
         LocalDate today = LocalDate.now();
 
         return expiredAt.isNotNull()
