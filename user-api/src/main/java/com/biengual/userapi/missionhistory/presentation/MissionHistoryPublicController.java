@@ -47,7 +47,7 @@ public class MissionHistoryPublicController {
         OAuth2UserPrincipal principal
     ) {
         MissionHistoryInfo.RecentHistories info = missionHistoryService.getRecentHistory(principal);
-        RecentHistoryDto.Responses response = missionHistoryDtoMapper.ofRecentHistory(info);
+        RecentHistoryDto.Response response = missionHistoryDtoMapper.ofRecentHistory(info);
 
         return ResponseEntityFactory.toResponseEntity(MISSION_RECENT_HISTORY_VIEW_SUCCESS, response);
     }

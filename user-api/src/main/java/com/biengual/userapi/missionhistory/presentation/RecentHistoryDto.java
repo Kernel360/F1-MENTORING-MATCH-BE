@@ -6,16 +6,15 @@ import java.util.List;
 import lombok.Builder;
 
 public class RecentHistoryDto {
-    public record Response(
+    public record DailyMissionCount(
         LocalDateTime date,
         Integer count
     ) {
     }
 
     @Builder
-
-    public record Responses(
-        List<Response> recentHistories
+    public record Response(
+        List<DailyMissionCount> recentHistories
     ) {
     }
 }

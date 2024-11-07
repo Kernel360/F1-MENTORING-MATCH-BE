@@ -25,7 +25,7 @@ public interface MissionHistoryDtoMapper {
     // Command <- Request
 
     // Response <- Info
-    RecentHistoryDto.Responses ofRecentHistory(MissionHistoryInfo.RecentHistories info);
+    RecentHistoryDto.Response ofRecentHistory(MissionHistoryInfo.RecentHistories info);
 
     // Entity <-> Info, Info <-> Info
 

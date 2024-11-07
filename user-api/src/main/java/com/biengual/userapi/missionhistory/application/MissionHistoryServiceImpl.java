@@ -18,6 +18,6 @@ public class MissionHistoryServiceImpl implements MissionHistoryService {
     @Override
     @Transactional(readOnly = true)
     public MissionHistoryInfo.RecentHistories getRecentHistory(OAuth2UserPrincipal principal) {
-        return missionHistoryReader.getRecentHistory(principal.getId());
+        return missionHistoryReader.findRecentHistory(principal.getId());
     }
 }

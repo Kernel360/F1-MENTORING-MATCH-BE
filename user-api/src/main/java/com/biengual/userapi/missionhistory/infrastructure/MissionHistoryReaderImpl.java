@@ -13,7 +13,7 @@ public class MissionHistoryReaderImpl implements MissionHistoryReader {
     private final MissionHistoryCustomRepository missionHistoryCustomRepository;
 
     @Override
-    public MissionHistoryInfo.RecentHistories getRecentHistory(Long userId) {
+    public MissionHistoryInfo.RecentHistories findRecentHistory(Long userId) {
         return MissionHistoryInfo.RecentHistories.of(missionHistoryCustomRepository.findRecentMissionHistory(userId));
     }
 }
