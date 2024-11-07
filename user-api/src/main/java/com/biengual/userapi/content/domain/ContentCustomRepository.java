@@ -428,7 +428,7 @@ public class ContentCustomRepository {
             Expressions.dateTemplate(LocalDate.class, "date({0})", createdAt).goe(fiveDaysAgo);
 
         if (userId == null) {
-            return Expressions.constant(true);
+            return isWithinFiveDays;
         }
 
         return JPAExpressions
