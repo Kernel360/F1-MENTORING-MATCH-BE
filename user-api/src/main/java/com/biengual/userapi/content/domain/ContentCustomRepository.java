@@ -422,10 +422,10 @@ public class ContentCustomRepository {
         Long userId, NumberPath<Long> contentId, DateTimePath<LocalDateTime> createdAt
     ) {
         // 오늘 날짜 기준으로 7일 전 날짜 계산
-        LocalDate fiveDaysAgo = LocalDate.now().minusDays(PERIOD_FOR_POINT_CONTENT_ACCESS);
+        LocalDate fewDaysAgo = LocalDate.now().minusDays(PERIOD_FOR_POINT_CONTENT_ACCESS);
         // createdAt이 7일 이내인지 확인
         BooleanExpression isWithinFiveDays =
-            Expressions.dateTemplate(LocalDate.class, "date({0})", createdAt).goe(fiveDaysAgo);
+            Expressions.dateTemplate(LocalDate.class, "date({0})", createdAt).goe(fewDaysAgo);
 
         if (userId == null) {
             return isWithinFiveDays;
