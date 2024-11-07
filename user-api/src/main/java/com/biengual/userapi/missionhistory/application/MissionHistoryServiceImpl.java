@@ -1,6 +1,7 @@
 package com.biengual.userapi.missionhistory.application;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.biengual.userapi.missionhistory.domain.MissionHistoryInfo;
 import com.biengual.userapi.missionhistory.domain.MissionHistoryReader;
@@ -15,6 +16,7 @@ public class MissionHistoryServiceImpl implements MissionHistoryService {
     private final MissionHistoryReader missionHistoryReader;
 
     @Override
+    @Transactional(readOnly = true)
     public MissionHistoryInfo.RecentHistories getRecentHistory(OAuth2UserPrincipal principal) {
         return missionHistoryReader.getRecentHistory(principal.getId());
     }
