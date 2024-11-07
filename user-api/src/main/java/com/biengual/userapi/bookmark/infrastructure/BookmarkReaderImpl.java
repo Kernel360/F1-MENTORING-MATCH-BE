@@ -1,11 +1,11 @@
 package com.biengual.userapi.bookmark.infrastructure;
 
 import com.biengual.core.annotation.DataProvider;
-import com.biengual.core.domain.entity.bookmark.BookmarkEntity;
-import com.biengual.userapi.bookmark.domain.*;
+import com.biengual.userapi.bookmark.domain.BookmarkCommand;
+import com.biengual.userapi.bookmark.domain.BookmarkCustomRepository;
+import com.biengual.userapi.bookmark.domain.BookmarkInfo;
+import com.biengual.userapi.bookmark.domain.BookmarkReader;
 import com.biengual.userapi.bookmark.presentation.BookmarkDtoMapper;
-import com.biengual.userapi.content.domain.ContentCustomRepository;
-
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -14,7 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookmarkReaderImpl implements BookmarkReader {
 	private final BookmarkCustomRepository bookmarkCustomRepository;
-	private final ContentCustomRepository contentCustomRepository;
 	private final BookmarkDtoMapper bookmarkDtoMapper;
 
 	@Override
@@ -27,13 +26,7 @@ public class BookmarkReaderImpl implements BookmarkReader {
 
 	@Override
 	public List<BookmarkInfo.MyList> getAllBookmarks(Long userId) {
-		List<BookmarkEntity> bookmarks = bookmarkCustomRepository.findBookmarks(userId);
-		return bookmarks.stream()
-			.map(bookmark -> bookmarkDtoMapper.buildMyList(
-				bookmark,
-				contentCustomRepository.findContentTypeById(bookmark.getScriptIndex()),
-				contentCustomRepository.findTitleById(bookmark.getScriptIndex())
-			)).toList();
+		return bookmarkCustomRepository.findBookmarkMyListByUserId(userId);
 	}
 
 	@Override

@@ -75,8 +75,7 @@ public class BookmarkApiController {
 		OAuth2UserPrincipal principal
 	) {
 		BookmarkInfo.MyListInfo info = bookmarkFacade.getAllBookmarks(principal.getId());
-		BookmarkResponseDto.MyListRes response
-			= bookmarkDtoMapper.ofMyListRes(info);
+		BookmarkResponseDto.MyListRes response = bookmarkDtoMapper.ofMyListRes(info);
 
 		return ResponseEntityFactory.toResponseEntity(BOOKMARK_VIEW_SUCCESS, response);
 	}

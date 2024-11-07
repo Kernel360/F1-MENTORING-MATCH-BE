@@ -101,6 +101,16 @@ dependencies {
     // StringUtils
     implementation 'org.apache.commons:commons-lang3:3.17.0'
 
+    // Batch
+    implementation 'org.springframework.boot:spring-boot-starter-batch'
+
+    // Stanford CoreNLP
+    implementation 'edu.stanford.nlp:stanford-corenlp:4.5.5'
+    implementation 'edu.stanford.nlp:stanford-corenlp:4.5.5:models'
+
+    // Word2Vec
+    implementation 'org.deeplearning4j:deeplearning4j-nlp:1.0.0-M2.1'
+    implementation 'org.nd4j:nd4j-native-platform:1.0.0-M2.1'
 }
 
 def querydslDir = "$buildDir/generated/querydsl"
@@ -122,6 +132,7 @@ tasks.named('test') {
 }
 
 tasks.named('bootJar') {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     enabled = true
 }
 

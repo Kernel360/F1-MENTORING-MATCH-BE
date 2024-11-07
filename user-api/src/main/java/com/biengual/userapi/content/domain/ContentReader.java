@@ -2,7 +2,6 @@ package com.biengual.userapi.content.domain;
 
 import java.util.List;
 
-import com.biengual.core.domain.entity.content.ContentEntity;
 import com.biengual.core.util.PaginationInfo;
 
 /**
@@ -11,7 +10,7 @@ import com.biengual.core.util.PaginationInfo;
  * @author 문찬욱
  */
 public interface ContentReader {
-    List<ContentInfo.PreviewContent> findContentsByScrapCount(Integer size);
+    List<ContentInfo.PreviewContent> findContentsByScrapCount(ContentCommand.GetScrapPreview command);
 
     PaginationInfo<ContentInfo.PreviewContent> findPreviewPageBySearch(ContentCommand.Search command);
 
@@ -23,9 +22,13 @@ public interface ContentReader {
 
     List<ContentInfo.PreviewContent> findListeningPreview(ContentCommand.GetListeningPreview command);
 
-    PaginationInfo<ContentInfo.Admin> findReadingAdmin(ContentCommand.GetReadingView command);
+    PaginationInfo<ContentInfo.Admin> findReadingAdmin(ContentCommand.GetAdminReadingView command);
 
-    PaginationInfo<ContentInfo.Admin> findListeningAdmin(ContentCommand.GetListeningView command);
+    PaginationInfo<ContentInfo.Admin> findListeningAdmin(ContentCommand.GetAdminListeningView command);
 
     ContentInfo.Detail findActiveContentWithScripts(ContentCommand.GetDetail command);
+
+    boolean checkAlreadyReadable(ContentCommand.GetDetail command);
+
+    void findContentIsActivated(Long contentId);
 }

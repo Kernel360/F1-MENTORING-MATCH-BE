@@ -28,7 +28,11 @@ public class BookmarkStoreImpl implements BookmarkStore {
 
 	@Override
 	public void deleteBookmark(BookmarkCommand.Delete command) {
-		bookmarkCustomRepository.deleteBookmark(command);
+		long execute = bookmarkCustomRepository.deleteBookmark(command);
+
+		if (execute < 1) {
+			throw new CommonException(BOOKMARK_NOT_FOUND);
+		}
 	}
 
 	@Override

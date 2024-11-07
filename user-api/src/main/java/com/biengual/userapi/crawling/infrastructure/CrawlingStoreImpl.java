@@ -1,5 +1,6 @@
 package com.biengual.userapi.crawling.infrastructure;
 
+import static com.biengual.core.constant.ServiceConstant.*;
 import static com.biengual.core.response.error.code.CrawlingErrorCode.*;
 
 import java.io.IOException;
@@ -39,6 +40,7 @@ import com.biengual.userapi.content.domain.ContentCustomRepository;
 import com.biengual.userapi.crawling.application.TranslateService;
 import com.biengual.userapi.crawling.domain.CrawlingStore;
 import com.biengual.userapi.crawling.presentation.CrawlingResponseDto;
+import com.biengual.userapi.nlp.CategoryClassifier;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -52,12 +54,14 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class CrawlingStoreImpl implements CrawlingStore {
     private final TranslateService translateService;
+    private final CategoryClassifier categoryClassifier;
     private final ContentCustomRepository contentCustomRepository;
     private final RestTemplate restTemplate;
 
     @Value("${YOUTUBE_API_KEY}")
     private String YOUTUBE_API_KEY;
 
+    // TODO: 추후 클린 코드로 변경해볼 것
     @Override
     public ContentCommand.Create getYoutubeDetail(ContentCommand.CrawlingContent command) {
         // Extract the video ID from the URL
@@ -93,19 +97,21 @@ public class CrawlingStoreImpl implements CrawlingStore {
         if (duration.compareTo(Duration.ofMinutes(8)) > 0) {
             throw new CommonException(CRAWLING_OUT_OF_BOUNDS);
         }
+
+        List<Script> scripts =
+            getYoutubeScript(command.url(), Double.parseDouble(String.valueOf(duration.getSeconds())));
+
+        category = classifyCategory(category, scripts);
+
         return ContentCommand.Create.builder()
             .url(command.url())
             .title(snippetNode.path("title").asText())
             .imgUrl(getThumbnailUrl(snippetNode.path("thumbnails")))
             .category(category)
             .contentType(ContentType.LISTENING)
-            .script(getYoutubeScript(command.url(), Double.parseDouble(String.valueOf(duration.getSeconds()))))
+            .script(scripts)
             .build();
     }
-
-    // Internal Methods ------------------------------------------------------------------------------------------------
-
-    // LISTENING - YOUTUBE
 
     @Override
     public ContentCommand.Create getCNNDetail(ContentCommand.CrawlingContent command) {
@@ -114,16 +120,21 @@ public class CrawlingStoreImpl implements CrawlingStore {
         // Check Already Stored In DB
         verifyCrawling(command.url());
 
+        String category = classifyCategory(response.category(), response.script());
+
         return ContentCommand.Create.builder()
             .url(response.url())
             .title(response.title())
             .imgUrl(response.imgUrl())
-            .category(response.category())
+            .category(category)
             .contentType(ContentType.READING)
             .script(response.script())
             .build();
     }
 
+    // Internal Methods ------------------------------------------------------------------------------------------------
+
+    // LISTENING - YOUTUBE
     // SELENIUM
     public List<Script> getYoutubeScript(String youtubeInfo, double seconds) {
         // 운영체제 감지
@@ -335,7 +346,7 @@ public class CrawlingStoreImpl implements CrawlingStore {
             }
         }
 
-        return "Unknown Category";
+        return UNKNOWN_CATEGORY_NAME;
     }
 
     // READING - CNN
@@ -423,4 +434,14 @@ public class CrawlingStoreImpl implements CrawlingStore {
             throw new CommonException(CRAWLING_ALREADY_DONE);
         }
     }
+
+    // 카테고리 분류
+    private String classifyCategory(String category, List<Script> scripts) {
+        List<String> sentences = scripts.stream()
+            .map(Script::getEnScript)
+            .toList();
+
+        return categoryClassifier.process(category, sentences);
+    }
+
 }

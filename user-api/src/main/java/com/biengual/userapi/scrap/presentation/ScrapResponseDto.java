@@ -16,7 +16,8 @@ public class ScrapResponseDto {
 		ContentType contentType,
 		LocalDateTime createdAt,
 		String preScripts,
-		String thumbnailUrl
+		String thumbnailUrl,
+		Boolean isActive
 	) {
 	}
 

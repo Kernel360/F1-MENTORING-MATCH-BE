@@ -10,75 +10,88 @@ import lombok.Builder;
 
 public class ContentInfo {
 
-	public record PreviewContent(
-		Long contentId,
-		String title,
-		String thumbnailUrl,
-		ContentType contentType,
-		String preScripts,
-		String category,
-		Integer hits
-	) {
-	}
+    public record PreviewContent(
+        Long contentId,
+        String title,
+        String thumbnailUrl,
+        ContentType contentType,
+        String preScripts,
+        String category,
+        Integer hits,
+        Boolean isScrapped,
+        Boolean isPointRequired
+    ) {
+    }
 
-	@Builder
-	public record PreviewContents(
-		List<PreviewContent> previewContents
-	) {
-		public static PreviewContents of(List<PreviewContent> previewContents) {
-			return PreviewContents.builder()
-				.previewContents(previewContents)
-				.build();
-		}
-	}
+    @Builder
+    public record PreviewContents(
+        List<PreviewContent> previewContents
+    ) {
+        public static PreviewContents of(List<PreviewContent> previewContents) {
+            return PreviewContents.builder()
+                .previewContents(previewContents)
+                .build();
+        }
+    }
 
-	public record ViewContent(
-		Long contentId,
-		String title,
-		String thumbnailUrl,
-		ContentType contentType,
-		String preScripts,
-		String category,
-		Integer hits
-	) {
-	}
+    public record ViewContent(
+        Long contentId,
+        String title,
+        String thumbnailUrl,
+        ContentType contentType,
+        String preScripts,
+        String category,
+        Integer hits,
+        Boolean isScrapped,
+        Boolean isPointRequired
+    ) {
+    }
 
-	@Builder
-	public record UserScript(
-		Script script,
-		Boolean isHighlighted,
-		String description
-	) {
-		public static UserScript of(Script script) {
-			return UserScript.builder()
-				.script(script)
-				.build();
-		}
-	}
+    @Builder
+    public record UserScript(
+        Script script,
+        Long bookmarkId,
+        Boolean isHighlighted,
+        String description
+    ) {
+        public static List<UserScript> toResponse(List<Script> scripts) {
+            return scripts.stream()
+                .map(UserScript::of)
+                .toList();
+        }
 
-	@Builder
-	public record Detail(
-		Long contentId,
-		ContentType contentType,
-		String category,
-		String title,
-		String thumbnailUrl,
-		String videoUrl,
-		Integer hits,
-		List<UserScript> scriptList
-	) {
-	}
+        private static UserScript of(Script script) {
+            return UserScript.builder()
+                .script(script)
+                .build();
+        }
+    }
 
-	@Builder
-	public record Admin(
-		Long contentId,
-		String title,
-		String category,
-		ContentType contentType,
-		Integer hits,
-		Integer numOfQuiz,
-		ContentStatus contentStatus
-	) {
-	}
+    @Builder
+    public record Detail(
+        Long contentId,
+        ContentType contentType,
+        String category,
+        String title,
+        String thumbnailUrl,
+        String videoUrl,
+        Integer hits,
+        Boolean isScrapped,
+        Integer learningRate,
+        List<UserScript> scriptList
+    ) {
+    }
+
+    @Builder
+    public record Admin(
+        Long contentId,
+        String title,
+        String category,
+        ContentType contentType,
+        Integer hits,
+        Integer numOfQuiz,
+        ContentStatus contentStatus
+    ) {
+    }
 
 }

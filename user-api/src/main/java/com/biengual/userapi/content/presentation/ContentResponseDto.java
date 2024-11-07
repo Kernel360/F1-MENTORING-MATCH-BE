@@ -1,11 +1,12 @@
 package com.biengual.userapi.content.presentation;
 
+import java.util.List;
+
 import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.enums.ContentType;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Builder;
 
-import java.util.List;
+import lombok.Builder;
 
 public class ContentResponseDto {
 	@Builder
@@ -16,6 +17,7 @@ public class ContentResponseDto {
 		Double durationInSecond,
 		String enScript,
 		String koScript,
+		Long bookmarkId,
 		Boolean isHighlighted,
 		String description
 	) {
@@ -31,6 +33,8 @@ public class ContentResponseDto {
 		@JsonInclude(JsonInclude.Include.NON_NULL)
 		String videoUrl,
 		Integer hits,
+		Boolean isScrapped,
+		Integer learningRate,
 		List<UserScript> scriptList
 	) {
 	}
@@ -42,7 +46,9 @@ public class ContentResponseDto {
 		ContentType contentType,
 		String preScripts,     // description
 		String category,
-		Integer hits
+		Integer hits,
+		Boolean isScrapped,
+		Boolean isPointRequired
 	) {
 	}
 
@@ -70,7 +76,9 @@ public class ContentResponseDto {
 		ContentType contentType,
 		String preScripts,
 		String category,
-		Integer hits
+		Integer hits,
+		Boolean isScrapped,
+		Boolean isPointRequired
 	) {
 	}
 

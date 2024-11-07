@@ -31,7 +31,8 @@ public class BookmarkResponseDto {
 		Long contentId,
 		String contentTitle,
 		LocalDateTime createdAt,
-		LocalDateTime updatedAt
+		LocalDateTime updatedAt,
+		Boolean isActive
 	) {
 	}
 

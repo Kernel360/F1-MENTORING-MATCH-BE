@@ -1,33 +1,23 @@
 package com.biengual.core.domain.entity.content;
 
-import java.util.List;
-
-import org.hibernate.annotations.DynamicUpdate;
-
-import com.biengual.core.enums.ContentStatus;
-import com.biengual.core.enums.ContentType;
+import com.biengual.core.domain.document.content.script.Script;
 import com.biengual.core.domain.entity.BaseEntity;
 import com.biengual.core.domain.entity.category.CategoryEntity;
-import com.biengual.core.domain.document.content.script.Script;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.ConstraintMode;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ForeignKey;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import com.biengual.core.enums.ContentStatus;
+import com.biengual.core.enums.ContentType;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static com.biengual.core.constant.RestrictionConstant.PERIOD_FOR_POINT_CONTENT_ACCESS;
 
 @Entity
 @Table(name = "content")
@@ -103,9 +93,18 @@ public class ContentEntity extends BaseEntity {
 		this.numOfQuiz += numOfQuiz;
 	}
 
-	public void updateHits() {
-		this.hits += 1;
+	public boolean isRecentContent() {
+		LocalDateTime createdAt = getCreatedAt();
+		LocalDate recentThreshold = LocalDate.now().minusDays(PERIOD_FOR_POINT_CONTENT_ACCESS);
+
+		if (createdAt != null) {
+			return recentThreshold.isBefore(createdAt.toLocalDate());
+		}
+
+		return false;
 	}
+
+	// Internal Method =================================================================================================
 
 	private String truncate(String content, int maxLength) {
 		if (content.startsWith("[")) {
