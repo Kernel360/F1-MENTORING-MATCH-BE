@@ -1,6 +1,7 @@
 package com.biengual.userapi.dashboard.presentation;
 
 import com.biengual.userapi.dashboard.domain.DashboardInfo;
+import com.biengual.userapi.dashboard.presentation.dto.GetRecentLearningDto;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
