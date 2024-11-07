@@ -34,7 +34,7 @@ public class MissionHistoryPublicController {
     private final MissionHistoryDtoMapper missionHistoryDtoMapper;
 
     @GetMapping("/recent")
-    @Operation(summary = "최근 미션 기록 조회", description = "최근 5일 동안 미션 완료 갯수를 조회합니다")
+    @Operation(summary = "최근 미션 기록 조회", description = "최근 7일 동안 미션 완료 갯수를 조회합니다")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "최근 미션 기록 조회 성공", content = {
             @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerMissionHistoryRecent.class))
