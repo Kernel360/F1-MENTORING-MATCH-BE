@@ -37,8 +37,8 @@ public class MissionServiceImpl implements MissionService {
     @Override
     @Transactional
     public void updateMissionComplete(MissionCommand.Update command) {
-        missionStore.updateMissionComplete(command);
         this.updatePointByMission(command);
+        missionStore.updateMissionComplete(command);
     }
 
     // Internal Methods ================================================================================================
@@ -46,15 +46,15 @@ public class MissionServiceImpl implements MissionService {
      * 바뀐 미션 상태에 따른 검증 및 포인트 업데이트
      */
     private void updatePointByMission(MissionCommand.Update command) {
-        MissionInfo.StatusInfo updatedMission = missionReader.getMissionsStatus(command.userId());
+        MissionInfo.StatusInfo existingMission = missionReader.getMissionsStatus(command.userId());
 
-        if (pointValidator.verifyMission(updatedMission.oneContent(), command.oneContent())) {
+        if (pointValidator.verifyMission(existingMission.oneContent(), command.oneContent())) {
             pointManager.updateAndSavePoint(PointReason.DAILY_CONTENT, command.userId());
         }
-        if (pointValidator.verifyMission(updatedMission.bookmark(), command.bookmark())) {
+        if (pointValidator.verifyMission(existingMission.bookmark(), command.bookmark())) {
             pointManager.updateAndSavePoint(PointReason.DAILY_MISSION, command.userId());
         }
-        if (pointValidator.verifyMission(updatedMission.quiz(), command.quiz())) {
+        if (pointValidator.verifyMission(existingMission.quiz(), command.quiz())) {
             pointManager.updateAndSavePoint(PointReason.DAILY_QUIZ, command.userId());
         }
     }
