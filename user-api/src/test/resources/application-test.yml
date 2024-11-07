@@ -1,0 +1,23 @@
+spring:
+  config:
+    activate:
+      on-profile: test
+    import:
+      - optional:file:.env[.properties]
+
+  datasource:
+    url: jdbc:h2:mem:testdb;DATABASE_TO_UPPER=FALSE;MODE=MYSQL;
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+
+  flyway:
+    enabled: false
+  jpa:
+    hibernate:
+      ddl-auto: create
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    database-platform: org.hibernate.dialect.H2Dialect
