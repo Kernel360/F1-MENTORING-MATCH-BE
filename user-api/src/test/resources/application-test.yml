@@ -6,18 +6,17 @@ spring:
       - optional:file:.env[.properties]
 
   datasource:
-    url: jdbc:h2:mem:testdb;DATABASE_TO_UPPER=FALSE;MODE=MYSQL;
-    username: sa
-    password: password
-    driverClassName: org.h2.Driver
+    url: jdbc:mysql://127.0.0.1:3306/biengual_test_db
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
   flyway:
     enabled: false
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
     open-in-view: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
-    database-platform: org.hibernate.dialect.H2Dialect
