@@ -23,6 +23,7 @@ dependencies {
      * If some dependency is not suitable classification, anyone can change that.
      */
     implementation project(':biengual-core')
+    testImplementation(testFixtures(project(':biengual-core')))
 
     // Spring Boot
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -111,20 +112,6 @@ dependencies {
     // Word2Vec
     implementation 'org.deeplearning4j:deeplearning4j-nlp:1.0.0-M2.1'
     implementation 'org.nd4j:nd4j-native-platform:1.0.0-M2.1'
-}
-
-def querydslDir = "$buildDir/generated/querydsl"
-
-sourceSets {
-    main.java.srcDirs += [querydslDir]
-}
-
-tasks.withType(JavaCompile) {
-    options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
-}
-
-clean.doLast {
-    file(querydslDir).deleteDir()
 }
 
 tasks.named('test') {

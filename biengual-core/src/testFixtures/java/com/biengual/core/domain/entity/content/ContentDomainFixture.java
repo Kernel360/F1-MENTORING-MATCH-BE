@@ -44,4 +44,31 @@ public class ContentDomainFixture {
             return mapper.convertValue(this, ContentEntity.class);
         }
     }
+
+    @Getter
+    @Builder
+    public static class TestContentEntityWithVersion {
+        private @Builder.Default Long id = 13414L;
+        private @Builder.Default String url = "url/test";
+        private @Builder.Default String title = "test title";
+        private @Builder.Default int hits = 0;
+        private @Builder.Default String thumbnailUrl = "thumbnail-url/test";
+        private @Builder.Default String preScripts = "test...";
+        private @Builder.Default ContentType contentType = ContentType.READING;
+        private @Builder.Default ContentStatus contentStatus = ContentStatus.ACTIVATED;
+        private @Builder.Default String mongoContentId = "mongoObjectId";
+        private @Builder.Default CategoryEntity category = null;
+        private @Builder.Default Integer numOfQuiz = 0;
+        private @Builder.Default LocalDateTime createdAt = LocalDateTime.now();
+        private @Builder.Default LocalDateTime updatedAt = LocalDateTime.now();
+        private @Builder.Default Integer version = 1;
+
+        public static TestContentEntityWithVersion.TestContentEntityWithVersionBuilder createContentEntityWithVersion() {
+            return TestContentEntityWithVersion.builder();
+        }
+
+        public ContentEntityWithVersion get() {
+            return mapper.convertValue(this, ContentEntityWithVersion.class);
+        }
+    }
 }
