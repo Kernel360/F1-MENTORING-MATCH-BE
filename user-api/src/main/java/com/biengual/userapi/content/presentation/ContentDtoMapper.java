@@ -109,6 +109,13 @@ public interface ContentDtoMapper {
         ContentInfo.PreviewContents listeningPreview
     );
 
+	@Mapping(target = "duration", source = "videoDurationInSeconds", qualifiedByName = "toDurationFormat")
+	ContentResponseDto.PreviewContent ofPreviewContent(ContentInfo.PreviewContent previewContent);
+
+	@Mapping(target = "duration", source = "videoDurationInSeconds", qualifiedByName = "toDurationFormat")
+	ContentResponseDto.ViewContent ofViewContent(ContentInfo.ViewContent viewContent);
+
+	@Mapping(target = "duration", source = "videoDurationInSeconds", qualifiedByName = "toDurationFormat")
 	ContentResponseDto.DetailRes ofDetailRes(ContentInfo.Detail detail);
 
 	@Mapping(target = "startTimeInSecond", source = "userScript.script", qualifiedByName = "mapStartTimeInSecond")
@@ -127,6 +134,7 @@ public interface ContentDtoMapper {
 	@Mapping(target = "isScrapped", constant = "false")
 	@Mapping(target = "learningRate", ignore = true)
 	@Mapping(target = "scriptList", source = "userScripts")
+	@Mapping(target = "videoDurationInSeconds", source = "content.videoDuration")
 	ContentInfo.Detail buildDetail(ContentEntity content, List<ContentInfo.UserScript> userScripts);
 
 	@Mapping(target = "contentId", source = "content.id")
@@ -135,6 +143,7 @@ public interface ContentDtoMapper {
 	@Mapping(target = "isScrapped", source = "isScrapped")
 	@Mapping(target = "learningRate", source = "learningRate")
 	@Mapping(target = "scriptList", source = "userScripts")
+	@Mapping(target = "videoDurationInSeconds", source = "content.videoDuration")
 	ContentInfo.Detail buildDetail(
 		ContentEntity content, Boolean isScrapped, Integer learningRate, List<ContentInfo.UserScript> userScripts
 	);
@@ -168,6 +177,16 @@ public interface ContentDtoMapper {
 	default Double mapDurationInSecond(Script script) {
 		if (script instanceof YoutubeScript) {
 			return ((YoutubeScript) script).getDurationInSecond();
+		}
+		return null;
+	}
+
+	@Named("toDurationFormat")
+	default String toVideoDurationFormat(Integer videoDurationInSeconds) {
+		if (videoDurationInSeconds != null) {
+			int minutes = videoDurationInSeconds / 60;
+			int seconds = videoDurationInSeconds % 60;
+			return String.format("%d:%02d", minutes, seconds);
 		}
 		return null;
 	}

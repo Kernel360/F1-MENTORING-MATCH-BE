@@ -108,6 +108,7 @@ public class ContentCustomRepository {
                     contentEntity.preScripts,
                     contentEntity.category.name,
                     contentEntity.hits,
+                    contentEntity.videoDuration,
                     getIsScrappedByUserId(userId),
                     getIsPointRequiredByUserIdAndContent(userId, contentEntity.id, contentEntity.createdAt)
                 )
@@ -183,6 +184,7 @@ public class ContentCustomRepository {
                     contentEntity.preScripts,
                     contentEntity.category.name,
                     contentEntity.hits,
+                    contentEntity.videoDuration,
                     getIsScrappedByUserId(userId),
                     getIsPointRequiredByUserIdAndContent(userId, contentEntity.id, contentEntity.createdAt)
                 )
@@ -217,6 +219,7 @@ public class ContentCustomRepository {
                     contentEntity.preScripts,
                     contentEntity.category.name,
                     contentEntity.hits,
+                    contentEntity.videoDuration,
                     getIsScrappedByUserId(userId),
                     getIsPointRequiredByUserIdAndContent(userId, contentEntity.id, contentEntity.createdAt)
                 )
@@ -252,6 +255,7 @@ public class ContentCustomRepository {
                     contentEntity.preScripts,
                     contentEntity.category.name,
                     contentEntity.hits,
+                    contentEntity.videoDuration,
                     getIsScrappedByUserId(userId),
                     getIsPointRequiredByUserIdAndContent(userId, contentEntity.id, contentEntity.createdAt)
                 )

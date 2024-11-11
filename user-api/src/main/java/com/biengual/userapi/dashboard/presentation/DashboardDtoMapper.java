@@ -2,9 +2,7 @@ package com.biengual.userapi.dashboard.presentation;
 
 import com.biengual.userapi.dashboard.domain.DashboardInfo;
 import com.biengual.userapi.dashboard.presentation.dto.GetRecentLearningDto;
-import org.mapstruct.InjectionStrategy;
-import org.mapstruct.Mapper;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
 
 /**
  * 객체 간의 Mapper를 정의
@@ -24,5 +22,21 @@ import org.mapstruct.ReportingPolicy;
     unmappedTargetPolicy = ReportingPolicy.ERROR
 )
 public interface DashboardDtoMapper {
-    GetRecentLearningDto.Response ofRecentLearning(DashboardInfo.RecentLearnings recentLearnings);
+    GetRecentLearningDto.Response ofRecentLearningRes(DashboardInfo.RecentLearnings recentLearnings);
+
+    @Mapping(target = "duration", source = "videoDurationInSeconds", qualifiedByName = "toDurationFormat")
+    GetRecentLearningDto.RecentLearning ofRecentLearning(DashboardInfo.RecentLearning recentLearning);
+
+
+    // Internal Method =================================================================================================
+
+    @Named("toDurationFormat")
+    default String toVideoDurationFormat(Integer videoDurationInSeconds) {
+        if (videoDurationInSeconds != null) {
+            int minutes = videoDurationInSeconds / 60;
+            int seconds = videoDurationInSeconds % 60;
+            return String.format("%d:%02d", minutes, seconds);
+        }
+        return null;
+    }
 }
