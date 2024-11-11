@@ -4,6 +4,7 @@ import com.biengual.core.domain.entity.content.ContentEntity;
 import com.biengual.core.domain.entity.content.ContentEntityWithVersion;
 import com.biengual.userapi.config.TestJpaConfig;
 import com.biengual.userapi.config.TestQueryDslConfig;
+import com.biengual.userapi.config.TestRedisRedissonConfig;
 import com.biengual.userapi.content.domain.ContentCustomRepository;
 import com.biengual.userapi.content.domain.ContentRepository;
 import com.biengual.userapi.repository.OptimisticLockContentRepository;
@@ -16,6 +17,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +39,43 @@ import static com.biengual.core.domain.entity.content.ContentDomainFixture.TestC
 import static com.biengual.core.domain.entity.content.QContentEntity.contentEntity;
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * 간단한 동시성 테스트를 위한 클래스
+ *
+ * 동시성 테스트 case
+ * - 실제 서비스에 사용하고 있는 contentEntity에 대한 쿼리 동시성 테스트 -> case1
+ * - 동시성 이슈를 발생시키도록 구현한 가상 쿼리에 대한 동시성 테스트 -> case2
+ * - 가상 쿼리 + 비관적 락에 대한 동시성 테스트 -> case3
+ * - 가상 쿼리 + 낙관적 락에 대한 동시성 테스트 -> case4
+ * - 가상 쿼리 + Redisson 분산 락에 대한 동시성 테스트 -> case5
+ *
+ * 스레드 수에 따른 case 성능
+ * - 스레드 수: 10
+ *      case1: 91 ms
+ *      case2: 21 ms (동시성 이슈 발생)
+ *      case3: 594 ms
+ *      case4: 673 ms
+ *      case5: 191 ms
+ *
+ * - 스레드 수: 100
+ *      case1: 536 ms
+ *      case2: 156 ms (동시성 이슈 발생)
+ *      case3: 1127 ms
+ *      case4: 1864 ms
+ *      case5: 1176 ms
+ *
+ * - 스레드 수: 1000
+ *      case1: 4504 ms
+ *      case2: 1512 ms (동시성 이슈 발생)
+ *      case3: 6197 ms
+ *      case4: 13470 ms
+ *      case5: 9375 ms
+ *
+ * @author 문찬욱
+ */
 @DataJpaTest
 @ActiveProfiles("test")
-@Import({TestJpaConfig.class, TestQueryDslConfig.class})
+@Import({TestJpaConfig.class, TestQueryDslConfig.class, TestRedisRedissonConfig.class})
 @DisplayName("컨텐츠 조회수 동시성 테스트 - 기본적으로 100 스레드에서 테스트")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class SimpleConcurrencyTest {
@@ -56,6 +93,9 @@ class SimpleConcurrencyTest {
 
     @Autowired
     private ContentCustomRepository contentCustomRepository;
+
+    @Autowired
+    private RedissonClient redissonClient;
 
     @Autowired
     private TransactionTemplate transactionTemplate;
@@ -78,7 +118,7 @@ class SimpleConcurrencyTest {
         queryFactory = new JPAQueryFactory(entityManager);
 
         // 동시에 실행할 스레드 수
-        threadCount = 100;
+        threadCount = 1000;
 
         // 테스트에 필요한 초기 Entity들 생성
         createExecutorService(1, this::createInitContentEntity);
@@ -121,11 +161,7 @@ class SimpleConcurrencyTest {
         assertThat(afterContent.getHits()).isLessThan(initHits + threadCount);
     }
 
-    /*
-     비관적 락을 건 동시성 테스트
-     - 10 스레드 기준 640 ms
-     - 1000 스레드 기준 6618 ms
-     */
+    // 비관적 락을 건 동시성 테스트
     @Test
     @DisplayName("가상 조회수 증가 로직에 비관적 락을 건 동시성 테스트 - 통과하면 동시성 이슈 발생하지 않았음")
     void virtualHitsIncreaseConcurrencyTestWithPessimisticLock() throws InterruptedException {
@@ -140,11 +176,7 @@ class SimpleConcurrencyTest {
         assertThat(afterContent.getHits()).isEqualTo(initHits + threadCount);
     }
 
-    /*
-     낙관적 락을 건 동시성 테스트
-     - 10 스레드 기준 294 ms
-     - 1000 스레드 기준 13638 ms, 오히려 비관적 락보다 느렸음.
-     */
+    // 낙관적 락을 건 동시성 테스트
     @Test
     @DisplayName("가상 조회수 증가 로직에 낙관적 락을 건 동시성 테스트 - 통과하면 동시성 이슈 발생하지 않았음")
     void virtualHitsIncreaseConcurrencyTestWithOptimisticLock() throws InterruptedException {
@@ -162,7 +194,22 @@ class SimpleConcurrencyTest {
         assertThat(afterContent.getHits()).isEqualTo(initHitsWithVersion + threadCount);
     }
 
+    // Redisson 분산 락을 건 동시성 테스트
+    @Test
+    @DisplayName("가상 조회수 증가 로직에 Redisson 분산 락을 건 동시성 테스트 - 통과하면 동시성 이슈 발생하지 않았음")
+    void virtualHitsIncreaseConcurrencyTestWithRedissonDistributedLock() throws InterruptedException {
+        threadCount = 1000;
 
+        StopWatch stopWatch = StopWatch.createStarted();
+        createExecutorService(threadCount, () -> increaseHitsForConcurrencyIssueWithRedissonDistributedLock(6));
+        stopWatch.stop();
+
+        ContentEntity afterContent = contentRepository.findById(initContentId).orElseThrow();
+        log.info("분산 - 예상 조회수: {}, 트랜잭션 종료 후 조회수: {}, 실행 스레드 수: {}, 걸린 시간: {} ms",
+            initHits + threadCount, afterContent.getHits(), threadCount, stopWatch.getTime(TimeUnit.MILLISECONDS));
+
+        assertThat(afterContent.getHits()).isEqualTo(initHits + threadCount);
+    }
 
     // Internal Method =================================================================================================
 
@@ -291,6 +338,37 @@ class SimpleConcurrencyTest {
                 } catch (InterruptedException ie) {
                     Thread.currentThread().interrupt();
                     throw new RuntimeException("재시도 대기 중 인터럽트 발생", ie);
+                }
+            }
+        }
+    }
+
+    // Redisson 분산 락을 건 쿼리
+    private void increaseHitsForConcurrencyIssueWithRedissonDistributedLock(int maxRetries) {
+        int attempt = 0;
+        String lockKey = initContentId.toString();
+        RLock lock = redissonClient.getLock(lockKey);  // 반복문 밖에서 RLock 객체 생성
+
+        while (true) {
+            try {
+                boolean lockable = lock.tryLock(5000, -1, TimeUnit.MILLISECONDS);
+                if (!lockable) {
+                    attempt++;
+                    if (attempt >= maxRetries) {
+                        log.info("Lock 획득 실패 lockKey: {}", lockKey);
+                        break;
+                    }
+                    continue;
+                }
+
+                increaseHitsForConcurrencyIssue();
+                break;
+            } catch (InterruptedException e) {
+                log.info("스레드가 락을 기다리는 동안 외부에서 인터럽트가 발생");
+            } finally {
+                // 락을 획득한 경우에만 unlock 호출
+                if (lock.isHeldByCurrentThread()) {
+                    lock.unlock();
                 }
             }
         }

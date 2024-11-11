@@ -22,3 +22,10 @@ spring:
         dialect: org.hibernate.dialect.MySQLDialect
         ## 쿼리문을 보고 싶다면 true를 설정하거나 logback-test.xml에서 p6spy logger를 주석처리할 것
         show_sql: false
+
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      password: 1234
+      username: default
