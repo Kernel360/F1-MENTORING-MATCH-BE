@@ -83,6 +83,7 @@ public class SecurityConfig {
                     .requestMatchers("/api/categories/**").hasAnyRole("USER", "DEVELOPER")
                     .requestMatchers("/api/scrap/**").hasAnyRole("USER", "DEVELOPER")
                     .requestMatchers("/api/missions/**").hasAnyRole("USER", "DEVELOPER")
+                    .requestMatchers("/api/mission-history/**").hasAnyRole("USER", "DEVELOPER")
                     .requestMatchers("/api/learning/**").hasAnyRole("USER", "DEVELOPER")
                     .requestMatchers("/api/dashboard/**").hasAnyRole("USER", "DEVELOPER")
 

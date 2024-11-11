@@ -150,7 +150,7 @@ public class ContentReaderImpl implements ContentReader {
         return contentDtoMapper.buildDetail(content, ContentInfo.UserScript.toResponse(scripts));
     }
 
-    // 컨텐츠 상세 조회 시 포인트 필요한지 확인 : 현재는 5일 이내 컨텐츠 기준
+    // 컨텐츠 상세 조회 시 포인트 필요한지 확인 : 현재는 7일 이내 컨텐츠 기준
     @Override
     public boolean checkAlreadyReadable(ContentCommand.GetDetail command) {
         boolean access = true;
@@ -173,7 +173,6 @@ public class ContentReaderImpl implements ContentReader {
     }
 
     // Internal Methods ================================================================================================
-
     private boolean verifyExpiredOfContent(Long contentId) {
         return LocalDate.now().minusDays(PERIOD_FOR_POINT_CONTENT_ACCESS).isBefore(
             contentCustomRepository.findCreatedAtOfContentById(contentId).toLocalDate()
