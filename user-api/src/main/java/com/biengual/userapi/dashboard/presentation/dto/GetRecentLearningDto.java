@@ -14,6 +14,7 @@ public class GetRecentLearningDto {
         ContentType contentType,
         String preScripts,
         String category,
+        String duration,
         Integer hits,
         Boolean isScrapped,
         Integer learningRate

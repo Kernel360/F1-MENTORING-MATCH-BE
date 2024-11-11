@@ -45,7 +45,7 @@ public class DashboardPublicController {
         @AuthenticationPrincipal OAuth2UserPrincipal principal
         ) {
         DashboardInfo.RecentLearnings info = dashboardService.getRecentLearning(principal.getId());
-        GetRecentLearningDto.Response response = dashboardDtoMapper.ofRecentLearning(info);
+        GetRecentLearningDto.Response response = dashboardDtoMapper.ofRecentLearningRes(info);
         return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
     }
 }

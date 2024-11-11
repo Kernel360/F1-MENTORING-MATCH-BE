@@ -32,6 +32,7 @@ public class ContentResponseDto {
 		String thumbnailUrl,
 		@JsonInclude(JsonInclude.Include.NON_NULL)
 		String videoUrl,
+		String duration,
 		Integer hits,
 		Boolean isScrapped,
 		Integer learningRate,
@@ -44,6 +45,7 @@ public class ContentResponseDto {
 		String title,
 		String thumbnailUrl,   // coverImageUrl
 		ContentType contentType,
+		String duration,
 		String preScripts,     // description
 		String category,
 		Integer hits,
@@ -77,6 +79,7 @@ public class ContentResponseDto {
 		String preScripts,
 		String category,
 		Integer hits,
+		String duration,
 		Boolean isScrapped,
 		Boolean isPointRequired
 	) {

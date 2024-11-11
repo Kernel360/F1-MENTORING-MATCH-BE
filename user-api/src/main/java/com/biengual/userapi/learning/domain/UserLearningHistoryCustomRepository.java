@@ -47,6 +47,7 @@ public class UserLearningHistoryCustomRepository {
                     contentEntity.contentType,
                     contentEntity.preScripts,
                     contentEntity.category.name,
+                    contentEntity.videoDuration,
                     contentEntity.hits,
                     getIsScrappedByUserId(userId),
                     userLearningHistoryEntity.learningRate

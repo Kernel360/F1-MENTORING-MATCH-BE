@@ -18,6 +18,7 @@ public class ContentInfo {
         String preScripts,
         String category,
         Integer hits,
+        Integer videoDurationInSeconds,
         Boolean isScrapped,
         Boolean isPointRequired
     ) {
@@ -42,6 +43,7 @@ public class ContentInfo {
         String preScripts,
         String category,
         Integer hits,
+        Integer videoDurationInSeconds,
         Boolean isScrapped,
         Boolean isPointRequired
     ) {
@@ -75,6 +77,7 @@ public class ContentInfo {
         String title,
         String thumbnailUrl,
         String videoUrl,
+        Integer videoDurationInSeconds,
         Integer hits,
         Boolean isScrapped,
         Integer learningRate,
