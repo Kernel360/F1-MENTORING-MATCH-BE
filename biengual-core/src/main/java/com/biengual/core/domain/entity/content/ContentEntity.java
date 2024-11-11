@@ -60,14 +60,17 @@ public class ContentEntity extends BaseEntity {
 	@JoinColumn(name = "category_id", columnDefinition = "bigint", foreignKey = @ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
 	private CategoryEntity category;
 
-	@Column(name = "num_of_quiz", nullable = false, columnDefinition = "bigint")
+	@Column(nullable = false, columnDefinition = "bigint")
 	private Integer numOfQuiz;
+
+	@Column(columnDefinition = "smallint")
+	private Integer videoDuration;
 
 	@Builder
 	public ContentEntity(
 		String url, String title, String thumbnailUrl,
 		ContentType contentType, String mongoContentId,
-		List<Script> preScripts, CategoryEntity category
+		List<Script> preScripts, CategoryEntity category, Integer videoDuration
 	) {
 		this.url = url;
 		this.title = title;
@@ -83,6 +86,7 @@ public class ContentEntity extends BaseEntity {
 		);
 		this.category = category;
 		this.numOfQuiz = 0;
+		this.videoDuration = videoDuration;
 	}
 
 	public void updateStatus(ContentStatus contentStatus) {
