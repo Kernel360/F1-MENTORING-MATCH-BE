@@ -173,6 +173,16 @@ public class ContentReaderImpl implements ContentReader {
         }
     }
 
+    @Override
+    public ContentEntity findLearnableContent(Long contentId, Long userId) {
+        ContentEntity content = contentRepository.findById(contentId)
+            .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
+
+        validateLearnableContent(content, userId);
+
+        return content;
+    }
+
     // Internal Methods ================================================================================================
     private boolean verifyExpiredOfContent(Long contentId) {
         return LocalDate.now().minusDays(PERIOD_FOR_POINT_CONTENT_ACCESS).isBefore(
@@ -180,4 +190,13 @@ public class ContentReaderImpl implements ContentReader {
         );
     }
 
+    private void validateLearnableContent(ContentEntity content, Long userId) {
+        if (content.getContentStatus().equals(ContentStatus.DEACTIVATED)) {
+            throw new CommonException(CONTENT_IS_DEACTIVATED);
+        }
+
+        if (content.isRecentContent()) {
+            // TODO: 최신 컨텐츠에 대해 포인트를 지불했는지에 대한 검증이 필요
+        }
+    }
 }

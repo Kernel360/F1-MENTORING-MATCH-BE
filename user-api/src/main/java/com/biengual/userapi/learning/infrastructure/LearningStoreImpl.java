@@ -3,30 +3,19 @@ package com.biengual.userapi.learning.infrastructure;
 import com.biengual.core.annotation.DataProvider;
 import com.biengual.core.domain.entity.content.ContentEntity;
 import com.biengual.core.domain.entity.learning.UserLearningHistoryEntity;
-import com.biengual.core.enums.ContentStatus;
-import com.biengual.core.response.error.exception.CommonException;
-import com.biengual.userapi.content.domain.ContentRepository;
-import com.biengual.userapi.learning.domain.LearningCommand;
-import com.biengual.userapi.learning.domain.LearningHistoryRepository;
-import com.biengual.userapi.learning.domain.LearningStore;
-import com.biengual.userapi.learning.domain.UserLearningHistoryRepository;
+import com.biengual.userapi.learning.domain.*;
 import lombok.RequiredArgsConstructor;
-
-import static com.biengual.core.response.error.code.ContentErrorCode.CONTENT_IS_DEACTIVATED;
-import static com.biengual.core.response.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
 
 @DataProvider
 @RequiredArgsConstructor
 public class LearningStoreImpl implements LearningStore {
-    private final ContentRepository contentRepository;
     private final LearningHistoryRepository learningHistoryRepository;
     private final UserLearningHistoryRepository userLearningHistoryRepository;
+    private final CategoryLearningHistoryRepository categoryLearningHistoryRepository;
 
     // 모든 학습 내역 쌓기
     @Override
     public void recordLearningHistory(LearningCommand.RecordLearningRate command) {
-        validateLearnableContent(command.contentId(), command.userId());
-
         learningHistoryRepository.save(command.toLearningHistoryEntity());
     }
 
@@ -35,7 +24,6 @@ public class LearningStoreImpl implements LearningStore {
     // 최근 학습 내역 쌓기
     @Override
     public void recordRecentLearningHistory(LearningCommand.RecordLearningRate command) {
-        validateLearnableContent(command.contentId(), command.userId());
         UserLearningHistoryEntity userLearningHistory =
             userLearningHistoryRepository.findByUserIdAndContentId(command.userId(), command.contentId())
                 .map(history -> {
@@ -47,17 +35,11 @@ public class LearningStoreImpl implements LearningStore {
         userLearningHistoryRepository.save(userLearningHistory);
     }
 
-    // Internal Method =================================================================================================
+    // 카테고리별 학습 내역 쌓기
+    @Override
+    public void recordCategoryLearningHistory(LearningCommand.RecordLearningRate command, ContentEntity content) {
+        Long categoryId = content.getCategory().getId();
 
-    private void validateLearnableContent(Long contentId, Long userId) {
-        ContentEntity content = contentRepository.findById(contentId)
-            .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
-        if (content.getContentStatus().equals(ContentStatus.DEACTIVATED)) {
-            throw new CommonException(CONTENT_IS_DEACTIVATED);
-        }
-
-        if (content.isRecentContent()) {
-            // TODO: 최신 컨텐츠에 대해 포인트를 지불했는지에 대한 검증이 필요
-        }
+        categoryLearningHistoryRepository.save(command.toCategoryLearningHistoryEntity(categoryId));
     }
 }

@@ -28,6 +28,7 @@ import org.mapstruct.ReportingPolicy;
 public interface LearningDtoMapper {
 
     @Mapping(target = "userId", source = "principal.id")
+    @Mapping(target = "learningTime", expression = "java(java.time.LocalDateTime.now())")
     LearningCommand.RecordLearningRate doRecordLearningRate(
         RecordLearningRateDto.Request request, OAuth2UserPrincipal principal
     );

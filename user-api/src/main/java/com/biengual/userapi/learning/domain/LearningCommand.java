@@ -1,5 +1,6 @@
 package com.biengual.userapi.learning.domain;
 
+import com.biengual.core.domain.entity.learning.CategoryLearningHistoryEntity;
 import com.biengual.core.domain.entity.learning.LearningHistoryEntity;
 import com.biengual.core.domain.entity.learning.UserLearningHistoryEntity;
 import lombok.Builder;
@@ -13,14 +14,15 @@ public class LearningCommand {
     public record RecordLearningRate(
         Long userId,
         Long contentId,
-        BigDecimal learningRate
+        BigDecimal learningRate,
+        LocalDateTime learningTime
     ) {
         public UserLearningHistoryEntity toUserLearningHistoryEntity() {
             return UserLearningHistoryEntity.builder()
                 .userId(this.userId)
                 .contentId(this.contentId)
                 .learningRate(this.learningRate)
-                .recentLearningTime(LocalDateTime.now())
+                .recentLearningTime(this.learningTime)
                 .build();
         }
 
@@ -29,7 +31,15 @@ public class LearningCommand {
                 .userId(this.userId)
                 .contentId(this.contentId)
                 .learningRate(this.learningRate)
-                .learningTime(LocalDateTime.now())
+                .learningTime(this.learningTime)
+                .build();
+        }
+
+        public CategoryLearningHistoryEntity toCategoryLearningHistoryEntity(Long categoryId) {
+            return CategoryLearningHistoryEntity.builder()
+                .userId(this.userId)
+                .categoryId(categoryId)
+                .learningTime(this.learningTime)
                 .build();
         }
     }
