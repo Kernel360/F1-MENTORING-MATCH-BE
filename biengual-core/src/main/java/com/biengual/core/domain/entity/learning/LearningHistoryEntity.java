@@ -7,13 +7,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
 @Entity
-@Table(name = "category_learning_history")
+@Table(name = "learning_history")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CategoryLearningHistoryEntity extends BaseEntity {
+public class LearningHistoryEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,18 +23,31 @@ public class CategoryLearningHistoryEntity extends BaseEntity {
     private Long userId;
 
     @Column(nullable = false, columnDefinition = "bigint")
+    private Long contentId;
+
+    @Column(nullable = false, columnDefinition = "bigint")
     private Long categoryId;
+
+    @Column(nullable = false, precision = 5, scale = 2)
+    private BigDecimal currentLearningRate;
+
+    @Column(nullable = false, precision = 5, scale = 2)
+    private BigDecimal completedLearningRate;
 
     @Column(nullable = false)
     private LocalDateTime learningTime;
 
     @Builder
-    public CategoryLearningHistoryEntity(
-        Long id, Long userId, Long categoryId, LocalDateTime learningTime
+    public LearningHistoryEntity(
+        Long id, Long userId, Long contentId, Long categoryId,
+        BigDecimal currentLearningRate, BigDecimal completedLearningRate, LocalDateTime learningTime
     ) {
         this.id = id;
         this.userId = userId;
+        this.contentId = contentId;
         this.categoryId = categoryId;
+        this.currentLearningRate = currentLearningRate;
+        this.completedLearningRate = completedLearningRate;
         this.learningTime = learningTime;
     }
 }
