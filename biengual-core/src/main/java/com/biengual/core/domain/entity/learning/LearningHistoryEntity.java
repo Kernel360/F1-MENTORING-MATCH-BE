@@ -25,9 +25,6 @@ public class LearningHistoryEntity extends BaseEntity {
     @Column(nullable = false, columnDefinition = "bigint")
     private Long contentId;
 
-    @Column(nullable = false, columnDefinition = "bigint")
-    private Long categoryId;
-
     @Column(nullable = false, precision = 5, scale = 2)
     private BigDecimal learningRate;
 
@@ -36,13 +33,11 @@ public class LearningHistoryEntity extends BaseEntity {
 
     @Builder
     public LearningHistoryEntity(
-        Long id, Long userId, Long contentId, Long categoryId,
-        BigDecimal learningRate, LocalDateTime learningTime
+        Long id, Long userId, Long contentId, BigDecimal learningRate, LocalDateTime learningTime
     ) {
         this.id = id;
         this.userId = userId;
         this.contentId = contentId;
-        this.categoryId = categoryId;
         this.learningRate = learningRate;
         this.learningTime = learningTime;
     }
