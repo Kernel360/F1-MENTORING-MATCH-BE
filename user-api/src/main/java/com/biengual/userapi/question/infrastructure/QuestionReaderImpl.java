@@ -13,8 +13,10 @@ import com.biengual.core.annotation.DataProvider;
 import com.biengual.core.domain.document.content.ContentDocument;
 import com.biengual.core.domain.document.question.QuestionDocument;
 import com.biengual.core.domain.entity.content.ContentEntity;
+import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.enums.QuestionType;
 import com.biengual.core.response.error.exception.CommonException;
+import com.biengual.userapi.content.domain.ContentCustomRepository;
 import com.biengual.userapi.content.domain.ContentDocumentRepository;
 import com.biengual.userapi.content.domain.ContentRepository;
 import com.biengual.userapi.question.domain.QuestionCommand;
@@ -30,12 +32,14 @@ public class QuestionReaderImpl implements QuestionReader {
     private final QuestionDocumentRepository questionDocumentRepository;
     private final ContentRepository contentRepository;
     private final ContentDocumentRepository contentDocumentRepository;
+    private final ContentCustomRepository contentCustomRepository;
 
     @Override
     public List<QuestionInfo.Detail> getQuestions(Long contentId) {
 
         ContentDocument contentDocument = this.getContentDocument(contentId);
         List<String> questionDocumentIds = contentDocument.getQuestionIds();
+
         if(questionDocumentIds.isEmpty()) {
             throw new CommonException(QUESTION_NOT_FOUND);
         }
@@ -81,6 +85,9 @@ public class QuestionReaderImpl implements QuestionReader {
     }
 
     private ContentEntity getContentEntity(Long contentId) {
+        if(!contentCustomRepository.findContentStatusByContentId(contentId).equals(ContentStatus.ACTIVATED)){
+            throw new CommonException(CONTENT_NOT_FOUND);
+        }
         return contentRepository.findById(contentId)
             .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
     }

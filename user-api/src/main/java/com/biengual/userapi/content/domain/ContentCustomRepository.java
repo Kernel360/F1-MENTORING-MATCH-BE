@@ -168,6 +168,15 @@ public class ContentCustomRepository {
         return findAdminViewPage(pageable, predicate, orderSpecifiers);
     }
 
+    public ContentStatus findContentStatusByContentId(Long contentId) {
+        return queryFactory
+            .select(contentEntity.contentStatus)
+            .from(contentEntity)
+            .where(contentEntity.id.eq(contentId))
+            .fetchOne();
+    }
+
+
     // Internal Method =================================================================================================
 
     // TODO: Predicate를 사용하지 않는 경우에는 Override? 아니면 null로 입력?
