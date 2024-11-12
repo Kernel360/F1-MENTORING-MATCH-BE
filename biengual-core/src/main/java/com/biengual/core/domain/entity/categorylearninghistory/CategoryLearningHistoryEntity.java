@@ -27,9 +27,6 @@ public class CategoryLearningHistoryEntity extends BaseEntity {
     private Long userId;
 
     @Column(nullable = false, columnDefinition = "bigint")
-    private Long contentId;
-
-    @Column(nullable = false, columnDefinition = "bigint")
     private Long categoryId;
 
     @Column(nullable = false)
@@ -37,11 +34,10 @@ public class CategoryLearningHistoryEntity extends BaseEntity {
 
     @Builder
     public CategoryLearningHistoryEntity(
-        Long id, Long userId, Long contentId, Long categoryId, LocalDateTime learningTime
+        Long id, Long userId, Long categoryId, LocalDateTime learningTime
     ) {
         this.id = id;
         this.userId = userId;
-        this.contentId = contentId;
         this.categoryId = categoryId;
         this.learningTime = learningTime;
     }

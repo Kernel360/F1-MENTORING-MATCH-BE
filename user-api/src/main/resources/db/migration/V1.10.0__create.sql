@@ -3,7 +3,6 @@ CREATE TABLE IF NOT EXISTS `category_learning_history`
     `id`         BIGINT      NOT NULL AUTO_INCREMENT,
     `user_id`    BIGINT      NOT NULL,
     `content_id` BIGINT      NOT NULL,
-    `category_id` BIGINT      NOT NULL,
     `learning_time` DATETIME(6) NOT NULL,
     `created_at` DATETIME(6) DEFAULT null,
     `updated_at` DATETIME(6) DEFAULT null,
