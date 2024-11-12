@@ -36,6 +36,10 @@ public class QuestionReaderImpl implements QuestionReader {
 
         ContentDocument contentDocument = this.getContentDocument(contentId);
         List<String> questionDocumentIds = contentDocument.getQuestionIds();
+        if(questionDocumentIds.isEmpty()) {
+            throw new CommonException(QUESTION_NOT_FOUND);
+        }
+
         List<QuestionInfo.Detail> questions = new ArrayList<>();
 
         for (String questionDocumentId : questionDocumentIds) {
