@@ -7,7 +7,6 @@ import java.util.concurrent.ExecutionException;
 
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Async;
 
 import com.biengual.core.annotation.ApiClient;
 import com.biengual.core.response.error.exception.CommonException;
@@ -62,8 +61,7 @@ public class PerplexityApiClient {
     // Internal Methods ===============================================================================================
     // Perplexity API 요청을 비동기로 처리하는 메소드
     @NotNull
-    @Async
-    protected CompletableFuture<HttpResponse<String>> getStringHttpResponse(String prompt) {
+    private CompletableFuture<HttpResponse<String>> getStringHttpResponse(String prompt) {
         JSONObject requestBody = new JSONObject();
         requestBody.put("model", "llama-3.1-sonar-large-128k-online");
 
@@ -76,12 +74,12 @@ public class PerplexityApiClient {
               "BLANK": [{"question": "...", "examples": ["...", "...", "...", "..."], "answer": "...", "hint": "..."}],
               "ORDER": [{"question": "...", "examples": ["...", "...", "...", "..."], "answer": "...", "hint": "..."}]
             }
-            각 유형별로 학습에 도움이 되는 영어로 보기가 있는 객관식 문제를 3개씩 보기 4개씩 생성해주세요.
+            각 유형별로 학습에 도움이 되는 영어로 보기가 있는 객관식 문제를 3개씩, 모든 문제에 대한 보기는 4개씩 생성해주세요.
             각 문제에 대한 힌트도 추가해주세요.
             정답은 examples 기준 인덱스로 주세요.
             문제에 대한 각 유형은 다음과 같습니다.
             MATCH: 내용 일치, WORD: 영단어 뜻 맞추기, 
-            BLANK: 문장의 빈칸에 들어갈 단어 맞추기, ORDER: 문장을 의미있는 세그먼트(최대 5개)로 나누어서 순서 맞추기
+            BLANK: 문장의 빈칸에 들어갈 단어 맞추기, ORDER: 본문의 의미있는 4개의 문장에 대한 순서 맞추기
             """;
 
         messages.put(new JSONObject().put("role", "user").put("content", prompt + quizOptions));
