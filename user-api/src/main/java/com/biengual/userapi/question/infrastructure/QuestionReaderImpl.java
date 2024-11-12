@@ -85,11 +85,14 @@ public class QuestionReaderImpl implements QuestionReader {
     }
 
     private ContentEntity getContentEntity(Long contentId) {
-        if(!contentCustomRepository.findContentStatusByContentId(contentId).equals(ContentStatus.ACTIVATED)){
-            throw new CommonException(CONTENT_NOT_FOUND);
-        }
-        return contentRepository.findById(contentId)
+        ContentEntity content = contentRepository.findById(contentId)
             .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
+
+        if(!content.getContentStatus().equals(ContentStatus.ACTIVATED)){
+            throw new CommonException(CONTENT_IS_DEACTIVATED);
+        }
+
+        return content;
     }
 
     private ContentDocument getContentDocument(Long contentId) {
