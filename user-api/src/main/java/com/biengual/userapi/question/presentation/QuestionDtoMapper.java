@@ -17,17 +17,17 @@ import com.biengual.userapi.question.domain.QuestionInfo;
  * @author 김영래
  */
 @Mapper(
-	componentModel = "spring",
-	injectionStrategy = InjectionStrategy.CONSTRUCTOR,
-	unmappedTargetPolicy = ReportingPolicy.ERROR
+    componentModel = "spring",
+    injectionStrategy = InjectionStrategy.CONSTRUCTOR,
+    unmappedTargetPolicy = ReportingPolicy.ERROR
 )
 public interface QuestionDtoMapper {
-	// Command <- Request
-	QuestionCommand.Create doCreate(Long contentId, QuestionRequestDto.CreateReq request);
+    // Command <- Request
+    QuestionCommand.Verify doVerify(String questionId, String answer);
 
-	// Response <- Info
-	QuestionResponseDto.ViewListRes ofViewListRes(QuestionInfo.DetailInfo info);
+    // Response <- Info
+    QuestionResponseDto.ViewListRes ofViewListRes(QuestionInfo.DetailInfo info);
 
-	// Entity <-> Info, Info <-> Info
+    // Entity <-> Info, Info <-> Info
 
 }
