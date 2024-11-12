@@ -1,6 +1,6 @@
 package com.biengual.userapi.learning.domain;
 
-import com.biengual.core.domain.entity.userlearninghistory.UserLearningHistoryEntity;
+import com.biengual.core.domain.entity.learning.UserLearningHistoryEntity;
 import lombok.Builder;
 
 import java.time.LocalDateTime;

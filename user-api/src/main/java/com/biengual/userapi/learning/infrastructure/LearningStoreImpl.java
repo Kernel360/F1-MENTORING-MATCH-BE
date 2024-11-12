@@ -2,7 +2,7 @@ package com.biengual.userapi.learning.infrastructure;
 
 import com.biengual.core.annotation.DataProvider;
 import com.biengual.core.domain.entity.content.ContentEntity;
-import com.biengual.core.domain.entity.userlearninghistory.UserLearningHistoryEntity;
+import com.biengual.core.domain.entity.learning.UserLearningHistoryEntity;
 import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.response.error.exception.CommonException;
 import com.biengual.userapi.content.domain.ContentRepository;
@@ -21,10 +21,13 @@ public class LearningStoreImpl implements LearningStore {
     private final UserLearningHistoryRepository userLearningHistoryRepository;
 
     // TODO: Validate를 앞단에서 하는 것이 좋은가? Validator 클래스를 만드는 것이 좋은가?
+    // TODO: 최근 검색을 위한 최근 학습 히스토리에 저장하는 로직이 변경될 수 있음
     // 학습 내역 쌓기
     @Override
     public void recordContentLearning(LearningCommand.UpdateLearningRate command) {
         validateLearnableContent(command.contentId(), command.userId());
+
+
 
         UserLearningHistoryEntity userLearningHistory =
             userLearningHistoryRepository.findByUserIdAndContentId(command.userId(), command.contentId())

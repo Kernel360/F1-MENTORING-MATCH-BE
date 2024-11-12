@@ -15,7 +15,7 @@ import java.util.Optional;
 
 import static com.biengual.core.domain.entity.content.QContentEntity.contentEntity;
 import static com.biengual.core.domain.entity.scrap.QScrapEntity.scrapEntity;
-import static com.biengual.core.domain.entity.userlearninghistory.QUserLearningHistoryEntity.userLearningHistoryEntity;
+import static com.biengual.core.domain.entity.learning.QUserLearningHistoryEntity.userLearningHistoryEntity;
 
 @Repository
 @RequiredArgsConstructor
