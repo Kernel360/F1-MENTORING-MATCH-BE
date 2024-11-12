@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class LearningCommand {
 
     @Builder
-    public record UpdateLearningRate(
+    public record RecordLearningRate(
         Long userId,
         Long contentId,
         BigDecimal learningRate

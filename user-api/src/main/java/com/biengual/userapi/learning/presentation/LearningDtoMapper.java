@@ -1,7 +1,7 @@
 package com.biengual.userapi.learning.presentation;
 
 import com.biengual.userapi.learning.domain.LearningCommand;
-import com.biengual.userapi.learning.presentation.dto.UpdateLearningRateDto;
+import com.biengual.userapi.learning.presentation.dto.RecordLearningRateDto;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
@@ -28,7 +28,7 @@ import org.mapstruct.ReportingPolicy;
 public interface LearningDtoMapper {
 
     @Mapping(target = "userId", source = "principal.id")
-    LearningCommand.UpdateLearningRate doUpdateLearningRate(
-        UpdateLearningRateDto.Request request, OAuth2UserPrincipal principal
+    LearningCommand.RecordLearningRate doRecordLearningRate(
+        RecordLearningRateDto.Request request, OAuth2UserPrincipal principal
     );
 }

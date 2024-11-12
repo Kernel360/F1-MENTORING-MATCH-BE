@@ -7,7 +7,7 @@ package com.biengual.userapi.learning.domain;
  */
 public interface LearningStore {
 
-    void recordLearningHistory(LearningCommand.UpdateLearningRate command);
+    void recordLearningHistory(LearningCommand.RecordLearningRate command);
 
-    void recordRecentLearningHistory(LearningCommand.UpdateLearningRate command);
+    void recordRecentLearningHistory(LearningCommand.RecordLearningRate command);
 }
