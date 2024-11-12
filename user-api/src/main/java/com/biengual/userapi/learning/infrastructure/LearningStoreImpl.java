@@ -7,6 +7,7 @@ import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.response.error.exception.CommonException;
 import com.biengual.userapi.content.domain.ContentRepository;
 import com.biengual.userapi.learning.domain.LearningCommand;
+import com.biengual.userapi.learning.domain.LearningHistoryRepository;
 import com.biengual.userapi.learning.domain.LearningStore;
 import com.biengual.userapi.learning.domain.UserLearningHistoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +19,20 @@ import static com.biengual.core.response.error.code.ContentErrorCode.CONTENT_NOT
 @RequiredArgsConstructor
 public class LearningStoreImpl implements LearningStore {
     private final ContentRepository contentRepository;
+    private final LearningHistoryRepository learningHistoryRepository;
     private final UserLearningHistoryRepository userLearningHistoryRepository;
+
+    // 모든 학습 내역 쌓기
+    @Override
+    public void recordLearningHistory(LearningCommand.UpdateLearningRate command) {
+        validateLearnableContent(command.contentId(), command.userId());
+
+        learningHistoryRepository.save(command.toLearningHistoryEntity());
+    }
 
     // TODO: Validate를 앞단에서 하는 것이 좋은가? Validator 클래스를 만드는 것이 좋은가?
     // TODO: 최근 검색을 위한 최근 학습 히스토리에 저장하는 로직이 변경될 수 있음
-    // 학습 내역 쌓기
+    // 최근 학습 내역 쌓기
     @Override
     public void recordRecentLearningHistory(LearningCommand.UpdateLearningRate command) {
         validateLearnableContent(command.contentId(), command.userId());

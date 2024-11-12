@@ -23,5 +23,14 @@ public class LearningCommand {
                 .recentLearningTime(LocalDateTime.now())
                 .build();
         }
+
+        public LearningHistoryEntity toLearningHistoryEntity() {
+            return LearningHistoryEntity.builder()
+                .userId(this.userId)
+                .contentId(this.contentId)
+                .learningRate(this.learningRate)
+                .learningTime(LocalDateTime.now())
+                .build();
+        }
     }
 }
