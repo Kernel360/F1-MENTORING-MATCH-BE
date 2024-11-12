@@ -79,7 +79,7 @@ public class PerplexityApiClient {
             + "각 문제에 대한 힌트도 추가해주세요."
             + "정답은 examples 기준 인덱스로 주세요"
             + "문제에 대한 각 유형은 다음과 같습니다: "
-            + "MATCH: 내용 일치, WORD: 영단어 뜻 한글로 맞추기, "
+            + "MATCH: 내용 일치, WORD: 영단어 뜻 맞추기, "
             + "BLANK: 문장의 빈칸에 들어갈 단어 맞추기, ORDER: 문장을 의미있는 세그먼트(최대 5개)로 나누어서 순서 맞추기";
 
         messages.put(new JSONObject().put("role", "user").put("content", prompt + quizOptions));
