@@ -16,6 +16,6 @@ public class LearningServiceImpl implements LearningService {
     @Override
     @Transactional
     public void updateLearningRate(LearningCommand.UpdateLearningRate command) {
-        learningStore.recordContentLearning(command);
+        learningStore.recordRecentLearningHistory(command);
     }
 }

@@ -6,5 +6,5 @@ package com.biengual.userapi.learning.domain;
  * @author 문찬욱
  */
 public interface LearningStore {
-    void recordContentLearning(LearningCommand.UpdateLearningRate command);
+    void recordRecentLearningHistory(LearningCommand.UpdateLearningRate command);
 }

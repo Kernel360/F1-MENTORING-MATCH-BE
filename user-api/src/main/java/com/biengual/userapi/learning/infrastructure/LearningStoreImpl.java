@@ -24,11 +24,8 @@ public class LearningStoreImpl implements LearningStore {
     // TODO: 최근 검색을 위한 최근 학습 히스토리에 저장하는 로직이 변경될 수 있음
     // 학습 내역 쌓기
     @Override
-    public void recordContentLearning(LearningCommand.UpdateLearningRate command) {
+    public void recordRecentLearningHistory(LearningCommand.UpdateLearningRate command) {
         validateLearnableContent(command.contentId(), command.userId());
-
-
-
         UserLearningHistoryEntity userLearningHistory =
             userLearningHistoryRepository.findByUserIdAndContentId(command.userId(), command.contentId())
                 .map(history -> {
