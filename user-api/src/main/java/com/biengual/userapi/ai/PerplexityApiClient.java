@@ -68,19 +68,21 @@ public class PerplexityApiClient {
         requestBody.put("model", "llama-3.1-sonar-large-128k-online");
 
         JSONArray messages = new JSONArray();
-        String quizOptions = " 다음 형식의 JSON만을 응답으로 제공해주세요. 다른 설명이나 텍스트는 포함하지 마세요: "
-            + "{"
-            + "  \"MATCH\": [{\"question\": \"...\", \"examples\": [\"...\", \"...\", \"...\", \"...\"], \"answer\": \"...\", \"hint\": \"...\"}],"
-            + "  \"WORD\": [{\"question\": \"...\", \"examples\": [\"...\", \"...\", \"...\", \"...\"], \"answer\": \"...\", \"hint\": \"...\"}],"
-            + "  \"BLANK\": [{\"question\": \"...\", \"examples\": [\"...\", \"...\", \"...\", \"...\"], \"answer\": \"...\", \"hint\": \"...\"}],"
-            + "  \"ORDER\": [{\"question\": \"...\", \"examples\": [\"...\", \"...\", \"...\", \"...\"], \"answer\": \"...\", \"hint\": \"...\"}]"
-            + "}"
-            + " 각 유형별로 학습에 도움이 되는 영어로 보기가 있는 객관식 문제를 3개씩 보기 4개씩 생성해주세요."
-            + "각 문제에 대한 힌트도 추가해주세요."
-            + "정답은 examples 기준 인덱스로 주세요"
-            + "문제에 대한 각 유형은 다음과 같습니다: "
-            + "MATCH: 내용 일치, WORD: 영단어 뜻 맞추기, "
-            + "BLANK: 문장의 빈칸에 들어갈 단어 맞추기, ORDER: 문장을 의미있는 세그먼트(최대 5개)로 나누어서 순서 맞추기";
+        String quizOptions = """
+             다음 형식의 JSON만을 응답으로 제공해주세요. 다른 설명이나 텍스트는 포함하지 마세요: 
+            {
+              "MATCH": [{"question": "...", "examples": ["...", "...", "...", "..."], "answer": "...", "hint": "..."}],
+              "WORD": [{"question": "...", "examples": ["...", "...", "...", "..."], "answer": "...", "hint": "..."}],
+              "BLANK": [{"question": "...", "examples": ["...", "...", "...", "..."], "answer": "...", "hint": "..."}],
+              "ORDER": [{"question": "...", "examples": ["...", "...", "...", "..."], "answer": "...", "hint": "..."}]
+            }
+            각 유형별로 학습에 도움이 되는 영어로 보기가 있는 객관식 문제를 3개씩 보기 4개씩 생성해주세요.
+            각 문제에 대한 힌트도 추가해주세요.
+            정답은 examples 기준 인덱스로 주세요.
+            문제에 대한 각 유형은 다음과 같습니다: 
+            MATCH: 내용 일치, WORD: 영단어 뜻 맞추기, 
+            BLANK: 문장의 빈칸에 들어갈 단어 맞추기, ORDER: 문장을 의미있는 세그먼트(최대 5개)로 나누어서 순서 맞추기
+            """;
 
         messages.put(new JSONObject().put("role", "user").put("content", prompt + quizOptions));
         requestBody.put("messages", messages);
