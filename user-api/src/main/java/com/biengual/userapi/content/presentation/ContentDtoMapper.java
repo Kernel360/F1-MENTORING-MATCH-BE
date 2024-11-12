@@ -1,5 +1,6 @@
 package com.biengual.userapi.content.presentation;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.mapstruct.*;
@@ -145,7 +146,7 @@ public interface ContentDtoMapper {
 	@Mapping(target = "scriptList", source = "userScripts")
 	@Mapping(target = "videoDurationInSeconds", source = "content.videoDuration")
 	ContentInfo.Detail buildDetail(
-		ContentEntity content, Boolean isScrapped, Integer learningRate, List<ContentInfo.UserScript> userScripts
+		ContentEntity content, Boolean isScrapped, BigDecimal learningRate, List<ContentInfo.UserScript> userScripts
 	);
 
 	// Internal Method =================================================================================================

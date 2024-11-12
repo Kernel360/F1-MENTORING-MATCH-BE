@@ -1,5 +1,6 @@
 package com.biengual.userapi.content.domain;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.biengual.core.domain.document.content.script.Script;
@@ -80,7 +81,7 @@ public class ContentInfo {
         Integer videoDurationInSeconds,
         Integer hits,
         Boolean isScrapped,
-        Integer learningRate,
+        BigDecimal learningRate,
         List<UserScript> scriptList
     ) {
     }

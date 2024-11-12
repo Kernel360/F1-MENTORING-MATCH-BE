@@ -3,6 +3,7 @@ package com.biengual.userapi.content.infrastructure;
 import static com.biengual.core.constant.RestrictionConstant.*;
 import static com.biengual.core.response.error.code.ContentErrorCode.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -139,10 +140,10 @@ public class ContentReaderImpl implements ContentReader {
 
             boolean isScrapped = scrapCustomRepository.existsScrap(command.userId(), command.contentId());
 
-            Integer learningRate =
+            BigDecimal learningRate =
                 userLearningHistoryCustomRepository
                     .findLearningRateByUserIdAndContentId(command.userId(), command.contentId())
-                    .orElse(0);
+                    .orElse(BigDecimal.ZERO);
 
             return contentDtoMapper.buildDetail(content, isScrapped, learningRate, userScripts);
         }
