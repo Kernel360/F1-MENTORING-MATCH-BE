@@ -1,4 +1,4 @@
-package com.biengual.core.domain.entity.categorylearninghistory;
+package com.biengual.core.domain.entity.learning;
 
 import com.biengual.core.domain.entity.BaseEntity;
 import jakarta.persistence.*;
