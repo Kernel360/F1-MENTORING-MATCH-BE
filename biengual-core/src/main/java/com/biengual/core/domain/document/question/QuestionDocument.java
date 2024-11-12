@@ -20,21 +20,26 @@ public class QuestionDocument extends MongoBaseDocument {
     private String question;
     private List<String> examples;
     private String answer;
+    private String hint;
     private QuestionType type;
 
     @Builder
-    public QuestionDocument(String question, List<String> examples, String answer, QuestionType type) {
+    public QuestionDocument(String question, List<String> examples, String answer, String hint, QuestionType type) {
         this.question = question;
         this.examples = examples;
         this.answer = answer;
+        this.hint = hint;
         this.type = type;
     }
 
-    public static QuestionDocument of(String question, List<String> examples, String answer, QuestionType type) {
+    public static QuestionDocument of(
+        String question, List<String> examples, String answer, String hint, QuestionType type
+    ) {
         return QuestionDocument.builder()
             .question(question)
             .examples(examples)
             .answer(answer)
+            .hint(hint)
             .type(type)
             .build();
     }

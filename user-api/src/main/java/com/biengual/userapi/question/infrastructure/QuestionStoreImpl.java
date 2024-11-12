@@ -104,16 +104,21 @@ public class QuestionStoreImpl implements QuestionStore {
         List<String> questionIds = new ArrayList<>();
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject matchItem = jsonArray.getJSONObject(i);
+
             String question = matchItem.getString("question");
+
             JSONArray exampleArray = matchItem.getJSONArray("examples");
             List<String> examples = IntStream.range(0, exampleArray.length())
                 .mapToObj(exampleArray::getString)
                 .collect(Collectors.toList());
+
             String answer = (type == QuestionType.ORDER)
                 ? matchItem.getJSONArray("answer").toList().toString()
                 : matchItem.get("answer").toString();
 
-            QuestionDocument questionDocument = QuestionDocument.of(question, examples, answer, type);
+            String hint =  matchItem.getString("hint");
+
+            QuestionDocument questionDocument = QuestionDocument.of(question, examples, answer, hint, type);
             questionDocumentRepository.save(questionDocument);
             questionIds.add(questionDocument.getId().toString());
         }
