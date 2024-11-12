@@ -168,14 +168,6 @@ public class ContentCustomRepository {
         return findAdminViewPage(pageable, predicate, orderSpecifiers);
     }
 
-    public ContentStatus findContentStatusByContentId(Long contentId) {
-        return queryFactory
-            .select(contentEntity.contentStatus)
-            .from(contentEntity)
-            .where(contentEntity.id.eq(contentId))
-            .fetchOne();
-    }
-
 
     // Internal Method =================================================================================================
 

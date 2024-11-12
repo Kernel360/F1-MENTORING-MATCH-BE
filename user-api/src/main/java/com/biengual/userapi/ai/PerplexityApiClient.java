@@ -72,14 +72,23 @@ public class PerplexityApiClient {
               "MATCH": [{"question": "...", "examples": ["...", "...", "...", "..."], "answer": "...", "hint": "..."}],
               "WORD": [{"question": "...", "examples": ["...", "...", "...", "..."], "answer": "...", "hint": "..."}],
               "BLANK": [{"question": "...", "examples": ["...", "...", "...", "..."], "answer": "...", "hint": "..."}],
-              "ORDER": [{"question": "...", "examples": ["...", "...", "...", "..."], "answer": "...", "hint": "..."}]
+              "ORDER": [{"question": "...", "examples": ["...", "...", "...", "..."], "answer": ["...", "...", "...", "..."], "hint": "..."}]
             }
-            각 유형별로 학습에 도움이 되는 영어로 보기가 있는 객관식 문제를 3개씩, 모든 문제에 대한 보기는 4개씩 생성해주세요.
+            제시한 글에 대해 학습에 도움이 되도록 각 유형별로 영어로 보기가 있는 객관식 문제를 3개씩, 모든 문제에 대한 보기는 4개씩 생성해주세요.
             각 문제에 대한 힌트도 추가해주세요.
             정답은 examples 기준 인덱스로 주세요.
             문제에 대한 각 유형은 다음과 같습니다.
-            MATCH: 내용 일치, WORD: 영단어 뜻 맞추기, 
-            BLANK: 문장의 빈칸에 들어갈 단어 맞추기, ORDER: 본문의 의미있는 4개의 문장에 대한 순서 맞추기
+            MATCH: 내용 일치, WORD: 영단어 뜻 맞추기, BLANK: 문장의 빈칸에 들어갈 단어 맞추기, 
+            ORDER: 다음 지침을 따라 문제를 생성하세요:
+                  1. 본문에서 중요한 완전한 영어 문장을 선택하세요.
+                  2. 이 문장을 4개의 의미 있는 부분으로 나누세요.
+                  3. 나눈 부분들을 무작위로 섞어 examples에 넣으세요.
+                  4. question에는 "Arrange the following parts to form a correct sentence:"를 넣으세요.
+                  5. answer에는 올바른 순서의 인덱스를 배열로 넣으세요. 예: [2, 0, 3, 1]
+                  6. 각 부분에서 불필요한 마침표나 대문자는 제거하세요.
+                  7. hint에는 문장의 의미나 구조에 대한 힌트를 제공하세요.
+
+           모든 유형의 문제에 대해 명확하고 정확한 문제와 보기를 생성하세요.
             """;
 
         messages.put(new JSONObject().put("role", "user").put("content", prompt + quizOptions));
