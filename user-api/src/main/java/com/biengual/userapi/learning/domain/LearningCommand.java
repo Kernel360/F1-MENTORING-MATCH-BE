@@ -1,8 +1,10 @@
 package com.biengual.userapi.learning.domain;
 
+import com.biengual.core.domain.entity.learning.LearningHistoryEntity;
 import com.biengual.core.domain.entity.learning.UserLearningHistoryEntity;
 import lombok.Builder;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class LearningCommand {
@@ -11,7 +13,7 @@ public class LearningCommand {
     public record UpdateLearningRate(
         Long userId,
         Long contentId,
-        Integer learningRate
+        BigDecimal learningRate
     ) {
         public UserLearningHistoryEntity toUserLearningHistoryEntity() {
             return UserLearningHistoryEntity.builder()
