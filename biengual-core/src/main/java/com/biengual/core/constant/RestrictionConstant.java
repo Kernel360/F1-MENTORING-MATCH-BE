@@ -8,4 +8,6 @@ package com.biengual.core.constant;
 public class RestrictionConstant {
     public static final int MAX_CATEGORY_SELECTION_LIMIT = 5;
     public static final int PERIOD_FOR_POINT_CONTENT_ACCESS = 7;
+    public static final int NUM_OF_EACH_QUIZ = 3;
+    public static final int NUM_OF_QUIZ_TYPE = 4;
 }

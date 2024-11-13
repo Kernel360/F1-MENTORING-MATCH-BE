@@ -11,8 +11,8 @@ public class QuestionInfo {
 	@Builder
 	public record Detail(
 		String question,
-		String questionKo,
-		String answer,
+		String questionId,
+		List<String> examples,
 		QuestionType type
 	) {
 	}

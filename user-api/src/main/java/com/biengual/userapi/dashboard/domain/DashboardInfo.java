@@ -14,6 +14,7 @@ public class DashboardInfo {
         ContentType contentType,
         String preScripts,
         String category,
+        Integer videoDurationInSeconds,
         Integer hits,
         Boolean isScrapped,
         Integer learningRate
