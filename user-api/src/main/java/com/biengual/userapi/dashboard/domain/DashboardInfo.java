@@ -45,5 +45,10 @@ public class DashboardInfo {
     public record CategoryLearningList(
         List<CategoryLearning> categoryLearningList
     ) {
+        public static CategoryLearningList of(List<CategoryLearning> categoryLearningList) {
+            return CategoryLearningList.builder()
+                .categoryLearningList(categoryLearningList)
+                .build();
+        }
     }
 }
