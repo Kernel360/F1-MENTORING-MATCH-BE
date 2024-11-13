@@ -13,7 +13,13 @@ public class DashboardServiceImpl implements DashboardService {
 
     // 최근 학습 컨텐츠 조회
     @Override
-    public DashboardInfo.RecentLearnings getRecentLearning(Long userId) {
-        return DashboardInfo.RecentLearnings.of(dashboardReader.findRecentLearning(userId));
+    public DashboardInfo.RecentLearningList getRecentLearning(Long userId) {
+        return DashboardInfo.RecentLearningList.of(dashboardReader.findRecentLearning(userId));
+    }
+
+    // 기간에 따른 카테고리별 학습량 조회
+    @Override
+    public DashboardInfo.CategoryLearningList getCategoryLearning(Long userId, String date) {
+        return dashboardReader.findCategoryLearning(userId, date);
     }
 }

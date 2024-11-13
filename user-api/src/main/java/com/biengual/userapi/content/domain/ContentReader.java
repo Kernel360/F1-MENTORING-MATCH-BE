@@ -2,6 +2,7 @@ package com.biengual.userapi.content.domain;
 
 import java.util.List;
 
+import com.biengual.core.domain.entity.content.ContentEntity;
 import com.biengual.core.util.PaginationInfo;
 
 /**
@@ -31,4 +32,6 @@ public interface ContentReader {
     boolean checkAlreadyReadable(ContentCommand.GetDetail command);
 
     void findContentIsActivated(Long contentId);
+
+    ContentEntity findLearnableContent(Long contentId, Long userId);
 }

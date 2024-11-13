@@ -113,6 +113,12 @@ dependencies {
     // Word2Vec
     implementation 'org.deeplearning4j:deeplearning4j-nlp:1.0.0-M2.1'
     implementation 'org.nd4j:nd4j-native-platform:1.0.0-M2.1'
+
+    // Perplexity AI
+    implementation 'com.theokanning.openai-gpt3-java:service:0.18.2'
+    // Unirest
+    implementation 'com.konghq:unirest-java:3.14.5'
+
 }
 
 tasks.named('test') {

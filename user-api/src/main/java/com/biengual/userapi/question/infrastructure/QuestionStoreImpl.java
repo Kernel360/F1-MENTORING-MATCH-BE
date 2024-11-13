@@ -1,143 +1,120 @@
 package com.biengual.userapi.question.infrastructure;
 
+import static com.biengual.core.constant.RestrictionConstant.*;
 import static com.biengual.core.response.error.code.ContentErrorCode.*;
+import static com.biengual.core.response.error.code.QuestionErrorCode.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.bson.types.ObjectId;
 
 import com.biengual.core.annotation.DataProvider;
 import com.biengual.core.domain.document.content.ContentDocument;
-import com.biengual.core.domain.entity.content.ContentEntity;
+import com.biengual.core.domain.document.content.script.Script;
 import com.biengual.core.domain.document.question.QuestionDocument;
+import com.biengual.core.domain.entity.content.ContentEntity;
 import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.enums.QuestionType;
 import com.biengual.core.response.error.exception.CommonException;
+import com.biengual.userapi.ai.PerplexityApiClient;
+import com.biengual.userapi.content.domain.ContentDocumentCustomRepository;
 import com.biengual.userapi.content.domain.ContentDocumentRepository;
 import com.biengual.userapi.content.domain.ContentRepository;
-import com.biengual.userapi.question.domain.QuestionCommand;
-import com.biengual.userapi.question.domain.QuestionRepository;
+import com.biengual.userapi.question.domain.QuestionDocumentRepository;
 import com.biengual.userapi.question.domain.QuestionStore;
+import com.biengual.userapi.validator.QuestionValidator;
 
+import kong.unirest.json.JSONArray;
+import kong.unirest.json.JSONObject;
 import lombok.RequiredArgsConstructor;
 
 @DataProvider
 @RequiredArgsConstructor
 public class QuestionStoreImpl implements QuestionStore {
-	private final QuestionRepository questionRepository;
-	private final ContentRepository contentRepository;
-	private final ContentDocumentRepository contentDocumentRepository;
+    private final QuestionDocumentRepository questionDocumentRepository;
+    private final ContentRepository contentRepository;
+    private final ContentDocumentRepository contentDocumentRepository;
+    private final ContentDocumentCustomRepository contentDocumentCustomRepository;
+    private final PerplexityApiClient apiClient;
+    private final QuestionValidator quizValidator;
 
-	@Override
-	public void createQuestion(QuestionCommand.Create command) {
-		Random random = new Random();
-		Set<Integer> randomIdxes = new HashSet<>();
-		List<String> questionIds = new ArrayList<>();
-		List<String> randomScripts = new ArrayList<>();
-		List<String> randomKoScripts = new ArrayList<>();
+    // 문제 생성 메소드
+    @Override
+    public void createQuestion(Long contentId) {
+        ContentDocument document = this.getContentDocument(contentId);
+        List<String> scripts = document.getScripts()
+            .stream()
+            .map(Script::getEnScript)
+            .toList();
 
-		ContentDocument contentDocument = this.getContentDocument(command);
+        JSONObject questions = apiClient.getQuestionsByPerplexity(String.join(" ", scripts));
 
-		while (randomIdxes.size() < command.questionNumOfBlank() + command.questionNumOfOrder()) {
-			randomIdxes.add(random.nextInt(contentDocument.getScripts().size()));
-		}
+        List<String> questionIds = this.parseQuestions(questions);
+        contentDocumentCustomRepository.updateQuestionIds(document.getId(), questionIds);
+        this.updateContentInfo(contentId);
+    }
 
-		for (Integer idx : randomIdxes) {
-			randomScripts.add(contentDocument.getScripts().get(idx).getEnScript());
-			randomKoScripts.add(contentDocument.getScripts().get(idx).getKoScript());
-		}
+    // Internal Methods ================================================================================================
+    private ContentDocument getContentDocument(Long contentId) {
+        ContentEntity content = getContentEntity(contentId);
+        quizValidator.verifyQuizAlreadyGenerated(content.getNumOfQuiz());
+        return contentDocumentRepository.findById(new ObjectId(content.getMongoContentId()))
+            .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
+    }
 
-		int start = 0;
-		// make blank question
-		questionIds.addAll(makeBlankQuestion(randomScripts, randomKoScripts, command.questionNumOfBlank()));
-		start += command.questionNumOfBlank();
+    private ContentEntity getContentEntity(Long contentId) {
+        return contentRepository.findById(contentId)
+            .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
+    }
 
-		// make word order question
-		questionIds.addAll(
-			makeWordOrderQuestion(randomScripts, randomKoScripts, start, command.questionNumOfOrder()));
+    // 문제 생성 시 ContentStatus 변경 및 ContentEntity 의 문제 갯수를 업데이트하는 메소드
+    private void updateContentInfo(Long contentId) {
+        ContentEntity content = getContentEntity(contentId);
+        content.updateStatus(ContentStatus.ACTIVATED);
+        content.updateNumOfQuiz(NUM_OF_EACH_QUIZ * NUM_OF_QUIZ_TYPE);
+    }
 
-		// update QuestionIds
-		contentDocument.updateQuestionIds(questionIds);
-		contentDocumentRepository.save(contentDocument);
-	}
+    // JSON 중에서 QuestionType 을 기준으로 파싱하는 메소드
+    private List<String> parseQuestions(JSONObject response) {
+        List<String> questionIds = new ArrayList<>();
+        // Extract the content from the response
+        for (QuestionType type : QuestionType.values()) {
+            JSONArray questions = response.getJSONArray(type.name());
+            if (questions == null) {
+                throw new CommonException(QUESTION_JSON_PARSING_ERROR);
+            }
+             questionIds.addAll(this.saveToMongo(questions, type));
+        }
+        return questionIds;
+    }
 
-	// Internal Methods ------------------------------------------------------------------------------------------------
-	private List<String> makeBlankQuestion(
-		List<String> randomScripts, List<String> randomKoScripts, Integer numOfBlank
-	) {
-		List<String> questionIds = new ArrayList<>();
-		Random random = new Random();
+    // QuestionType 에 해당하는 JSONArray 를 MongoDB 에 저장하는 메소드
+    private List<String> saveToMongo(JSONArray jsonArray, QuestionType type) {
+        List<String> questionIds = new ArrayList<>();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject matchItem = jsonArray.getJSONObject(i);
 
-		for (int i = 0; i < numOfBlank; ++i) {
-			String script = randomScripts.get(i);
-			String[] words = script.split("\\s+");
-			if (words.length > 1) {
-				int blankIndex = random.nextInt(words.length);
-				StringBuilder question = new StringBuilder();
-				for (int j = 0; j < words.length; j++) {
-					if (j == blankIndex) {
-						question.append("____");
-					} else {
-						question.append(words[j]);
-					}
-					if (j < words.length - 1) {
-						question.append(" ");
-					}
-				}
-				questionIds.add(
-					saveToMongo(
-						question.toString(), randomKoScripts.get(i), words[blankIndex], QuestionType.BLANK
-					)
-				);
-			}
-		}
-		return questionIds;
-	}
+            String question = matchItem.getString("question");
 
-	private List<String> makeWordOrderQuestion(
-		List<String> randomScripts, List<String> randomKoScripts, Integer start, Integer numOfOrder
-	) {
-		List<String> questionIds = new ArrayList<>();
-		Random random = new Random();
+            JSONArray exampleArray = matchItem.getJSONArray("examples");
+            List<String> examples = IntStream.range(0, exampleArray.length())
+                .mapToObj(exampleArray::getString)
+                .collect(Collectors.toList());
 
-		for (int i = start; i < start + numOfOrder; ++i) {
-			String script = randomScripts.get(i);
-			String[] words = script.split("\\s+");
-			if (words.length > 1) {
-				List<String> shuffledWords = new ArrayList<>(Arrays.asList(words));
-				Collections.shuffle(shuffledWords, random);
-				String question = String.join(" ", shuffledWords);
+            String answer = (type == QuestionType.ORDER)
+                ? matchItem.getJSONArray("answer").toList().toString()
+                : matchItem.get("answer").toString();
 
-				questionIds.add(
-					saveToMongo(question, randomKoScripts.get(i), script, QuestionType.ORDER)
-				);
-			}
-		}
-		return questionIds;
-	}
+            String hint =  matchItem.getString("hint");
 
-	private String saveToMongo(String question, String questionKo, String word, QuestionType type) {
+            QuestionDocument questionDocument = QuestionDocument.of(question, examples, answer, hint, type);
+            questionDocumentRepository.save(questionDocument);
+            questionIds.add(questionDocument.getId().toString());
+        }
 
-		QuestionDocument questionDocument = QuestionDocument.of(question, questionKo, word, type);
-		questionRepository.save(questionDocument);
-
-		return questionDocument.getId().toString();
-	}
-
-	private ContentDocument getContentDocument(QuestionCommand.Create command) {
-		ContentEntity content = contentRepository.findById(command.contentId())
-			.orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
-
-		content.updateStatus(ContentStatus.ACTIVATED);
-		content.updateNumOfQuiz(command.questionNumOfBlank() + command.questionNumOfOrder());
-
-		return contentDocumentRepository.findById(new ObjectId(content.getMongoContentId()))
-			.orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
-	}
+        return questionIds;
+    }
 }

@@ -14,19 +14,24 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class QuestionServiceImpl implements QuestionService {
-	private final QuestionReader questionReader;
-	private final QuestionStore questionStore;
+    private final QuestionReader questionReader;
+    private final QuestionStore questionStore;
 
-	@Override
-	@Transactional
-	public void createQuestion(QuestionCommand.Create command) {
-		questionStore.createQuestion(command);
-	}
+    @Override
+    @Transactional
+    public void createQuestion(Long contentId) {
+        questionStore.createQuestion(contentId);
+    }
 
-	@Override
-	@Transactional(readOnly = true)
-	public QuestionInfo.DetailInfo getQuestions(Long contentId) {
-		return QuestionInfo.DetailInfo.of(questionReader.getQuestions(contentId));
-	}
+    @Override
+    @Transactional(readOnly = true)
+    public QuestionInfo.DetailInfo getQuestions(Long contentId) {
+        return QuestionInfo.DetailInfo.of(questionReader.getQuestions(contentId));
+    }
 
+    @Override
+    @Transactional(readOnly = true)
+    public boolean verifyAnswer(QuestionCommand.Verify command) {
+        return questionReader.verifyAnswer(command);
+    }
 }

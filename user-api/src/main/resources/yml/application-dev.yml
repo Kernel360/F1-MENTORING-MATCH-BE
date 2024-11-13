@@ -56,3 +56,7 @@ spring:
 nlp:
   model:
     word2vec: ${WORD2VEC_MODEL_FILE_PATH}
+
+perplexity:
+  api-key: ${PERPLEXITY_API_KEY}
+  base-url: https://api.perplexity.ai

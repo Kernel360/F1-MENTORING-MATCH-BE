@@ -4,4 +4,5 @@ import java.util.List;
 
 public interface QuestionReader {
 	List<QuestionInfo.Detail> getQuestions(Long contentId);
+	boolean verifyAnswer(QuestionCommand.Verify command);
 }

@@ -108,6 +108,7 @@ public class ContentCustomRepository {
                     contentEntity.preScripts,
                     contentEntity.category.name,
                     contentEntity.hits,
+                    contentEntity.videoDuration,
                     getIsScrappedByUserId(userId),
                     getIsPointRequiredByUserIdAndContent(userId, contentEntity.id, contentEntity.createdAt)
                 )
@@ -167,6 +168,7 @@ public class ContentCustomRepository {
         return findAdminViewPage(pageable, predicate, orderSpecifiers);
     }
 
+
     // Internal Method =================================================================================================
 
     // TODO: Predicate를 사용하지 않는 경우에는 Override? 아니면 null로 입력?
@@ -183,6 +185,7 @@ public class ContentCustomRepository {
                     contentEntity.preScripts,
                     contentEntity.category.name,
                     contentEntity.hits,
+                    contentEntity.videoDuration,
                     getIsScrappedByUserId(userId),
                     getIsPointRequiredByUserIdAndContent(userId, contentEntity.id, contentEntity.createdAt)
                 )
@@ -217,6 +220,7 @@ public class ContentCustomRepository {
                     contentEntity.preScripts,
                     contentEntity.category.name,
                     contentEntity.hits,
+                    contentEntity.videoDuration,
                     getIsScrappedByUserId(userId),
                     getIsPointRequiredByUserIdAndContent(userId, contentEntity.id, contentEntity.createdAt)
                 )
@@ -252,6 +256,7 @@ public class ContentCustomRepository {
                     contentEntity.preScripts,
                     contentEntity.category.name,
                     contentEntity.hits,
+                    contentEntity.videoDuration,
                     getIsScrappedByUserId(userId),
                     getIsPointRequiredByUserIdAndContent(userId, contentEntity.id, contentEntity.createdAt)
                 )

@@ -28,23 +28,25 @@ public class ContentCommand {
 		String imgUrl,
 		String category,
 		ContentType contentType,
+		Integer videoDuration,
 		List<Script> script
 	) {
 		public ContentDocument toDocument() {
 			return ContentDocument.builder()
-				.scriptList(script)
+				.scriptList(this.script)
 				.build();
 		}
 
 		public ContentEntity toEntity(ObjectId contentScriptId, ContentType contentType, CategoryEntity category) {
 			return ContentEntity.builder()
 				.contentType(contentType)
-				.url(url)
-				.title(title)
-				.thumbnailUrl(imgUrl)
+				.url(this.url)
+				.title(this.title)
+				.thumbnailUrl(this.imgUrl)
 				.mongoContentId(contentScriptId.toString())
-				.preScripts(script)
+				.preScripts(this.script)
 				.category(category)
+				.videoDuration(this.videoDuration)
 				.build();
 
 		}

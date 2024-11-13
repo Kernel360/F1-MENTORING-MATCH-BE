@@ -1,4 +1,4 @@
-package com.biengual.core.domain.entity.userlearninghistory;
+package com.biengual.core.domain.entity.learning;
 
 import com.biengual.core.domain.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -7,13 +7,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "user_learning_history")
 @Getter
+@Entity
+@Table(name = "learning_history")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserLearningHistoryEntity extends BaseEntity {
+public class LearningHistoryEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,24 +25,20 @@ public class UserLearningHistoryEntity extends BaseEntity {
     @Column(nullable = false, columnDefinition = "bigint")
     private Long contentId;
 
-    @Column(nullable = false, columnDefinition = "tinyint")
-    private Integer learningRate;
+    @Column(nullable = false, precision = 5, scale = 2)
+    private BigDecimal learningRate;
 
     @Column(nullable = false)
-    private LocalDateTime recentLearningTime;
+    private LocalDateTime learningTime;
 
     @Builder
-    public UserLearningHistoryEntity(
-        Long userId, Long contentId, Integer learningRate, LocalDateTime recentLearningTime
+    public LearningHistoryEntity(
+        Long id, Long userId, Long contentId, BigDecimal learningRate, LocalDateTime learningTime
     ) {
+        this.id = id;
         this.userId = userId;
         this.contentId = contentId;
         this.learningRate = learningRate;
-        this.recentLearningTime = recentLearningTime;
-    }
-
-    public void record(Integer learningRate) {
-        this.learningRate = learningRate;
-        this.recentLearningTime = LocalDateTime.now();
+        this.learningTime = learningTime;
     }
 }

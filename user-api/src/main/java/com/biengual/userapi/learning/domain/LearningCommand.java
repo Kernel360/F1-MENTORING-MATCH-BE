@@ -1,24 +1,46 @@
 package com.biengual.userapi.learning.domain;
 
-import com.biengual.core.domain.entity.userlearninghistory.UserLearningHistoryEntity;
+import com.biengual.core.domain.entity.learning.CategoryLearningHistoryEntity;
+import com.biengual.core.domain.entity.learning.LearningHistoryEntity;
+import com.biengual.core.domain.entity.learning.RecentLearningHistoryEntity;
 import lombok.Builder;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class LearningCommand {
 
     @Builder
-    public record UpdateLearningRate(
+    public record RecordLearningRate(
         Long userId,
         Long contentId,
-        Integer learningRate
+        BigDecimal learningRate,
+        LocalDateTime learningTime
     ) {
-        public UserLearningHistoryEntity toUserLearningHistoryEntity() {
-            return UserLearningHistoryEntity.builder()
+        public RecentLearningHistoryEntity toUserLearningHistoryEntity() {
+            return RecentLearningHistoryEntity.builder()
+                .userId(this.userId)
+                .contentId(this.contentId)
+                .currentLearningRate(this.learningRate)
+                .completedLearningRate(this.learningRate)
+                .recentLearningTime(this.learningTime)
+                .build();
+        }
+
+        public LearningHistoryEntity toLearningHistoryEntity() {
+            return LearningHistoryEntity.builder()
                 .userId(this.userId)
                 .contentId(this.contentId)
                 .learningRate(this.learningRate)
-                .recentLearningTime(LocalDateTime.now())
+                .learningTime(this.learningTime)
+                .build();
+        }
+
+        public CategoryLearningHistoryEntity toCategoryLearningHistoryEntity(Long categoryId) {
+            return CategoryLearningHistoryEntity.builder()
+                .userId(this.userId)
+                .categoryId(categoryId)
+                .learningTime(this.learningTime)
                 .build();
         }
     }

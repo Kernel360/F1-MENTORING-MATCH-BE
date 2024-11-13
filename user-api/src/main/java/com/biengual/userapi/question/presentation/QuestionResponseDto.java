@@ -8,10 +8,11 @@ import lombok.Builder;
 
 public class QuestionResponseDto {
 
+	@Builder
 	public record View(
 		String question,
-		String questionKo,
-		String answer,
+		String questionId,
+		List<String> examples,
 		QuestionType type
 	) {
 	}

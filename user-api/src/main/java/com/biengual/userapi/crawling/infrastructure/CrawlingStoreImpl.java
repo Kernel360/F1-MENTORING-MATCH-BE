@@ -109,6 +109,7 @@ public class CrawlingStoreImpl implements CrawlingStore {
             .imgUrl(getThumbnailUrl(snippetNode.path("thumbnails")))
             .category(category)
             .contentType(ContentType.LISTENING)
+            .videoDuration((int) duration.getSeconds())
             .script(scripts)
             .build();
     }
