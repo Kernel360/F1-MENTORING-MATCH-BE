@@ -11,6 +11,12 @@ import org.springframework.stereotype.Service;
 public class DashboardServiceImpl implements DashboardService {
     private final DashboardReader dashboardReader;
 
+    // 최근 학습 컨텐츠 1개 요약하여 조회
+    @Override
+    public DashboardInfo.RecentLearningSummary getRecentLearningSummary(Long userId) {
+        return dashboardReader.findRecentLearningSummary(userId);
+    }
+
     // 최근 학습 컨텐츠 조회
     @Override
     public DashboardInfo.RecentLearningList getRecentLearning(Long userId) {
