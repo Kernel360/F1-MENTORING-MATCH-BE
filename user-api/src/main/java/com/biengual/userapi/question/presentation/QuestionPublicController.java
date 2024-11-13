@@ -2,7 +2,6 @@ package com.biengual.userapi.question.presentation;
 
 import static com.biengual.core.response.success.QuestionSuccessCode.*;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,9 +32,6 @@ import lombok.RequiredArgsConstructor;
 public class QuestionPublicController {
     private final QuestionDtoMapper questionDtoMapper;
     private final QuestionFacade questionFacade;
-
-    @Value("${custom-header.biengual.question}")
-    private String savedHeader;     // 문제에 대한 정답을 주소창을 통해 조회하는걸 방지하기 위한 커스텀 헤더
 
     @GetMapping("/view/{contentId}")
     @Operation(summary = "문제 조회", description = "컨텐츠 Id를 이용해 문제를 조회합니다.")

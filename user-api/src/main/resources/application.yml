@@ -73,8 +73,3 @@ microsoft:
   location: ${TRANSLATOR_TEXT_LOCATION}
   endpoint: ${TRANSLATOR_TEXT_ENDPOINT}
   key: ${TRANSLATOR_TEXT_SUBSCRIPTION_KEY}
-
-# Custom Header
-custom-header:
-  biengual:
-    question: ${BIENGUAL_CUSTOM_HEADER}
