@@ -9,4 +9,6 @@ import java.util.List;
  */
 public interface DashboardReader {
     List<DashboardInfo.RecentLearning> findRecentLearning(Long userId);
+
+    DashboardInfo.CategoryLearningList findCategoryLearning(Long userId, String date);
 }

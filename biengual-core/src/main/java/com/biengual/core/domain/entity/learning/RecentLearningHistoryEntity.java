@@ -47,9 +47,10 @@ public class RecentLearningHistoryEntity extends BaseEntity {
         this.recentLearningTime = recentLearningTime;
     }
 
-    public void record(BigDecimal learningRate) {
+    public void record(BigDecimal learningRate, LocalDateTime recentLearningTime) {
         this.currentLearningRate = learningRate;
         this.completedLearningRate = this.completedLearningRate.compareTo(learningRate) < 0
             ? learningRate : this.completedLearningRate;
+        this.recentLearningTime = recentLearningTime;
     }
 }

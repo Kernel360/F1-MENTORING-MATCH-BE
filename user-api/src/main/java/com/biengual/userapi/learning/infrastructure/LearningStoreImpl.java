@@ -29,7 +29,7 @@ public class LearningStoreImpl implements LearningStore {
         RecentLearningHistoryEntity userLearningHistory =
             recentLearningHistoryRepository.findByUserIdAndContentId(command.userId(), command.contentId())
                 .map(history -> {
-                    history.record(command.learningRate());
+                    history.record(command.learningRate(), command.learningTime());
                     return history;
                 })
                 .orElseGet(command::toUserLearningHistoryEntity);
@@ -42,17 +42,6 @@ public class LearningStoreImpl implements LearningStore {
     public void recordCategoryLearningHistory(LearningCommand.RecordLearningRate command, ContentEntity content) {
         Long categoryId = content.getCategory().getId();
 
-        if (validateAlreadyLearningInMonth(command)) {
-            return;
-        }
-
         categoryLearningHistoryRepository.save(command.toCategoryLearningHistoryEntity(categoryId));
-    }
-
-    // Internal Method =================================================================================================
-
-    private boolean validateAlreadyLearningInMonth(LearningCommand.RecordLearningRate command) {
-        return learningHistoryCustomRepository
-            .existsByUserIdAndContentIdInMonth(command.userId(), command.contentId(), command.learningTime());
     }
 }

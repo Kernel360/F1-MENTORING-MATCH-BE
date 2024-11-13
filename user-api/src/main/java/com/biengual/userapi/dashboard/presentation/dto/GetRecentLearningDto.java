@@ -18,7 +18,8 @@ public class GetRecentLearningDto {
         String duration,
         Integer hits,
         Boolean isScrapped,
-        BigDecimal learningRate
+        BigDecimal currentLearningRate,
+        BigDecimal completedLearningRate
     ) {
     }
 

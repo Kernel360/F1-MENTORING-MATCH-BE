@@ -18,17 +18,38 @@ public class DashboardInfo {
         Integer videoDurationInSeconds,
         Integer hits,
         Boolean isScrapped,
-        BigDecimal learningRate
+        BigDecimal currentLearningRate,
+        BigDecimal completedLearningRate
     ) {
     }
 
     @Builder
-    public record RecentLearnings(
+    public record RecentLearningList(
         List<RecentLearning> recentLearningPreview
     ) {
-        public static RecentLearnings of(List<RecentLearning> recentLearnings) {
-            return RecentLearnings.builder()
-                .recentLearningPreview(recentLearnings)
+        public static RecentLearningList of(List<RecentLearning> recentLearningList) {
+            return RecentLearningList.builder()
+                .recentLearningPreview(recentLearningList)
+                .build();
+        }
+    }
+
+    public record CategoryLearning(
+        Long categoryId,
+        String categoryName,
+        Long count
+    ) {
+    }
+
+    @Builder
+    public record CategoryLearningList(
+        Long totalCount,
+        List<CategoryLearning> categoryLearningList
+    ) {
+        public static CategoryLearningList of(Long totalCount, List<CategoryLearning> categoryLearningList) {
+            return CategoryLearningList.builder()
+                .totalCount(totalCount)
+                .categoryLearningList(categoryLearningList)
                 .build();
         }
     }
