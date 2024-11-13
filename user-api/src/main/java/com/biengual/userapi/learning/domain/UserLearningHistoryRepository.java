@@ -1,6 +1,6 @@
 package com.biengual.userapi.learning.domain;
 
-import com.biengual.core.domain.entity.learning.UserLearningHistoryEntity;
+import com.biengual.core.domain.entity.learning.RecentLearningHistoryEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
@@ -10,6 +10,6 @@ import java.util.Optional;
  *
  * @author 문찬욱
  */
-public interface UserLearningHistoryRepository extends JpaRepository<UserLearningHistoryEntity, Long> {
-    Optional<UserLearningHistoryEntity> findByUserIdAndContentId(Long userId, Long contentId);
+public interface UserLearningHistoryRepository extends JpaRepository<RecentLearningHistoryEntity, Long> {
+    Optional<RecentLearningHistoryEntity> findByUserIdAndContentId(Long userId, Long contentId);
 }

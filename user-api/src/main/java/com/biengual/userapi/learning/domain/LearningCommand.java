@@ -2,7 +2,7 @@ package com.biengual.userapi.learning.domain;
 
 import com.biengual.core.domain.entity.learning.CategoryLearningHistoryEntity;
 import com.biengual.core.domain.entity.learning.LearningHistoryEntity;
-import com.biengual.core.domain.entity.learning.UserLearningHistoryEntity;
+import com.biengual.core.domain.entity.learning.RecentLearningHistoryEntity;
 import lombok.Builder;
 
 import java.math.BigDecimal;
@@ -17,11 +17,12 @@ public class LearningCommand {
         BigDecimal learningRate,
         LocalDateTime learningTime
     ) {
-        public UserLearningHistoryEntity toUserLearningHistoryEntity() {
-            return UserLearningHistoryEntity.builder()
+        public RecentLearningHistoryEntity toUserLearningHistoryEntity() {
+            return RecentLearningHistoryEntity.builder()
                 .userId(this.userId)
                 .contentId(this.contentId)
-                .learningRate(this.learningRate)
+                .currentLearningRate(this.learningRate)
+                .completedLearningRate(this.learningRate)
                 .recentLearningTime(this.learningTime)
                 .build();
         }

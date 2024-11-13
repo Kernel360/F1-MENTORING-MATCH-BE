@@ -15,22 +15,22 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.biengual.core.domain.entity.content.QContentEntity.contentEntity;
+import static com.biengual.core.domain.entity.learning.QRecentLearningHistoryEntity.recentLearningHistoryEntity;
 import static com.biengual.core.domain.entity.scrap.QScrapEntity.scrapEntity;
-import static com.biengual.core.domain.entity.learning.QUserLearningHistoryEntity.userLearningHistoryEntity;
 
 @Repository
 @RequiredArgsConstructor
 public class UserLearningHistoryCustomRepository {
     private final JPAQueryFactory queryFactory;
 
-    // 해당 컨텐츠의 유저 학습률을 조회하기 위한 쿼리
+    // 해당 컨텐츠의 유저 현재 학습률을 조회하기 위한 쿼리
     public Optional<BigDecimal> findLearningRateByUserIdAndContentId(Long userId, Long contentId) {
         return Optional.ofNullable(
             queryFactory
-            .select(userLearningHistoryEntity.learningRate)
-            .from(userLearningHistoryEntity)
-                .where(userLearningHistoryEntity.userId.eq(userId)
-                    .and(userLearningHistoryEntity.contentId.eq(contentId)))
+            .select(recentLearningHistoryEntity.currentLearningRate)
+            .from(recentLearningHistoryEntity)
+                .where(recentLearningHistoryEntity.userId.eq(userId)
+                    .and(recentLearningHistoryEntity.contentId.eq(contentId)))
             .fetchOne()
         );
     }
@@ -51,15 +51,15 @@ public class UserLearningHistoryCustomRepository {
                     contentEntity.videoDuration,
                     contentEntity.hits,
                     getIsScrappedByUserId(userId),
-                    userLearningHistoryEntity.learningRate
+                    recentLearningHistoryEntity.completedLearningRate
                 )
             )
-            .from(userLearningHistoryEntity)
+            .from(recentLearningHistoryEntity)
             .innerJoin(contentEntity)
-            .on(userLearningHistoryEntity.contentId.eq(contentEntity.id))
-            .where(userLearningHistoryEntity.userId.eq(userId))
+            .on(recentLearningHistoryEntity.contentId.eq(contentEntity.id))
+            .where(recentLearningHistoryEntity.userId.eq(userId))
             .limit(8)
-            .orderBy(userLearningHistoryEntity.learningRate.desc())
+            .orderBy(recentLearningHistoryEntity.recentLearningTime.desc())
             .fetch();
     }
 
