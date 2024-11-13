@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 
 import static com.biengual.core.domain.entity.learning.QLearningHistoryEntity.learningHistoryEntity;
 
@@ -14,10 +15,9 @@ import static com.biengual.core.domain.entity.learning.QLearningHistoryEntity.le
 public class LearningHistoryCustomRepository {
     private final JPAQueryFactory queryFactory;
 
-    public boolean existsByUserIdAndContentIdInMonth(Long userId, Long contentId, LocalDateTime localDateTime) {
-
-        LocalDateTime startOfMonth = PeriodUtil.getStartOfMonth(localDateTime);
-        LocalDateTime endOfMonth = PeriodUtil.getEndOfMonth(localDateTime);
+    public boolean existsByUserIdAndContentIdInMonth(Long userId, Long contentId, YearMonth yearMonth) {
+        LocalDateTime startOfMonth = PeriodUtil.getStartOfMonth(yearMonth);
+        LocalDateTime endOfMonth = PeriodUtil.getEndOfMonth(yearMonth);
 
         return queryFactory
             .select(learningHistoryEntity.id)
