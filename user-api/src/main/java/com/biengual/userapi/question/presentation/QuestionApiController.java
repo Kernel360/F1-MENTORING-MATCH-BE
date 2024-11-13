@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.biengual.core.response.ResponseEntityFactory;
 import com.biengual.core.swagger.SwaggerVoidReturn;
 import com.biengual.userapi.question.application.QuestionFacade;
-import com.biengual.userapi.question.application.QuestionServiceImpl;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -27,7 +26,6 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "Question - private API", description = "문제 생성 회원전용 API")
 public class QuestionApiController {
     private final QuestionFacade questionFacade;
-    private final QuestionServiceImpl questionServiceImpl;
 
     @PostMapping("/create/{contentId}")
     @Operation(summary = "어드민 - 문제 생성", description = "어드민 회원이 컨텐츠에 대한 문제를 새로 생성합니다.")
@@ -49,15 +47,6 @@ public class QuestionApiController {
     ) {
         questionFacade.createQuestion(contentId);
 
-        return ResponseEntityFactory.toResponseEntity(QUESTION_CREATE_SUCCESS);
-    }
-
-    // TODO: 일회용으로 쓰고 삭제 예정
-    @PostMapping("/delete")
-    @Operation(summary = "어드민 - 문제 삭제 - 기존 문제 삭제용 API - 사용 금지", description = "기존 문제 삭제")
-    public ResponseEntity<Object> deleteQuestion(
-    ) {
-        questionServiceImpl.deleteQuestions();
         return ResponseEntityFactory.toResponseEntity(QUESTION_CREATE_SUCCESS);
     }
 }

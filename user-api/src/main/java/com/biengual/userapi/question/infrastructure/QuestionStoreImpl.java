@@ -57,14 +57,6 @@ public class QuestionStoreImpl implements QuestionStore {
         this.updateContentInfo(contentId);
     }
 
-    // TODO: 일회용으로 쓰고 삭제 예정
-    @Override
-    public void deleteQuestions() {
-        questionDocumentRepository.deleteAll();
-        contentDocumentCustomRepository.deleteAllQuestionIds();
-        contentRepository.findAll().forEach(ContentEntity::updateToZero);
-    }
-
     // Internal Methods ================================================================================================
     private ContentDocument getContentDocument(Long contentId) {
         ContentEntity content = getContentEntity(contentId);
