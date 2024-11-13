@@ -20,6 +20,6 @@ public class DashboardServiceImpl implements DashboardService {
     // 기간에 따른 카테고리별 학습량 조회
     @Override
     public DashboardInfo.CategoryLearningList getCategoryLearning(Long userId, String date) {
-        return DashboardInfo.CategoryLearningList.of(dashboardReader.findCategoryLearning(userId, date));
+        return dashboardReader.findCategoryLearning(userId, date);
     }
 }
