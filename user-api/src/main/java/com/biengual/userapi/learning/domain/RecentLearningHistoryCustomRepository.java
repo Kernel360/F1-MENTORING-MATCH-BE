@@ -20,7 +20,7 @@ import static com.biengual.core.domain.entity.scrap.QScrapEntity.scrapEntity;
 
 @Repository
 @RequiredArgsConstructor
-public class UserLearningHistoryCustomRepository {
+public class RecentLearningHistoryCustomRepository {
     private final JPAQueryFactory queryFactory;
 
     // 해당 컨텐츠의 유저 현재 학습률을 조회하기 위한 쿼리

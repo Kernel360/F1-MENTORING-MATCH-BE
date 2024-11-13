@@ -27,7 +27,7 @@ import com.biengual.userapi.content.domain.ContentReader;
 import com.biengual.userapi.content.domain.ContentRepository;
 import com.biengual.userapi.content.domain.UserContentBookmarks;
 import com.biengual.userapi.content.presentation.ContentDtoMapper;
-import com.biengual.userapi.learning.domain.UserLearningHistoryCustomRepository;
+import com.biengual.userapi.learning.domain.RecentLearningHistoryCustomRepository;
 import com.biengual.userapi.payment.domain.PaymentReader;
 import com.biengual.userapi.scrap.domain.ScrapCustomRepository;
 
@@ -42,7 +42,7 @@ public class ContentReaderImpl implements ContentReader {
     private final ContentDocumentRepository contentDocumentRepository;
     private final BookmarkRepository bookmarkRepository;
     private final ScrapCustomRepository scrapCustomRepository;
-    private final UserLearningHistoryCustomRepository userLearningHistoryCustomRepository;
+    private final RecentLearningHistoryCustomRepository recentLearningHistoryCustomRepository;
     private final PaymentReader paymentReader;
 
     // 스크랩 많은 순 컨텐츠 프리뷰 조회
@@ -141,7 +141,7 @@ public class ContentReaderImpl implements ContentReader {
             boolean isScrapped = scrapCustomRepository.existsScrap(command.userId(), command.contentId());
 
             BigDecimal learningRate =
-                userLearningHistoryCustomRepository
+                recentLearningHistoryCustomRepository
                     .findLearningRateByUserIdAndContentId(command.userId(), command.contentId())
                     .orElse(BigDecimal.ZERO);
 

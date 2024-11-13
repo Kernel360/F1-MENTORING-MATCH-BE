@@ -10,6 +10,6 @@ import java.util.Optional;
  *
  * @author 문찬욱
  */
-public interface UserLearningHistoryRepository extends JpaRepository<RecentLearningHistoryEntity, Long> {
+public interface RecentLearningHistoryRepository extends JpaRepository<RecentLearningHistoryEntity, Long> {
     Optional<RecentLearningHistoryEntity> findByUserIdAndContentId(Long userId, Long contentId);
 }

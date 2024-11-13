@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 public class LearningStoreImpl implements LearningStore {
     private final LearningHistoryRepository learningHistoryRepository;
     private final LearningHistoryCustomRepository learningHistoryCustomRepository;
-    private final UserLearningHistoryRepository userLearningHistoryRepository;
+    private final RecentLearningHistoryRepository recentLearningHistoryRepository;
     private final CategoryLearningHistoryRepository categoryLearningHistoryRepository;
 
     // 모든 학습 내역 쌓기
@@ -27,14 +27,14 @@ public class LearningStoreImpl implements LearningStore {
     @Override
     public void recordRecentLearningHistory(LearningCommand.RecordLearningRate command) {
         RecentLearningHistoryEntity userLearningHistory =
-            userLearningHistoryRepository.findByUserIdAndContentId(command.userId(), command.contentId())
+            recentLearningHistoryRepository.findByUserIdAndContentId(command.userId(), command.contentId())
                 .map(history -> {
                     history.record(command.learningRate());
                     return history;
                 })
                 .orElseGet(command::toUserLearningHistoryEntity);
 
-        userLearningHistoryRepository.save(userLearningHistory);
+        recentLearningHistoryRepository.save(userLearningHistory);
     }
 
     // 카테고리별 학습 내역 쌓기
