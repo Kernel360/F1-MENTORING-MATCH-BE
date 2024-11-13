@@ -111,11 +111,6 @@ public class ContentEntity extends BaseEntity {
 		this.numOfQuiz += numOfQuiz;
 	}
 
-	// TODO: 일회용으로 쓰고 삭제 예정
-	public void updateToZero() {
-		this.numOfQuiz = 0;
-	}
-
 	public boolean isRecentContent() {
 		LocalDateTime createdAt = getCreatedAt();
 		LocalDate recentThreshold = LocalDate.now().minusDays(PERIOD_FOR_POINT_CONTENT_ACCESS);

@@ -34,10 +34,4 @@ public class QuestionServiceImpl implements QuestionService {
     public boolean verifyAnswer(QuestionCommand.Verify command) {
         return questionReader.verifyAnswer(command);
     }
-
-    // TODO: 일회용으로 쓰고 삭제 예정
-    @Transactional
-    public void deleteQuestions() {
-        questionStore.deleteQuestions();
-    }
 }
