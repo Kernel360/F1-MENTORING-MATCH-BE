@@ -11,10 +11,10 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "user_learning_history")
+@Table(name = "recent_learning_history")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserLearningHistoryEntity extends BaseEntity {
+public class RecentLearningHistoryEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,24 +25,31 @@ public class UserLearningHistoryEntity extends BaseEntity {
     @Column(nullable = false, columnDefinition = "bigint")
     private Long contentId;
 
-    @Column(nullable = false, columnDefinition = "tinyint")
-    private BigDecimal learningRate;
+    @Column(nullable = false, precision = 5, scale = 2)
+    private BigDecimal currentLearningRate;
+
+    @Column(nullable = false, precision = 5, scale = 2)
+    private BigDecimal completedLearningRate;
 
     @Column(nullable = false)
     private LocalDateTime recentLearningTime;
 
     @Builder
-    public UserLearningHistoryEntity(
-        Long userId, Long contentId, BigDecimal learningRate, LocalDateTime recentLearningTime
+    public RecentLearningHistoryEntity(
+        Long id, Long userId, Long contentId,
+        BigDecimal currentLearningRate, BigDecimal completedLearningRate, LocalDateTime recentLearningTime
     ) {
+        this.id = id;
         this.userId = userId;
         this.contentId = contentId;
-        this.learningRate = learningRate;
+        this.currentLearningRate = currentLearningRate;
+        this.completedLearningRate = completedLearningRate;
         this.recentLearningTime = recentLearningTime;
     }
 
     public void record(BigDecimal learningRate) {
-        this.learningRate = learningRate;
-        this.recentLearningTime = LocalDateTime.now();
+        this.currentLearningRate = learningRate;
+        this.completedLearningRate = this.completedLearningRate.compareTo(learningRate) < 0
+            ? learningRate : this.completedLearningRate;
     }
 }
