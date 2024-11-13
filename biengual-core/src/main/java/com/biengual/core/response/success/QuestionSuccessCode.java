@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 public enum QuestionSuccessCode implements SuccessCode {
 	QUESTION_CREATE_SUCCESS(HttpStatus.CREATED, QuestionServiceStatus.QUESTION_CREATE_SUCCESS, "문제 생성 성공"),
 	QUESTION_VIEW_SUCCESS(HttpStatus.OK, QuestionServiceStatus.QUESTION_VIEW_SUCCESS, "문제 조회 성공"),
+	QUESTION_ANSWER_VIEW_SUCCESS(HttpStatus.OK, QuestionServiceStatus.QUESTION_ANSWER_VIEW_SUCCESS, "문제 정답 조회 성공"),
 
 	;
 
