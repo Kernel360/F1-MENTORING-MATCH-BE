@@ -36,6 +36,24 @@ public class RecentLearningHistoryCustomRepository {
         );
     }
 
+    // 최근 학습 컨텐츠 1개를 요약하여 조회하기 위한 쿼리
+    public DashboardInfo.RecentLearningSummary findRecentLearningSummaryByUserId(Long userId) {
+        return queryFactory
+            .select(
+                Projections.constructor(
+                    DashboardInfo.RecentLearningSummary.class,
+                    contentEntity.title,
+                    recentLearningHistoryEntity.completedLearningRate
+                )
+            )
+            .from(recentLearningHistoryEntity)
+            .innerJoin(contentEntity)
+            .on(recentLearningHistoryEntity.contentId.eq(contentEntity.id))
+            .where(recentLearningHistoryEntity.userId.eq(userId))
+            .orderBy(recentLearningHistoryEntity.recentLearningTime.desc())
+            .fetchFirst();
+    }
+
     // TODO: 8개로 고정할 것인지?
     // 최근 학습 컨텐츠 8개를 학습률과 함께 조회하기 위한 쿼리
     public List<DashboardInfo.RecentLearning> findRecentLearningTop8ByUserId(Long userId) {

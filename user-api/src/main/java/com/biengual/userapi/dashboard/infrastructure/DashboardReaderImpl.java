@@ -17,6 +17,11 @@ public class DashboardReaderImpl implements DashboardReader {
     private final RecentLearningHistoryCustomRepository recentLearningHistoryCustomRepository;
     private final CategoryLearningHistoryCustomRepository categoryLearningHistoryCustomRepository;
 
+    @Override
+    public DashboardInfo.RecentLearningSummary findRecentLearningSummary(Long userId) {
+        return recentLearningHistoryCustomRepository.findRecentLearningSummaryByUserId(userId);
+    }
+
     // 최근 학습 컨텐츠 조회
     @Override
     public List<DashboardInfo.RecentLearning> findRecentLearning(Long userId) {
