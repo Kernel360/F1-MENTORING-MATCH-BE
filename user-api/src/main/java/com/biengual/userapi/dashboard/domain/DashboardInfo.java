@@ -23,13 +23,27 @@ public class DashboardInfo {
     }
 
     @Builder
-    public record RecentLearnings(
+    public record RecentLearningList(
         List<RecentLearning> recentLearningPreview
     ) {
-        public static RecentLearnings of(List<RecentLearning> recentLearnings) {
-            return RecentLearnings.builder()
-                .recentLearningPreview(recentLearnings)
+        public static RecentLearningList of(List<RecentLearning> recentLearningList) {
+            return RecentLearningList.builder()
+                .recentLearningPreview(recentLearningList)
                 .build();
         }
+    }
+
+    public record CategoryLearning(
+        Long categoryId,
+        String categoryName,
+        Integer count,
+        BigDecimal ratio
+    ) {
+    }
+
+    @Builder
+    public record CategoryLearningList(
+        List<CategoryLearning> categoryLearningList
+    ) {
     }
 }
