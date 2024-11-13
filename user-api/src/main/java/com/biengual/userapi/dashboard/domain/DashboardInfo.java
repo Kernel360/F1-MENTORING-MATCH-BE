@@ -3,6 +3,7 @@ package com.biengual.userapi.dashboard.domain;
 import com.biengual.core.enums.ContentType;
 import lombok.Builder;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class DashboardInfo {
@@ -17,7 +18,7 @@ public class DashboardInfo {
         Integer videoDurationInSeconds,
         Integer hits,
         Boolean isScrapped,
-        Integer learningRate
+        BigDecimal learningRate
     ) {
     }
 

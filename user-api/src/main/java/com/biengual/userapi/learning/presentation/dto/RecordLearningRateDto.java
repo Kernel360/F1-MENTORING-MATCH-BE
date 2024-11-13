@@ -1,9 +1,11 @@
 package com.biengual.userapi.learning.presentation.dto;
 
-public class UpdateLearningRateDto {
+import java.math.BigDecimal;
+
+public class RecordLearningRateDto {
     public record Request(
        Long contentId,
-       Integer learningRate
+       BigDecimal learningRate
     ) {
     }
 }
