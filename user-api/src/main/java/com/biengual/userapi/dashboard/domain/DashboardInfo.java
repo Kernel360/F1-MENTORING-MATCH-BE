@@ -18,7 +18,8 @@ public class DashboardInfo {
         Integer videoDurationInSeconds,
         Integer hits,
         Boolean isScrapped,
-        BigDecimal learningRate
+        BigDecimal currentLearningRate,
+        BigDecimal completedLearningRate
     ) {
     }
 

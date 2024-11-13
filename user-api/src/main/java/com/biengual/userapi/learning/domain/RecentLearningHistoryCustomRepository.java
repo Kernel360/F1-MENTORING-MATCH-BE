@@ -1,6 +1,7 @@
 package com.biengual.userapi.learning.domain;
 
 
+import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.dashboard.domain.DashboardInfo;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
@@ -51,6 +52,7 @@ public class RecentLearningHistoryCustomRepository {
                     contentEntity.videoDuration,
                     contentEntity.hits,
                     getIsScrappedByUserId(userId),
+                    recentLearningHistoryEntity.currentLearningRate,
                     recentLearningHistoryEntity.completedLearningRate
                 )
             )
