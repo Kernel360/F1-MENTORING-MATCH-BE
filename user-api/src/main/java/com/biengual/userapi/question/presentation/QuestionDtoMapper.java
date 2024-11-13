@@ -23,7 +23,7 @@ import com.biengual.userapi.question.domain.QuestionInfo;
 )
 public interface QuestionDtoMapper {
     // Command <- Request
-    QuestionCommand.Verify doVerify(String questionId, String answer);
+    QuestionCommand.Verify doVerify(VerifyDto.Request request);
 
     // Response <- Info
     QuestionResponseDto.ViewListRes ofViewListRes(QuestionInfo.DetailInfo info);
