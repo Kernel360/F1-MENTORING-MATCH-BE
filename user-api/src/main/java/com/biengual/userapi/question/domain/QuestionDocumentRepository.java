@@ -4,6 +4,6 @@ import com.biengual.core.domain.document.question.QuestionDocument;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface QuestionRepository extends MongoRepository<QuestionDocument, ObjectId> {
+public interface QuestionDocumentRepository extends MongoRepository<QuestionDocument, ObjectId> {
 
 }

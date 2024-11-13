@@ -12,11 +12,15 @@ import lombok.RequiredArgsConstructor;
 public class QuestionFacade {
 	private final QuestionService questionService;
 
-	public void createQuestion(QuestionCommand.Create command) {
-		questionService.createQuestion(command);
+	public void createQuestion(Long contentId) {
+		questionService.createQuestion(contentId);
 	}
 
 	public QuestionInfo.DetailInfo getQuestions(Long contentId) {
 		return questionService.getQuestions(contentId);
+	}
+
+	public boolean verifyAnswer(QuestionCommand.Verify command) {
+		return questionService.verifyAnswer(command);
 	}
 }

@@ -1,7 +1,9 @@
 package com.biengual.userapi.question.domain;
 
 public interface QuestionService {
-	void createQuestion(QuestionCommand.Create command);
+	void createQuestion(Long contentId);
 
 	QuestionInfo.DetailInfo getQuestions(Long contentId);
+
+	boolean verifyAnswer(QuestionCommand.Verify command);
 }
