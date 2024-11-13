@@ -69,7 +69,7 @@ public class DashboardPublicController {
         @ApiResponse(responseCode = "500", description = "서버 에러", content = @Content(mediaType = "application/json"))
     })
     @Parameters({
-        @Parameter(name = "page", description = "페이지 번호 (1부터 시작) / default: 1", in = ParameterIn.QUERY, schema = @Schema(type = "integer", defaultValue = "1")),
+        @Parameter(name = "date", description = "\"yyyy-mm\" 문자열 형태의 날짜 / default: 현재 날짜"),
     })
     public ResponseEntity<Object> getCategoryLearning(
         @AuthenticationPrincipal OAuth2UserPrincipal principal,

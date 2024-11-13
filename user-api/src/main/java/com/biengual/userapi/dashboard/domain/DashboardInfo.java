@@ -36,17 +36,18 @@ public class DashboardInfo {
     public record CategoryLearning(
         Long categoryId,
         String categoryName,
-        Integer count,
-        BigDecimal ratio
+        Long count
     ) {
     }
 
     @Builder
     public record CategoryLearningList(
+        Long totalCount,
         List<CategoryLearning> categoryLearningList
     ) {
-        public static CategoryLearningList of(List<CategoryLearning> categoryLearningList) {
+        public static CategoryLearningList of(Long totalCount, List<CategoryLearning> categoryLearningList) {
             return CategoryLearningList.builder()
+                .totalCount(totalCount)
                 .categoryLearningList(categoryLearningList)
                 .build();
         }
