@@ -6,6 +6,5 @@ public class VerifyDto {
         String questionId,
         String answer
     ) {
-
     }
 }
