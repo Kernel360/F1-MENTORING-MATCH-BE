@@ -2,6 +2,7 @@ package com.biengual.userapi.dashboard.presentation;
 
 import com.biengual.userapi.dashboard.domain.DashboardInfo;
 import com.biengual.userapi.dashboard.presentation.dto.GetCategoryLearningDto;
+import com.biengual.userapi.dashboard.presentation.dto.GetCurrentPointDto;
 import com.biengual.userapi.dashboard.presentation.dto.GetRecentLearningDto;
 import org.mapstruct.*;
 
@@ -30,6 +31,7 @@ public interface DashboardDtoMapper {
 
     GetCategoryLearningDto.Response ofCategoryLearningRes(DashboardInfo.CategoryLearningList categoryLearningList);
 
+    GetCurrentPointDto.Response ofCurrentPointRes(Long currentPoint);
 
     // Internal Method =================================================================================================
 
