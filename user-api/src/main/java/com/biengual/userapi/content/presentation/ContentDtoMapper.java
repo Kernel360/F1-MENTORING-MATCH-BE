@@ -1,13 +1,5 @@
 package com.biengual.userapi.content.presentation;
 
-import java.math.BigDecimal;
-import java.util.List;
-
-import org.mapstruct.*;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-
 import com.biengual.core.domain.document.content.script.Script;
 import com.biengual.core.domain.document.content.script.YoutubeScript;
 import com.biengual.core.domain.entity.content.ContentEntity;
@@ -16,6 +8,12 @@ import com.biengual.core.util.PaginationInfo;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
+import org.mapstruct.*;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
+import java.util.List;
 
 /**
  * do~ : Command <- Request
@@ -133,7 +131,8 @@ public interface ContentDtoMapper {
 	@Mapping(target = "videoUrl", source = "content", qualifiedByName = "toVideoUrl")
 	@Mapping(target = "category", source = "content.category.name")
 	@Mapping(target = "isScrapped", constant = "false")
-	@Mapping(target = "learningRate", ignore = true)
+	@Mapping(target = "currentLearningRate", ignore = true)
+	@Mapping(target = "completedLearningRate", ignore = true)
 	@Mapping(target = "scriptList", source = "userScripts")
 	@Mapping(target = "videoDurationInSeconds", source = "content.videoDuration")
 	ContentInfo.Detail buildDetail(ContentEntity content, List<ContentInfo.UserScript> userScripts);
@@ -142,11 +141,12 @@ public interface ContentDtoMapper {
 	@Mapping(target = "videoUrl", source = "content", qualifiedByName = "toVideoUrl")
 	@Mapping(target = "category", source = "content.category.name")
 	@Mapping(target = "isScrapped", source = "isScrapped")
-	@Mapping(target = "learningRate", source = "learningRate")
+	@Mapping(target = "currentLearningRate", source = "learningRateInfo.currentLearningRate")
+	@Mapping(target = "completedLearningRate", source = "learningRateInfo.completedLearningRate")
 	@Mapping(target = "scriptList", source = "userScripts")
 	@Mapping(target = "videoDurationInSeconds", source = "content.videoDuration")
 	ContentInfo.Detail buildDetail(
-		ContentEntity content, Boolean isScrapped, BigDecimal learningRate, List<ContentInfo.UserScript> userScripts
+		ContentEntity content, Boolean isScrapped, ContentInfo.LearningRateInfo learningRateInfo, List<ContentInfo.UserScript> userScripts
 	);
 
 	// Internal Method =================================================================================================

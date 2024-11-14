@@ -1,5 +1,6 @@
 package com.biengual.userapi.content.presentation;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.biengual.core.enums.ContentStatus;
@@ -35,7 +36,8 @@ public class ContentResponseDto {
 		String duration,
 		Integer hits,
 		Boolean isScrapped,
-		Integer learningRate,
+		BigDecimal currentLearningRate,
+		BigDecimal completedLearningRate,
 		List<UserScript> scriptList
 	) {
 	}
