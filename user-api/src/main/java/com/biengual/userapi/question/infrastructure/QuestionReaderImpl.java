@@ -45,12 +45,7 @@ public class QuestionReaderImpl implements QuestionReader {
             QuestionDocument questionDocument = questionDocumentRepository.findById(new ObjectId(questionDocumentId))
                 .orElseThrow(() -> new CommonException(QUESTION_NOT_FOUND));
             questions.add(
-                QuestionInfo.Detail.builder()
-                    .question(questionDocument.getQuestion())
-                    .questionId(questionDocumentId)
-                    .examples(questionDocument.getExamples())
-                    .type(questionDocument.getType())
-                    .build()
+                QuestionInfo.Detail.of(questionDocument)
             );
         }
         return questions;
@@ -64,9 +59,7 @@ public class QuestionReaderImpl implements QuestionReader {
 
     @Override
     public QuestionInfo.Hint findHintOfQuestion(String questionId) {
-        return QuestionInfo.Hint.builder()
-            .hint(this.findQuestionByQuestionId(questionId).getHint())
-            .build();
+        return QuestionInfo.Hint.of(this.findQuestionByQuestionId(questionId).getHint());
     }
 
     // Internal Methods ------------------------------------------------------------------------------------------------
