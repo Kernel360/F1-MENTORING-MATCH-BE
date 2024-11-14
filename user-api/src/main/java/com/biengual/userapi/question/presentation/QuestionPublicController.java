@@ -80,7 +80,7 @@ public class QuestionPublicController {
         return ResponseEntityFactory.toResponseEntity(QUESTION_VIEW_SUCCESS, response);
     }
 
-    @PostMapping("/verify/{questionId}")
+    @PostMapping("/verify")
     @Operation(summary = "문제 정답 확인", description = "문제에 대한 정답을 확인합니다.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "문제 정답 조회 성공",
