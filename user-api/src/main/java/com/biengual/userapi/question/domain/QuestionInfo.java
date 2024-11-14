@@ -8,29 +8,29 @@ import lombok.Builder;
 
 public class QuestionInfo {
 
-	@Builder
-	public record Detail(
-		String question,
-		String questionId,
-		List<String> examples,
-		QuestionType type
-	) {
-	}
+    @Builder
+    public record Detail(
+        String question,
+        String questionId,
+        List<String> examples,
+        QuestionType type
+    ) {
+    }
 
-	@Builder
-	public record DetailInfo(
-		List<Detail> questionAnswer
-	) {
-		public static DetailInfo of(List<Detail> details){
-			return DetailInfo.builder()
-				.questionAnswer(details)
-				.build();
-		}
-	}
+    @Builder
+    public record DetailInfo(
+        List<Detail> questionAnswer
+    ) {
+        public static DetailInfo of(List<Detail> details) {
+            return DetailInfo.builder()
+                .questionAnswer(details)
+                .build();
+        }
+    }
 
-	@Builder
+    @Builder
     public record Hint(
-		String hint
-	) {
-	}
+        String hint
+    ) {
+    }
 }
