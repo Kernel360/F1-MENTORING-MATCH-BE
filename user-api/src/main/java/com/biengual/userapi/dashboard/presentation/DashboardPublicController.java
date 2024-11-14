@@ -4,9 +4,11 @@ import com.biengual.core.response.ResponseEntityFactory;
 import com.biengual.userapi.dashboard.domain.DashboardInfo;
 import com.biengual.userapi.dashboard.domain.DashboardService;
 import com.biengual.userapi.dashboard.presentation.dto.GetCategoryLearningDto;
+import com.biengual.userapi.dashboard.presentation.dto.GetCurrentPointDto;
 import com.biengual.userapi.dashboard.presentation.dto.GetRecentLearningDto;
 import com.biengual.userapi.dashboard.presentation.dto.GetRecentLearningSummaryDto;
 import com.biengual.userapi.dashboard.presentation.swagger.SwaggerGetCategoryLearning;
+import com.biengual.userapi.dashboard.presentation.swagger.SwaggerGetCurrentPoint;
 import com.biengual.userapi.dashboard.presentation.swagger.SwaggerGetRecentLearning;
 import com.biengual.userapi.dashboard.presentation.swagger.SwaggerGetRecentLearningSummary;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
@@ -99,5 +101,23 @@ public class DashboardPublicController {
         DashboardInfo.CategoryLearningList info = dashboardService.getCategoryLearning(principal.getId(), date);
         GetCategoryLearningDto.Response response = dashboardDtoMapper.ofCategoryLearningRes(info);
         return ResponseEntityFactory.toResponseEntity(CATEGORY_LEARNING_VIEW_SUCCESS, response);
+    }
+
+    @GetMapping("/points")
+    @Operation(summary = "현재 포인트 조회", description = "회원의 현재 포인트를 조회합니다.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "현재 포인트 조회 성공",
+            content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerGetCurrentPoint.class))}
+        ),
+        @ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "500", description = "서버 에러", content = @Content(mediaType = "application/json"))
+    })
+    public ResponseEntity<Object> getCurrentPoint(
+        @AuthenticationPrincipal OAuth2UserPrincipal principal
+    ) {
+        Long currentPoint = dashboardService.getCurrentPoint(principal.getId());
+        GetCurrentPointDto.Response response = dashboardDtoMapper.ofCurrentPointRes(currentPoint);
+        return ResponseEntityFactory.toResponseEntity(CURRENT_POINT_VIEW_SUCCESS, response);
     }
 }

@@ -13,4 +13,6 @@ public interface DashboardReader {
     List<DashboardInfo.RecentLearning> findRecentLearning(Long userId);
 
     DashboardInfo.CategoryLearningList findCategoryLearning(Long userId, String date);
+
+    Long findCurrentPoint(Long userId);
 }
