@@ -15,7 +15,7 @@ public class QuestionCommand {
 	}
 
 
-	public record View(
+	public record GetQuestion(
 		Long contentId,
 		Long userId
 	) {

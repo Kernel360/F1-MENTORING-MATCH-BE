@@ -16,7 +16,7 @@ public class QuestionFacade {
 		questionService.createQuestion(contentId);
 	}
 
-	public QuestionInfo.DetailInfo getQuestions(QuestionCommand.View command) {
+	public QuestionInfo.DetailInfo getQuestions(QuestionCommand.GetQuestion command) {
 		return questionService.getQuestions(command);
 	}
 
@@ -28,7 +28,7 @@ public class QuestionFacade {
 		return questionService.getHint(command);
 	}
 
-	public QuestionInfo.DetailInfo getCorrectQuestions(QuestionCommand.View command) {
+	public QuestionInfo.DetailInfo getCorrectQuestions(QuestionCommand.GetQuestion command) {
 		return questionService.getCorrectedQuestions(command);
 	}
 }

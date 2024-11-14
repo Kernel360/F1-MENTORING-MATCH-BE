@@ -33,7 +33,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     @Transactional(readOnly = true)
-    public QuestionInfo.DetailInfo getQuestions(QuestionCommand.View command) {
+    public QuestionInfo.DetailInfo getQuestions(QuestionCommand.GetQuestion command) {
         return QuestionInfo.DetailInfo.of(
             questionReader.findQuestionsByContentId(command.contentId(), command.userId())
         );
@@ -41,7 +41,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     @Transactional(readOnly = true)
-    public QuestionInfo.DetailInfo getCorrectedQuestions(QuestionCommand.View command) {
+    public QuestionInfo.DetailInfo getCorrectedQuestions(QuestionCommand.GetQuestion command) {
         return QuestionInfo.DetailInfo.of(
             questionReader.findCorrectedQuestionsByContentId(command.contentId(), command.userId())
         );

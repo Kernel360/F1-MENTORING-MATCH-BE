@@ -53,7 +53,7 @@ public class QuestionPublicController {
         @AuthenticationPrincipal
         OAuth2UserPrincipal principal
     ) {
-        QuestionCommand.View command = questionDtoMapper.doView(contentId, principal);
+        QuestionCommand.GetQuestion command = questionDtoMapper.doGetQuestion(contentId, principal);
         QuestionInfo.DetailInfo info = questionFacade.getQuestions(command);
         QuestionResponseDto.ViewListRes response = questionDtoMapper.ofViewListRes(info);
 
@@ -78,7 +78,7 @@ public class QuestionPublicController {
         @AuthenticationPrincipal
         OAuth2UserPrincipal principal
     ) {
-        QuestionCommand.View command = questionDtoMapper.doView(contentId, principal);
+        QuestionCommand.GetQuestion command = questionDtoMapper.doGetQuestion(contentId, principal);
         QuestionInfo.DetailInfo info = questionFacade.getCorrectQuestions(command);
         QuestionResponseDto.ViewListRes response = questionDtoMapper.ofViewListRes(info);
 

@@ -32,7 +32,7 @@ public interface QuestionDtoMapper {
     QuestionCommand.GetHint doGetHint(GetHintDto.Request request, OAuth2UserPrincipal principal);
 
     @Mapping(target = "userId", source = "principal.id")
-    QuestionCommand.View doView(Long contentId, OAuth2UserPrincipal principal);
+    QuestionCommand.GetQuestion doGetQuestion(Long contentId, OAuth2UserPrincipal principal);
 
     // Response <- Info
     QuestionResponseDto.ViewListRes ofViewListRes(QuestionInfo.DetailInfo info);
