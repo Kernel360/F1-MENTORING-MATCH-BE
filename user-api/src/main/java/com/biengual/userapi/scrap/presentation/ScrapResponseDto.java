@@ -17,6 +17,8 @@ public class ScrapResponseDto {
 		LocalDateTime createdAt,
 		String preScripts,
 		String thumbnailUrl,
+		String category,
+		String duration,
 		Boolean isActive
 	) {
 	}
