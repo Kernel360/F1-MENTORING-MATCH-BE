@@ -53,4 +53,10 @@ public class DashboardInfo {
                 .build();
         }
     }
+
+    public record RecentLearningSummary(
+        String title,
+        BigDecimal completedLearningRate
+    ) {
+    }
 }

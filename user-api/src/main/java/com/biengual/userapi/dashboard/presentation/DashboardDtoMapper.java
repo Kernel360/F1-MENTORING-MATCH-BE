@@ -4,6 +4,7 @@ import com.biengual.userapi.dashboard.domain.DashboardInfo;
 import com.biengual.userapi.dashboard.presentation.dto.GetCategoryLearningDto;
 import com.biengual.userapi.dashboard.presentation.dto.GetCurrentPointDto;
 import com.biengual.userapi.dashboard.presentation.dto.GetRecentLearningDto;
+import com.biengual.userapi.dashboard.presentation.dto.GetRecentLearningSummaryDto;
 import org.mapstruct.*;
 
 /**
@@ -24,6 +25,12 @@ import org.mapstruct.*;
     unmappedTargetPolicy = ReportingPolicy.ERROR
 )
 public interface DashboardDtoMapper {
+
+    @Mapping(target = "learningRate", source = "completedLearningRate")
+    GetRecentLearningSummaryDto.Response ofRecentLearningSummaryRes(
+        DashboardInfo.RecentLearningSummary recentLearningSummary
+    );
+
     GetRecentLearningDto.Response ofRecentLearningRes(DashboardInfo.RecentLearningList recentLearningList);
 
     @Mapping(target = "duration", source = "videoDurationInSeconds", qualifiedByName = "toDurationFormat")
