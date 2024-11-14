@@ -1,6 +1,0 @@
-spring:
-  application:
-    name: Test-User
-
-  profiles:
-    active: test
