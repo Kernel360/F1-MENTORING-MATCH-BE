@@ -3,7 +3,7 @@ package com.biengual.userapi.content.domain;
 import static com.biengual.core.constant.RestrictionConstant.*;
 import static com.biengual.core.domain.entity.content.QContentEntity.*;
 import static com.biengual.core.domain.entity.scrap.QScrapEntity.*;
-import static com.biengual.core.domain.entity.usercontenthistory.QPaymentContentHistoryEntity.*;
+import static com.biengual.core.domain.entity.paymenthistory.QPaymentContentHistoryEntity.*;
 import static com.biengual.core.response.error.code.ContentErrorCode.*;
 
 import java.lang.reflect.Field;
