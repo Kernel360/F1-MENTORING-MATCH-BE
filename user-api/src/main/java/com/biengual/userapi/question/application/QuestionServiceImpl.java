@@ -33,8 +33,18 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     @Transactional(readOnly = true)
-    public QuestionInfo.DetailInfo getQuestions(Long contentId) {
-        return QuestionInfo.DetailInfo.of(questionReader.findQuestionsByContentId(contentId));
+    public QuestionInfo.DetailInfo getQuestions(QuestionCommand.GetQuestion command) {
+        return QuestionInfo.DetailInfo.of(
+            questionReader.findQuestionsByContentId(command.contentId(), command.userId())
+        );
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public QuestionInfo.DetailInfo getCorrectedQuestions(QuestionCommand.GetQuestion command) {
+        return QuestionInfo.DetailInfo.of(
+            questionReader.findCorrectedQuestionsByContentId(command.contentId(), command.userId())
+        );
     }
 
     @Override

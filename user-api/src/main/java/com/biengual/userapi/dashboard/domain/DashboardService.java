@@ -11,4 +11,6 @@ public interface DashboardService {
     DashboardInfo.CategoryLearningList getCategoryLearning(Long userId, String date);
 
     Long getCurrentPoint(Long userId);
+
+    DashboardInfo.MissionCalendar getMissionCalendar(Long userId, String date);
 }

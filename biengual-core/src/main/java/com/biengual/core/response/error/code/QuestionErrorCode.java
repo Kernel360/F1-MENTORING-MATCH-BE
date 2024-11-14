@@ -13,7 +13,7 @@ public enum QuestionErrorCode implements ErrorCode {
 	QUESTION_GENERATE_API_ERROR(HttpStatus.NOT_ACCEPTABLE, QuestionServiceStatus.QUESTION_GENERATE_API_ERROR, "문제 생성 API 에러"),
 	QUESTION_JSON_PARSING_ERROR(HttpStatus.CONFLICT, QuestionServiceStatus.QUESTION_JSON_PARSING_ERROR, "문제 생성 JSON 파싱 에러"),
 	QUESTION_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, QuestionServiceStatus.QUESTION_ALREADY_EXISTS, "이미 퀴즈가 생성된 컨텐츠"),
-	QUESTION_WRONG_REQUEST(HttpStatus.METHOD_NOT_ALLOWED, QuestionServiceStatus.QUESTION_WRONG_REQUEST, "이미 퀴즈가 생성된 컨텐츠"),
+	QUESTION_ALL_CORRECTED(HttpStatus.NOT_FOUND, QuestionServiceStatus.QUESTION_ALL_CORRECTED, "해당 컨텐츠의 문제 모두 정답")
 	;
 
 	private final HttpStatus httpStatus;

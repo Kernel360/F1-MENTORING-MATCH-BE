@@ -2,6 +2,8 @@ package com.biengual.userapi.questionhistory.domain;
 
 import static com.biengual.core.domain.entity.questionhistory.QQuestionHistoryEntity.*;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -29,5 +31,17 @@ public class QuestionHistoryCustomRepository {
                     .and(questionHistoryEntity.questionId.eq(questionId))
             )
             .execute();
+    }
+
+    public List<String> findQuestionsCorrected(List<String> questionIds, Long userId) {
+        return queryFactory
+            .select(questionHistoryEntity.questionId)
+            .from(questionHistoryEntity)
+            .where(
+                questionHistoryEntity.userId.eq(userId)
+                    .and(questionHistoryEntity.questionId.in(questionIds))
+                    .and(questionHistoryEntity.finalTry.eq(true))
+            )
+            .fetch();
     }
 }
