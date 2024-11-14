@@ -14,7 +14,9 @@ public enum DashboardSuccessCode implements SuccessCode {
     CATEGORY_LEARNING_VIEW_SUCCESS(HttpStatus.OK, DashboardServiceStatus.CATEGORY_LEARNING_VIEW_SUCCESS,
         "카테고리별 학습 조회 성공"),
     CURRENT_POINT_VIEW_SUCCESS(HttpStatus.OK, DashboardServiceStatus.CURRENT_POINT_VIEW_SUCCESS,
-        "현재 포인트 조회 성공");
+        "현재 포인트 조회 성공"),
+    MISSION_CALENDAR_VIEW_SUCCESS(HttpStatus.OK, DashboardServiceStatus.MISSION_CALENDAR_VIEW_SUCCESS,
+        "월간 미션 달력 조회 성공");
 
     private final HttpStatus code;
     private final ServiceStatus serviceStatus;

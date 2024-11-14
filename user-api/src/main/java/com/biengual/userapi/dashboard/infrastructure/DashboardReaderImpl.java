@@ -6,6 +6,7 @@ import com.biengual.userapi.dashboard.domain.DashboardInfo;
 import com.biengual.userapi.dashboard.domain.DashboardReader;
 import com.biengual.userapi.learning.domain.CategoryLearningHistoryCustomRepository;
 import com.biengual.userapi.learning.domain.RecentLearningHistoryCustomRepository;
+import com.biengual.userapi.missionhistory.domain.MissionHistoryCustomRepository;
 import com.biengual.userapi.user.domain.UserCustomRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +19,7 @@ public class DashboardReaderImpl implements DashboardReader {
     private final RecentLearningHistoryCustomRepository recentLearningHistoryCustomRepository;
     private final CategoryLearningHistoryCustomRepository categoryLearningHistoryCustomRepository;
     private final UserCustomRepository userCustomRepository;
+    private final MissionHistoryCustomRepository missionHistoryCustomRepository;
 
     @Override
     public DashboardInfo.RecentLearningSummary findRecentLearningSummary(Long userId) {
@@ -47,5 +49,13 @@ public class DashboardReaderImpl implements DashboardReader {
     @Override
     public Long findCurrentPoint(Long userId) {
         return userCustomRepository.findUserPointByUserId(userId);
+    }
+
+    // 미션 달력 조회
+    @Override
+    public List<DashboardInfo.MissionHistory> findMissionHistory(Long userId, String date) {
+        YearMonth yearMonth = PeriodUtil.toYearMonth(date);
+
+        return missionHistoryCustomRepository.findMissionHistoryByUserIdInMonth(userId, yearMonth);
     }
 }

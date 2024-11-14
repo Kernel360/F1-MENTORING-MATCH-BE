@@ -3,14 +3,8 @@ package com.biengual.userapi.dashboard.presentation;
 import com.biengual.core.response.ResponseEntityFactory;
 import com.biengual.userapi.dashboard.domain.DashboardInfo;
 import com.biengual.userapi.dashboard.domain.DashboardService;
-import com.biengual.userapi.dashboard.presentation.dto.GetCategoryLearningDto;
-import com.biengual.userapi.dashboard.presentation.dto.GetCurrentPointDto;
-import com.biengual.userapi.dashboard.presentation.dto.GetRecentLearningDto;
-import com.biengual.userapi.dashboard.presentation.dto.GetRecentLearningSummaryDto;
-import com.biengual.userapi.dashboard.presentation.swagger.SwaggerGetCategoryLearning;
-import com.biengual.userapi.dashboard.presentation.swagger.SwaggerGetCurrentPoint;
-import com.biengual.userapi.dashboard.presentation.swagger.SwaggerGetRecentLearning;
-import com.biengual.userapi.dashboard.presentation.swagger.SwaggerGetRecentLearningSummary;
+import com.biengual.userapi.dashboard.presentation.dto.*;
+import com.biengual.userapi.dashboard.presentation.swagger.*;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -79,9 +73,9 @@ public class DashboardPublicController {
     }
 
     @GetMapping("/learning/categories")
-    @Operation(summary = "월별 카테고리별 학습 컨텐츠 비율 및 개수 조회", description = "월별 카테고리별 학습 컨텐츠 비율 및 개수를 조회합니다.")
+    @Operation(summary = "월간 카테고리별 학습 컨텐츠 비율 및 개수 조회", description = "월간 카테고리별 학습 컨텐츠 비율 및 개수를 조회합니다.")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "월별 카테고리별 학습 컨텐츠 비율 및 개수 조회 성공",
+        @ApiResponse(responseCode = "200", description = "월간 카테고리별 학습 컨텐츠 비율 및 개수 조회 성공",
             content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerGetCategoryLearning.class))}
         ),
@@ -119,5 +113,30 @@ public class DashboardPublicController {
         Long currentPoint = dashboardService.getCurrentPoint(principal.getId());
         GetCurrentPointDto.Response response = dashboardDtoMapper.ofCurrentPointRes(currentPoint);
         return ResponseEntityFactory.toResponseEntity(CURRENT_POINT_VIEW_SUCCESS, response);
+    }
+
+    @GetMapping("/missions/calendar")
+    @Operation(summary = "월간 미션 달력 조회", description = "회원의 월간 미션 달력를 조회합니다.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "월간 미션 달력 조회 성공",
+            content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerGetMissionCalendar.class))}
+        ),
+        @ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "500", description = "서버 에러", content = @Content(mediaType = "application/json"))
+    })
+    @Parameters({
+        @Parameter(name = "date", description = "\"yyyy-mm\" 문자열 형태의 날짜 / default: 현재 날짜"),
+    })
+    public ResponseEntity<Object> getMissionCalendar(
+        @AuthenticationPrincipal OAuth2UserPrincipal principal,
+
+        @RequestParam(required = false)
+        @Pattern(regexp = "^[1-9][0-9]{3}-(0?[1-9]|1[0-2])$", message = DATE_PATTERN_MISMATCH)
+        String date
+    ) {
+        DashboardInfo.MissionCalendar info = dashboardService.getMissionCalendar(principal.getId(), date);
+        GetMissionCalendarDto.Response response = dashboardDtoMapper.ofMissionCalendarRes(info);
+        return ResponseEntityFactory.toResponseEntity(MISSION_CALENDAR_VIEW_SUCCESS, response);
     }
 }

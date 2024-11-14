@@ -1,11 +1,11 @@
 package com.biengual.userapi.dashboard.presentation;
 
 import com.biengual.userapi.dashboard.domain.DashboardInfo;
-import com.biengual.userapi.dashboard.presentation.dto.GetCategoryLearningDto;
-import com.biengual.userapi.dashboard.presentation.dto.GetCurrentPointDto;
-import com.biengual.userapi.dashboard.presentation.dto.GetRecentLearningDto;
-import com.biengual.userapi.dashboard.presentation.dto.GetRecentLearningSummaryDto;
+import com.biengual.userapi.dashboard.presentation.dto.*;
 import org.mapstruct.*;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 /**
  * 객체 간의 Mapper를 정의
@@ -40,6 +40,12 @@ public interface DashboardDtoMapper {
 
     GetCurrentPointDto.Response ofCurrentPointRes(Long currentPoint);
 
+    @Mapping(target = "monthlyHistoryList", source = "missionHistoryList")
+    GetMissionCalendarDto.Response ofMissionCalendarRes(DashboardInfo.MissionCalendar missionCalendar);
+
+    @Mapping(target = "date", source = "date", qualifiedByName = "toLocalDateFormat")
+    GetMissionCalendarDto.MissionHistory ofMissionHistory(DashboardInfo.MissionHistory missionHistory);
+
     // Internal Method =================================================================================================
 
     @Named("toDurationFormat")
@@ -50,5 +56,10 @@ public interface DashboardDtoMapper {
             return String.format("%d:%02d", minutes, seconds);
         }
         return null;
+    }
+
+    @Named("toLocalDateFormat")
+    default LocalDate toLocalDateFormat(LocalDateTime localDateTime) {
+        return localDateTime.toLocalDate();
     }
 }

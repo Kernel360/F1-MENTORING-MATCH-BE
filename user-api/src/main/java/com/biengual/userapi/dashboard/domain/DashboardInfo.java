@@ -4,6 +4,7 @@ import com.biengual.core.enums.ContentType;
 import lombok.Builder;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class DashboardInfo {
@@ -58,5 +59,30 @@ public class DashboardInfo {
         String title,
         BigDecimal completedLearningRate
     ) {
+    }
+
+    public record MissionStatus(
+        Boolean oneContent,
+        Boolean bookmark,
+        Boolean quiz,
+        Integer count
+    ) {
+    }
+
+    public record MissionHistory(
+        LocalDateTime date,
+        MissionStatus missionStatus
+    ) {
+    }
+
+    @Builder
+    public record MissionCalendar(
+        List<MissionHistory> missionHistoryList
+    ) {
+        public static MissionCalendar of(List<MissionHistory> missionHistoryList) {
+            return MissionCalendar.builder()
+                .missionHistoryList(missionHistoryList)
+                .build();
+        }
     }
 }
