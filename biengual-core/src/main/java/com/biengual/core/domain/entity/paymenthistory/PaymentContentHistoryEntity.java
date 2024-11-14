@@ -1,4 +1,4 @@
-package com.biengual.core.domain.entity.usercontenthistory;
+package com.biengual.core.domain.entity.paymenthistory;
 
 import static com.biengual.core.constant.RestrictionConstant.*;
 
