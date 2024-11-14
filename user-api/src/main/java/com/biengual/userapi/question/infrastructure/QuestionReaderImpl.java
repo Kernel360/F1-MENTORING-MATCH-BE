@@ -50,8 +50,8 @@ public class QuestionReaderImpl implements QuestionReader {
         // 랜덤 셔플
         Collections.shuffle(questionDocumentIdsNotCorrected);
 
-        // 정해진 문제 갯수만큼 리턴
-        // 만약 정해진 갯수보다 맞추지 못한 문제가 적으면 리턴하는 문제 갯수는 MAX_QUIZ_SIZE보다 작음
+        // 정해진 문제 개수만큼 리턴
+        // 만약 정해진 개수보다 맞추지 못한 문제가 적으면 리턴하는 문제 갯수는 MAX_QUIZ_SIZE보다 작음
         List<QuestionInfo.Detail> questions = new ArrayList<>();
         for (String questionDocumentId : questionDocumentIdsNotCorrected) {
             if (questions.size() == MAX_QUIZ_SIZE) {
