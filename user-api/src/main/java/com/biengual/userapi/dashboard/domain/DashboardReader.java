@@ -8,6 +8,8 @@ import java.util.List;
  * @author 문찬욱
  */
 public interface DashboardReader {
+    DashboardInfo.RecentLearningSummary findRecentLearningSummary(Long userId);
+
     List<DashboardInfo.RecentLearning> findRecentLearning(Long userId);
 
     DashboardInfo.CategoryLearningList findCategoryLearning(Long userId, String date);

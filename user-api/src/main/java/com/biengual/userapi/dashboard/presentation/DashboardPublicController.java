@@ -5,13 +5,14 @@ import com.biengual.userapi.dashboard.domain.DashboardInfo;
 import com.biengual.userapi.dashboard.domain.DashboardService;
 import com.biengual.userapi.dashboard.presentation.dto.GetCategoryLearningDto;
 import com.biengual.userapi.dashboard.presentation.dto.GetRecentLearningDto;
+import com.biengual.userapi.dashboard.presentation.dto.GetRecentLearningSummaryDto;
 import com.biengual.userapi.dashboard.presentation.swagger.SwaggerGetCategoryLearning;
 import com.biengual.userapi.dashboard.presentation.swagger.SwaggerGetRecentLearning;
+import com.biengual.userapi.dashboard.presentation.swagger.SwaggerGetRecentLearningSummary;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,8 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.biengual.core.constant.BadRequestMessageConstant.DATE_PATTERN_MISMATCH;
-import static com.biengual.core.response.success.DashboardSuccessCode.CATEGORY_LEARNING_VIEW_SUCCESS;
-import static com.biengual.core.response.success.DashboardSuccessCode.RECENT_LEARNING_VIEW_SUCCESS;
+import static com.biengual.core.response.success.DashboardSuccessCode.*;
 
 @RestController
 @RequestMapping("/api/dashboard")
@@ -38,6 +38,24 @@ public class DashboardPublicController {
 
     private final DashboardDtoMapper dashboardDtoMapper;
     private final DashboardService dashboardService;
+
+    @GetMapping("/learning/recent/summary")
+    @Operation(summary = "최근 학습 컨텐츠 1개 조회", description = "회원이 최근 학습한 컨텐츠 1개를 조회합니다.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "최근 학습 컨텐츠 1개 조회 성공",
+            content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerGetRecentLearningSummary.class))}
+        ),
+        @ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "500", description = "서버 에러", content = @Content(mediaType = "application/json"))
+    })
+    public ResponseEntity<Object> getRecentLearningSummary(
+        @AuthenticationPrincipal OAuth2UserPrincipal principal
+    ) {
+        DashboardInfo.RecentLearningSummary info = dashboardService.getRecentLearningSummary(principal.getId());
+        GetRecentLearningSummaryDto.Response response = dashboardDtoMapper.ofRecentLearningSummaryRes(info);
+        return ResponseEntityFactory.toResponseEntity(RECENT_LEARNING_SUMMARY_VIEW_SUCCESS, response);
+    }
 
     // TODO: 프런트에서 목록 사이즈를 조절할 수 있게 할 것인지?
     @GetMapping("/learning/recent")
