@@ -27,4 +27,10 @@ public class QuestionInfo {
 				.build();
 		}
 	}
+
+	@Builder
+    public record Hint(
+		String hint
+	) {
+	}
 }

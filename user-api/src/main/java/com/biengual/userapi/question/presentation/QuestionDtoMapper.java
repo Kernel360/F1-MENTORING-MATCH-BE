@@ -2,8 +2,10 @@ package com.biengual.userapi.question.presentation;
 
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
+import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
 import com.biengual.userapi.question.domain.QuestionCommand;
 import com.biengual.userapi.question.domain.QuestionInfo;
 
@@ -23,10 +25,17 @@ import com.biengual.userapi.question.domain.QuestionInfo;
 )
 public interface QuestionDtoMapper {
     // Command <- Request
-    QuestionCommand.Verify doVerify(VerifyDto.Request request);
+    @Mapping(target = "userId", source = "principal.id")
+    QuestionCommand.Verify doVerify(VerifyDto.Request request, OAuth2UserPrincipal principal);
+
+    @Mapping(target = "userId", source = "principal.id")
+    QuestionCommand.ViewHint doViewHint(ViewHintDto.Request request, OAuth2UserPrincipal principal);
 
     // Response <- Info
+
     QuestionResponseDto.ViewListRes ofViewListRes(QuestionInfo.DetailInfo info);
+
+    ViewHintDto.Response ofViewHintRes(QuestionInfo.Hint info);
 
     // Entity <-> Info, Info <-> Info
 

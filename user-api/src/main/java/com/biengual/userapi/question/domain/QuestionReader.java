@@ -2,7 +2,12 @@ package com.biengual.userapi.question.domain;
 
 import java.util.List;
 
+import com.biengual.core.domain.document.question.QuestionDocument;
+
 public interface QuestionReader {
-	List<QuestionInfo.Detail> getQuestions(Long contentId);
-	boolean verifyAnswer(QuestionCommand.Verify command);
+	List<QuestionInfo.Detail> findQuestionsByContentId(Long contentId);
+
+	QuestionDocument findQuestionByQuestionId(String questionId);
+
+	QuestionInfo.Hint findHintOfQuestion(String questionId);
 }

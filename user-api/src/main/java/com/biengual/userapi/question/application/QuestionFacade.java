@@ -23,4 +23,8 @@ public class QuestionFacade {
 	public boolean verifyAnswer(QuestionCommand.Verify command) {
 		return questionService.verifyAnswer(command);
 	}
+
+	public QuestionInfo.Hint getHint(QuestionCommand.ViewHint command) {
+		return questionService.getHint(command);
+	}
 }
