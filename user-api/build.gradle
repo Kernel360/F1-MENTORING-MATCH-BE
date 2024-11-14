@@ -56,6 +56,7 @@ dependencies {
 
     // Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'org.redisson:redisson-spring-boot-starter:3.27.0'
 
     // TODO 추후에도 서버 Login 화면 주석처리 상태에도 정상적으로 동작하면 삭제할 것
     // 서버 Login 화면
