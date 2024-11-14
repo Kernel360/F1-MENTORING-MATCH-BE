@@ -61,10 +61,4 @@ public class QuestionHistoryEntity extends BaseEntity {
             .count(1L)
             .build();
     }
-
-    public void updateQuestionHistory(Boolean isCorrect) {
-        if((this.firstTry).equals(Boolean.FALSE)){
-            this.finalTry = isCorrect;
-        }
-    }
 }
