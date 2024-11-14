@@ -38,4 +38,10 @@ public class DashboardServiceImpl implements DashboardService {
     public Long getCurrentPoint(Long userId) {
         return dashboardReader.findCurrentPoint(userId);
     }
+
+    // 미션 달력 조회
+    @Override
+    public DashboardInfo.MissionCalendar getMissionCalendar(Long userId, String date) {
+        return DashboardInfo.MissionCalendar.of(dashboardReader.findMissionHistory(userId, date));
+    }
 }
