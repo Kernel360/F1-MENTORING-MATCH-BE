@@ -13,4 +13,11 @@ public class QuestionCommand {
 		Long userId
 	) {
 	}
+
+
+	public record View(
+		Long contentId,
+		Long userId
+	) {
+	}
 }

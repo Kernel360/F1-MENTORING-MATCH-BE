@@ -14,7 +14,7 @@ public enum QuestionServiceStatus implements ServiceStatus {
 	QUESTION_GENERATE_API_ERROR("U-Q-902"),
 	QUESTION_JSON_PARSING_ERROR("U-Q-903"),
 	QUESTION_ALREADY_EXISTS("U-Q-904"),
-	QUESTION_WRONG_REQUEST("U-Q-905")
+	QUESTION_ALL_CORRECTED("U-Q-905")
 	;
 
 	private final String code;
