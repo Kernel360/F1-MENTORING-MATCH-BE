@@ -23,7 +23,6 @@ dependencies {
      * If some dependency is not suitable classification, anyone can change that.
      */
     implementation project(':biengual-core')
-    testImplementation(testFixtures(project(':biengual-core')))
 
     // Spring Boot
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -37,14 +36,9 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-
-    // Test
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
-    testCompileOnly 'org.projectlombok:lombok'
-    testAnnotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'com.h2database:h2'
 
     // Swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
@@ -62,7 +56,11 @@ dependencies {
 
     // Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    testImplementation 'org.redisson:redisson-spring-boot-starter:3.27.0'
+
+    // TODO 추후에도 서버 Login 화면 주석처리 상태에도 정상적으로 동작하면 삭제할 것
+    // 서버 Login 화면
+//    implementation 'org.springframework.boot:spring-boot-starter-groovy-templates'
+//    implementation 'org.webjars:webjars-locator-core'
 
     // Querydsl
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
@@ -119,6 +117,20 @@ dependencies {
     // Unirest
     implementation 'com.konghq:unirest-java:3.14.5'
 
+}
+
+def querydslDir = "$buildDir/generated/querydsl"
+
+sourceSets {
+    main.java.srcDirs += [querydslDir]
+}
+
+tasks.withType(JavaCompile) {
+    options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
+}
+
+clean.doLast {
+    file(querydslDir).deleteDir()
 }
 
 tasks.named('test') {

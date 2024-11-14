@@ -2,9 +2,6 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.3'
 	id 'io.spring.dependency-management' version '1.1.6'
-	id 'java-library'
-	id 'java-test-fixtures'
-	id 'maven-publish'
 }
 
 group = 'com.biengual'
@@ -38,14 +35,9 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-
-	// TestFixtures
-	testFixturesImplementation 'org.springframework.boot:spring-boot-starter-web'
-	testFixturesImplementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	testFixturesImplementation 'org.springframework.boot:spring-boot-starter-validation'
-	testFixturesCompileOnly 'org.projectlombok:lombok'
-	testFixturesAnnotationProcessor 'org.projectlombok:lombok'
-	testFixturesImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
 
 	// Querydsl
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
@@ -72,21 +64,8 @@ dependencies {
 
 }
 
-// QueryDSL의 생성 경로를 별도로 설정
-def querydslDirMain = "$buildDir/generated/querydsl/main"
-def querydslDirTestFixtures = "$buildDir/generated/querydsl/testFixtures"
-
-sourceSets {
-	main.java.srcDirs += [querydslDirMain]
-	testFixtures.java.srcDirs += [querydslDirTestFixtures]
-}
-
-tasks.withType(JavaCompile) {
-	options.getGeneratedSourceOutputDirectory().set(file(querydslDirMain))
-}
-
-clean.doLast {
-	file(querydslDirMain).deleteDir()
+tasks.named('test') {
+	useJUnitPlatform()
 }
 
 tasks.named('bootJar') {
