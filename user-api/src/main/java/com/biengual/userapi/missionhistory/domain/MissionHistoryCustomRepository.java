@@ -6,11 +6,11 @@ import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
 
+import org.springframework.stereotype.Repository;
+
 import com.biengual.core.util.PeriodUtil;
 import com.biengual.userapi.dashboard.domain.DashboardInfo;
 import com.querydsl.core.types.ConstructorExpression;
-import org.springframework.stereotype.Repository;
-
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -33,6 +33,7 @@ public class MissionHistoryCustomRepository {
             .from(missionHistoryEntity)
             .where(missionHistoryEntity.userId.eq(userId))
             .orderBy(missionHistoryEntity.createdAt.desc())
+            .limit(5)
             .fetch();
     }
 
