@@ -66,7 +66,6 @@ public class DashboardReaderImpl implements DashboardReader {
         return missionHistoryCustomRepository.findMissionHistoryByUserIdInMonth(userId, yearMonth);
     }
 
-    // TODO: Grouping을 애플리케이션 단에서 하고 있는데, 테이블 추가없이 DB 단에서 하면서 원하는 형태의 데이터로 받을 수 있는 방법이 있는지?
     // 포인트 내역 조회
     @Override
     public DashboardInfo.MonthlyPointHistory findMonthlyPointHistory(Long userId, String date) {
