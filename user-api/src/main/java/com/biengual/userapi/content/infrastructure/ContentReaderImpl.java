@@ -158,7 +158,7 @@ public class ContentReaderImpl implements ContentReader {
 
         if (this.verifyExpiredOfContent(command.contentId())) {
             // access 가 필요한 date인 컨텐츠에 대해 access 가 있으면 true
-            access = paymentReader.existsPaymentHistory(command.userId(), command.contentId());
+            access = paymentReader.existsPaymentContentHistory(command.userId(), command.contentId());
         }
 
         return access;

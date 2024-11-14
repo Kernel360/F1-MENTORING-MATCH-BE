@@ -12,7 +12,7 @@ public class PaymentReaderImpl implements PaymentReader {
     private final PaymentRepository paymentRepository;
 
     @Override
-    public boolean existsPaymentHistory(Long userId, Long contentId) {
+    public boolean existsPaymentContentHistory(Long userId, Long contentId) {
         return paymentRepository.existsByUserIdAndContentId(userId, contentId);
     }
 }

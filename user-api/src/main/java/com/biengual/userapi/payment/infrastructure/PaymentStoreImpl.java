@@ -1,7 +1,7 @@
 package com.biengual.userapi.payment.infrastructure;
 
 import com.biengual.core.annotation.DataProvider;
-import com.biengual.core.domain.entity.usercontenthistory.PaymentContentHistoryEntity;
+import com.biengual.core.domain.entity.paymenthistory.PaymentContentHistoryEntity;
 import com.biengual.userapi.payment.domain.PaymentRepository;
 import com.biengual.userapi.payment.domain.PaymentStore;
 
