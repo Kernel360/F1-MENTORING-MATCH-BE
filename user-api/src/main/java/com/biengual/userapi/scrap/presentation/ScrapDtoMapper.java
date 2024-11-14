@@ -38,6 +38,7 @@ public interface ScrapDtoMapper {
 	// Response <- Info
 	ScrapResponseDto.ViewListRes ofViewRes(ScrapInfo.ViewInfo allScraps);
 
+	@Mapping(target = "duration", source = "videoDurationInSeconds", qualifiedByName = "toDurationFormat")
 	@Mapping(target = "isActive", source = "contentStatus", qualifiedByName = "toIsActive")
 	ScrapResponseDto.View ofView(ScrapInfo.View view);
 
@@ -48,6 +49,8 @@ public interface ScrapDtoMapper {
 	@Mapping(target = "contentType", source = "content.contentType")
 	@Mapping(target = "preScripts", source = "content.preScripts")
 	@Mapping(target = "thumbnailUrl", source = "content.thumbnailUrl")
+	@Mapping(target = "category", source = "content.category.name")
+	@Mapping(target = "videoDurationInSeconds", source = "content.videoDuration")
 	@Mapping(target = "contentStatus", source = "content.contentStatus")
 	ScrapInfo.View buildView(ScrapEntity scrap);
 
@@ -59,5 +62,15 @@ public interface ScrapDtoMapper {
 	@Named("toIsActive")
 	default Boolean toIsActive(ContentStatus contentStatus) {
 		return contentStatus == ContentStatus.ACTIVATED;
+	}
+
+	@Named("toDurationFormat")
+	default String toVideoDurationFormat(Integer videoDurationInSeconds) {
+		if (videoDurationInSeconds != null) {
+			int minutes = videoDurationInSeconds / 60;
+			int seconds = videoDurationInSeconds % 60;
+			return String.format("%d:%02d", minutes, seconds);
+		}
+		return null;
 	}
 }
