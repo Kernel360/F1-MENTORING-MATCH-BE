@@ -60,7 +60,7 @@ public class QuestionStoreImpl implements QuestionStore {
     // Internal Methods ================================================================================================
     private ContentDocument getContentDocument(Long contentId) {
         ContentEntity content = getContentEntity(contentId);
-        quizValidator.verifyQuizAlreadyGenerated(content.getNumOfQuiz());
+        quizValidator.verifyQuestionAlreadyGenerated(content.getNumOfQuiz());
         return contentDocumentRepository.findById(new ObjectId(content.getMongoContentId()))
             .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
     }

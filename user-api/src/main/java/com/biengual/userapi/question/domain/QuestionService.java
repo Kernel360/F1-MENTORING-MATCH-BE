@@ -6,4 +6,6 @@ public interface QuestionService {
 	QuestionInfo.DetailInfo getQuestions(Long contentId);
 
 	boolean verifyAnswer(QuestionCommand.Verify command);
+
+	QuestionInfo.Hint getHint(QuestionCommand.GetHint command);
 }
