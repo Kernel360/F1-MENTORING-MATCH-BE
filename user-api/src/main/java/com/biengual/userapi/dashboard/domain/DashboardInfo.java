@@ -1,9 +1,11 @@
 package com.biengual.userapi.dashboard.domain;
 
 import com.biengual.core.enums.ContentType;
+import com.biengual.core.enums.PointReason;
 import lombok.Builder;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -82,6 +84,38 @@ public class DashboardInfo {
         public static MissionCalendar of(List<MissionHistory> missionHistoryList) {
             return MissionCalendar.builder()
                 .missionHistoryList(missionHistoryList)
+                .build();
+        }
+    }
+
+    @Builder
+    public record PointRecord(
+        PointReason reason,
+        Long point
+    ) {
+        public static PointRecord of(PointReason reason, Long point) {
+            return PointRecord.builder()
+                .reason(reason)
+                .point(point)
+                .build();
+        }
+    }
+
+    public record DailyPointHistory(
+        LocalDate date,
+        List<PointRecord> pointsHistory
+    ) {
+    }
+
+    @Builder
+    public record MonthlyPointHistory(
+        Long currentPoint,
+        List<DailyPointHistory> dailyPointHistoryList
+    ) {
+        public static MonthlyPointHistory of(Long currentPoint, List<DailyPointHistory> dailyPointHistoryList) {
+            return MonthlyPointHistory.builder()
+                .currentPoint(currentPoint)
+                .dailyPointHistoryList(dailyPointHistoryList)
                 .build();
         }
     }

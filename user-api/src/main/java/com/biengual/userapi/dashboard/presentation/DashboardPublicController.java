@@ -139,4 +139,29 @@ public class DashboardPublicController {
         GetMissionCalendarDto.Response response = dashboardDtoMapper.ofMissionCalendarRes(info);
         return ResponseEntityFactory.toResponseEntity(MISSION_CALENDAR_VIEW_SUCCESS, response);
     }
+
+    @GetMapping("/points/history")
+    @Operation(summary = "월간 포인트 내역 조회", description = "회원의 월간 포인트 내역을 조회합니다.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "월간 포인트 내역 조회 성공",
+            content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerGetMonthlyPointHistory.class))}
+        ),
+        @ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "500", description = "서버 에러", content = @Content(mediaType = "application/json"))
+    })
+    @Parameters({
+        @Parameter(name = "date", description = "\"yyyy-mm\" 문자열 형태의 날짜 / default: 현재 날짜"),
+    })
+    public ResponseEntity<Object> getMonthlyPointHistory(
+        @AuthenticationPrincipal OAuth2UserPrincipal principal,
+
+        @RequestParam(required = false)
+        @Pattern(regexp = "^[1-9][0-9]{3}-(0?[1-9]|1[0-2])$", message = DATE_PATTERN_MISMATCH)
+        String date
+    ) {
+        DashboardInfo.MonthlyPointHistory info = dashboardService.getMonthlyPointHistory(principal.getId(), date);
+        GetMonthlyPointHistoryDto.Response response = dashboardDtoMapper.ofMonthlyPointHistoryRes(info);
+        return ResponseEntityFactory.toResponseEntity(MONTHLY_POINT_HISTORY_VIEW_SUCCESS, response);
+    }
 }
