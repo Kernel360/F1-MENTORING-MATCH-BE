@@ -1,9 +1,11 @@
 package com.biengual.userapi.question.infrastructure;
 
+import static com.biengual.core.constant.RestrictionConstant.*;
 import static com.biengual.core.response.error.code.ContentErrorCode.*;
 import static com.biengual.core.response.error.code.QuestionErrorCode.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -19,6 +21,7 @@ import com.biengual.userapi.content.domain.ContentRepository;
 import com.biengual.userapi.question.domain.QuestionDocumentRepository;
 import com.biengual.userapi.question.domain.QuestionInfo;
 import com.biengual.userapi.question.domain.QuestionReader;
+import com.biengual.userapi.questionhistory.domain.QuestionHistoryCustomRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,27 +31,55 @@ public class QuestionReaderImpl implements QuestionReader {
     private final QuestionDocumentRepository questionDocumentRepository;
     private final ContentRepository contentRepository;
     private final ContentDocumentRepository contentDocumentRepository;
+    private final QuestionHistoryCustomRepository questionHistoryCustomRepository;
 
     @Override
-    public List<QuestionInfo.Detail> findQuestionsByContentId(Long contentId) {
+    public List<QuestionInfo.Detail> findQuestionsByContentId(Long contentId, Long userId) {
 
-        ContentDocument contentDocument = this.getContentDocument(contentId);
-        List<String> questionDocumentIds = contentDocument.getQuestionIds();
+        // 컨텐츠에 포함된 모든 문제 중 맞추지 못한 문제 id
+        List<String> questionDocumentIdsCorrected = questionHistoryCustomRepository.findQuestionsCorrected(
+            this.getContentDocument(contentId).getQuestionIds(), userId
+        );
 
-        if (questionDocumentIds.isEmpty()) {
-            throw new CommonException(QUESTION_NOT_FOUND);
+        List<String> questionDocumentIdsNotCorrected = new ArrayList<>(
+            questionDocumentIdsCorrected.stream()
+                .filter(quizId -> !questionDocumentIdsCorrected.contains(quizId))
+                .toList()
+        );
+
+        if (questionDocumentIdsNotCorrected.isEmpty()) {
+            throw new CommonException(QUESTION_ALL_CORRECTED);
         }
 
-        List<QuestionInfo.Detail> questions = new ArrayList<>();
+        // 랜덤 셔플
+        Collections.shuffle(questionDocumentIdsNotCorrected);
 
-        for (String questionDocumentId : questionDocumentIds) {
+        // 정해진 문제 개수만큼 리턴
+        // 만약 정해진 개수보다 맞추지 못한 문제가 적으면 리턴하는 문제 갯수는 MAX_QUIZ_SIZE보다 작음
+        List<QuestionInfo.Detail> questions = new ArrayList<>();
+        for (String questionDocumentId : questionDocumentIdsNotCorrected) {
+            if (questions.size() == MAX_QUIZ_SIZE) {
+                break;
+            }
+
             QuestionDocument questionDocument = questionDocumentRepository.findById(new ObjectId(questionDocumentId))
                 .orElseThrow(() -> new CommonException(QUESTION_NOT_FOUND));
             questions.add(
                 QuestionInfo.Detail.of(questionDocument)
             );
         }
+
         return questions;
+    }
+
+    @Override
+    public List<QuestionInfo.Detail> findCorrectedQuestionsByContentId(Long contentId, Long userId) {
+        List<String> questionIds = this.getContentDocument(contentId).getQuestionIds();
+
+        return questionHistoryCustomRepository.findQuestionsCorrected(questionIds, userId)
+            .stream()
+            .map(questionId -> QuestionInfo.Detail.of(this.findQuestionByQuestionId(questionId)))
+            .toList();
     }
 
     @Override
