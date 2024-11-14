@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LearningStoreImpl implements LearningStore {
     private final LearningHistoryRepository learningHistoryRepository;
-    private final LearningHistoryCustomRepository learningHistoryCustomRepository;
     private final RecentLearningHistoryRepository recentLearningHistoryRepository;
     private final CategoryLearningHistoryRepository categoryLearningHistoryRepository;
 
