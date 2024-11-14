@@ -55,7 +55,7 @@ public class QuestionServiceImpl implements QuestionService {
         }
 
         // 대시 보드 를 위해 문제 기록 저장
-        questionHistoryStore.updateQuestionHistory(command.userId(), command.questionId(), isCorrect);
+        questionHistoryStore.recordQuestionHistory(command.userId(), command.questionId(), isCorrect);
 
         return isCorrect;
     }

@@ -15,7 +15,7 @@ public class QuestionHistoryStoreImpl implements QuestionHistoryStore {
     private final QuestionHistoryCustomRepository questionHistoryCustomRepository;
 
     @Override
-    public void updateQuestionHistory(Long userId, String questionId, Boolean isCorrect) {
+    public void recordQuestionHistory(Long userId, String questionId, Boolean isCorrect) {
         boolean exists = questionHistoryRepository.existsByUserIdAndQuestionId(userId, questionId);
 
         if (!exists) {
