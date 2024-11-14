@@ -32,4 +32,10 @@ public class DashboardServiceImpl implements DashboardService {
     public DashboardInfo.CategoryLearningList getCategoryLearning(Long userId, String date) {
         return dashboardReader.findCategoryLearning(userId, date);
     }
+
+    // 현재 유저 포인트 조회
+    @Override
+    public Long getCurrentPoint(Long userId) {
+        return dashboardReader.findCurrentPoint(userId);
+    }
 }

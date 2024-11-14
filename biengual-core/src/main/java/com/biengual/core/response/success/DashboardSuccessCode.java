@@ -12,7 +12,9 @@ public enum DashboardSuccessCode implements SuccessCode {
     RECENT_LEARNING_VIEW_SUCCESS(HttpStatus.OK, DashboardServiceStatus.RECENT_LEARNING_VIEW_SUCCESS,
         "최근 학습 조회 성공"),
     CATEGORY_LEARNING_VIEW_SUCCESS(HttpStatus.OK, DashboardServiceStatus.CATEGORY_LEARNING_VIEW_SUCCESS,
-        "카테고리별 학습 조회 성공");
+        "카테고리별 학습 조회 성공"),
+    CURRENT_POINT_VIEW_SUCCESS(HttpStatus.OK, DashboardServiceStatus.CURRENT_POINT_VIEW_SUCCESS,
+        "현재 포인트 조회 성공");
 
     private final HttpStatus code;
     private final ServiceStatus serviceStatus;

@@ -6,6 +6,7 @@ import com.biengual.userapi.dashboard.domain.DashboardInfo;
 import com.biengual.userapi.dashboard.domain.DashboardReader;
 import com.biengual.userapi.learning.domain.CategoryLearningHistoryCustomRepository;
 import com.biengual.userapi.learning.domain.RecentLearningHistoryCustomRepository;
+import com.biengual.userapi.user.domain.UserCustomRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.time.YearMonth;
@@ -16,6 +17,7 @@ import java.util.List;
 public class DashboardReaderImpl implements DashboardReader {
     private final RecentLearningHistoryCustomRepository recentLearningHistoryCustomRepository;
     private final CategoryLearningHistoryCustomRepository categoryLearningHistoryCustomRepository;
+    private final UserCustomRepository userCustomRepository;
 
     @Override
     public DashboardInfo.RecentLearningSummary findRecentLearningSummary(Long userId) {
@@ -39,5 +41,11 @@ public class DashboardReaderImpl implements DashboardReader {
             categoryLearningHistoryCustomRepository.findCategoryLearningByUserIdInMonth(userId, yearMonth);
 
         return DashboardInfo.CategoryLearningList.of(totalCount, categoryLearningList);
+    }
+
+    // 현재 유저 포인트 조회
+    @Override
+    public Long findCurrentPoint(Long userId) {
+        return userCustomRepository.findUserPointByUserId(userId);
     }
 }

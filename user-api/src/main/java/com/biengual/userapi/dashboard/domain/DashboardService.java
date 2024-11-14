@@ -9,4 +9,6 @@ public interface DashboardService {
     DashboardInfo.RecentLearningList getRecentLearning(Long userId);
 
     DashboardInfo.CategoryLearningList getCategoryLearning(Long userId, String date);
+
+    Long getCurrentPoint(Long userId);
 }
