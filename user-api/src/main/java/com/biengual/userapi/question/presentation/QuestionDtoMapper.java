@@ -29,13 +29,13 @@ public interface QuestionDtoMapper {
     QuestionCommand.Verify doVerify(VerifyDto.Request request, OAuth2UserPrincipal principal);
 
     @Mapping(target = "userId", source = "principal.id")
-    QuestionCommand.ViewHint doViewHint(ViewHintDto.Request request, OAuth2UserPrincipal principal);
+    QuestionCommand.GetHint doGetHint(GetHintDto.Request request, OAuth2UserPrincipal principal);
 
     // Response <- Info
 
     QuestionResponseDto.ViewListRes ofViewListRes(QuestionInfo.DetailInfo info);
 
-    ViewHintDto.Response ofViewHintRes(QuestionInfo.Hint info);
+    GetHintDto.Response ofGetHintRes(QuestionInfo.Hint info);
 
     // Entity <-> Info, Info <-> Info
 

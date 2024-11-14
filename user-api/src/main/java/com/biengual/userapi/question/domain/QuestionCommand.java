@@ -8,7 +8,7 @@ public class QuestionCommand {
 	) {
 	}
 
-	public record ViewHint(
+	public record GetHint(
 		String questionId,
 		Long userId
 	) {

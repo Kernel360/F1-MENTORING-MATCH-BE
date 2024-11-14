@@ -24,7 +24,7 @@ public class QuestionFacade {
 		return questionService.verifyAnswer(command);
 	}
 
-	public QuestionInfo.Hint getHint(QuestionCommand.ViewHint command) {
+	public QuestionInfo.Hint getHint(QuestionCommand.GetHint command) {
 		return questionService.getHint(command);
 	}
 }

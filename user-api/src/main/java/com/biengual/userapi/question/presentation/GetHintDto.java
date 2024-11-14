@@ -1,6 +1,6 @@
 package com.biengual.userapi.question.presentation;
 
-public class ViewHintDto {
+public class GetHintDto {
 
     public record Request(
         String questionId

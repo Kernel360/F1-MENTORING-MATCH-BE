@@ -70,12 +70,12 @@ public class QuestionPublicController {
     })
     public ResponseEntity<Object> getHintOfQuestion(
         @RequestBody
-        ViewHintDto.Request request,
+        GetHintDto.Request request,
         @AuthenticationPrincipal
         OAuth2UserPrincipal principal
     ) {
-        QuestionCommand.ViewHint command = questionDtoMapper.doViewHint(request, principal);
-        ViewHintDto.Response response = questionDtoMapper.ofViewHintRes(questionFacade.getHint(command));
+        QuestionCommand.GetHint command = questionDtoMapper.doGetHint(request, principal);
+        GetHintDto.Response response = questionDtoMapper.ofGetHintRes(questionFacade.getHint(command));
 
         return ResponseEntityFactory.toResponseEntity(QUESTION_VIEW_SUCCESS, response);
     }

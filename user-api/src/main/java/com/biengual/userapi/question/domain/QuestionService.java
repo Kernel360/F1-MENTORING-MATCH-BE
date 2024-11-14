@@ -7,5 +7,5 @@ public interface QuestionService {
 
 	boolean verifyAnswer(QuestionCommand.Verify command);
 
-	QuestionInfo.Hint getHint(QuestionCommand.ViewHint command);
+	QuestionInfo.Hint getHint(QuestionCommand.GetHint command);
 }

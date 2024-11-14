@@ -62,7 +62,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     @Transactional
-    public QuestionInfo.Hint getHint(QuestionCommand.ViewHint command) {
+    public QuestionInfo.Hint getHint(QuestionCommand.GetHint command) {
         // 문제 힌트 조회는 포인트 중복 지불 방지 없음
         pointManager.updateAndSavePoint(PointReason.VIEW_QUIZ_HINT, command.userId());
 
