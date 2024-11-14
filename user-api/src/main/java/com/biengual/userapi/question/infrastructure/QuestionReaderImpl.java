@@ -37,10 +37,14 @@ public class QuestionReaderImpl implements QuestionReader {
     public List<QuestionInfo.Detail> findQuestionsByContentId(Long contentId, Long userId) {
 
         // 컨텐츠에 포함된 모든 문제 중 맞추지 못한 문제 id
+        List<String> questionDocumentIdsCorrected = questionHistoryCustomRepository.findQuestionsCorrected(
+            this.getContentDocument(contentId).getQuestionIds(), userId
+        );
+
         List<String> questionDocumentIdsNotCorrected = new ArrayList<>(
-            questionHistoryCustomRepository.findQuestionsNotCorrected(
-                this.getContentDocument(contentId).getQuestionIds(), userId
-            )
+            questionDocumentIdsCorrected.stream()
+                .filter(quizId -> !questionDocumentIdsCorrected.contains(quizId))
+                .toList()
         );
 
         if (questionDocumentIdsNotCorrected.isEmpty()) {

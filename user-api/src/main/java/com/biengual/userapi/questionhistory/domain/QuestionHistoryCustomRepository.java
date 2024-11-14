@@ -33,21 +33,6 @@ public class QuestionHistoryCustomRepository {
             .execute();
     }
 
-    public List<String> findQuestionsNotCorrected(List<String> questionIds, Long userId) {
-        List<String> attemptedQuestions = queryFactory
-            .select(questionHistoryEntity.questionId)
-            .from(questionHistoryEntity)
-            .where(
-                questionHistoryEntity.userId.eq(userId)
-                    .and(questionHistoryEntity.questionId.in(questionIds))
-                    .and(questionHistoryEntity.finalTry.eq(true))
-            )
-            .fetch();
-        return questionIds.stream()
-            .filter(quizId -> !attemptedQuestions.contains(quizId))
-            .toList();
-    }
-
     public List<String> findQuestionsCorrected(List<String> questionIds, Long userId) {
         return queryFactory
             .select(questionHistoryEntity.questionId)
