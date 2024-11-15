@@ -19,9 +19,6 @@ public class LearningStoreImpl implements LearningStore {
         learningHistoryRepository.save(command.toLearningHistoryEntity());
     }
 
-    // TODO: Validate를 앞단에서 하는 것이 좋은가? Validator 클래스를 만드는 것이 좋은가?
-    //  -> 현재는 앞단에서 ContentReader에서 검증한 content를 반환
-    // TODO: 동시성 보장을 할까요? 말까요?
     // 최근 학습 내역 쌓기
     @Override
     public void recordRecentLearningHistory(LearningCommand.RecordLearningRate command) {
