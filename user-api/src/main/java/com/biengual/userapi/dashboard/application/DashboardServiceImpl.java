@@ -44,4 +44,10 @@ public class DashboardServiceImpl implements DashboardService {
     public DashboardInfo.MissionCalendar getMissionCalendar(Long userId, String date) {
         return DashboardInfo.MissionCalendar.of(dashboardReader.findMissionHistory(userId, date));
     }
+
+    // 포인트 내역 조회
+    @Override
+    public DashboardInfo.MonthlyPointHistory getMonthlyPointHistory(Long userId, String date) {
+        return dashboardReader.findMonthlyPointHistory(userId, date);
+    }
 }

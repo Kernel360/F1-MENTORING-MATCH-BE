@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 )
 public interface DashboardDtoMapper {
 
+    // Response <- Info
     @Mapping(target = "learningRate", source = "completedLearningRate")
     GetRecentLearningSummaryDto.Response ofRecentLearningSummaryRes(
         DashboardInfo.RecentLearningSummary recentLearningSummary
@@ -45,6 +46,9 @@ public interface DashboardDtoMapper {
 
     @Mapping(target = "date", source = "date", qualifiedByName = "toLocalDateFormat")
     GetMissionCalendarDto.MissionHistory ofMissionHistory(DashboardInfo.MissionHistory missionHistory);
+
+    @Mapping(target = "monthlyHistoryList", source = "dailyPointHistoryList")
+    GetMonthlyPointHistoryDto.Response ofMonthlyPointHistoryRes(DashboardInfo.MonthlyPointHistory monthlyPointHistory);
 
     // Internal Method =================================================================================================
 
