@@ -72,7 +72,7 @@ public class DashboardReaderImpl implements DashboardReader {
 
     @Override
     public DashboardInfo.QuestionWeeklySummary findQuestionSummary(Long userId, String date) {
-        LocalDate currentDate = (date == null) ? LocalDate.now() : LocalDate.parse(date);
+        LocalDate currentDate = PeriodUtil.toLocalDate(date);
         return DashboardInfo.QuestionWeeklySummary.of(
             questionHistoryCustomRepository.findQuestionHistoryByUserIdLastFiveWeeks(userId, currentDate)
         );

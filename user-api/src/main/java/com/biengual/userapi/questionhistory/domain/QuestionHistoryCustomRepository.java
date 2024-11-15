@@ -2,15 +2,14 @@ package com.biengual.userapi.questionhistory.domain;
 
 import static com.biengual.core.domain.entity.questionhistory.QQuestionHistoryEntity.*;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.biengual.core.util.PeriodUtil;
 import com.biengual.userapi.dashboard.domain.DashboardInfo;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
@@ -54,8 +53,7 @@ public class QuestionHistoryCustomRepository {
     public List<DashboardInfo.QuestionSummary> findQuestionHistoryByUserIdLastFiveWeeks(
         Long userId, LocalDate currentDate
     ) {
-        LocalDate fiveWeeksAgo =
-            currentDate.minusWeeks(4).with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
+        LocalDate fiveWeeksAgo = PeriodUtil.getFiveWeeksAgo(currentDate);
 
         List<DashboardInfo.QuestionSummary> result = new ArrayList<>();
 
