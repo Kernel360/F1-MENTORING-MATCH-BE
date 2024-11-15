@@ -174,7 +174,7 @@ public class DashboardPublicController {
         String date
     ){
         DashboardInfo.QuestionSummary info = dashboardService.getQuestionSummary(principal.getId(), date);
-        GetQuestionSummaryDto.Response response = dashboardDtoMapper.ofQuestionSummary(info);
+        GetQuestionSummaryDto.Response response = dashboardDtoMapper.ofQuestionSummaryRes(info);
         return ResponseEntityFactory.toResponseEntity(MONTHLY_QUIZ_HISTORY_VIEW_SUCCESS, response);
     }
   

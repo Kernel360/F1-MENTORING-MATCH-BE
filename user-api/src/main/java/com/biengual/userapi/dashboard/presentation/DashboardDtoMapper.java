@@ -58,7 +58,7 @@ public interface DashboardDtoMapper {
     @Mapping(target = "date", source = "date", qualifiedByName = "toLocalDateFormat")
     GetMissionCalendarDto.MissionHistory ofMissionHistory(DashboardInfo.MissionHistory missionHistory);
 
-    GetQuestionSummaryDto.Response ofQuestionSummary(DashboardInfo.QuestionSummary info);
+    GetQuestionSummaryDto.Response ofQuestionSummaryRes(DashboardInfo.QuestionSummary info);
     
     @Mapping(target = "monthlyHistoryList", source = "dailyPointHistoryList")
     GetMonthlyPointHistoryDto.Response ofMonthlyPointHistoryRes(DashboardInfo.MonthlyPointHistory monthlyPointHistory);
