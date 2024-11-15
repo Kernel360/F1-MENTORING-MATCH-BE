@@ -1,12 +1,12 @@
 package com.biengual.userapi.dashboard.domain;
 
-import com.biengual.core.enums.PointReason;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import com.biengual.core.enums.ContentType;
+import com.biengual.core.enums.PointReason;
 
 import lombok.Builder;
 
@@ -89,12 +89,45 @@ public class DashboardInfo {
         }
     }
 
+    @Builder
     public record QuestionSummary(
-        Double firstTryCorrectRate,
-        Double reTryCorrectRate
+        LocalDate weekStartDate,
+        int weekNumber,
+        Integer firstTryCorrect,
+        Integer reTryCorrect,
+        Integer totalFirstTry,
+        Integer totalReTry
     ) {
+        public static QuestionSummary of(
+            LocalDate weekStartDate,
+            int weekNumber,
+            Integer firstTryCorrect,
+            Integer reTryCorrect,
+            Integer totalFirstTry,
+            Integer totalReTry
+        ) {
+            return QuestionSummary.builder()
+                .weekStartDate(weekStartDate)
+                .weekNumber(weekNumber)
+                .firstTryCorrect(firstTryCorrect)
+                .reTryCorrect(reTryCorrect)
+                .totalFirstTry(totalFirstTry)
+                .totalReTry(totalReTry)
+                .build();
+        }
     }
-  
+
+    @Builder
+    public record QuestionWeeklySummary(
+        List<QuestionSummary> questionSummaryList
+    ) {
+        public static QuestionWeeklySummary of(List<QuestionSummary> questionSummaryList) {
+            return QuestionWeeklySummary.builder()
+                .questionSummaryList(questionSummaryList)
+                .build();
+        }
+    }
+
     @Builder
     public record PointRecord(
         PointReason reason,

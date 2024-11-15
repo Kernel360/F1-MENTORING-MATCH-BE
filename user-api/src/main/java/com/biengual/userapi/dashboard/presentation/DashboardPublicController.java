@@ -80,7 +80,7 @@ public class DashboardPublicController {
     })
     public ResponseEntity<Object> getRecentLearning(
         @AuthenticationPrincipal OAuth2UserPrincipal principal
-        ) {
+    ) {
         DashboardInfo.RecentLearningList info = dashboardService.getRecentLearning(principal.getId());
         GetRecentLearningDto.Response response = dashboardDtoMapper.ofRecentLearningRes(info);
         return ResponseEntityFactory.toResponseEntity(RECENT_LEARNING_VIEW_SUCCESS, response);
@@ -101,7 +101,6 @@ public class DashboardPublicController {
     })
     public ResponseEntity<Object> getCategoryLearning(
         @AuthenticationPrincipal OAuth2UserPrincipal principal,
-
         @RequestParam(required = false)
         @Pattern(regexp = "^[1-9][0-9]{3}-(0?[1-9]|1[0-2])$", message = DATE_PATTERN_MISMATCH)
         String date
@@ -144,7 +143,6 @@ public class DashboardPublicController {
     })
     public ResponseEntity<Object> getMissionCalendar(
         @AuthenticationPrincipal OAuth2UserPrincipal principal,
-
         @RequestParam(required = false)
         @Pattern(regexp = "^[1-9][0-9]{3}-(0?[1-9]|1[0-2])$", message = DATE_PATTERN_MISMATCH)
         String date
@@ -155,9 +153,9 @@ public class DashboardPublicController {
     }
 
     @GetMapping("/quiz/summary")
-    @Operation(summary = "월간 퀴즈 정답률 조회", description = "월간 퀴즈 첫 시도, 재 시도 정답률을 조회합니다.")
+    @Operation(summary = "최근 5주간 퀴즈 정답률 조회", description = "최근 5주간 퀴즈 첫시도, 재시도 정답 수를 조회합니다.")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "월간 퀴즈 첫 시도, 재 시도 정답률 조회 성공",
+        @ApiResponse(responseCode = "200", description = "최근 5주간 퀴즈 첫시도, 재시도 정답 수 조회 성공",
             content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerGetQuestionSummary.class))}
         ),
@@ -165,20 +163,19 @@ public class DashboardPublicController {
         @ApiResponse(responseCode = "500", description = "서버 에러", content = @Content(mediaType = "application/json"))
     })
     @Parameters({
-        @Parameter(name = "date", description = "\"yyyy-mm\" 문자열 형태의 날짜 / default: 현재 날짜"),
+        @Parameter(name = "date", description = "\"yyyy-mm-dd\" 문자열 형태의 날짜 / default: 현재 날짜"),
     })
     public ResponseEntity<Object> getQuestionSummary(
         @AuthenticationPrincipal OAuth2UserPrincipal principal,
         @RequestParam(required = false)
-        @Pattern(regexp = "^[1-9][0-9]{3}-(0?[1-9]|1[0-2])$", message = DATE_PATTERN_MISMATCH)
+        @Pattern(regexp = "^[1-9][0-9]{3}-(0?[1-9]|1[0-2])-(0?[1-9]|[12][0-9]|3[01])$", message = DATE_PATTERN_MISMATCH)
         String date
-    ){
-        DashboardInfo.QuestionSummary info = dashboardService.getQuestionSummary(principal.getId(), date);
+    ) {
+        DashboardInfo.QuestionWeeklySummary info = dashboardService.getQuestionSummary(principal.getId(), date);
         GetQuestionSummaryDto.Response response = dashboardDtoMapper.ofQuestionSummaryRes(info);
         return ResponseEntityFactory.toResponseEntity(MONTHLY_QUIZ_HISTORY_VIEW_SUCCESS, response);
     }
-  
-  
+
     @GetMapping("/points/history")
     @Operation(summary = "월간 포인트 내역 조회", description = "회원의 월간 포인트 내역을 조회합니다.")
     @ApiResponses(value = {
