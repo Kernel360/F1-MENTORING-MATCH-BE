@@ -13,7 +13,7 @@ spring:
 
   data:
     redis:
-      host: localhost
+      host: ${REDIS_DEV_HOST}
       port: 6379
       password: ${DB_ROOT_PASSWORD}
       username: default
