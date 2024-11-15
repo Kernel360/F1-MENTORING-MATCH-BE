@@ -4,14 +4,14 @@ spring:
       on-profile: test
 
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/biengual_test_db
+    url: jdbc:mysql://localhost:3306/biengual_test_db
     username: root
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   data:
     redis:
-      host: 127.0.0.1
+      host: localhost
       port: 6379
       password: 1234
       username: default
