@@ -55,9 +55,9 @@ public class LearningConcurrencyTest {
             .build()
             .get();
 
-        ContentEntity saveContent = contentRepository.save(content);
+        ContentEntity savedContent = contentRepository.save(content);
 
-        initContentId = saveContent.getId();
+        initContentId = savedContent.getId();
     }
 
     @Test
