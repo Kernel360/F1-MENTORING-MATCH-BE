@@ -74,6 +74,4 @@ public interface DashboardDtoMapper {
     default LocalDate toLocalDateFormat(LocalDateTime localDateTime) {
         return localDateTime.toLocalDate();
     }
-
-
 }
