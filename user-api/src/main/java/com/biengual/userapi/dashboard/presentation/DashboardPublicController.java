@@ -16,12 +16,14 @@ import com.biengual.userapi.dashboard.domain.DashboardService;
 import com.biengual.userapi.dashboard.presentation.dto.GetCategoryLearningDto;
 import com.biengual.userapi.dashboard.presentation.dto.GetCurrentPointDto;
 import com.biengual.userapi.dashboard.presentation.dto.GetMissionCalendarDto;
+import com.biengual.userapi.dashboard.presentation.dto.GetMonthlyPointHistoryDto;
 import com.biengual.userapi.dashboard.presentation.dto.GetQuestionSummaryDto;
 import com.biengual.userapi.dashboard.presentation.dto.GetRecentLearningDto;
 import com.biengual.userapi.dashboard.presentation.dto.GetRecentLearningSummaryDto;
 import com.biengual.userapi.dashboard.presentation.swagger.SwaggerGetCategoryLearning;
 import com.biengual.userapi.dashboard.presentation.swagger.SwaggerGetCurrentPoint;
 import com.biengual.userapi.dashboard.presentation.swagger.SwaggerGetMissionCalendar;
+import com.biengual.userapi.dashboard.presentation.swagger.SwaggerGetMonthlyPointHistory;
 import com.biengual.userapi.dashboard.presentation.swagger.SwaggerGetQuestionSummary;
 import com.biengual.userapi.dashboard.presentation.swagger.SwaggerGetRecentLearning;
 import com.biengual.userapi.dashboard.presentation.swagger.SwaggerGetRecentLearningSummary;
@@ -167,15 +169,13 @@ public class DashboardPublicController {
     })
     public ResponseEntity<Object> getQuestionSummary(
         @AuthenticationPrincipal OAuth2UserPrincipal principal,
-
         @RequestParam(required = false)
         @Pattern(regexp = "^[1-9][0-9]{3}-(0?[1-9]|1[0-2])$", message = DATE_PATTERN_MISMATCH)
         String date
     ){
         DashboardInfo.QuestionSummary info = dashboardService.getQuestionSummary(principal.getId(), date);
         GetQuestionSummaryDto.Response response = dashboardDtoMapper.ofQuestionSummary(info);
-        
-        return ResponseEntityFactory.toResponseEntity(CATEGORY_LEARNING_VIEW_SUCCESS, response);
+        return ResponseEntityFactory.toResponseEntity(MONTHLY_QUIZ_HISTORY_VIEW_SUCCESS, response);
     }
   
   

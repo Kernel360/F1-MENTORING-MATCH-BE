@@ -13,6 +13,7 @@ import com.biengual.userapi.dashboard.domain.DashboardInfo;
 import com.biengual.userapi.dashboard.presentation.dto.GetCategoryLearningDto;
 import com.biengual.userapi.dashboard.presentation.dto.GetCurrentPointDto;
 import com.biengual.userapi.dashboard.presentation.dto.GetMissionCalendarDto;
+import com.biengual.userapi.dashboard.presentation.dto.GetMonthlyPointHistoryDto;
 import com.biengual.userapi.dashboard.presentation.dto.GetQuestionSummaryDto;
 import com.biengual.userapi.dashboard.presentation.dto.GetRecentLearningDto;
 import com.biengual.userapi.dashboard.presentation.dto.GetRecentLearningSummaryDto;
