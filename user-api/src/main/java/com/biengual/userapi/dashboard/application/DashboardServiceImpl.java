@@ -49,7 +49,7 @@ public class DashboardServiceImpl implements DashboardService {
 
     @Override
     @Transactional(readOnly = true)
-    public DashboardInfo.QuestionSummary getQuestionSummary(Long userId, String date) {
+    public DashboardInfo.QuestionWeeklySummary getQuestionSummary(Long userId, String date) {
         return dashboardReader.findQuestionSummary(userId, date);
     }
 

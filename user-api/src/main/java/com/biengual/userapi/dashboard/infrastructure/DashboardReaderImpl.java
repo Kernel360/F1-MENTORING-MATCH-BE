@@ -1,5 +1,12 @@
 package com.biengual.userapi.dashboard.infrastructure;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import com.biengual.core.annotation.DataProvider;
 import com.biengual.core.domain.entity.pointhistory.PointHistoryEntity;
 import com.biengual.core.util.PeriodUtil;
@@ -8,17 +15,11 @@ import com.biengual.userapi.dashboard.domain.DashboardReader;
 import com.biengual.userapi.learning.domain.CategoryLearningHistoryCustomRepository;
 import com.biengual.userapi.learning.domain.RecentLearningHistoryCustomRepository;
 import com.biengual.userapi.missionhistory.domain.MissionHistoryCustomRepository;
-import com.biengual.userapi.questionhistory.domain.QuestionHistoryCustomRepository;
 import com.biengual.userapi.pointhistory.domain.PointHistoryCustomRepository;
+import com.biengual.userapi.questionhistory.domain.QuestionHistoryCustomRepository;
 import com.biengual.userapi.user.domain.UserCustomRepository;
 
 import lombok.RequiredArgsConstructor;
-import java.time.LocalDate;
-import java.time.YearMonth;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @DataProvider
 @RequiredArgsConstructor
@@ -46,7 +47,8 @@ public class DashboardReaderImpl implements DashboardReader {
     public DashboardInfo.CategoryLearningList findCategoryLearning(Long userId, String date) {
         YearMonth yearMonth = PeriodUtil.toYearMonth(date);
 
-        Long totalCount = categoryLearningHistoryCustomRepository.countCategoryLearningByUserIdInMonth(userId, yearMonth);
+        Long totalCount = categoryLearningHistoryCustomRepository.countCategoryLearningByUserIdInMonth(userId,
+            yearMonth);
 
         List<DashboardInfo.CategoryLearning> categoryLearningList =
             categoryLearningHistoryCustomRepository.findCategoryLearningByUserIdInMonth(userId, yearMonth);
@@ -69,9 +71,11 @@ public class DashboardReaderImpl implements DashboardReader {
     }
 
     @Override
-    public DashboardInfo.QuestionSummary findQuestionSummary(Long userId, String date) {
-        YearMonth yearMonth = PeriodUtil.toYearMonth(date);
-        return questionHistoryCustomRepository.findQuestionHistoryByUserIdInMonth(userId, yearMonth);
+    public DashboardInfo.QuestionWeeklySummary findQuestionSummary(Long userId, String date) {
+        LocalDate currentDate = (date == null) ? LocalDate.now() : LocalDate.parse(date);
+        return DashboardInfo.QuestionWeeklySummary.of(
+            questionHistoryCustomRepository.findQuestionHistoryByUserIdLastFiveWeeks(userId, currentDate)
+        );
     }
 
     // 포인트 내역 조회
