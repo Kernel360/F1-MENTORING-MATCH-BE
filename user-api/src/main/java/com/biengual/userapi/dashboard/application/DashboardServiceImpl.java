@@ -1,11 +1,13 @@
 package com.biengual.userapi.dashboard.application;
 
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.biengual.userapi.dashboard.domain.DashboardInfo;
 import com.biengual.userapi.dashboard.domain.DashboardReader;
 import com.biengual.userapi.dashboard.domain.DashboardService;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -43,5 +45,17 @@ public class DashboardServiceImpl implements DashboardService {
     @Override
     public DashboardInfo.MissionCalendar getMissionCalendar(Long userId, String date) {
         return DashboardInfo.MissionCalendar.of(dashboardReader.findMissionHistory(userId, date));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public DashboardInfo.QuestionSummary getQuestionSummary(Long userId, String date) {
+        return dashboardReader.findQuestionSummary(userId, date);
+    }
+
+    // 포인트 내역 조회
+    @Override
+    public DashboardInfo.MonthlyPointHistory getMonthlyPointHistory(Long userId, String date) {
+        return dashboardReader.findMonthlyPointHistory(userId, date);
     }
 }

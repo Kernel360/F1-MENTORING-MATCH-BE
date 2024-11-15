@@ -13,4 +13,8 @@ public interface DashboardService {
     Long getCurrentPoint(Long userId);
 
     DashboardInfo.MissionCalendar getMissionCalendar(Long userId, String date);
+
+    DashboardInfo.QuestionSummary getQuestionSummary(Long userId, String date);
+
+    DashboardInfo.MonthlyPointHistory getMonthlyPointHistory(Long userId, String date);
 }

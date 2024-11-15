@@ -1,9 +1,11 @@
 package com.biengual.core.response.success;
 
+import org.springframework.http.HttpStatus;
+
 import com.biengual.core.response.status.DashboardServiceStatus;
 import com.biengual.core.response.status.ServiceStatus;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 
 @RequiredArgsConstructor
 public enum DashboardSuccessCode implements SuccessCode {
@@ -16,7 +18,11 @@ public enum DashboardSuccessCode implements SuccessCode {
     CURRENT_POINT_VIEW_SUCCESS(HttpStatus.OK, DashboardServiceStatus.CURRENT_POINT_VIEW_SUCCESS,
         "현재 포인트 조회 성공"),
     MISSION_CALENDAR_VIEW_SUCCESS(HttpStatus.OK, DashboardServiceStatus.MISSION_CALENDAR_VIEW_SUCCESS,
-        "월간 미션 달력 조회 성공");
+        "월간 미션 달력 조회 성공"),
+    MONTHLY_POINT_HISTORY_VIEW_SUCCESS(HttpStatus.OK, DashboardServiceStatus.MONTHLY_POINT_HISTORY_VIEW_SUCCESS,
+        "월간 포인트 내역 조회 성공"),
+    MONTHLY_QUIZ_HISTORY_VIEW_SUCCESS(HttpStatus.OK, DashboardServiceStatus.MONTHLY_QUIZ_HISTORY_VIEW_SUCCESS,
+        "월간 퀴즈 내역 조회 성공");
 
     private final HttpStatus code;
     private final ServiceStatus serviceStatus;

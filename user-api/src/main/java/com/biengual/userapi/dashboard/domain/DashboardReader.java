@@ -17,4 +17,8 @@ public interface DashboardReader {
     Long findCurrentPoint(Long userId);
 
     List<DashboardInfo.MissionHistory> findMissionHistory(Long userId, String date);
+
+    DashboardInfo.QuestionSummary findQuestionSummary(Long userId, String date);
+
+    DashboardInfo.MonthlyPointHistory findMonthlyPointHistory(Long userId, String date);
 }
