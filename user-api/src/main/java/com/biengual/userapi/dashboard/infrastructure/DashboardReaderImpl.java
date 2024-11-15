@@ -8,10 +8,11 @@ import com.biengual.userapi.dashboard.domain.DashboardReader;
 import com.biengual.userapi.learning.domain.CategoryLearningHistoryCustomRepository;
 import com.biengual.userapi.learning.domain.RecentLearningHistoryCustomRepository;
 import com.biengual.userapi.missionhistory.domain.MissionHistoryCustomRepository;
+import com.biengual.userapi.questionhistory.domain.QuestionHistoryCustomRepository;
 import com.biengual.userapi.pointhistory.domain.PointHistoryCustomRepository;
 import com.biengual.userapi.user.domain.UserCustomRepository;
-import lombok.RequiredArgsConstructor;
 
+import lombok.RequiredArgsConstructor;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Comparator;
@@ -26,6 +27,7 @@ public class DashboardReaderImpl implements DashboardReader {
     private final CategoryLearningHistoryCustomRepository categoryLearningHistoryCustomRepository;
     private final UserCustomRepository userCustomRepository;
     private final MissionHistoryCustomRepository missionHistoryCustomRepository;
+    private final QuestionHistoryCustomRepository questionHistoryCustomRepository;
     private final PointHistoryCustomRepository pointHistoryCustomRepository;
 
     @Override
@@ -64,6 +66,12 @@ public class DashboardReaderImpl implements DashboardReader {
         YearMonth yearMonth = PeriodUtil.toYearMonth(date);
 
         return missionHistoryCustomRepository.findMissionHistoryByUserIdInMonth(userId, yearMonth);
+    }
+
+    @Override
+    public DashboardInfo.QuestionSummary findQuestionSummary(Long userId, String date) {
+        YearMonth yearMonth = PeriodUtil.toYearMonth(date);
+        return questionHistoryCustomRepository.findQuestionHistoryByUserIdInMonth(userId, yearMonth);
     }
 
     // 포인트 내역 조회

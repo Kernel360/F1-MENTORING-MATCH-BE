@@ -1,13 +1,14 @@
 package com.biengual.userapi.dashboard.domain;
 
-import com.biengual.core.enums.ContentType;
 import com.biengual.core.enums.PointReason;
-import lombok.Builder;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import com.biengual.core.enums.ContentType;
+
+import lombok.Builder;
 
 public class DashboardInfo {
 
@@ -88,6 +89,12 @@ public class DashboardInfo {
         }
     }
 
+    public record QuestionSummary(
+        Double firstTryCorrectRate,
+        Double reTryCorrectRate
+    ) {
+    }
+  
     @Builder
     public record PointRecord(
         PointReason reason,

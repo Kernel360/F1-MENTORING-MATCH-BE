@@ -1,11 +1,34 @@
 package com.biengual.userapi.dashboard.presentation;
 
+import static com.biengual.core.constant.BadRequestMessageConstant.*;
+import static com.biengual.core.response.success.DashboardSuccessCode.*;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.biengual.core.response.ResponseEntityFactory;
 import com.biengual.userapi.dashboard.domain.DashboardInfo;
 import com.biengual.userapi.dashboard.domain.DashboardService;
-import com.biengual.userapi.dashboard.presentation.dto.*;
-import com.biengual.userapi.dashboard.presentation.swagger.*;
+import com.biengual.userapi.dashboard.presentation.dto.GetCategoryLearningDto;
+import com.biengual.userapi.dashboard.presentation.dto.GetCurrentPointDto;
+import com.biengual.userapi.dashboard.presentation.dto.GetMissionCalendarDto;
+import com.biengual.userapi.dashboard.presentation.dto.GetMonthlyPointHistoryDto;
+import com.biengual.userapi.dashboard.presentation.dto.GetQuestionSummaryDto;
+import com.biengual.userapi.dashboard.presentation.dto.GetRecentLearningDto;
+import com.biengual.userapi.dashboard.presentation.dto.GetRecentLearningSummaryDto;
+import com.biengual.userapi.dashboard.presentation.swagger.SwaggerGetCategoryLearning;
+import com.biengual.userapi.dashboard.presentation.swagger.SwaggerGetCurrentPoint;
+import com.biengual.userapi.dashboard.presentation.swagger.SwaggerGetMissionCalendar;
+import com.biengual.userapi.dashboard.presentation.swagger.SwaggerGetMonthlyPointHistory;
+import com.biengual.userapi.dashboard.presentation.swagger.SwaggerGetQuestionSummary;
+import com.biengual.userapi.dashboard.presentation.swagger.SwaggerGetRecentLearning;
+import com.biengual.userapi.dashboard.presentation.swagger.SwaggerGetRecentLearningSummary;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -16,15 +39,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import static com.biengual.core.constant.BadRequestMessageConstant.DATE_PATTERN_MISMATCH;
-import static com.biengual.core.response.success.DashboardSuccessCode.*;
 
 @RestController
 @RequestMapping("/api/dashboard")
@@ -140,6 +154,31 @@ public class DashboardPublicController {
         return ResponseEntityFactory.toResponseEntity(MISSION_CALENDAR_VIEW_SUCCESS, response);
     }
 
+    @GetMapping("/quiz/summary")
+    @Operation(summary = "월간 퀴즈 정답률 조회", description = "월간 퀴즈 첫 시도, 재 시도 정답률을 조회합니다.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "월간 퀴즈 첫 시도, 재 시도 정답률 조회 성공",
+            content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerGetQuestionSummary.class))}
+        ),
+        @ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "500", description = "서버 에러", content = @Content(mediaType = "application/json"))
+    })
+    @Parameters({
+        @Parameter(name = "date", description = "\"yyyy-mm\" 문자열 형태의 날짜 / default: 현재 날짜"),
+    })
+    public ResponseEntity<Object> getQuestionSummary(
+        @AuthenticationPrincipal OAuth2UserPrincipal principal,
+        @RequestParam(required = false)
+        @Pattern(regexp = "^[1-9][0-9]{3}-(0?[1-9]|1[0-2])$", message = DATE_PATTERN_MISMATCH)
+        String date
+    ){
+        DashboardInfo.QuestionSummary info = dashboardService.getQuestionSummary(principal.getId(), date);
+        GetQuestionSummaryDto.Response response = dashboardDtoMapper.ofQuestionSummaryRes(info);
+        return ResponseEntityFactory.toResponseEntity(MONTHLY_QUIZ_HISTORY_VIEW_SUCCESS, response);
+    }
+  
+  
     @GetMapping("/points/history")
     @Operation(summary = "월간 포인트 내역 조회", description = "회원의 월간 포인트 내역을 조회합니다.")
     @ApiResponses(value = {
@@ -155,7 +194,6 @@ public class DashboardPublicController {
     })
     public ResponseEntity<Object> getMonthlyPointHistory(
         @AuthenticationPrincipal OAuth2UserPrincipal principal,
-
         @RequestParam(required = false)
         @Pattern(regexp = "^[1-9][0-9]{3}-(0?[1-9]|1[0-2])$", message = DATE_PATTERN_MISMATCH)
         String date
