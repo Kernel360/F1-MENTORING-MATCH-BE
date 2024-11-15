@@ -36,6 +36,7 @@ import com.biengual.userapi.dashboard.presentation.dto.GetRecentLearningSummaryD
 )
 public interface DashboardDtoMapper {
 
+    // Response <- Info
     @Mapping(target = "learningRate", source = "completedLearningRate")
     GetRecentLearningSummaryDto.Response ofRecentLearningSummaryRes(
         DashboardInfo.RecentLearningSummary recentLearningSummary
@@ -57,6 +58,9 @@ public interface DashboardDtoMapper {
     GetMissionCalendarDto.MissionHistory ofMissionHistory(DashboardInfo.MissionHistory missionHistory);
 
     GetQuestionSummaryDto.Response ofQuestionSummary(DashboardInfo.QuestionSummary info);
+    
+    @Mapping(target = "monthlyHistoryList", source = "dailyPointHistoryList")
+    GetMonthlyPointHistoryDto.Response ofMonthlyPointHistoryRes(DashboardInfo.MonthlyPointHistory monthlyPointHistory);
 
     // Internal Method =================================================================================================
 

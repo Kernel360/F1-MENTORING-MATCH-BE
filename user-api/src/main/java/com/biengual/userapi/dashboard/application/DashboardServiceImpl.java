@@ -52,4 +52,10 @@ public class DashboardServiceImpl implements DashboardService {
     public DashboardInfo.QuestionSummary getQuestionSummary(Long userId, String date) {
         return dashboardReader.findQuestionSummary(userId, date);
     }
+
+    // 포인트 내역 조회
+    @Override
+    public DashboardInfo.MonthlyPointHistory getMonthlyPointHistory(Long userId, String date) {
+        return dashboardReader.findMonthlyPointHistory(userId, date);
+    }
 }
