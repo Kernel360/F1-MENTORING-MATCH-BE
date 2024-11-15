@@ -56,13 +56,13 @@ public class PointHistoryEntity extends BaseEntity {
         this.reason = reason;
     }
 
-    public static PointHistoryEntity createPointHistory(
-        UserEntity user, Long pointChange, Long currentBalance, PointReason reason
+    public static PointHistoryEntity createPointHistoryAfterPointUpdate(
+        UserEntity user, Long pointChange, PointReason reason
     ) {
         return PointHistoryEntity.builder()
             .user(user)
             .pointChange(pointChange)
-            .pointBalance(currentBalance)
+            .pointBalance(user.getCurrentPoint())
             .reason(reason)
             .build();
     }

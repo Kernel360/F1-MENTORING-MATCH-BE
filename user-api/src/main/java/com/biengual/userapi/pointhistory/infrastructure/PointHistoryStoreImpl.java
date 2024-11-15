@@ -25,8 +25,8 @@ public class PointHistoryStoreImpl implements PointHistoryStore {
         UserEntity user = userRepository.findById(userId)
             .orElseThrow(() -> new CommonException(USER_NOT_FOUND));
 
-        PointHistoryEntity history = PointHistoryEntity.createPointHistory(
-            user, reason.getValue(), currentPoint, reason
+        PointHistoryEntity history = PointHistoryEntity.createPointHistoryAfterPointUpdate(
+            user, reason.getValue(), reason
         );
         pointHistoryRepository.save(history);
     }
