@@ -35,14 +35,15 @@ public class QuestionReaderImpl implements QuestionReader {
 
     @Override
     public List<QuestionInfo.Detail> findQuestionsByContentId(Long contentId, Long userId) {
+        ContentDocument contentDocument = this.getContentDocument(contentId);
 
         // 컨텐츠에 포함된 모든 문제 중 맞추지 못한 문제 id
-        List<String> questionDocumentIdsCorrected = questionHistoryCustomRepository.findQuestionsCorrected(
-            this.getContentDocument(contentId).getQuestionIds(), userId
-        );
+        List<String> questionDocumentIdsCorrected =
+            questionHistoryCustomRepository.findQuestionsCorrected(contentDocument.getQuestionIds(), userId);
 
         List<String> questionDocumentIdsNotCorrected = new ArrayList<>(
-            questionDocumentIdsCorrected.stream()
+            contentDocument.getQuestionIds()
+                .stream()
                 .filter(quizId -> !questionDocumentIdsCorrected.contains(quizId))
                 .toList()
         );
