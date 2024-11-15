@@ -1,11 +1,12 @@
 package com.biengual.userapi.dashboard.domain;
 
-import com.biengual.core.enums.ContentType;
-import lombok.Builder;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import com.biengual.core.enums.ContentType;
+
+import lombok.Builder;
 
 public class DashboardInfo {
 
@@ -84,5 +85,11 @@ public class DashboardInfo {
                 .missionHistoryList(missionHistoryList)
                 .build();
         }
+    }
+
+    public record QuestionSummary(
+        Double firstTryCorrectRate,
+        Double reTryCorrectRate
+    ) {
     }
 }

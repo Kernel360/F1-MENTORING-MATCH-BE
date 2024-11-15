@@ -1,5 +1,8 @@
 package com.biengual.userapi.dashboard.infrastructure;
 
+import java.time.YearMonth;
+import java.util.List;
+
 import com.biengual.core.annotation.DataProvider;
 import com.biengual.core.util.PeriodUtil;
 import com.biengual.userapi.dashboard.domain.DashboardInfo;
@@ -7,11 +10,10 @@ import com.biengual.userapi.dashboard.domain.DashboardReader;
 import com.biengual.userapi.learning.domain.CategoryLearningHistoryCustomRepository;
 import com.biengual.userapi.learning.domain.RecentLearningHistoryCustomRepository;
 import com.biengual.userapi.missionhistory.domain.MissionHistoryCustomRepository;
+import com.biengual.userapi.questionhistory.domain.QuestionHistoryCustomRepository;
 import com.biengual.userapi.user.domain.UserCustomRepository;
-import lombok.RequiredArgsConstructor;
 
-import java.time.YearMonth;
-import java.util.List;
+import lombok.RequiredArgsConstructor;
 
 @DataProvider
 @RequiredArgsConstructor
@@ -20,6 +22,7 @@ public class DashboardReaderImpl implements DashboardReader {
     private final CategoryLearningHistoryCustomRepository categoryLearningHistoryCustomRepository;
     private final UserCustomRepository userCustomRepository;
     private final MissionHistoryCustomRepository missionHistoryCustomRepository;
+    private final QuestionHistoryCustomRepository questionHistoryCustomRepository;
 
     @Override
     public DashboardInfo.RecentLearningSummary findRecentLearningSummary(Long userId) {
@@ -57,5 +60,11 @@ public class DashboardReaderImpl implements DashboardReader {
         YearMonth yearMonth = PeriodUtil.toYearMonth(date);
 
         return missionHistoryCustomRepository.findMissionHistoryByUserIdInMonth(userId, yearMonth);
+    }
+
+    @Override
+    public DashboardInfo.QuestionSummary findQuestionSummary(Long userId, String date) {
+        YearMonth yearMonth = PeriodUtil.toYearMonth(date);
+        return questionHistoryCustomRepository.findQuestionHistoryByUserIdInMonth(userId, yearMonth);
     }
 }

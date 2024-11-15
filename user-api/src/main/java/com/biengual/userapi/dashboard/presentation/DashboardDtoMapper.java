@@ -1,11 +1,21 @@
 package com.biengual.userapi.dashboard.presentation;
 
-import com.biengual.userapi.dashboard.domain.DashboardInfo;
-import com.biengual.userapi.dashboard.presentation.dto.*;
-import org.mapstruct.*;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import org.mapstruct.InjectionStrategy;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+import org.mapstruct.ReportingPolicy;
+
+import com.biengual.userapi.dashboard.domain.DashboardInfo;
+import com.biengual.userapi.dashboard.presentation.dto.GetCategoryLearningDto;
+import com.biengual.userapi.dashboard.presentation.dto.GetCurrentPointDto;
+import com.biengual.userapi.dashboard.presentation.dto.GetMissionCalendarDto;
+import com.biengual.userapi.dashboard.presentation.dto.GetQuestionSummaryDto;
+import com.biengual.userapi.dashboard.presentation.dto.GetRecentLearningDto;
+import com.biengual.userapi.dashboard.presentation.dto.GetRecentLearningSummaryDto;
 
 /**
  * 객체 간의 Mapper를 정의
@@ -46,6 +56,8 @@ public interface DashboardDtoMapper {
     @Mapping(target = "date", source = "date", qualifiedByName = "toLocalDateFormat")
     GetMissionCalendarDto.MissionHistory ofMissionHistory(DashboardInfo.MissionHistory missionHistory);
 
+    GetQuestionSummaryDto.Response ofQuestionSummary(DashboardInfo.QuestionSummary info);
+
     // Internal Method =================================================================================================
 
     @Named("toDurationFormat")
@@ -62,4 +74,6 @@ public interface DashboardDtoMapper {
     default LocalDate toLocalDateFormat(LocalDateTime localDateTime) {
         return localDateTime.toLocalDate();
     }
+
+
 }
