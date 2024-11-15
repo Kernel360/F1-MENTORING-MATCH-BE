@@ -37,8 +37,7 @@ public class PeriodUtil {
         return yearMonth.atEndOfMonth().atTime(23, 59, 59, 999_999);
     }
 
-    public static LocalDate getFiveWeeksAgo(LocalDate currentDate) {
-        return currentDate.minusWeeks(4).with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-
+    public static LocalDate getFewWeeksAgo(LocalDate currentDate, long subtractWeek, DayOfWeek dayOfWeek) {
+        return currentDate.minusWeeks(subtractWeek).with(TemporalAdjusters.previousOrSame(dayOfWeek));
     }
 }

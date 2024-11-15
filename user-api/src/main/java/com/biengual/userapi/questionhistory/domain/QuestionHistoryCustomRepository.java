@@ -2,6 +2,7 @@ package com.biengual.userapi.questionhistory.domain;
 
 import static com.biengual.core.domain.entity.questionhistory.QQuestionHistoryEntity.*;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ public class QuestionHistoryCustomRepository {
     public List<DashboardInfo.QuestionSummary> findQuestionHistoryByUserIdLastFiveWeeks(
         Long userId, LocalDate currentDate
     ) {
-        LocalDate fiveWeeksAgo = PeriodUtil.getFiveWeeksAgo(currentDate);
+        LocalDate fiveWeeksAgo = PeriodUtil.getFewWeeksAgo(currentDate, 4, DayOfWeek.MONDAY);
 
         List<DashboardInfo.QuestionSummary> result = new ArrayList<>();
 
