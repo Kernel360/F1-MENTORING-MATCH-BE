@@ -22,6 +22,6 @@ public class PointManager {
 
         pointValidator.verifyUpdatePoint(currentPoint, reason);
         userStore.updatePoint(userId, reason);
-        pointHistoryStore.recordPointHistory(userId, reason, currentPoint);
+        pointHistoryStore.recordPointHistory(userId, reason);
     }
 }

@@ -21,7 +21,7 @@ public class PointHistoryStoreImpl implements PointHistoryStore {
 
     // 포인트 변동 내역을 PointHistory에 저장
     @Override
-    public void recordPointHistory(Long userId, PointReason reason, Long currentPoint) {
+    public void recordPointHistory(Long userId, PointReason reason) {
         UserEntity user = userRepository.findById(userId)
             .orElseThrow(() -> new CommonException(USER_NOT_FOUND));
 
