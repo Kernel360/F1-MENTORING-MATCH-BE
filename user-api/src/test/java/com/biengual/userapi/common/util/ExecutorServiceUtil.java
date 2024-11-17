@@ -13,13 +13,10 @@ public class ExecutorServiceUtil {
         CountDownLatch latch = new CountDownLatch(threadCount);
 
         for (int i = 0; i < threadCount; i++) {
-
-            int finalI = i;
             executorService.submit(() -> {
                 try {
                     task.run();
                 } finally {
-                    System.out.println("순서: " + finalI);
                     latch.countDown();
                 }
             });
