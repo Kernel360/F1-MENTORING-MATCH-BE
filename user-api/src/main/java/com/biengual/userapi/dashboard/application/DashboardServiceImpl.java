@@ -37,12 +37,14 @@ public class DashboardServiceImpl implements DashboardService {
 
     // 현재 유저 포인트 조회
     @Override
+    @Transactional(readOnly = true)
     public Long getCurrentPoint(Long userId) {
         return dashboardReader.findCurrentPoint(userId);
     }
 
     // 미션 달력 조회
     @Override
+    @Transactional(readOnly = true)
     public DashboardInfo.MissionCalendar getMissionCalendar(Long userId, String date) {
         return DashboardInfo.MissionCalendar.of(dashboardReader.findMissionHistory(userId, date));
     }
@@ -55,6 +57,7 @@ public class DashboardServiceImpl implements DashboardService {
 
     // 포인트 내역 조회
     @Override
+    @Transactional(readOnly = true)
     public DashboardInfo.MonthlyPointHistory getMonthlyPointHistory(Long userId, String date) {
         return dashboardReader.findMonthlyPointHistory(userId, date);
     }

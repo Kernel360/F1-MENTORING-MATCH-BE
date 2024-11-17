@@ -1,29 +1,26 @@
 spring:
   config:
-    import:
-      - optional:file:.env[.properties]
     activate:
-      on-profile: prod
-  
+      on-profile: test
+
   datasource:
-    url: ${MY_PROD_DATA_SOURCE}
-    username: ${DB_ROOT_USERNAME}
-    password: ${DB_MYSQL_PASSWORD}
+    url: jdbc:mysql://localhost:3306/biengual_test_db
+    username: root
+    password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   data:
     redis:
-      host: ${REDIS_PROD_HOST}
+      host: localhost
       port: 6379
-      password: ${DB_ROOT_PASSWORD}
+      password: 1234
       username: default
 
-
     mongodb:
-      uri: ${MONGO_PROD_URI}
-      database: ${MONGO_PROD_DATABASE}
+      uri: ${MONGO_LOCAL_URI}
+      database: biengual_test_db
       username: ${DB_ROOT_USERNAME}
-      password: ${DB_MYSQL_PASSWORD}
+      password: ${DB_ROOT_PASSWORD}
 
   security:
     oauth2:
@@ -32,30 +29,27 @@ spring:
           google:
             client-id: ${MY_GOOGLE_CLIENT_ID}
             client-secret: ${MY_GOOGLE_CLIENT_SECRET}
-            redirect-uri: ${MY_GOOGLE_PROD_REDIRECT_URI}
             scope:
               - email
               - profile
-#              - https://www.googleapis.com/auth/youtube.force-ssl
-#              - https://www.googleapis.com/auth/youtube.readonly
           kakao:
             client-id: ${MY_KAKAO_CLIENT_ID}
             client-secret: ${MY_KAKAO_CLIENT_SECRET}
             client-authentication-method: client_secret_post
             authorization-grant-type: authorization_code
-            redirect-uri: ${MY_KAKAO_PROD_REDIRECT_URI}
+            redirect-uri: ${MY_KAKAO_LOCAL_REDIRECT_URI}
             client-name: kakao
           naver:
             client-id: ${MY_NAVER_CLIENT_ID}
             client-secret: ${MY_NAVER_CLIENT_SECRET}
-            redirect-uri: ${MY_NAVER_PROD_REDIRECT_URI}
+            redirect-uri: ${MY_NAVER_LOCAL_REDIRECT_URI}
             authorization-grant-type: authorization_code
       success:
-        redirect-uri: ${OAUTH2_SUCCESS_PROD_REDIRECTION_PATH}
+        redirect-uri: ${OAUTH2_SUCCESS_LOCAL_REDIRECTION_PATH}
 
 nlp:
   model:
-    word2vec: ${WORD2VEC_MODEL_FILE_PATH}
+    word2vec: ${WORD2VEC_MODEL_TEST_FILE_PATH}
 
 perplexity:
   api-key: ${PERPLEXITY_API_KEY}
