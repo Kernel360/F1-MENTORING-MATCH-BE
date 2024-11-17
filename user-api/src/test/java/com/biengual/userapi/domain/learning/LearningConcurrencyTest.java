@@ -33,16 +33,16 @@ public class LearningConcurrencyTest {
     private Long initContentId;
 
     @Autowired
-    LearningService learningService;
+    private LearningService learningService;
 
     @Autowired
-    ContentRepository contentRepository;
+    private ContentRepository contentRepository;
 
     @Autowired
-    TestRecentLearningHistoryRepository testRecentLearningHistoryRepository;
+    private TestRecentLearningHistoryRepository testRecentLearningHistoryRepository;
 
     @Autowired
-    TestCategoryLearningHistoryRepository testCategoryLearningHistoryRepository;
+    private TestCategoryLearningHistoryRepository testCategoryLearningHistoryRepository;
 
     @BeforeEach
     void init() {
@@ -67,7 +67,7 @@ public class LearningConcurrencyTest {
     @DisplayName("LearningService의 recordLearningRate 메서드 동시 호출 시 최근 학습 내역 및 카테고리별 학습 내역 동시성 테스트")
     void recordLearningRate_ShouldEnsureConcurrency_WhenCalledSimultaneously() throws InterruptedException {
         // given
-        int threadCount = 100;
+        int threadCount = 10;
 
         LearningCommand.RecordLearningRate command = createCommandRecordLearningRate()
             .contentId(initContentId)

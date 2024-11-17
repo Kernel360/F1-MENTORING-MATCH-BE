@@ -21,7 +21,7 @@ public class LearningServiceImpl implements LearningService {
     //  그리고 학습 내역이 기록이 되면 최근 학습 내역과 카테고리별 학습 내역을 비동기적으로 기록할 수 있을 것 같습니다.
     // 학습률 업데이트
     @Override
-    @RedisDistributedLock(key = "#command.userId()+ \":\" + #command.contentId()")
+    @RedisDistributedLock(key = "#command.userId() + \":\" + #command.contentId()")
     public void recordLearningRate(LearningCommand.RecordLearningRate command) {
         ContentEntity content = contentReader.findLearnableContent(command.contentId(), command.userId());
 
