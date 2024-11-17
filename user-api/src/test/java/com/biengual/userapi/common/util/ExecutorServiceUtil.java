@@ -5,9 +5,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
+/**
+ * 테스트에서 사용하는 ExecutorService를 위한 Util 클래스
+ *
+ * @author 문찬욱
+ */
 public class ExecutorServiceUtil {
 
-    // 단일 입력 파라미터에 대한 ExecutorService
+    // 동일한 입력에 대한 ExecutorService
     public static void createExecutorService(int threadCount, Runnable task) throws InterruptedException {
         ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
         CountDownLatch latch = new CountDownLatch(threadCount);
@@ -26,7 +31,7 @@ public class ExecutorServiceUtil {
         executorService.shutdown();
     }
 
-    // 여러 입력 파라미터에 대한 ExecutorService
+    // 다양한 입력에 대한 ExecutorService
     public static <T> void createExecutorService(T[] objects, Consumer<T> task) throws InterruptedException {
         int threadCount = objects.length;
 
