@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
 import static com.biengual.userapi.domain.user.UserTestFixture.TestUserEntity.createUserEntity;
@@ -90,7 +91,7 @@ public class PointConcurrencyTest {
     @DisplayName("PointManager의 updateAndSavePoint 메서드 같은 reason으로 동시 호출 시 currentPoint 및 balance 동시성 테스트")
     void updateAndSavePoint_ShouldEnsureConcurrency_WhenCalledSimultaneouslyWithSameReasons() throws InterruptedException {
         // given
-        PointReason reason = PointReason.VIEW_QUIZ_HINT;
+        PointReason reason = this.getRandomPointReason();
         int threadCount = 10;
         AtomicLong currentPoint = new AtomicLong(initCurrentPoint);
 
@@ -103,6 +104,8 @@ public class PointConcurrencyTest {
         UserEntity user = userRepository.findById(initUserId).orElseThrow();
         PointHistoryEntity pointHistory = testPointHistoryRepository.findTopByOrderByIdDesc().orElseThrow();
 
+        log.info("InitCurrentPoint: {}", initCurrentPoint);
+        log.info("PointReason: {}, PointValue: {}, threadCount: {}", reason, reason.getValue(), threadCount);
         log.info("User의 CurrentPoint: {}", user.getCurrentPoint());
         log.info("PointHistory의 PointBalance: {}", pointHistory.getPointBalance());
 
@@ -120,5 +123,15 @@ public class PointConcurrencyTest {
         });
 
         currentPoint.addAndGet(reason.getValue());
+    }
+
+    // 랜덤한 PointReason을 뽑기 위한 메서드
+    private PointReason getRandomPointReason() {
+        PointReason[] reasons = PointReason.values();
+
+        Random random = new Random();
+        int randomIndex = random.nextInt(reasons.length);
+
+        return reasons[randomIndex];
     }
 }
