@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS category_recommender
 (
     `id`                   BIGINT AUTO_INCREMENT,
     `category_id`          BIGINT       NOT NULL,
-    `similar_category_ids` VARCHAR(512) NOT NULL,
+    `similar_category_ids` VARCHAR(255) NOT NULL,
     `created_at`         DATETIME(6) DEFAULT NULL,
     `updated_at`         DATETIME(6) DEFAULT NULL,
     PRIMARY KEY (`id`)
