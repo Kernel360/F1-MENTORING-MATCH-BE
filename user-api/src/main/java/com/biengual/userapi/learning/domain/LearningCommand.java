@@ -1,12 +1,13 @@
 package com.biengual.userapi.learning.domain;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 import com.biengual.core.domain.entity.learning.CategoryLearningHistoryEntity;
 import com.biengual.core.domain.entity.learning.LearningHistoryEntity;
 import com.biengual.core.domain.entity.learning.RecentLearningHistoryEntity;
-import lombok.Builder;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import lombok.Builder;
 
 public class LearningCommand {
 
@@ -39,6 +40,7 @@ public class LearningCommand {
         public CategoryLearningHistoryEntity toCategoryLearningHistoryEntity(Long categoryId) {
             return CategoryLearningHistoryEntity.builder()
                 .userId(this.userId)
+                .contentId(this.contentId)
                 .categoryId(categoryId)
                 .learningTime(this.learningTime)
                 .build();

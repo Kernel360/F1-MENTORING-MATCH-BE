@@ -1,18 +1,20 @@
 package com.biengual.userapi.learning.domain;
 
-import com.biengual.core.util.PeriodUtil;
-import com.biengual.userapi.dashboard.domain.DashboardInfo;
-import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import static com.biengual.core.domain.entity.category.QCategoryEntity.*;
+import static com.biengual.core.domain.entity.learning.QCategoryLearningHistoryEntity.*;
 
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.List;
 
-import static com.biengual.core.domain.entity.category.QCategoryEntity.categoryEntity;
-import static com.biengual.core.domain.entity.learning.QCategoryLearningHistoryEntity.categoryLearningHistoryEntity;
+import org.springframework.stereotype.Repository;
+
+import com.biengual.core.util.PeriodUtil;
+import com.biengual.userapi.dashboard.domain.DashboardInfo;
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+
+import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
