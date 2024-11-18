@@ -1,6 +1,7 @@
 package com.biengual.userapi.content.presentation;
 
 import com.biengual.core.response.ResponseEntityFactory;
+import com.biengual.core.swagger.SwaggerVoidReturn;
 import com.biengual.core.util.PaginationInfo;
 import com.biengual.userapi.content.application.ContentFacade;
 import com.biengual.userapi.content.domain.ContentCommand;
@@ -239,7 +240,7 @@ public class ContentPublicController {
     @Operation(summary = "컨텐츠 난이도 피드백", description = "회원이 컨텐츠에 대한 난이도를 피드백합니다.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "컨텐츠 난이도 피드백 요청 성공", content = {
-            @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerContentSubmitLevelFeedback.class))
+            @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerVoidReturn.class))
         }),
         @ApiResponse(responseCode = "400", description = "이미 제출한 해당 컨텐츠의 난이도 피드백", content = @Content(mediaType = "application/json")),
         @ApiResponse(responseCode = "403", description = "비활성화 컨텐츠", content = @Content(mediaType = "application/json")),
