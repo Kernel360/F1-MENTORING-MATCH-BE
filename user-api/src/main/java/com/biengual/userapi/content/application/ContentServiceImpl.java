@@ -93,6 +93,8 @@ public class ContentServiceImpl implements ContentService {
     @Override
     @RedisDistributedLock(key = "#command.userId() + \":\" + #command.contentId()")
     public void submitLevelFeedback(ContentCommand.SubmitLevelFeedback command) {
+        contentReader.findLearnableContent(command.contentId(), command.userId());
+
         contentStore.recordContentLevelFeedbackHistory(command);
     }
 

@@ -241,7 +241,11 @@ public class ContentPublicController {
         @ApiResponse(responseCode = "200", description = "컨텐츠 난이도 피드백 요청 성공", content = {
             @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerContentSubmitLevelFeedback.class))
         }),
+        @ApiResponse(responseCode = "400", description = "이미 제출한 해당 컨텐츠의 난이도 피드백", content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "403", description = "비활성화 컨텐츠", content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "403", description = "포인트를 지불하지 않은 최신 컨텐츠", content = @Content(mediaType = "application/json")),
         @ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "404", description = "컨텐츠 조회 실패", content = @Content(mediaType = "application/json")),
         @ApiResponse(responseCode = "500", description = "서버 에러", content = @Content)
     })
     public ResponseEntity<Object> submitLevelFeedback(

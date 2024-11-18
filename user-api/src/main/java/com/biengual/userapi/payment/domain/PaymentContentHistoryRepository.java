@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.biengual.core.domain.entity.paymenthistory.PaymentContentHistoryEntity;
 
-public interface PaymentRepository extends JpaRepository<PaymentContentHistoryEntity, Long> {
+public interface PaymentContentHistoryRepository extends JpaRepository<PaymentContentHistoryEntity, Long> {
     boolean existsByUserIdAndContentId(Long userId, Long contentId);
 }

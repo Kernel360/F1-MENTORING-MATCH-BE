@@ -52,7 +52,6 @@ public class ContentStoreImpl implements ContentStore {
     // 컨텐츠 난이도 피드백 기록
     @Override
     public void recordContentLevelFeedbackHistory(ContentCommand.SubmitLevelFeedback command) {
-
         validateAlreadySubmitLevelFeedback(command);
 
         contentLevelFeedbackHistoryRepository.save(command.toContentLevelFeedbackHistoryEntity());
