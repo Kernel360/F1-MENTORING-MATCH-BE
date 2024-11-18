@@ -12,8 +12,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
-import com.biengual.core.domain.entity.learning.QCategoryLearningHistoryEntity;
-import com.biengual.core.domain.entity.recommender.QCategoryRecommenderEntity;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
@@ -28,19 +26,16 @@ public class RecommenderCustomRepository {
 
     // CategoryRecommenderEntity를 업데이트 하기 위한 쿼리
     public void updateCategoryRecommender() {
-        QCategoryLearningHistoryEntity learningHistory = categoryLearningHistoryEntity;
-        QCategoryRecommenderEntity categoryRecommender = categoryRecommenderEntity;
-
         // 1. 각 카테고리별로 해당 카테고리를 많이 학습한 유저들의 ID를 가져옴
         Map<Long, List<Long>> categoryToUserIdsMap = queryFactory
-            .select(learningHistory.categoryId, learningHistory.userId)
-            .from(learningHistory)
+            .select(categoryLearningHistoryEntity.categoryId, categoryLearningHistoryEntity.userId)
+            .from(categoryLearningHistoryEntity)
             .fetch()
             .stream()
             .collect(Collectors.groupingBy(
-                tuple -> Optional.ofNullable(tuple.get(learningHistory.categoryId)).orElse(-1L),
+                tuple -> Optional.ofNullable(tuple.get(categoryLearningHistoryEntity.categoryId)).orElse(-1L),
                 Collectors.mapping(
-                    tuple -> Optional.ofNullable(tuple.get(learningHistory.userId)).orElse(-1L),
+                    tuple -> Optional.ofNullable(tuple.get(categoryLearningHistoryEntity.userId)).orElse(-1L),
                     Collectors.toList()
                 )
             ));
@@ -52,20 +47,20 @@ public class RecommenderCustomRepository {
 
             // 해당 유저들이 학습한 다른 카테고리들을 조회
             List<String> similarCategoryIds = queryFactory
-                .select(learningHistory.categoryId.stringValue())
-                .from(learningHistory)
-                .where(learningHistory.userId.in(userIds)
-                    .and(learningHistory.categoryId.ne(categoryId)))
-                .groupBy(learningHistory.categoryId)
-                .orderBy(learningHistory.categoryId.count().desc()) // 많이 학습한 순으로 정렬
+                .select(categoryLearningHistoryEntity.categoryId.stringValue())
+                .from(categoryLearningHistoryEntity)
+                .where(categoryLearningHistoryEntity.userId.in(userIds)
+                    .and(categoryLearningHistoryEntity.categoryId.ne(categoryId)))
+                .groupBy(categoryLearningHistoryEntity.categoryId)
+                .orderBy(categoryLearningHistoryEntity.categoryId.count().desc()) // 많이 학습한 순으로 정렬
                 .limit(3) // 최대 3개의 비슷한 카테고리 추천
                 .fetch();
 
             // 3. CategoryRecommenderEntity의 similarCategoryIds를 업데이트
             queryFactory
-                .update(categoryRecommender)
-                .where(categoryRecommender.categoryId.eq(categoryId))
-                .set(categoryRecommender.similarCategoryIds, similarCategoryIds)
+                .update(categoryRecommenderEntity)
+                .where(categoryRecommenderEntity.categoryId.eq(categoryId))
+                .set(categoryRecommenderEntity.similarCategoryIds, similarCategoryIds)
                 .execute();
         }
     }
