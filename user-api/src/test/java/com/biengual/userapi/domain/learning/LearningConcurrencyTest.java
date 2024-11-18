@@ -4,6 +4,7 @@ import com.biengual.core.domain.entity.category.CategoryEntity;
 import com.biengual.core.domain.entity.content.ContentEntity;
 import com.biengual.core.domain.entity.learning.CategoryLearningHistoryEntity;
 import com.biengual.core.domain.entity.learning.RecentLearningHistoryEntity;
+import com.biengual.userapi.common.util.ExecutorServiceUtil;
 import com.biengual.userapi.content.domain.ContentRepository;
 import com.biengual.userapi.learning.domain.LearningCommand;
 import com.biengual.userapi.learning.domain.LearningService;
@@ -16,15 +17,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import static com.biengual.userapi.domain.category.CategoryTestFixture.TestCategoryEntity.createCategoryEntity;
 import static com.biengual.userapi.domain.content.ContentTestFixture.TestContentEntity.createContentEntity;
 import static com.biengual.userapi.domain.learning.LearningTestFixture.TestCommandRecordLearningRate.createCommandRecordLearningRate;
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * 학습 도메인에 대한 동시성을 테스트하기 위한 테스트 클래스
+ *
+ * @author 문찬욱
+ */
 @SpringBootTest
 @DisplayName("학습 도메인 동시성 테스트")
 public class LearningConcurrencyTest {
@@ -33,16 +36,16 @@ public class LearningConcurrencyTest {
     private Long initContentId;
 
     @Autowired
-    LearningService learningService;
+    private LearningService learningService;
 
     @Autowired
-    ContentRepository contentRepository;
+    private ContentRepository contentRepository;
 
     @Autowired
-    TestRecentLearningHistoryRepository testRecentLearningHistoryRepository;
+    private TestRecentLearningHistoryRepository testRecentLearningHistoryRepository;
 
     @Autowired
-    TestCategoryLearningHistoryRepository testCategoryLearningHistoryRepository;
+    private TestCategoryLearningHistoryRepository testCategoryLearningHistoryRepository;
 
     @BeforeEach
     void init() {
@@ -75,7 +78,7 @@ public class LearningConcurrencyTest {
             .get();
 
         // when
-        createExecutorService(threadCount, () -> learningService.recordLearningRate(command));
+        ExecutorServiceUtil.createExecutorService(threadCount, () -> learningService.recordLearningRate(command));
 
         // then
         List<RecentLearningHistoryEntity> recentLearningHistory =
@@ -88,26 +91,5 @@ public class LearningConcurrencyTest {
 
         assertThat(recentLearningHistory).hasSize(1);
         assertThat(categoryLearningHistory).hasSize(1);
-    }
-
-    // Internal Method =================================================================================================
-
-    // ExecutorService 캡슐화
-    private void createExecutorService(int threadCount, Runnable task) throws InterruptedException {
-        ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
-        CountDownLatch latch = new CountDownLatch(threadCount);
-
-        for (int i = 0; i < threadCount; i++) {
-            executorService.submit(() -> {
-                try {
-                    task.run();
-                } finally {
-                    latch.countDown();
-                }
-            });
-        }
-
-        latch.await();
-        executorService.shutdown();
     }
 }
