@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/recommender")
-@Tag(name = "Recommender - private API", description = "추천 시스템 회원 전용 API")
+@Tag(name = "Recommender - public API", description = "추천 시스템 회원 전용 API")
 public class RecommenderPublicController {
     private final RecommenderDtoMapper recommenderDtoMapper;
     private final RecommenderService recommenderService;
