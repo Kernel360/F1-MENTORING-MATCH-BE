@@ -16,11 +16,19 @@ public class QuestionFacade {
 		questionService.createQuestion(contentId);
 	}
 
-	public QuestionInfo.DetailInfo getQuestions(Long contentId) {
-		return questionService.getQuestions(contentId);
+	public QuestionInfo.DetailInfo getQuestions(QuestionCommand.GetQuestion command) {
+		return questionService.getQuestions(command);
 	}
 
 	public boolean verifyAnswer(QuestionCommand.Verify command) {
 		return questionService.verifyAnswer(command);
+	}
+
+	public QuestionInfo.Hint getHint(QuestionCommand.GetHint command) {
+		return questionService.getHint(command);
+	}
+
+	public QuestionInfo.DetailInfo getCorrectQuestions(QuestionCommand.GetQuestion command) {
+		return questionService.getCorrectedQuestions(command);
 	}
 }

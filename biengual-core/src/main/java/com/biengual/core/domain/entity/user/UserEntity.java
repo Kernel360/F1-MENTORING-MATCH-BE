@@ -13,6 +13,7 @@ import com.biengual.core.domain.entity.BaseEntity;
 import com.biengual.core.domain.entity.bookmark.BookmarkEntity;
 import com.biengual.core.domain.entity.scrap.ScrapEntity;
 import com.biengual.core.enums.Gender;
+import com.biengual.core.enums.PointReason;
 import com.biengual.core.enums.Role;
 import com.biengual.core.enums.UserStatus;
 import com.biengual.core.util.RandomNicknameGenerator;
@@ -109,7 +110,7 @@ public class UserEntity extends BaseEntity {
         this.userStatus = userStatus;
         this.provider = provider;
         this.providerId = providerId;
-        this.currentPoint = 100L;
+        this.currentPoint = PointReason.FIRST_SIGN_UP.getValue();
         this.lastLoginTime = LocalDateTime.now();
     }
 

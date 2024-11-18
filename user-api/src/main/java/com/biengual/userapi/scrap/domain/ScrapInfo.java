@@ -19,6 +19,8 @@ public class ScrapInfo {
 		LocalDateTime createdAt,
 		String preScripts,
 		String thumbnailUrl,
+		String category,
+		Integer videoDurationInSeconds,
 		ContentStatus contentStatus
 	) {
 	}

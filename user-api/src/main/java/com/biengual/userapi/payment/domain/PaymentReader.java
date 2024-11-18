@@ -1,5 +1,5 @@
 package com.biengual.userapi.payment.domain;
 
 public interface PaymentReader {
-    boolean existsPaymentHistory(Long userId, Long contentId);
+    boolean existsPaymentContentHistory(Long userId, Long contentId);
 }

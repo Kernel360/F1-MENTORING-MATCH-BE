@@ -1,12 +1,12 @@
 package com.biengual.userapi.content.domain;
 
-import java.util.List;
-
 import com.biengual.core.domain.document.content.script.Script;
 import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.enums.ContentType;
-
 import lombok.Builder;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 public class ContentInfo {
 
@@ -70,6 +70,19 @@ public class ContentInfo {
     }
 
     @Builder
+    public record LearningRateInfo(
+        BigDecimal currentLearningRate,
+        BigDecimal completedLearningRate
+    ) {
+        public static LearningRateInfo createInitLearningRateInfo() {
+            return LearningRateInfo.builder()
+                .currentLearningRate(BigDecimal.ZERO)
+                .completedLearningRate(BigDecimal.ZERO)
+                .build();
+        }
+    }
+
+    @Builder
     public record Detail(
         Long contentId,
         ContentType contentType,
@@ -80,7 +93,8 @@ public class ContentInfo {
         Integer videoDurationInSeconds,
         Integer hits,
         Boolean isScrapped,
-        Integer learningRate,
+        BigDecimal currentLearningRate,
+        BigDecimal completedLearningRate,
         List<UserScript> scriptList
     ) {
     }

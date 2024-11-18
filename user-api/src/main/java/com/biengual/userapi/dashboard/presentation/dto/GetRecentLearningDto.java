@@ -3,6 +3,7 @@ package com.biengual.userapi.dashboard.presentation.dto;
 import com.biengual.core.enums.ContentType;
 import lombok.Builder;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class GetRecentLearningDto {
@@ -17,7 +18,8 @@ public class GetRecentLearningDto {
         String duration,
         Integer hits,
         Boolean isScrapped,
-        Integer learningRate
+        BigDecimal currentLearningRate,
+        BigDecimal completedLearningRate
     ) {
     }
 

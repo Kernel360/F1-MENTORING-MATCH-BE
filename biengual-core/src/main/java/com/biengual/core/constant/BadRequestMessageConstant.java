@@ -11,4 +11,5 @@ public class BadRequestMessageConstant {
     public static final String BLANK_CONTENT_KEYWORD_ERROR_MESSAGE = "컨테츠 검색 키워드 blank 허용 불가";
     public static final String NULL_MISSION_LIST_ERROR_MESSAGE = "미션 체크 목록 null 허용 불가";
     public static final String MIN_POINT_AMOUNT_ERROR_MESSAGE = "총 포인트 음수 불가";
+    public static final String DATE_PATTERN_MISMATCH = "입력된 날짜가 잘못된 형식";
 }

@@ -12,7 +12,7 @@ public enum PointReason {
     DAILY_MISSION(8L),
     DAILY_CONTENT(9L),
     FIRST_DAILY_LOG_IN(10L),
-    QUIZ_CORRECT_ANSWER(6L),
+    QUIZ_CORRECT_ANSWER(5L),    // 일단 확정
 
     // -
     VIEW_RECENT_CONTENT(-10L),
