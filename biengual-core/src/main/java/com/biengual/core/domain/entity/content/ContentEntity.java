@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+import com.biengual.core.enums.ContentLevel;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.biengual.core.domain.document.content.script.Script;
@@ -80,6 +81,10 @@ public class ContentEntity extends BaseEntity {
 
 	@Column(columnDefinition = "smallint")
 	private Integer videoDuration;
+
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	private ContentLevel contentLevel;
 
 	@Builder
 	public ContentEntity(
