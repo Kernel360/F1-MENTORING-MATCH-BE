@@ -1,8 +1,5 @@
 package com.biengual.userapi.content.infrastructure;
 
-import static com.biengual.core.response.error.code.CategoryErrorCode.*;
-import static com.biengual.core.response.error.code.ContentErrorCode.*;
-
 import com.biengual.core.annotation.DataProvider;
 import com.biengual.core.domain.document.content.ContentDocument;
 import com.biengual.core.domain.entity.category.CategoryEntity;
@@ -10,13 +7,12 @@ import com.biengual.core.domain.entity.content.ContentEntity;
 import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.response.error.exception.CommonException;
 import com.biengual.userapi.category.domain.CategoryRepository;
-import com.biengual.userapi.content.domain.ContentCommand;
-import com.biengual.userapi.content.domain.ContentCustomRepository;
-import com.biengual.userapi.content.domain.ContentDocumentRepository;
-import com.biengual.userapi.content.domain.ContentRepository;
-import com.biengual.userapi.content.domain.ContentStore;
-
+import com.biengual.userapi.content.domain.*;
 import lombok.RequiredArgsConstructor;
+
+import static com.biengual.core.response.error.code.CategoryErrorCode.CATEGORY_NOT_FOUND;
+import static com.biengual.core.response.error.code.ContentErrorCode.CONTENT_LEVEL_FEEDBACK_HISTORY_ALREADY_EXISTS;
+import static com.biengual.core.response.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
 
 @DataProvider
 @RequiredArgsConstructor
@@ -25,6 +21,7 @@ public class ContentStoreImpl implements ContentStore {
     private final ContentRepository contentRepository;
     private final ContentDocumentRepository contentDocumentRepository;
     private final CategoryRepository categoryRepository;
+    private final ContentLevelFeedbackHistoryRepository contentLevelFeedbackHistoryRepository;
 
     @Override
     public void createContent(ContentCommand.Create command) {
@@ -52,9 +49,13 @@ public class ContentStoreImpl implements ContentStore {
         contentCustomRepository.increaseHitsByContentId(contentId);
     }
 
+    // 컨텐츠 레벨 피드백 기록
     @Override
     public void recordContentLevelFeedbackHistory(ContentCommand.SubmitLevelFeedback command) {
 
+        validateAlreadySubmitLevelFeedback(command);
+
+        contentLevelFeedbackHistoryRepository.save(command.toContentLevelFeedbackHistoryEntity());
     }
 
     // Internal Methods=================================================================================================
@@ -66,5 +67,11 @@ public class ContentStoreImpl implements ContentStore {
         }
 
         return categoryRepository.save(command.toCategoryEntity());
+    }
+
+    private void validateAlreadySubmitLevelFeedback(ContentCommand.SubmitLevelFeedback command) {
+        if (contentLevelFeedbackHistoryRepository.existsByUserIdAndContentId(command.userId(), command.contentId())) {
+            throw new CommonException(CONTENT_LEVEL_FEEDBACK_HISTORY_ALREADY_EXISTS);
+        }
     }
 }

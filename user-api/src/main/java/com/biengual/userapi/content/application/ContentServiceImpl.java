@@ -1,5 +1,6 @@
 package com.biengual.userapi.content.application;
 
+import com.biengual.core.annotation.RedisDistributedLock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -90,7 +91,7 @@ public class ContentServiceImpl implements ContentService {
 
     // 컨텐츠 레벨 피드백
     @Override
-    @Transactional
+    @RedisDistributedLock(key = "#command.userId() + \":\" + #command.contentId()")
     public void submitLevelFeedback(ContentCommand.SubmitLevelFeedback command) {
         contentStore.recordContentLevelFeedbackHistory(command);
     }

@@ -36,4 +36,12 @@ public class ContentLevelFeedbackHistoryEntity extends BaseEntity {
         this.contentId = contentId;
         this.contentLevel = contentLevel;
     }
+
+    public static ContentLevelFeedbackHistoryEntity createEntity(Long userId, Long contentId, ContentLevel contentLevel) {
+        return ContentLevelFeedbackHistoryEntity.builder()
+            .userId(userId)
+            .contentId(contentId)
+            .contentLevel(contentLevel)
+            .build();
+    }
 }
