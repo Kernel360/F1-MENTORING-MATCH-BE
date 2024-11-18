@@ -89,7 +89,7 @@ public class ContentServiceImpl implements ContentService {
         return contentReader.findListeningAdmin(command);
     }
 
-    // 컨텐츠 레벨 피드백
+    // 컨텐츠 난이도 피드백
     @Override
     @RedisDistributedLock(key = "#command.userId() + \":\" + #command.contentId()")
     public void submitLevelFeedback(ContentCommand.SubmitLevelFeedback command) {
