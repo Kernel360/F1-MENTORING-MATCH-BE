@@ -12,4 +12,5 @@ public interface ContentStore {
 
     void increaseHits(Long contentId);
 
+    void recordContentLevelFeedbackHistory(ContentCommand.SubmitLevelFeedback command);
 }

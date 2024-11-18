@@ -52,6 +52,11 @@ public class ContentStoreImpl implements ContentStore {
         contentCustomRepository.increaseHitsByContentId(contentId);
     }
 
+    @Override
+    public void recordContentLevelFeedbackHistory(ContentCommand.SubmitLevelFeedback command) {
+
+    }
+
     // Internal Methods=================================================================================================
 
     private CategoryEntity getCategoryEntity(ContentCommand.Create command) {

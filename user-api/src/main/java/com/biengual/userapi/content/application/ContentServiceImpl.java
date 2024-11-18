@@ -76,19 +76,23 @@ public class ContentServiceImpl implements ContentService {
 
     // 어드민 페이지 리딩 컨텐츠 조회 - DEACTIVATED 포함
     @Override
+    @Transactional(readOnly = true)
     public PaginationInfo<ContentInfo.Admin> getAdminView(ContentCommand.GetAdminReadingView command) {
         return contentReader.findReadingAdmin(command);
     }
 
     // 어드민 페이지 리스닝 컨텐츠 조회 - DEACTIVATED 포함
     @Override
+    @Transactional(readOnly = true)
     public PaginationInfo<ContentInfo.Admin> getAdminView(ContentCommand.GetAdminListeningView command) {
         return contentReader.findListeningAdmin(command);
     }
 
     // 컨텐츠 레벨 피드백
     @Override
+    @Transactional
     public void submitLevelFeedback(ContentCommand.SubmitLevelFeedback command) {
+        contentStore.recordContentLevelFeedbackHistory(command);
     }
 
     // 컨텐츠 상태 변경 ACTIVATED <-> DEACTIVATED
