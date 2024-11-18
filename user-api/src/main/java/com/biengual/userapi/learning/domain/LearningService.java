@@ -5,6 +5,4 @@ package com.biengual.userapi.learning.domain;
  */
 public interface LearningService {
     void recordLearningRate(LearningCommand.RecordLearningRate command);
-
-
 }
