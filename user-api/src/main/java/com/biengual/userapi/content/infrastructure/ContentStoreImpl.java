@@ -8,10 +8,10 @@ import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.response.error.exception.CommonException;
 import com.biengual.userapi.category.domain.CategoryRepository;
 import com.biengual.userapi.content.domain.*;
+import com.biengual.userapi.validator.ContentValidator;
 import lombok.RequiredArgsConstructor;
 
 import static com.biengual.core.response.error.code.CategoryErrorCode.CATEGORY_NOT_FOUND;
-import static com.biengual.core.response.error.code.ContentErrorCode.CONTENT_LEVEL_FEEDBACK_HISTORY_ALREADY_EXISTS;
 import static com.biengual.core.response.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
 
 @DataProvider
@@ -22,6 +22,7 @@ public class ContentStoreImpl implements ContentStore {
     private final ContentDocumentRepository contentDocumentRepository;
     private final CategoryRepository categoryRepository;
     private final ContentLevelFeedbackHistoryRepository contentLevelFeedbackHistoryRepository;
+    private final ContentValidator contentValidator;
 
     @Override
     public void createContent(ContentCommand.Create command) {
@@ -52,7 +53,7 @@ public class ContentStoreImpl implements ContentStore {
     // 컨텐츠 난이도 피드백 기록
     @Override
     public void recordContentLevelFeedbackHistory(ContentCommand.SubmitLevelFeedback command) {
-        validateAlreadySubmitLevelFeedback(command);
+        contentValidator.verifyAlreadySubmitLevelFeedback(command.userId(), command.contentId());
 
         contentLevelFeedbackHistoryRepository.save(command.toContentLevelFeedbackHistoryEntity());
     }
@@ -66,12 +67,5 @@ public class ContentStoreImpl implements ContentStore {
         }
 
         return categoryRepository.save(command.toCategoryEntity());
-    }
-
-    // 이미 해당 컨텐츠에 대해 난이도 피드백을 했는지 검증
-    private void validateAlreadySubmitLevelFeedback(ContentCommand.SubmitLevelFeedback command) {
-        if (contentLevelFeedbackHistoryRepository.existsByUserIdAndContentId(command.userId(), command.contentId())) {
-            throw new CommonException(CONTENT_LEVEL_FEEDBACK_HISTORY_ALREADY_EXISTS);
-        }
     }
 }

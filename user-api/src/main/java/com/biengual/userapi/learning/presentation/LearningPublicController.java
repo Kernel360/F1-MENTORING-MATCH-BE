@@ -1,10 +1,10 @@
 package com.biengual.userapi.learning.presentation;
 
 import com.biengual.core.response.ResponseEntityFactory;
+import com.biengual.core.swagger.SwaggerVoidReturn;
 import com.biengual.userapi.learning.domain.LearningCommand;
 import com.biengual.userapi.learning.domain.LearningService;
 import com.biengual.userapi.learning.presentation.dto.RecordLearningRateDto;
-import com.biengual.userapi.learning.presentation.swagger.SwaggerRecordLearningRate;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -35,7 +35,7 @@ public class LearningPublicController {
     @Operation(summary = "학습률 기록", description = "해당 컨텐츠에 대한 학습률을 기록합니다.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "학습률 기록 성공", content = {
-            @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerRecordLearningRate.class))}
+            @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerVoidReturn.class))}
         ),
         @ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
         @ApiResponse(responseCode = "404", description = "컨텐츠 조회 실패", content = @Content(mediaType = "application/json")),

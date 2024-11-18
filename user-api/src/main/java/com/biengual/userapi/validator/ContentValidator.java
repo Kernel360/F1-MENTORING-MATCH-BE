@@ -3,11 +3,11 @@ package com.biengual.userapi.validator;
 import com.biengual.core.annotation.Validator;
 import com.biengual.core.domain.entity.content.ContentEntity;
 import com.biengual.core.response.error.exception.CommonException;
+import com.biengual.userapi.content.domain.ContentLevelFeedbackHistoryRepository;
 import com.biengual.userapi.payment.domain.PaymentContentHistoryRepository;
 import lombok.RequiredArgsConstructor;
 
-import static com.biengual.core.response.error.code.ContentErrorCode.CONTENT_IS_DEACTIVATED;
-import static com.biengual.core.response.error.code.ContentErrorCode.UNPAID_RECENT_CONTENT;
+import static com.biengual.core.response.error.code.ContentErrorCode.*;
 
 /**
  * Content 도메인의 검증을 위한 클래스
@@ -18,6 +18,7 @@ import static com.biengual.core.response.error.code.ContentErrorCode.UNPAID_RECE
 @RequiredArgsConstructor
 public class ContentValidator {
     private final PaymentContentHistoryRepository paymentContentHistoryRepository;
+    private final ContentLevelFeedbackHistoryRepository contentLevelFeedbackHistoryRepository;
 
     // 해당 컨텐츠가 학습할 수 있는 컨텐츠인지 검증
     public void verifyLearnableContent(ContentEntity content, Long userId) {
@@ -27,6 +28,13 @@ public class ContentValidator {
 
         if (content.isRecentContent()) {
             validatePaymentForRecentContent(content.getId(), userId);
+        }
+    }
+
+    // 이미 해당 컨텐츠에 대해 난이도 피드백을 했는지 검증
+    public void verifyAlreadySubmitLevelFeedback(Long userId, Long contentId) {
+        if (contentLevelFeedbackHistoryRepository.existsByUserIdAndContentId(userId, contentId)) {
+            throw new CommonException(CONTENT_LEVEL_FEEDBACK_HISTORY_ALREADY_EXISTS);
         }
     }
 
