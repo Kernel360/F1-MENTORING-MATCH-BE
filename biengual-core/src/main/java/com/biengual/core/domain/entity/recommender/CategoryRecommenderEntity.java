@@ -31,7 +31,7 @@ public class CategoryRecommenderEntity extends BaseEntity {
     private Long categoryId;
 
     @Convert(converter = StringListConverter.class)
-    @Column(nullable = false, columnDefinition = "varchar(512)")
+    @Column(nullable = false, columnDefinition = "varchar(255)")
     private List<String> similarCategoryIds;
 
     @Builder
