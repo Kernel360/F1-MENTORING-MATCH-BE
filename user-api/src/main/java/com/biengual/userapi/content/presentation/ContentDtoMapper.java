@@ -7,6 +7,7 @@ import com.biengual.core.enums.ContentType;
 import com.biengual.core.util.PaginationInfo;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentInfo;
+import com.biengual.userapi.content.presentation.dto.SubmitLevelFeedbackDto;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
 import org.mapstruct.*;
 import org.springframework.data.domain.PageRequest;
@@ -78,6 +79,9 @@ public interface ContentDtoMapper {
 
 	@Mapping(target = "userId", source = "principal.id")
 	ContentCommand.GetScrapPreview doGetScrapPreview(Integer size, OAuth2UserPrincipal principal);
+
+	@Mapping(target = "userId", source = "principal.id")
+	ContentCommand.SubmitLevelFeedback doSubmitLevelFeedback(SubmitLevelFeedbackDto.Request request, OAuth2UserPrincipal principal);
 
 	// Response <- Info
     @Mapping(target = "contentByScrapCount", source = "previewContents")

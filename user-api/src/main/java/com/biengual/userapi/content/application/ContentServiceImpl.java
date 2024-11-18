@@ -86,6 +86,11 @@ public class ContentServiceImpl implements ContentService {
         return contentReader.findListeningAdmin(command);
     }
 
+    // 컨텐츠 레벨 피드백
+    @Override
+    public void submitLevelFeedback(ContentCommand.SubmitLevelFeedback command) {
+    }
+
     // 컨텐츠 상태 변경 ACTIVATED <-> DEACTIVATED
     @Override
     @Transactional
