@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `question_history`
+CREATE TABLE IF NOT EXISTS `content_level_feedback_history`
 (
     `id`            BIGINT                         NOT NULL AUTO_INCREMENT,
     `user_id`       BIGINT                         NOT NULL,
