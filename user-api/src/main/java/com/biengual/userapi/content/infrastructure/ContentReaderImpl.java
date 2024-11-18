@@ -14,6 +14,7 @@ import com.biengual.userapi.content.presentation.ContentDtoMapper;
 import com.biengual.userapi.learning.domain.RecentLearningHistoryCustomRepository;
 import com.biengual.userapi.payment.domain.PaymentReader;
 import com.biengual.userapi.scrap.domain.ScrapCustomRepository;
+import com.biengual.userapi.validator.ContentValidator;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
@@ -36,6 +37,7 @@ public class ContentReaderImpl implements ContentReader {
     private final ScrapCustomRepository scrapCustomRepository;
     private final RecentLearningHistoryCustomRepository recentLearningHistoryCustomRepository;
     private final PaymentReader paymentReader;
+    private final ContentValidator contentValidator;
 
     // 스크랩 많은 순 컨텐츠 프리뷰 조회
     @Override
@@ -170,7 +172,7 @@ public class ContentReaderImpl implements ContentReader {
         ContentEntity content = contentRepository.findById(contentId)
             .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
 
-        validateLearnableContent(content, userId);
+        contentValidator.verifyLearnableContent(content, userId);
 
         return content;
     }
@@ -180,15 +182,5 @@ public class ContentReaderImpl implements ContentReader {
         return LocalDate.now().minusDays(PERIOD_FOR_POINT_CONTENT_ACCESS).isBefore(
             contentCustomRepository.findCreatedAtOfContentById(contentId).toLocalDate()
         );
-    }
-
-    private void validateLearnableContent(ContentEntity content, Long userId) {
-        if (content.getContentStatus().equals(ContentStatus.DEACTIVATED)) {
-            throw new CommonException(CONTENT_IS_DEACTIVATED);
-        }
-
-        if (content.isRecentContent()) {
-            // TODO: 최신 컨텐츠에 대해 포인트를 지불했는지에 대한 검증이 필요
-        }
     }
 }

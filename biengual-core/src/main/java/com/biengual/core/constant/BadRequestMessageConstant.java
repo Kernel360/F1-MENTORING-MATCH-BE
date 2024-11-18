@@ -12,4 +12,6 @@ public class BadRequestMessageConstant {
     public static final String NULL_MISSION_LIST_ERROR_MESSAGE = "미션 체크 목록 null 허용 불가";
     public static final String MIN_POINT_AMOUNT_ERROR_MESSAGE = "총 포인트 음수 불가";
     public static final String DATE_PATTERN_MISMATCH = "입력된 날짜가 잘못된 형식";
+    public static final String NULL_CONTENT_ID_ERROR_MESSAGE = "컨텐츠 Id는 null 허용 불가";
+    public static final String NULL_CONTENT_LEVEL_ERROR_MESSAGE = "컨텐츠 level은 null 허용 불가";
 }

@@ -2,6 +2,8 @@ package com.biengual.userapi.content.domain;
 
 import java.util.List;
 
+import com.biengual.core.domain.entity.content.ContentLevelFeedbackHistoryEntity;
+import com.biengual.core.enums.ContentLevel;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Pageable;
 
@@ -129,5 +131,16 @@ public class ContentCommand {
 		Integer size,
 		Long userId
 	) {
+	}
+
+	@Builder
+	public record SubmitLevelFeedback(
+		Long userId,
+		Long contentId,
+		ContentLevel contentLevel
+	) {
+		public ContentLevelFeedbackHistoryEntity toContentLevelFeedbackHistoryEntity() {
+			return ContentLevelFeedbackHistoryEntity.createEntity(this.userId, this.contentId, this.contentLevel);
+		}
 	}
 }

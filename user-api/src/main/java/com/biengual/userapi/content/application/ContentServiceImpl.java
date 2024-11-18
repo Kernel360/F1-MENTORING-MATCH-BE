@@ -1,5 +1,6 @@
 package com.biengual.userapi.content.application;
 
+import com.biengual.core.annotation.RedisDistributedLock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -76,14 +77,25 @@ public class ContentServiceImpl implements ContentService {
 
     // 어드민 페이지 리딩 컨텐츠 조회 - DEACTIVATED 포함
     @Override
+    @Transactional(readOnly = true)
     public PaginationInfo<ContentInfo.Admin> getAdminView(ContentCommand.GetAdminReadingView command) {
         return contentReader.findReadingAdmin(command);
     }
 
     // 어드민 페이지 리스닝 컨텐츠 조회 - DEACTIVATED 포함
     @Override
+    @Transactional(readOnly = true)
     public PaginationInfo<ContentInfo.Admin> getAdminView(ContentCommand.GetAdminListeningView command) {
         return contentReader.findListeningAdmin(command);
+    }
+
+    // 컨텐츠 난이도 피드백
+    @Override
+    @RedisDistributedLock(key = "#command.userId() + \":\" + #command.contentId()")
+    public void submitLevelFeedback(ContentCommand.SubmitLevelFeedback command) {
+        contentReader.findLearnableContent(command.contentId(), command.userId());
+
+        contentStore.recordContentLevelFeedbackHistory(command);
     }
 
     // 컨텐츠 상태 변경 ACTIVATED <-> DEACTIVATED

@@ -29,4 +29,6 @@ public interface ContentService {
     PaginationInfo<ContentInfo.Admin> getAdminView(ContentCommand.GetAdminReadingView command);
 
     PaginationInfo<ContentInfo.Admin> getAdminView(ContentCommand.GetAdminListeningView command);
+
+    void submitLevelFeedback(ContentCommand.SubmitLevelFeedback command);
 }

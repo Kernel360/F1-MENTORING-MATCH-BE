@@ -5,6 +5,7 @@ import static com.biengual.core.constant.RestrictionConstant.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -120,6 +121,10 @@ public class ContentEntity extends BaseEntity {
 		}
 
 		return false;
+	}
+
+	public boolean isActivated() {
+		return Objects.equals(this.contentStatus, ContentStatus.ACTIVATED);
 	}
 
 	// Internal Method =================================================================================================
