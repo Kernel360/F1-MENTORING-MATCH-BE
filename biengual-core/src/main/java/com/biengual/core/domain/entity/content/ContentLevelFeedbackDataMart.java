@@ -1,6 +1,5 @@
 package com.biengual.core.domain.entity.content;
 
-import com.biengual.core.domain.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -9,10 +8,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 /**
- * AggregationTime까지의 ContentLevelFeedback에 대한 집계를 보여주기 위한 DataMart 엔티티
+ * ContentLevelFeedback에 대한 집계를 보여주기 위한 DataMart 엔티티
  *
  * @author 문찬욱
  */
@@ -20,7 +17,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "content_level_feedback_data_mart")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ContentLevelFeedbackDataMart extends BaseEntity {
+public class ContentLevelFeedbackDataMart {
     @Id
     @Column(name = "id")
     private Long contentId;
@@ -36,7 +33,4 @@ public class ContentLevelFeedbackDataMart extends BaseEntity {
 
     @Column(nullable = false, columnDefinition = "bigint")
     private Long feedbackTotalCount;
-
-    @Column(nullable = false)
-    private LocalDateTime aggregationTime;
 }
