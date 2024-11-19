@@ -45,17 +45,11 @@ public class MetadataStoreImpl implements MetadataStore {
 
             // 각 집계된 Content
             for (ContentInfo.AggregatedLevelFeedback aggregatedLevelFeedback : aggregatedLevelFeedbackList) {
-                System.out.println("집계 info 들어옴? " + aggregatedLevelFeedback.contentId());
-
                 if (!contentLevelFeedbackDataMartRepository.existsById(aggregatedLevelFeedback.contentId())) {
                     ContentLevelFeedbackDataMart contentLevelFeedbackDataMart =
                         aggregatedLevelFeedback.toContentLevelFeedbackDataMart();
 
-                    System.out.println("집계 content 들어옴? " + contentLevelFeedbackDataMart.getContentId());
-
-                    ContentLevelFeedbackDataMart save = contentLevelFeedbackDataMartRepository.save(contentLevelFeedbackDataMart);
-
-                    System.out.println("save 거침? " + save.getContentId());
+                    contentLevelFeedbackDataMartRepository.save(contentLevelFeedbackDataMart);
                 } else {
                     contentLevelFeedbackDataMartCustomRepository
                         .updateByAggregatedLevelFeedbackInfo(aggregatedLevelFeedback);
