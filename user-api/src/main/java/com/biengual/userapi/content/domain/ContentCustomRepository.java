@@ -2,8 +2,8 @@ package com.biengual.userapi.content.domain;
 
 import static com.biengual.core.constant.RestrictionConstant.*;
 import static com.biengual.core.domain.entity.content.QContentEntity.*;
-import static com.biengual.core.domain.entity.scrap.QScrapEntity.*;
 import static com.biengual.core.domain.entity.paymenthistory.QPaymentContentHistoryEntity.*;
+import static com.biengual.core.domain.entity.scrap.QScrapEntity.*;
 import static com.biengual.core.response.error.code.ContentErrorCode.*;
 
 import java.lang.reflect.Field;
@@ -25,6 +25,7 @@ import com.biengual.core.domain.entity.content.QContentEntity;
 import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.enums.ContentType;
 import com.biengual.core.response.error.exception.CommonException;
+import com.biengual.userapi.recommender.domain.RecommenderInfo;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -32,8 +33,10 @@ import com.querydsl.core.types.Path;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.DateTimePath;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.JPAExpressions;
@@ -168,6 +171,87 @@ public class ContentCustomRepository {
         return findAdminViewPage(pageable, predicate, orderSpecifiers);
     }
 
+    // 컨텐츠 생성 날짜 조회를 위한 쿼리
+    public LocalDateTime findCreatedAtOfContentById(Long contentId) {
+        return queryFactory
+            .select(contentEntity.createdAt)
+            .from(contentEntity)
+            .where(contentEntity.id.eq(contentId))
+            .fetchOne();
+    }
+
+    // 카테고리에 해당하는 컨텐츠들을 리턴하기 위한 쿼리
+    public List<RecommenderInfo.Preview> findCustomizedContentsByCategories(Long userId, List<Long> similarCategories) {
+        // 1. CASE 문을 사용하여 리스트의 순서를 보장
+        CaseBuilder.Cases<Integer, NumberExpression<Integer>> caseBuilder = new CaseBuilder()
+            .when(contentEntity.category.id.eq(similarCategories.get(0))).then(0);
+
+        for (int i = 1; i < similarCategories.size() && i < 3; i++) {
+            caseBuilder.when(contentEntity.category.id.eq(similarCategories.get(i))).then(i);
+        }
+        NumberExpression<Integer> orderByClause = caseBuilder.otherwise(Expressions.asNumber(similarCategories.size()));
+
+        // 2. 각 카테고리당 최대 3개의 콘텐츠를 가져옴
+        List<RecommenderInfo.Preview> previews = queryFactory
+            .select(
+                Projections.constructor(
+                    RecommenderInfo.Preview.class,
+                    contentEntity.id,
+                    contentEntity.title,
+                    contentEntity.thumbnailUrl,
+                    contentEntity.contentType,
+                    contentEntity.preScripts,
+                    contentEntity.category.name,
+                    contentEntity.hits,
+                    contentEntity.videoDuration,
+                    getIsScrappedByUserId(userId),
+                    getIsPointRequiredByUserIdAndContent(userId, contentEntity.id, contentEntity.createdAt)
+                )
+            )
+            .from(contentEntity)
+            .innerJoin(scrapEntity)
+            .on(contentEntity.id.eq(scrapEntity.content.id))
+            .where(contentEntity.category.id.in(similarCategories))
+            .groupBy(contentEntity.id)
+            .orderBy(orderByClause.asc(), contentEntity.hits.desc(), scrapEntity.count().desc())
+            .limit(similarCategories.size() * 3L) // 각 카테고리당 최대 3개씩 가져옴
+            .fetch();
+
+        // 3. 결과가 9개 미만일 경우 랜덤한 컨텐츠 추가
+        if (previews.size() < 9) {
+            // 이미 선택된 콘텐츠의 ID를 수집
+            List<Long> selectedContentIds = previews.stream()
+                .map(RecommenderInfo.Preview::contentId)
+                .toList();
+
+            List<RecommenderInfo.Preview> randomPreviews = queryFactory
+                .select(
+                    Projections.constructor(
+                        RecommenderInfo.Preview.class,
+                        contentEntity.id,
+                        contentEntity.title,
+                        contentEntity.thumbnailUrl,
+                        contentEntity.contentType,
+                        contentEntity.preScripts,
+                        contentEntity.category.name,
+                        contentEntity.hits,
+                        contentEntity.videoDuration,
+                        getIsScrappedByUserId(userId),
+                        getIsPointRequiredByUserIdAndContent(userId, contentEntity.id, contentEntity.createdAt)
+                    )
+                )
+                .from(contentEntity)
+                .where(contentEntity.id.notIn(selectedContentIds)) // 이미 선택된 콘텐츠 제외
+                .groupBy(contentEntity.id)
+                .orderBy(contentEntity.hits.desc())
+                .limit(9 - previews.size())
+                .fetch();
+
+            previews.addAll(randomPreviews);
+        }
+
+        return previews;
+    }
 
     // Internal Method =================================================================================================
 
@@ -399,15 +483,6 @@ public class ContentCustomRepository {
             .where(predicate);
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchOne);
-    }
-
-    // 컨텐츠 생성 날짜 조회를 위한 쿼리
-    public LocalDateTime findCreatedAtOfContentById(Long contentId) {
-        return queryFactory
-            .select(contentEntity.createdAt)
-            .from(contentEntity)
-            .where(contentEntity.id.eq(contentId))
-            .fetchOne();
     }
 
     // isScrapped를 col로 받기 위한 확인하는 쿼리, 비로그인 상태 시 false 리턴
