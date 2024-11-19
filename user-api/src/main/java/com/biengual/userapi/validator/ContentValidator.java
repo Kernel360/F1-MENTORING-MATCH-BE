@@ -22,7 +22,7 @@ public class ContentValidator {
 
     // 해당 컨텐츠가 학습할 수 있는 컨텐츠인지 검증
     public void verifyLearnableContent(ContentEntity content, Long userId) {
-        if (content.isActivated()) {
+        if (content.isDeactivated()) {
             throw new CommonException(CONTENT_IS_DEACTIVATED);
         }
 
