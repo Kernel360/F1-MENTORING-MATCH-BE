@@ -16,7 +16,7 @@ import static com.biengual.core.constant.ServiceConstant.CONTENT_LEVEL_FEEDBACK_
 import static com.biengual.core.response.error.code.MetadataErrorCode.NOT_AGGREGATION_TABLE;
 
 /**
- * 집계 유형의 메타데이터를 저장하기 위한 엔티티
+ * 집계 테이블의 메타데이터를 저장하기 위한 엔티티
  *
  * @author 문찬욱
  */
