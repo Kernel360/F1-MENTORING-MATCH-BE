@@ -34,12 +34,14 @@ public class RecommenderStoreImpl implements RecommenderStore {
             .filter(id -> !categoryRecommenderRepository.existsByCategoryId(id))
             .toList();
 
-        if(!notUpdatedCategoryIds.isEmpty()) {
-            notUpdatedCategoryIds
-                .forEach(id -> {
-                    CategoryRecommenderEntity categoryRecommender = CategoryRecommenderEntity.createdByCategoryId(id);
-                    categoryRecommenderRepository.save(categoryRecommender);
-                });
+        if (!notUpdatedCategoryIds.isEmpty()) {
+            List<CategoryRecommenderEntity> categoryRecommenderEntities =
+                notUpdatedCategoryIds
+                    .stream()
+                    .map(CategoryRecommenderEntity::createdByCategoryId)
+                    .toList();
+
+            categoryRecommenderRepository.saveAll(categoryRecommenderEntities);
         }
     }
 }
