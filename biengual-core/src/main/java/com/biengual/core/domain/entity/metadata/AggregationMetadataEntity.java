@@ -2,12 +2,18 @@ package com.biengual.core.domain.entity.metadata;
 
 import com.biengual.core.domain.entity.BaseEntity;
 import com.biengual.core.enums.IntervalType;
+import com.biengual.core.response.error.exception.CommonException;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+
+import static com.biengual.core.constant.ServiceConstant.BIENGUAL_SERVICE_START_TIME;
+import static com.biengual.core.constant.ServiceConstant.CONTENT_LEVEL_FEEDBACK_HISTORY_TABLE;
+import static com.biengual.core.response.error.code.MetadataErrorCode.NOT_AGGREGATION_TABLE;
 
 /**
  * 집계 유형의 메타데이터를 저장하기 위한 엔티티
@@ -35,4 +41,43 @@ public class AggregationMetadataEntity extends BaseEntity {
 
     @Column(nullable = false, columnDefinition = "tinyint")
     private Integer interval;
+
+    @Builder
+    public AggregationMetadataEntity(
+        Long id, String tableName, LocalDateTime aggregateEndTime, IntervalType intervalType, Integer interval
+    ) {
+        this.id = id;
+        this.tableName = tableName;
+        this.aggregateEndTime = aggregateEndTime;
+        this.intervalType = intervalType;
+        this.interval = interval;
+    }
+
+    // TODO: REST API가 아닌 백엔드 내부 로직에서 발생하는 예외인데, HttpStatus가 필요한지?
+    // Table Name에 맞는 AggregationMetadataEntity를 생성하는 메서드
+    public static AggregationMetadataEntity createEntityByTableName(String tableName) {
+        switch (tableName) {
+            case CONTENT_LEVEL_FEEDBACK_HISTORY_TABLE:
+                return createEntity(tableName, IntervalType.ALL, -1);
+            default:
+                throw new CommonException(NOT_AGGREGATION_TABLE);
+        }
+    }
+
+    public void updateAggregateEndTime(LocalDateTime aggregateEndTime) {
+        this.aggregateEndTime = aggregateEndTime;
+    }
+
+    // Internal Method =================================================================================================
+
+    private static AggregationMetadataEntity createEntity(
+        String tableName, IntervalType intervalType, Integer interval
+    ) {
+        return AggregationMetadataEntity.builder()
+            .tableName(tableName)
+            .aggregateEndTime(BIENGUAL_SERVICE_START_TIME)
+            .intervalType(intervalType)
+            .interval(interval)
+            .build();
+    }
 }

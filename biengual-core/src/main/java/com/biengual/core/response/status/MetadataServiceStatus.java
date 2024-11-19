@@ -3,11 +3,9 @@ package com.biengual.core.response.status;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public enum ServerServiceStatus implements ServiceStatus {
+public enum MetadataServiceStatus implements ServiceStatus {
     // failure
-    SERVER_ERROR("U-SV-901"),
-    TIME_RANGE_IS_INVALID("U-SV-902"),
-    INTERVAL_TYPE_IS_INVALID("U-SV-903");
+    NOT_AGGREGATION_TABLE("U-M-901");
 
     private final String code;
 
