@@ -128,8 +128,8 @@ public class ContentEntity extends BaseEntity {
 		return false;
 	}
 
-	public boolean isActivated() {
-		return Objects.equals(this.contentStatus, ContentStatus.ACTIVATED);
+	public boolean isDeactivated() {
+		return Objects.equals(this.contentStatus, ContentStatus.DEACTIVATED);
 	}
 
 	// Internal Method =================================================================================================

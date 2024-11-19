@@ -21,7 +21,6 @@ public class UserRequestDto {
 		String phoneNumber,
 		LocalDate birth,
 		Gender gender,
-		@NotNull(message = NULL_CATEGORY_LIST_ERROR_MESSAGE)
 		@Size(max = MAX_CATEGORY_SELECTION_LIMIT, message = MAX_CATEGORY_SELECTION_ERROR_MESSAGE)
 		List<Long> categories
 	) {
