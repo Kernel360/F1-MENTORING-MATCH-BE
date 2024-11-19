@@ -58,7 +58,7 @@ public class PeriodUtil {
             now, start, aggregationMetadata.getIntervalType(), aggregationMetadata.getIntervalNumber()
         );
 
-        while (now.isAfter(end) || now.isEqual(end)) {
+        while (!now.isBefore(end) && !start.isEqual(end)) {
             TimeRange timeRange = TimeRange.of(start, end);
 
             aggregationPeriodQueue.add(timeRange);
@@ -85,7 +85,7 @@ public class PeriodUtil {
             case HOURLY:
                 return start.plusHours(interval);
             case ALL:
-                return now;
+                return now.withMinute(0).withSecond(0).withNano(0);
             default:
                 throw new CommonException(INTERVAL_TYPE_IS_INVALID);
         }
