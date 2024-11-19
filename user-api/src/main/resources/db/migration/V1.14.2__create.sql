@@ -10,6 +10,5 @@ CREATE TABLE IF NOT EXISTS `aggregation_metadata`
     PRIMARY KEY (`id`),
     UNIQUE KEY `UKqlsjiwn68bedqaaomcee26hznvxki4` (`table_name`)
 ) ENGINE = InnoDB
-  AUTO_INCREMENT = 9
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
