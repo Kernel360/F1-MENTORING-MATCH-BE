@@ -40,17 +40,17 @@ public class AggregationMetadataEntity extends BaseEntity {
     private IntervalType intervalType;
 
     @Column(nullable = false, columnDefinition = "tinyint")
-    private Integer interval;
+    private Integer intervalNumber;
 
     @Builder
     public AggregationMetadataEntity(
-        Long id, String tableName, LocalDateTime aggregateEndTime, IntervalType intervalType, Integer interval
+        Long id, String tableName, LocalDateTime aggregateEndTime, IntervalType intervalType, Integer intervalNumber
     ) {
         this.id = id;
         this.tableName = tableName;
         this.aggregateEndTime = aggregateEndTime;
         this.intervalType = intervalType;
-        this.interval = interval;
+        this.intervalNumber = intervalNumber;
     }
 
     // TODO: REST API가 아닌 백엔드 내부 로직에서 발생하는 예외인데, HttpStatus가 필요한지?
@@ -71,13 +71,13 @@ public class AggregationMetadataEntity extends BaseEntity {
     // Internal Method =================================================================================================
 
     private static AggregationMetadataEntity createEntity(
-        String tableName, IntervalType intervalType, Integer interval
+        String tableName, IntervalType intervalType, Integer intervalNumber
     ) {
         return AggregationMetadataEntity.builder()
             .tableName(tableName)
             .aggregateEndTime(BIENGUAL_SERVICE_START_TIME)
             .intervalType(intervalType)
-            .interval(interval)
+            .intervalNumber(intervalNumber)
             .build();
     }
 }

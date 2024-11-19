@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS `aggregation_metadata`
     `table_name`         varchar(100)                                         NOT NULL,
     `aggregate_end_time` datetime(6)                                          NOT NULL,
     `interval_type`      enum ('YEARLY', 'MONTHLY', 'DAILY', 'HOURLY', 'ALL') NOT NULL,
-    `interval`           tinyint                                              NOT NULL,
+    `interval_number`    tinyint                                              NOT NULL,
     `created_at`         datetime(6) DEFAULT NULL,
     `updated_at`         datetime(6) DEFAULT NULL,
     PRIMARY KEY (`id`),

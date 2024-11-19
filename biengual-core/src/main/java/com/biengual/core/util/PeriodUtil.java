@@ -55,7 +55,7 @@ public class PeriodUtil {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime start = aggregationMetadata.getAggregateEndTime();
         LocalDateTime end = calculateAggregateEndTime(
-            now, start, aggregationMetadata.getIntervalType(), aggregationMetadata.getInterval()
+            now, start, aggregationMetadata.getIntervalType(), aggregationMetadata.getIntervalNumber()
         );
 
         while (now.isAfter(end) || now.isEqual(end)) {
@@ -65,7 +65,7 @@ public class PeriodUtil {
 
             start = end;
             end = calculateAggregateEndTime(
-                now, start, aggregationMetadata.getIntervalType(), aggregationMetadata.getInterval()
+                now, start, aggregationMetadata.getIntervalType(), aggregationMetadata.getIntervalNumber()
             );
         }
 
