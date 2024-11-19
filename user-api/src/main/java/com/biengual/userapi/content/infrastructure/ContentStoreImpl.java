@@ -4,6 +4,8 @@ import com.biengual.core.annotation.DataProvider;
 import com.biengual.core.domain.document.content.ContentDocument;
 import com.biengual.core.domain.entity.category.CategoryEntity;
 import com.biengual.core.domain.entity.content.ContentEntity;
+import com.biengual.core.domain.entity.content.ContentLevelFeedbackDataMart;
+import com.biengual.core.enums.ContentLevel;
 import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.response.error.exception.CommonException;
 import com.biengual.userapi.category.domain.CategoryRepository;
@@ -11,7 +13,10 @@ import com.biengual.userapi.content.domain.*;
 import com.biengual.userapi.validator.ContentValidator;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 import static com.biengual.core.response.error.code.CategoryErrorCode.CATEGORY_NOT_FOUND;
+import static com.biengual.core.response.error.code.ContentErrorCode.CONTENT_LEVEL_FEEDBACK_DATA_MART_NOT_FOUND;
 import static com.biengual.core.response.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
 
 @DataProvider
@@ -22,6 +27,7 @@ public class ContentStoreImpl implements ContentStore {
     private final ContentDocumentRepository contentDocumentRepository;
     private final CategoryRepository categoryRepository;
     private final ContentLevelFeedbackHistoryRepository contentLevelFeedbackHistoryRepository;
+    private final ContentLevelFeedbackDataMartRepository contentLevelFeedbackDataMartRepository;
     private final ContentValidator contentValidator;
 
     @Override
@@ -58,6 +64,23 @@ public class ContentStoreImpl implements ContentStore {
         contentLevelFeedbackHistoryRepository.save(command.toContentLevelFeedbackHistoryEntity());
     }
 
+    // ContentLevelFeedback에 대해 집계된 Content에 컨텐츠 난이도 반영
+    @Override
+    public void reflectContentLevel(List<Long> contentIdList) {
+        for (Long contentId : contentIdList) {
+            ContentEntity content = contentRepository.findById(contentId)
+                .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
+
+            ContentLevelFeedbackDataMart contentLevelFeedbackDataMart =
+                contentLevelFeedbackDataMartRepository.findById(contentId)
+                    .orElseThrow(() -> new CommonException(CONTENT_LEVEL_FEEDBACK_DATA_MART_NOT_FOUND));
+
+            ContentLevel contentLevel = this.determineContentLevel(contentLevelFeedbackDataMart);
+
+            content.updateContentLevel(contentLevel);
+        }
+    }
+
     // Internal Methods=================================================================================================
 
     private CategoryEntity getCategoryEntity(ContentCommand.Create command) {
@@ -67,5 +90,20 @@ public class ContentStoreImpl implements ContentStore {
         }
 
         return categoryRepository.save(command.toCategoryEntity());
+    }
+
+    // 난이도 계산 로직
+    private ContentLevel determineContentLevel(ContentLevelFeedbackDataMart contentLevelFeedbackDataMart) {
+        Long levelHighCount = contentLevelFeedbackDataMart.getLevelHighCount();
+        Long levelMediumCount = contentLevelFeedbackDataMart.getLevelMediumCount();
+        Long levelLowCount = contentLevelFeedbackDataMart.getLevelLowCount();
+
+        if (levelHighCount >= levelMediumCount && levelHighCount >= levelLowCount) {
+            return ContentLevel.HIGH;
+        } else if (levelMediumCount >= levelLowCount) {
+            return ContentLevel.MEDIUM;
+        } else {
+            return ContentLevel.LOW;
+        }
     }
 }
