@@ -1,6 +1,17 @@
 package com.biengual.userapi.learning.domain;
 
+import static com.biengual.core.domain.entity.content.QContentEntity.*;
+import static com.biengual.core.domain.entity.learning.QRecentLearningHistoryEntity.*;
+import static com.biengual.core.domain.entity.scrap.QScrapEntity.*;
 
+import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Repository;
+
+import com.biengual.core.util.PeriodUtil;
 import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.dashboard.domain.DashboardInfo;
 import com.querydsl.core.types.Expression;
@@ -8,15 +19,8 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-
-import java.util.List;
-import java.util.Optional;
-
-import static com.biengual.core.domain.entity.content.QContentEntity.contentEntity;
-import static com.biengual.core.domain.entity.learning.QRecentLearningHistoryEntity.recentLearningHistoryEntity;
-import static com.biengual.core.domain.entity.scrap.QScrapEntity.scrapEntity;
 
 @Repository
 @RequiredArgsConstructor
@@ -87,7 +91,26 @@ public class RecentLearningHistoryCustomRepository {
             .orderBy(recentLearningHistoryEntity.recentLearningTime.desc())
             .fetch();
     }
+    public List<Long> findRecentlyFrequentCategoryIds(Long userId){
+        LocalDateTime startOfMonth = PeriodUtil.getStartOfMonth(YearMonth.now());
+        LocalDateTime endOfMonth = PeriodUtil.getEndOfMonth(YearMonth.now());
 
+        return queryFactory
+            .select(contentEntity.category.id)
+            .from(recentLearningHistoryEntity)
+            .innerJoin(contentEntity)
+            .on(recentLearningHistoryEntity.contentId.eq(contentEntity.id))
+            .where(
+                recentLearningHistoryEntity.userId.eq(userId)
+                    .and(recentLearningHistoryEntity.recentLearningTime.between(startOfMonth, endOfMonth))
+            )
+            .groupBy(contentEntity.category.id)
+            .orderBy(contentEntity.category.count().desc())
+            .limit(3)
+            .fetch();
+    }
+
+    // Internal Methods ================================================================================================
     // isScrapped를 col로 받기 위한 확인하는 쿼리, 비로그인 상태 시 false 리턴
     private Expression<?> getIsScrappedByUserId(Long userId) {
         return userId != null ?
