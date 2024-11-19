@@ -46,18 +46,11 @@ public class LearningReaderImpl implements LearningReader {
     private List<Long> mergeRecommendedCategories(
         List<Long> userSelectedCategoryIds, List<Long> recentLearningCategoryIdsInMonth
     ) {
-        // 결과를 저장할 리스트
-        List<Long> mergedList = new ArrayList<>(recentLearningCategoryIdsInMonth);
-        // 중복 제거를 위해 Set으로 변환
-        Set<Long> mergedSet = new LinkedHashSet<>(mergedList);
+        Set<Long> mergedSet = new LinkedHashSet<>(recentLearningCategoryIdsInMonth);
 
-        // userSelectedCategoryIds와 겹치는 항목을 먼저 추가
-        for (Long id : userSelectedCategoryIds) {
-            if (!mergedSet.contains(id)) {
-                mergedList.add(id);
-                mergedSet.add(id);
-            }
-        }
+        mergedSet.addAll(userSelectedCategoryIds);
+
+        List<Long> mergedList = new ArrayList<>(mergedSet);
 
         return (mergedList.size() > 3) ? mergedList.subList(0, 3) : mergedList;
     }
