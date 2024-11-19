@@ -14,6 +14,7 @@ import com.biengual.userapi.metadata.domain.MetadataStore;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
@@ -27,9 +28,11 @@ public class MetadataStoreImpl implements MetadataStore {
     private final ContentLevelFeedbackDataMartRepository contentLevelFeedbackDataMartRepository;
     private final ContentLevelFeedbackDataMartCustomRepository contentLevelFeedbackDataMartCustomRepository;
 
-    // ContentLevelFeedbackHistory 집계
+    // ContentLevelFeedbackHistory 집계한 후 집계된 ContentId들을 반환
     @Override
-    public void aggregateContentLevelFeedbackHistory() {
+    public List<Long> aggregateContentLevelFeedbackHistory() {
+        List<Long> aggregatedContentIdList = new ArrayList<>();
+
         AggregationMetadataEntity aggregationMetadata =
             this.findAggregationMetadata(CONTENT_LEVEL_FEEDBACK_HISTORY_TABLE);
 
@@ -59,6 +62,8 @@ public class MetadataStoreImpl implements MetadataStore {
                     contentLevelFeedbackDataMartCustomRepository
                         .updateByAggregatedLevelFeedbackInfo(aggregatedLevelFeedback);
                 }
+
+                aggregatedContentIdList.add(aggregatedLevelFeedback.contentId());
             }
 
             aggregateEndTime = timeRange.end();
@@ -66,6 +71,8 @@ public class MetadataStoreImpl implements MetadataStore {
 
         // 집계 완료 후, AggregationMetadata의 해당 TableName에 대한 AggregationTime 업데이트
         aggregationMetadata.updateAggregateEndTime(aggregateEndTime);
+
+        return aggregatedContentIdList;
     }
 
     // Internal Method =================================================================================================
