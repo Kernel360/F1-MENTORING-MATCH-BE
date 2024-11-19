@@ -20,7 +20,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ContentLevelFeedbackDataMart {
     @Id
-    @Column(name = "id")
     private Long contentId;
 
     @Column(nullable = false, columnDefinition = "bigint")
