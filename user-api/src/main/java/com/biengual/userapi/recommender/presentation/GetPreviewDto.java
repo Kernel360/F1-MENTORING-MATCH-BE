@@ -6,7 +6,7 @@ import com.biengual.core.enums.ContentType;
 
 import lombok.Builder;
 
-public class PreviewDto {
+public class GetPreviewDto {
 
     public record Preview(
         Long contentId,
