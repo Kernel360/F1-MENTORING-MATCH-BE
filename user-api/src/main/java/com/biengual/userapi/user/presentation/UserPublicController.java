@@ -6,6 +6,7 @@ import com.biengual.core.response.ResponseEntityFactory;
 import com.biengual.core.swagger.SwaggerBooleanReturn;
 import com.biengual.core.swagger.SwaggerVoidReturn;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
+import com.biengual.userapi.user.domain.UserService;
 import com.biengual.userapi.user.presentation.swagger.SwaggerUserMyPage;
 import com.biengual.userapi.user.presentation.swagger.SwaggerUserMyTime;
 import com.biengual.userapi.user.application.UserFacade;
@@ -34,6 +35,7 @@ public class UserPublicController {
 
 	private final UserDtoMapper userDtoMapper;
 	private final UserFacade userFacade;
+	private final UserService userService;
 
 	@GetMapping("/me")
 	@Operation(summary = "본인 정보 조회", description = "유저가 본인의 정보를 조회합니다.")
@@ -70,7 +72,7 @@ public class UserPublicController {
 		UserRequestDto.UpdateMyInfoReq request
 	) {
 		UserCommand.UpdateMyInfo command = userDtoMapper.doUpdateMyInfo(request, principal);
-		userFacade.updateMyInfo(command);
+		userService.updateMyInfo(command);
 
 		return ResponseEntityFactory.toResponseEntity(USER_UPDATE_INFO);
 	}

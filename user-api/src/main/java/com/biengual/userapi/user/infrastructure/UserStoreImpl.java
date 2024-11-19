@@ -41,13 +41,15 @@ public class UserStoreImpl implements UserStore {
             command.username(), command.nickname(), command.phoneNumber(), command.birth(), command.gender()
         );
 
-        // user가 이미 관심 카테고리로 등록한 CategoryIds List
-        List<Long> alreadyRegisteredMyCategoryIds =
-            userCategoryCustomRepository.findAllMyRegisteredCategoryId(command.userId());
+        if (command.categoryIds() != null) {
+            // user가 이미 관심 카테고리로 등록한 CategoryIds List
+            List<Long> alreadyRegisteredMyCategoryIds =
+                userCategoryCustomRepository.findAllMyRegisteredCategoryId(command.userId());
 
-        saveAdditionalMyCategories(alreadyRegisteredMyCategoryIds, command);
+            saveAdditionalMyCategories(alreadyRegisteredMyCategoryIds, command);
 
-        deleteRemovalMyCategoryIds(alreadyRegisteredMyCategoryIds, command);
+            deleteRemovalMyCategoryIds(alreadyRegisteredMyCategoryIds, command);
+        }
     }
 
     @Override
