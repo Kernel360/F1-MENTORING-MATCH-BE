@@ -39,7 +39,9 @@ public class MetadataStoreImpl implements MetadataStore {
 
         // TODO: 현재는 순차 처리이고, 추후 개선하여 성능 비교하면 좋을 것 같습니다.
         // 각 집계 기간
-        for (TimeRange timeRange : aggregationPeriodQueue) {
+        while (!aggregationPeriodQueue.isEmpty()) {
+            TimeRange timeRange = aggregationPeriodQueue.poll();
+
             List<ContentInfo.AggregatedLevelFeedback> aggregatedLevelFeedbackList =
                 contentLevelFeedbackHistoryCustomRepository.countContentLevelsGroupByContentIdInTimeRange(timeRange);
 
