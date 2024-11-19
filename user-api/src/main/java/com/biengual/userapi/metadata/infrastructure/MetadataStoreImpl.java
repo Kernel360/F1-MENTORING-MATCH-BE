@@ -45,11 +45,14 @@ public class MetadataStoreImpl implements MetadataStore {
 
             // 각 집계된 Content
             for (ContentInfo.AggregatedLevelFeedback aggregatedLevelFeedback : aggregatedLevelFeedbackList) {
+                // 처음 집계된 Content
                 if (!contentLevelFeedbackDataMartRepository.existsById(aggregatedLevelFeedback.contentId())) {
                     ContentLevelFeedbackDataMart contentLevelFeedbackDataMart =
                         aggregatedLevelFeedback.toContentLevelFeedbackDataMart();
 
                     contentLevelFeedbackDataMartRepository.save(contentLevelFeedbackDataMart);
+
+                // 집계된 적 있는 Content
                 } else {
                     contentLevelFeedbackDataMartCustomRepository
                         .updateByAggregatedLevelFeedbackInfo(aggregatedLevelFeedback);
@@ -59,6 +62,7 @@ public class MetadataStoreImpl implements MetadataStore {
             aggregateEndTime = timeRange.end();
         }
 
+        // 집계 완료 후, AggregationMetadata의 해당 TableName에 대한 AggregationTime 업데이트
         aggregationMetadata.updateAggregateEndTime(aggregateEndTime);
     }
 
