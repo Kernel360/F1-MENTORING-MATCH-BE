@@ -24,7 +24,7 @@ public interface RecommenderDtoMapper {
     // Command <- Request
 
     // Response <- Info
-    RecommenderDto.Response ofPreviewRes(RecommenderInfo.PreviewRecommender info);
+    PreviewDto.Response ofPreviewRes(RecommenderInfo.PreviewRecommender info);
 
     // Entity <-> Info, Info <-> Info
 

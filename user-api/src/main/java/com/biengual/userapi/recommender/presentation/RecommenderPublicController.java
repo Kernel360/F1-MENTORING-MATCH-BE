@@ -46,7 +46,7 @@ public class RecommenderPublicController {
         OAuth2UserPrincipal principal
     ) {
         RecommenderInfo.PreviewRecommender info = recommenderService.getRecommendedContentsByCategory(principal.getId());
-        RecommenderDto.Response response = recommenderDtoMapper.ofPreviewRes(info);
+        PreviewDto.Response response = recommenderDtoMapper.ofPreviewRes(info);
         return ResponseEntityFactory.toResponseEntity(RECOMMENDER_CATEGORY_VIEW_SUCCESS, response);
     }
 }
