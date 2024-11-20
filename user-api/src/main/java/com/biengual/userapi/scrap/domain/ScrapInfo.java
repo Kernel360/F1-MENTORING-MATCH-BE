@@ -22,7 +22,7 @@ public class ScrapInfo {
 		String thumbnailUrl,
 		String category,
 		Integer videoDurationInSeconds,
-		ContentLevel contentLevel,
+		ContentLevel calculatedLevel,
 		ContentStatus contentStatus
 	) {
 	}

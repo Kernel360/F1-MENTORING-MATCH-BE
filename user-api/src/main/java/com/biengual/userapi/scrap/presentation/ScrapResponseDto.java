@@ -20,7 +20,7 @@ public class ScrapResponseDto {
 		String thumbnailUrl,
 		String category,
 		String duration,
-		ContentLevel contentLevel,
+		ContentLevel calculatedLevel,
 		Boolean isActive
 	) {
 	}

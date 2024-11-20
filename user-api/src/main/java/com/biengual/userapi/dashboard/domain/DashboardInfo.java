@@ -22,7 +22,7 @@ public class DashboardInfo {
         String category,
         Integer videoDurationInSeconds,
         Integer hits,
-        ContentLevel contentLevel,
+        ContentLevel calculatedLevel,
         Boolean isScrapped,
         BigDecimal currentLearningRate,
         BigDecimal completedLearningRate
