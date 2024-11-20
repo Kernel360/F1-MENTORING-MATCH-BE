@@ -3,7 +3,6 @@ package com.biengual.userapi.content.presentation;
 import com.biengual.core.response.ResponseEntityFactory;
 import com.biengual.core.swagger.SwaggerVoidReturn;
 import com.biengual.core.util.PaginationInfo;
-import com.biengual.userapi.content.application.ContentFacade;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.content.domain.ContentService;
@@ -39,7 +38,6 @@ import static com.biengual.core.response.success.ContentSuccessCode.CONTENT_VIEW
 public class ContentPublicController {
 
     private final ContentDtoMapper contentDtoMapper;
-    private final ContentFacade contentFacade;
     private final ContentService contentService;
 
     @GetMapping("/preview/scrap-count")

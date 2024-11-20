@@ -13,7 +13,6 @@ import com.biengual.userapi.content.domain.*;
 import com.biengual.userapi.validator.ContentValidator;
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
 import java.util.Set;
 
 import static com.biengual.core.constant.RestrictionConstant.CONTENT_LEVEL_DETERMINATION_THRESHOLD;
@@ -78,7 +77,7 @@ public class ContentStoreImpl implements ContentStore {
                 contentLevelFeedbackDataMartRepository.findById(contentId)
                     .orElseThrow(() -> new CommonException(CONTENT_LEVEL_FEEDBACK_DATA_MART_NOT_FOUND));
 
-            ContentLevel contentLevel = this.determineContentLevel(contentLevelFeedbackDataMart);
+            ContentLevel contentLevel = this.calculateContentLevel(contentLevelFeedbackDataMart);
 
             content.updateContentLevel(contentLevel);
         }
@@ -96,7 +95,7 @@ public class ContentStoreImpl implements ContentStore {
     }
 
     // 난이도 계산 로직
-    private ContentLevel determineContentLevel(ContentLevelFeedbackDataMart contentLevelFeedbackDataMart) {
+    private ContentLevel calculateContentLevel(ContentLevelFeedbackDataMart contentLevelFeedbackDataMart) {
         Long feedbackTotalCount = contentLevelFeedbackDataMart.getFeedbackTotalCount();
 
         if (feedbackTotalCount < MINIMUM_CONTENT_LEVEL_FEEDBACK_COUNT) {

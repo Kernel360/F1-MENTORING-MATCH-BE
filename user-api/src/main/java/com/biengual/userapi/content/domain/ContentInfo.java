@@ -21,7 +21,7 @@ public class ContentInfo {
         String category,
         Integer hits,
         Integer videoDurationInSeconds,
-        ContentLevel contentLevel,
+        ContentLevel calculatedLevel,
         Boolean isScrapped,
         Boolean isPointRequired
     ) {
@@ -47,7 +47,7 @@ public class ContentInfo {
         String category,
         Integer hits,
         Integer videoDurationInSeconds,
-        ContentLevel contentLevel,
+        ContentLevel calculatedLevel,
         Boolean isScrapped,
         Boolean isPointRequired
     ) {
@@ -96,7 +96,8 @@ public class ContentInfo {
         String videoUrl,
         Integer videoDurationInSeconds,
         Integer hits,
-        ContentLevel contentLevel,
+        ContentLevel customLevel,
+        ContentLevel calculatedLevel,
         Boolean isScrapped,
         BigDecimal currentLearningRate,
         BigDecimal completedLearningRate,

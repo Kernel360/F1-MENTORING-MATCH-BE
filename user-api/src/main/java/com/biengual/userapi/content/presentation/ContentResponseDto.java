@@ -1,14 +1,13 @@
 package com.biengual.userapi.content.presentation;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 import com.biengual.core.enums.ContentLevel;
 import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.enums.ContentType;
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import lombok.Builder;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 public class ContentResponseDto {
 	@Builder
@@ -36,7 +35,8 @@ public class ContentResponseDto {
 		String videoUrl,
 		String duration,
 		Integer hits,
-		ContentLevel contentLevel,
+		ContentLevel customLevel,
+		ContentLevel calculatedLevel,
 		Boolean isScrapped,
 		BigDecimal currentLearningRate,
 		BigDecimal completedLearningRate,
@@ -53,7 +53,7 @@ public class ContentResponseDto {
 		String preScripts,     // description
 		String category,
 		Integer hits,
-		ContentLevel contentLevel,
+		ContentLevel calculatedLevel,
 		Boolean isScrapped,
 		Boolean isPointRequired
 	) {
@@ -85,7 +85,7 @@ public class ContentResponseDto {
 		String category,
 		Integer hits,
 		String duration,
-		ContentLevel contentLevel,
+		ContentLevel calculatedLevel,
 		Boolean isScrapped,
 		Boolean isPointRequired
 	) {
