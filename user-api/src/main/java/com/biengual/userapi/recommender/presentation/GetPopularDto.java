@@ -4,10 +4,10 @@ import java.util.List;
 
 import lombok.Builder;
 
-public class GetBookmarkDto {
+public class GetPopularDto {
 
     @Builder
-    public record Popular(
+    public record Bookmark(
         String enDetail,
         String koDetail,
         Long contentId
@@ -16,7 +16,7 @@ public class GetBookmarkDto {
 
     @Builder
     public record Response(
-        List<Popular> popularBookmarks
+        List<Bookmark> popularBookmarks
     ) {
     }
 }
