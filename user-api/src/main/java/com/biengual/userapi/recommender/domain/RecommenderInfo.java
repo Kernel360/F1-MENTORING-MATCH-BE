@@ -55,4 +55,12 @@ public class RecommenderInfo {
                 .build();
         }
     }
+
+    @Builder
+    public record VerifiedBookmark(
+        Long contentId,
+        Long sentenceIndex,
+        String enDetail
+    ) {
+    }
 }
