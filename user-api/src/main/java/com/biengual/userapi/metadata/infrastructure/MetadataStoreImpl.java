@@ -36,7 +36,7 @@ public class MetadataStoreImpl implements MetadataStore {
         AggregationMetadataEntity aggregationMetadata =
             this.findAggregationMetadata(CONTENT_LEVEL_FEEDBACK_HISTORY_TABLE);
 
-        LocalDateTime aggregateEndTime = aggregationMetadata.getAggregateEndTime();
+        LocalDateTime nextAggTime = aggregationMetadata.getNextAggTime();
 
         Queue<TimeRange> aggregationPeriodQueue = PeriodUtil.getAggregationPeriodQueue(aggregationMetadata);
 
@@ -66,11 +66,11 @@ public class MetadataStoreImpl implements MetadataStore {
                 aggregatedContentIdList.add(aggregatedLevelFeedback.contentId());
             }
 
-            aggregateEndTime = timeRange.end();
+            nextAggTime = timeRange.end();
         }
 
         // 집계 완료 후, AggregationMetadata의 해당 TableName에 대한 AggregationTime 업데이트
-        aggregationMetadata.updateAggregateEndTime(aggregateEndTime);
+        aggregationMetadata.updateNextAggTime(nextAggTime);
 
         return aggregatedContentIdList;
     }

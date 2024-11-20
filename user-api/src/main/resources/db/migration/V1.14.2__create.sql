@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS `aggregation_metadata`
 (
     `id`                 bigint                                               NOT NULL AUTO_INCREMENT,
     `table_name`         varchar(100)                                         NOT NULL,
-    `aggregate_end_time` datetime(6)                                          NOT NULL,
+    `next_agg_time` datetime(6)                                          NOT NULL,
     `interval_type`      enum ('YEARLY', 'MONTHLY', 'DAILY', 'HOURLY', 'ALL') NOT NULL,
     `interval_number`    tinyint                                              NOT NULL,
     `created_at`         datetime(6) DEFAULT NULL,

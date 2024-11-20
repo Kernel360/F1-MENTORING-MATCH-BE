@@ -53,7 +53,7 @@ public class PeriodUtil {
         Queue<TimeRange> aggregationPeriodQueue = new ArrayDeque<>();
 
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime start = aggregationMetadata.getAggregateEndTime();
+        LocalDateTime start = aggregationMetadata.getNextAggTime();
         LocalDateTime end = calculateAggregateEndTime(
             now, start, aggregationMetadata.getIntervalType(), aggregationMetadata.getIntervalNumber()
         );
