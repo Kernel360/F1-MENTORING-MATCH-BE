@@ -23,8 +23,8 @@ import com.biengual.userapi.content.domain.ContentDocumentRepository;
 import com.biengual.userapi.recommender.domain.BookmarkRecommenderRepository;
 import com.biengual.userapi.recommender.domain.CategoryRecommenderRepository;
 import com.biengual.userapi.recommender.domain.RecommenderCustomRepository;
+import com.biengual.userapi.recommender.domain.RecommenderInfo;
 import com.biengual.userapi.recommender.domain.RecommenderStore;
-import com.biengual.userapi.recommender.presentation.VerifiedDto;
 import com.biengual.userapi.validator.ContentValidator;
 
 import lombok.RequiredArgsConstructor;
@@ -61,22 +61,22 @@ public class RecommenderStoreImpl implements RecommenderStore {
 
         // TODO : LISTENING 의 경우 문장이 쪼개진 상태로 저장이 되고 문장 자체도 완전한 상태가 아니기 때문에
         // TODO : 여기서 쓰고 싶으면 content create 과정에 추가적인 전처리가 필요함
-        List<VerifiedDto.Bookmark> bookmarksOfWeek =
+        List<RecommenderInfo.VerifiedBookmark> bookmarksOfWeek =
             bookmarkCustomRepository.findPopularBookmarksOfReadingContentsOnWeek(startOfWeek, endOfWeek);
 
-        for (VerifiedDto.Bookmark bookmarkDto : bookmarksOfWeek) {
-            Long contentId = bookmarkDto.contentId();
+        for (RecommenderInfo.VerifiedBookmark info : bookmarksOfWeek) {
+            Long contentId = info.contentId();
             // 번역 내용을 content document 로부터 가져옴
             // TODO : TranslateApiClient 로 다시 번역 하는 방식 보다 느리면 차라리 번역을 다시 하는 방식도 고려
             String koDetail = this.getContentDocument(contentId)
                 .getScripts()
-                .get(Math.toIntExact(bookmarkDto.sentenceIndex()))
+                .get(Math.toIntExact(info.sentenceIndex()))
                 .getKoScript();
 
             // Bookmark Recommender 에 저장
             BookmarkRecommenderEntity recommender = BookmarkRecommenderEntity.createdByBookmark(
-                bookmarkDto.contentId(), bookmarkDto.sentenceIndex(),
-                bookmarkDto.enDetail(), koDetail,
+                info.contentId(), info.sentenceIndex(),
+                info.enDetail(), koDetail,
                 startOfWeek, endOfWeek
             );
             bookmarkRecommenderRepository.save(recommender);

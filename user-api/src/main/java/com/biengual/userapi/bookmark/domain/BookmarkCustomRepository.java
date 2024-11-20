@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.biengual.core.domain.entity.bookmark.BookmarkEntity;
 import com.biengual.core.enums.ContentType;
-import com.biengual.userapi.recommender.presentation.VerifiedDto;
+import com.biengual.userapi.recommender.domain.RecommenderInfo;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -69,13 +69,13 @@ public class BookmarkCustomRepository {
             .fetch();
     }
 
-    public List<VerifiedDto.Bookmark> findPopularBookmarksOfReadingContentsOnWeek(
+    public List<RecommenderInfo.VerifiedBookmark> findPopularBookmarksOfReadingContentsOnWeek(
         LocalDateTime startOfWeek, LocalDateTime endOfWeek
     ) {
         return queryFactory
             .select(
                 Projections.constructor(
-                    VerifiedDto.Bookmark.class,
+                    RecommenderInfo.VerifiedBookmark.class,
                     bookmarkEntity.scriptIndex,
                     bookmarkEntity.sentenceIndex,
                     bookmarkEntity.detail
