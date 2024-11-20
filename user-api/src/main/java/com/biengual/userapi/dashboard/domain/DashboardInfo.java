@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.biengual.core.enums.ContentLevel;
 import com.biengual.core.enums.ContentType;
 import com.biengual.core.enums.PointReason;
 
@@ -21,6 +22,7 @@ public class DashboardInfo {
         String category,
         Integer videoDurationInSeconds,
         Integer hits,
+        ContentLevel contentLevel,
         Boolean isScrapped,
         BigDecimal currentLearningRate,
         BigDecimal completedLearningRate

@@ -78,6 +78,7 @@ public class RecentLearningHistoryCustomRepository {
                     contentEntity.category.name,
                     contentEntity.videoDuration,
                     contentEntity.hits,
+                    contentEntity.contentLevel,
                     getIsScrappedByUserId(userId),
                     recentLearningHistoryEntity.currentLearningRate,
                     recentLearningHistoryEntity.completedLearningRate
