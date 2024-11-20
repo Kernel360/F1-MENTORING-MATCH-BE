@@ -12,6 +12,7 @@ import com.biengual.core.response.ResponseEntityFactory;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
 import com.biengual.userapi.recommender.domain.RecommenderInfo;
 import com.biengual.userapi.recommender.domain.RecommenderService;
+import com.biengual.userapi.recommender.presentation.swagger.SwaggerBookmarkRecommender;
 import com.biengual.userapi.recommender.presentation.swagger.SwaggerCategoryRecommender;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,8 +46,25 @@ public class RecommenderPublicController {
         @AuthenticationPrincipal
         OAuth2UserPrincipal principal
     ) {
-        RecommenderInfo.PreviewRecommender info = recommenderService.getRecommendedContentsByCategory(principal.getId());
+        RecommenderInfo.PreviewRecommender info =
+            recommenderService.getRecommendedContentsByCategory(principal.getId());
         GetPreviewDto.Response response = recommenderDtoMapper.ofPreviewRes(info);
         return ResponseEntityFactory.toResponseEntity(RECOMMENDER_CATEGORY_VIEW_SUCCESS, response);
+    }
+
+    @GetMapping("/bookmark")
+    @Operation(summary = "많이 저장된 북마크 문장 조회", description = "메인 페이지에서 북마크 많이 한 문장을 조회힙니다")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "북마크 조회 성공",
+            content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerBookmarkRecommender.class))}
+        ),
+        @ApiResponse(responseCode = "500", description = "서버 에러", content = @Content)
+    })
+    public ResponseEntity<Object> getPopularBookmarks() {
+        RecommenderInfo.PopularBookmarkRecommender info = recommenderService.getPopularBookmarks();
+        GetPopularSentenceDto.Response response = recommenderDtoMapper.ofGetPopularRes(info);
+
+        return ResponseEntityFactory.toResponseEntity(RECOMMENDER_BOOKMARK_VIEW_SUCCESS, response);
     }
 }

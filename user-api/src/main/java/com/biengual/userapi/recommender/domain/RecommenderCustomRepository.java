@@ -1,8 +1,10 @@
 package com.biengual.userapi.recommender.domain;
 
 import static com.biengual.core.domain.entity.learning.QCategoryLearningHistoryEntity.*;
+import static com.biengual.core.domain.entity.recommender.QBookmarkRecommenderEntity.*;
 import static com.biengual.core.domain.entity.recommender.QCategoryRecommenderEntity.*;
 
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +14,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
@@ -122,5 +125,26 @@ public class RecommenderCustomRepository {
         return uniqueSimilarCategoryIds.stream()
             .limit(3)  // 정확히 3개만 반환
             .collect(Collectors.toList());
+    }
+
+    // 이번주 인기 북마크 조회
+    public List<RecommenderInfo.PopularBookmark> findPopularBookmarks(
+        LocalDateTime startOfWeek, LocalDateTime endOfWeek
+    ) {
+        return queryFactory
+            .select(
+                Projections.constructor(
+                    RecommenderInfo.PopularBookmark.class,
+                    bookmarkRecommenderEntity.enDetail,
+                    bookmarkRecommenderEntity.koDetail,
+                    bookmarkRecommenderEntity.contentId
+                )
+            )
+            .from(bookmarkRecommenderEntity)
+            .where(
+                bookmarkRecommenderEntity.startOfWeek.eq(startOfWeek)
+                    .and(bookmarkRecommenderEntity.endOfWeek.eq(endOfWeek))
+            )
+            .fetch();
     }
 }

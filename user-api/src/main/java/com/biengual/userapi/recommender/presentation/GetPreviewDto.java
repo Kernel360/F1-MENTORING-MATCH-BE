@@ -13,11 +13,7 @@ public class GetPreviewDto {
         String title,
         String thumbnailUrl,   // coverImageUrl
         ContentType contentType,
-        String preScripts,     // description
         String category,
-        Integer hits,
-        Integer videoDurationInSeconds,
-        Boolean isScrapped,
         Boolean isPointRequired
     ) {
     }

@@ -201,11 +201,7 @@ public class ContentCustomRepository {
                     contentEntity.title,
                     contentEntity.thumbnailUrl,
                     contentEntity.contentType,
-                    contentEntity.preScripts,
                     contentEntity.category.name,
-                    contentEntity.hits,
-                    contentEntity.videoDuration,
-                    getIsScrappedByUserId(userId),
                     getIsPointRequiredByUserIdAndContent(userId, contentEntity.id, contentEntity.createdAt)
                 )
             )
