@@ -1,6 +1,5 @@
 package com.biengual.userapi.content.domain;
 
-import java.util.List;
 import java.util.Set;
 
 /**
