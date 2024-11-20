@@ -25,7 +25,6 @@ import com.biengual.userapi.recommender.domain.CategoryRecommenderRepository;
 import com.biengual.userapi.recommender.domain.RecommenderCustomRepository;
 import com.biengual.userapi.recommender.domain.RecommenderInfo;
 import com.biengual.userapi.recommender.domain.RecommenderStore;
-import com.biengual.userapi.validator.ContentValidator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -37,7 +36,6 @@ public class RecommenderStoreImpl implements RecommenderStore {
     private final CategoryCustomRepository categoryCustomRepository;
     private final RecommenderCustomRepository recommenderCustomRepository;
     private final BookmarkCustomRepository bookmarkCustomRepository;
-    private final ContentValidator contentValidator;
     private final ContentDocumentRepository contentDocumentRepository;
     private final ContentCustomRepository contentCustomRepository;
 
