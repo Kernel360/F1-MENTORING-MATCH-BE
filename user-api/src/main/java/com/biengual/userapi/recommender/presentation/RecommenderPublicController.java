@@ -63,7 +63,7 @@ public class RecommenderPublicController {
     })
     public ResponseEntity<Object> getPopularBookmarks() {
         RecommenderInfo.PopularBookmarkRecommender info = recommenderService.getPopularBookmarks();
-        GetPopularDto.Response response = recommenderDtoMapper.ofGetPopularRes(info);
+        GetPopularSentenceDto.Response response = recommenderDtoMapper.ofGetPopularRes(info);
 
         return ResponseEntityFactory.toResponseEntity(RECOMMENDER_BOOKMARK_VIEW_SUCCESS, response);
     }

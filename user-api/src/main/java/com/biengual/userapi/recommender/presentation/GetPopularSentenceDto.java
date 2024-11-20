@@ -4,7 +4,7 @@ import java.util.List;
 
 import lombok.Builder;
 
-public class GetPopularDto {
+public class GetPopularSentenceDto {
 
     @Builder
     public record Bookmark(
