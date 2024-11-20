@@ -3,6 +3,7 @@ package com.biengual.userapi.scrap.presentation;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.biengual.core.enums.ContentLevel;
 import com.biengual.core.enums.ContentType;
 
 import lombok.Builder;
@@ -19,6 +20,7 @@ public class ScrapResponseDto {
 		String thumbnailUrl,
 		String category,
 		String duration,
+		ContentLevel contentLevel,
 		Boolean isActive
 	) {
 	}

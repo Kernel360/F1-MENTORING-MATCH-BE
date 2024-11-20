@@ -3,6 +3,7 @@ package com.biengual.userapi.scrap.domain;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.biengual.core.enums.ContentLevel;
 import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.enums.ContentType;
 
@@ -21,6 +22,7 @@ public class ScrapInfo {
 		String thumbnailUrl,
 		String category,
 		Integer videoDurationInSeconds,
+		ContentLevel contentLevel,
 		ContentStatus contentStatus
 	) {
 	}

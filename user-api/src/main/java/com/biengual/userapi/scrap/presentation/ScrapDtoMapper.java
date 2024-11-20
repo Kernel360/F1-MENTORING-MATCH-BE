@@ -51,6 +51,7 @@ public interface ScrapDtoMapper {
 	@Mapping(target = "thumbnailUrl", source = "content.thumbnailUrl")
 	@Mapping(target = "category", source = "content.category.name")
 	@Mapping(target = "videoDurationInSeconds", source = "content.videoDuration")
+	@Mapping(target = "contentLevel", source = "content.contentLevel")
 	@Mapping(target = "contentStatus", source = "content.contentStatus")
 	ScrapInfo.View buildView(ScrapEntity scrap);
 
