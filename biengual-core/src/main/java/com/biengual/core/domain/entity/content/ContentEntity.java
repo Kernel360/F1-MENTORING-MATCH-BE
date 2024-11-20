@@ -5,7 +5,9 @@ import static com.biengual.core.constant.RestrictionConstant.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
+import com.biengual.core.enums.ContentLevel;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.biengual.core.domain.document.content.script.Script;
@@ -80,6 +82,10 @@ public class ContentEntity extends BaseEntity {
 	@Column(columnDefinition = "smallint")
 	private Integer videoDuration;
 
+	@Column(nullable = false)
+	@Enumerated(EnumType.STRING)
+	private ContentLevel contentLevel;
+
 	@Builder
 	public ContentEntity(
 		String url, String title, String thumbnailUrl,
@@ -111,6 +117,10 @@ public class ContentEntity extends BaseEntity {
 		this.numOfQuiz += numOfQuiz;
 	}
 
+	public void updateContentLevel(ContentLevel contentLevel) {
+		this.contentLevel = contentLevel;
+	}
+
 	public boolean isRecentContent() {
 		LocalDateTime createdAt = getCreatedAt();
 		LocalDate recentThreshold = LocalDate.now().minusDays(PERIOD_FOR_POINT_CONTENT_ACCESS);
@@ -120,6 +130,10 @@ public class ContentEntity extends BaseEntity {
 		}
 
 		return false;
+	}
+
+	public boolean isDeactivated() {
+		return Objects.equals(this.contentStatus, ContentStatus.DEACTIVATED);
 	}
 
 	// Internal Method =================================================================================================

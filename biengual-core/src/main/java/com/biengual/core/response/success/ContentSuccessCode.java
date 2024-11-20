@@ -12,8 +12,9 @@ public enum ContentSuccessCode implements SuccessCode {
 	CONTENT_CREATE_SUCCESS(HttpStatus.CREATED, ContentServiceStatus.CONTENT_CREATE_SUCCESS, "컨텐츠 생성 성공"),
 	CONTENT_VIEW_SUCCESS(HttpStatus.OK, ContentServiceStatus.CONTENT_VIEW_SUCCESS, "컨텐츠 조회 성공"),
 	CONTENT_MODIFY_SUCCESS(HttpStatus.OK, ContentServiceStatus.CONTENT_MODIFY_SUCCESS, "컨텐츠 상태 변경 성공"),
-	CONTENT_DEACTIVATE_SUCCESS(HttpStatus.OK, ContentServiceStatus.CONTENT_DEACTIVATE_SUCCESS, "컨텐츠 비활성화 성공")
-	;
+	CONTENT_DEACTIVATE_SUCCESS(HttpStatus.OK, ContentServiceStatus.CONTENT_DEACTIVATE_SUCCESS, "컨텐츠 비활성화 성공"),
+	CONTENT_LEVEL_FEEDBACK_SUBMIT_SUCCESS(HttpStatus.OK, ContentServiceStatus.CONTENT_LEVEL_FEEDBACK_SUBMIT_SUCCESS,
+		"컨텐츠 난이도 피드백 요청 성공");
 
 	private final HttpStatus code;
 	private final ServiceStatus serviceStatus;

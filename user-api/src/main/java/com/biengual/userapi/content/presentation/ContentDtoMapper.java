@@ -3,10 +3,12 @@ package com.biengual.userapi.content.presentation;
 import com.biengual.core.domain.document.content.script.Script;
 import com.biengual.core.domain.document.content.script.YoutubeScript;
 import com.biengual.core.domain.entity.content.ContentEntity;
+import com.biengual.core.enums.ContentLevel;
 import com.biengual.core.enums.ContentType;
 import com.biengual.core.util.PaginationInfo;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentInfo;
+import com.biengual.userapi.content.presentation.dto.SubmitLevelFeedbackDto;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
 import org.mapstruct.*;
 import org.springframework.data.domain.PageRequest;
@@ -79,6 +81,9 @@ public interface ContentDtoMapper {
 	@Mapping(target = "userId", source = "principal.id")
 	ContentCommand.GetScrapPreview doGetScrapPreview(Integer size, OAuth2UserPrincipal principal);
 
+	@Mapping(target = "userId", source = "principal.id")
+	ContentCommand.SubmitLevelFeedback doSubmitLevelFeedback(SubmitLevelFeedbackDto.Request request, OAuth2UserPrincipal principal);
+
 	// Response <- Info
     @Mapping(target = "contentByScrapCount", source = "previewContents")
     ContentResponseDto.ScrapPreviewContentsRes ofScrapPreviewContentsRes(ContentInfo.PreviewContents previewContents);
@@ -130,6 +135,8 @@ public interface ContentDtoMapper {
 	@Mapping(target = "contentId", source = "content.id")
 	@Mapping(target = "videoUrl", source = "content", qualifiedByName = "toVideoUrl")
 	@Mapping(target = "category", source = "content.category.name")
+	@Mapping(target = "customLevel", ignore = true)
+	@Mapping(target = "calculatedLevel", source = "content.contentLevel")
 	@Mapping(target = "isScrapped", constant = "false")
 	@Mapping(target = "currentLearningRate", ignore = true)
 	@Mapping(target = "completedLearningRate", ignore = true)
@@ -140,13 +147,15 @@ public interface ContentDtoMapper {
 	@Mapping(target = "contentId", source = "content.id")
 	@Mapping(target = "videoUrl", source = "content", qualifiedByName = "toVideoUrl")
 	@Mapping(target = "category", source = "content.category.name")
+	@Mapping(target = "calculatedLevel", source = "content.contentLevel")
 	@Mapping(target = "isScrapped", source = "isScrapped")
 	@Mapping(target = "currentLearningRate", source = "learningRateInfo.currentLearningRate")
 	@Mapping(target = "completedLearningRate", source = "learningRateInfo.completedLearningRate")
 	@Mapping(target = "scriptList", source = "userScripts")
 	@Mapping(target = "videoDurationInSeconds", source = "content.videoDuration")
 	ContentInfo.Detail buildDetail(
-		ContentEntity content, Boolean isScrapped, ContentInfo.LearningRateInfo learningRateInfo, List<ContentInfo.UserScript> userScripts
+		ContentEntity content, Boolean isScrapped, ContentInfo.LearningRateInfo learningRateInfo,
+		List<ContentInfo.UserScript> userScripts, ContentLevel customLevel
 	);
 
 	// Internal Method =================================================================================================

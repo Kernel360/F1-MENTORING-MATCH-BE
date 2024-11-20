@@ -1,5 +1,6 @@
 package com.biengual.userapi.dashboard.presentation.dto;
 
+import com.biengual.core.enums.ContentLevel;
 import com.biengual.core.enums.ContentType;
 import lombok.Builder;
 
@@ -17,6 +18,7 @@ public class GetRecentLearningDto {
         String category,
         String duration,
         Integer hits,
+        ContentLevel calculatedLevel,
         Boolean isScrapped,
         BigDecimal currentLearningRate,
         BigDecimal completedLearningRate

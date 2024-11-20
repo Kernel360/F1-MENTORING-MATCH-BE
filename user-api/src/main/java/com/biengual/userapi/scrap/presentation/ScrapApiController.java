@@ -2,6 +2,7 @@ package com.biengual.userapi.scrap.presentation;
 
 import static com.biengual.core.response.success.ScrapSuccessCode.*;
 
+import com.biengual.userapi.scrap.domain.ScrapService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,6 +36,7 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "Scrap - public API", description = "스크랩 회원전용 API")
 public class ScrapApiController {
 	private final ScrapFacade scrapFacade;
+	private final ScrapService scrapService;
 	private final ScrapDtoMapper scrapDtoMapper;
 
 	@GetMapping("/view")
@@ -51,7 +53,7 @@ public class ScrapApiController {
 		@AuthenticationPrincipal
 		OAuth2UserPrincipal principal
 	) {
-		ScrapInfo.ViewInfo info = scrapFacade.getAllScraps(principal.getId());
+		ScrapInfo.ViewInfo info = scrapService.getAllScraps(principal.getId());
 		ScrapResponseDto.ViewListRes response = scrapDtoMapper.ofViewRes(info);
 
 		return ResponseEntityFactory.toResponseEntity(SCRAP_VIEW_SUCCESS, response);

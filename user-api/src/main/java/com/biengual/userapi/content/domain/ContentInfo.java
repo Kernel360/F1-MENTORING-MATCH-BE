@@ -1,6 +1,8 @@
 package com.biengual.userapi.content.domain;
 
 import com.biengual.core.domain.document.content.script.Script;
+import com.biengual.core.domain.entity.content.ContentLevelFeedbackDataMart;
+import com.biengual.core.enums.ContentLevel;
 import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.enums.ContentType;
 import lombok.Builder;
@@ -19,6 +21,7 @@ public class ContentInfo {
         String category,
         Integer hits,
         Integer videoDurationInSeconds,
+        ContentLevel calculatedLevel,
         Boolean isScrapped,
         Boolean isPointRequired
     ) {
@@ -44,6 +47,7 @@ public class ContentInfo {
         String category,
         Integer hits,
         Integer videoDurationInSeconds,
+        ContentLevel calculatedLevel,
         Boolean isScrapped,
         Boolean isPointRequired
     ) {
@@ -92,6 +96,8 @@ public class ContentInfo {
         String videoUrl,
         Integer videoDurationInSeconds,
         Integer hits,
+        ContentLevel customLevel,
+        ContentLevel calculatedLevel,
         Boolean isScrapped,
         BigDecimal currentLearningRate,
         BigDecimal completedLearningRate,
@@ -111,4 +117,21 @@ public class ContentInfo {
     ) {
     }
 
+    public record AggregatedLevelFeedback(
+        Long contentId,
+        Long levelLowCount,
+        Long levelMediumCount,
+        Long levelHighCount,
+        Long feedbackTotalCount
+    ) {
+        public ContentLevelFeedbackDataMart toContentLevelFeedbackDataMart() {
+            return ContentLevelFeedbackDataMart.createEntity(
+                this.contentId,
+                this.levelLowCount,
+                this.levelMediumCount,
+                this.levelHighCount,
+                this.feedbackTotalCount
+            );
+        }
+    }
 }

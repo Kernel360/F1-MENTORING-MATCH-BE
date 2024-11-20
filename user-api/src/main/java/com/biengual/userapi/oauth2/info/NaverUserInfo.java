@@ -1,9 +1,9 @@
 package com.biengual.userapi.oauth2.info;
 
-import lombok.AllArgsConstructor;
-
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Map;
+
+import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class NaverUserInfo implements OAuth2UserInfo {
@@ -11,7 +11,7 @@ public class NaverUserInfo implements OAuth2UserInfo {
 
 	@Override
 	public String getProviderId() {
-		LinkedHashMap<String, Object> accountInfo = (LinkedHashMap<String, Object>) naverAccount.get("response");
+		Map<String, Object> accountInfo = (HashMap<String, Object>) naverAccount.get("response");
 
 		return String.valueOf(accountInfo.get("id"));
 	}
@@ -23,13 +23,13 @@ public class NaverUserInfo implements OAuth2UserInfo {
 
 	@Override
 	public String getEmail() {
-		LinkedHashMap<String, Object> accountInfo = (LinkedHashMap<String, Object>)naverAccount.get("response");
+		Map<String, Object> accountInfo = (HashMap<String, Object>)naverAccount.get("response");
 		return String.valueOf(accountInfo.get("email"));
 	}
 
 	@Override
 	public String getUsername() {
-		LinkedHashMap<String, Object> accountInfo = (LinkedHashMap<String, Object>)naverAccount.get("response");
+		Map<String, Object> accountInfo = (HashMap<String, Object>)naverAccount.get("response");
 		return String.valueOf(accountInfo.get("name"));
 	}
 

@@ -1,33 +1,14 @@
 package com.biengual.userapi.content.presentation;
 
-import static com.biengual.core.constant.BadRequestMessageConstant.*;
-import static com.biengual.core.response.success.ContentSuccessCode.*;
-
-import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.biengual.core.response.ResponseEntityFactory;
+import com.biengual.core.swagger.SwaggerVoidReturn;
 import com.biengual.core.util.PaginationInfo;
-import com.biengual.userapi.content.application.ContentFacade;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.content.domain.ContentService;
-import com.biengual.userapi.content.presentation.swagger.SwaggerContentDetail;
-import com.biengual.userapi.content.presentation.swagger.SwaggerContentListeningPreview;
-import com.biengual.userapi.content.presentation.swagger.SwaggerContentListeningView;
-import com.biengual.userapi.content.presentation.swagger.SwaggerContentReadingPreview;
-import com.biengual.userapi.content.presentation.swagger.SwaggerContentReadingView;
-import com.biengual.userapi.content.presentation.swagger.SwaggerContentScrapPreview;
-import com.biengual.userapi.content.presentation.swagger.SwaggerContentSearchPreview;
+import com.biengual.userapi.content.presentation.dto.SubmitLevelFeedbackDto;
+import com.biengual.userapi.content.presentation.swagger.*;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -39,6 +20,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import static com.biengual.core.constant.BadRequestMessageConstant.BLANK_CONTENT_KEYWORD_ERROR_MESSAGE;
+import static com.biengual.core.response.success.ContentSuccessCode.CONTENT_LEVEL_FEEDBACK_SUBMIT_SUCCESS;
+import static com.biengual.core.response.success.ContentSuccessCode.CONTENT_VIEW_SUCCESS;
 
 @Validated
 @RestController
@@ -48,7 +38,6 @@ import lombok.RequiredArgsConstructor;
 public class ContentPublicController {
 
     private final ContentDtoMapper contentDtoMapper;
-    private final ContentFacade contentFacade;
     private final ContentService contentService;
 
     @GetMapping("/preview/scrap-count")
@@ -70,7 +59,7 @@ public class ContentPublicController {
         OAuth2UserPrincipal principal
     ) {
         ContentCommand.GetScrapPreview command = contentDtoMapper.doGetScrapPreview(size, principal);
-        ContentInfo.PreviewContents info = contentFacade.getContentsByScrapCount(command);
+        ContentInfo.PreviewContents info = contentService.getContentsByScrapCount(command);
         ContentResponseDto.ScrapPreviewContentsRes response = contentDtoMapper.ofScrapPreviewContentsRes(info);
 
         return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
@@ -105,7 +94,7 @@ public class ContentPublicController {
         ContentCommand.Search command = contentDtoMapper.doSearch(
             page, size, direction, sort, searchWords, principal
         );
-        PaginationInfo<ContentInfo.PreviewContent> info = contentFacade.search(command);
+        PaginationInfo<ContentInfo.PreviewContent> info = contentService.search(command);
         ContentResponseDto.SearchPreviewContentsRes response = contentDtoMapper.ofSearchPreviewContentsRes(info);
 
         return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
@@ -138,7 +127,7 @@ public class ContentPublicController {
     ) {
         ContentCommand.GetReadingView command =
             contentDtoMapper.doGetReadingView(page, size, direction, sort, categoryId, principal);
-        PaginationInfo<ContentInfo.ViewContent> info = contentFacade.getReadingView(command);
+        PaginationInfo<ContentInfo.ViewContent> info = contentService.getViewContents(command);
         ContentResponseDto.ReadingViewContentsRes response = contentDtoMapper.ofReadingViewContentsRes(info);
 
         return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
@@ -171,7 +160,7 @@ public class ContentPublicController {
     ) {
         ContentCommand.GetListeningView command =
             contentDtoMapper.doGetListeningView(page, size, direction, sort, categoryId, principal);
-        PaginationInfo<ContentInfo.ViewContent> info = contentFacade.getListeningView(command);
+        PaginationInfo<ContentInfo.ViewContent> info = contentService.getViewContents(command);
         ContentResponseDto.ListeningViewContentsRes response = contentDtoMapper.ofListeningViewContentsRes(info);
 
         return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
@@ -193,7 +182,7 @@ public class ContentPublicController {
         OAuth2UserPrincipal principal
     ) {
         ContentCommand.GetReadingPreview command = contentDtoMapper.doGetReadingPreview(size, sort, principal);
-        ContentInfo.PreviewContents info = contentFacade.getReadingPreview(command);
+        ContentInfo.PreviewContents info = contentService.getPreviewContents(command);
         ContentResponseDto.ReadingPreviewContentsRes response = contentDtoMapper.ofReadingPreviewContentsRes(info);
 
         return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
@@ -215,7 +204,7 @@ public class ContentPublicController {
         OAuth2UserPrincipal principal
     ) {
         ContentCommand.GetListeningPreview command = contentDtoMapper.doGetListeningPreview(size, sort, principal);
-        ContentInfo.PreviewContents info = contentFacade.getListeningPreview(command);
+        ContentInfo.PreviewContents info = contentService.getPreviewContents(command);
         ContentResponseDto.ListeningPreviewContentsRes response = contentDtoMapper.ofListeningPreviewContentsRes(info);
 
         return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
@@ -238,8 +227,6 @@ public class ContentPublicController {
         @PathVariable Long contentId,
         @AuthenticationPrincipal OAuth2UserPrincipal principal
     ) {
-        // TODO: 로그인 유무에 따라 다른 DTO 응답을 보여준다고 하면,
-        //  하나의 DTO로 관리하는 것이 좋은지 분리하는 것이 좋은지? 아니면 권한 기준으로 컨트롤러 분리가 가능하다면 분리?
         ContentCommand.GetDetail command = contentDtoMapper.doGetDetail(contentId, principal);
         ContentInfo.Detail info = contentService.getScriptsOfContent(command);
         ContentResponseDto.DetailRes response = contentDtoMapper.ofDetailRes(info);
@@ -247,4 +234,25 @@ public class ContentPublicController {
         return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
     }
 
+    @PostMapping("/feedback/level")
+    @Operation(summary = "컨텐츠 난이도 피드백", description = "회원이 컨텐츠에 대한 난이도를 피드백합니다.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "컨텐츠 난이도 피드백 요청 성공", content = {
+            @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerVoidReturn.class))
+        }),
+        @ApiResponse(responseCode = "400", description = "이미 제출한 해당 컨텐츠의 난이도 피드백", content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "403", description = "비활성화 컨텐츠", content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "403", description = "포인트를 지불하지 않은 최신 컨텐츠", content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "404", description = "컨텐츠 조회 실패", content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "500", description = "서버 에러", content = @Content)
+    })
+    public ResponseEntity<Object> submitLevelFeedback(
+        @AuthenticationPrincipal OAuth2UserPrincipal principal,
+        @RequestBody SubmitLevelFeedbackDto.Request request
+    ) {
+        ContentCommand.SubmitLevelFeedback command = contentDtoMapper.doSubmitLevelFeedback(request, principal);
+        contentService.submitLevelFeedback(command);
+        return ResponseEntityFactory.toResponseEntity(CONTENT_LEVEL_FEEDBACK_SUBMIT_SUCCESS);
+    }
 }

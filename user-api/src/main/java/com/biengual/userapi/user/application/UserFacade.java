@@ -26,11 +26,6 @@ public class UserFacade {
         return userService.getMyInfo(userId);
     }
 
-    // 본인 정보 수정
-    public void updateMyInfo(UserCommand.UpdateMyInfo command) {
-        userService.updateMyInfo(command);
-    }
-
     // 본인 회원가입 날짜 조회
     public UserInfo.MySignUpTime getMySignUpTime(Long userId) {
         return userService.getMySignUpTime(userId);

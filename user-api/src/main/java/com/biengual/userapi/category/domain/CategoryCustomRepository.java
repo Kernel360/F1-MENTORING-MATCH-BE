@@ -30,4 +30,12 @@ public class CategoryCustomRepository {
             .from(categoryEntity)
             .fetch();
     }
+
+    public List<Long> findAllCategoryIds(){
+        return queryFactory
+            .select(categoryEntity.id)
+            .from(categoryEntity)
+            .fetch();
+    }
+
 }
