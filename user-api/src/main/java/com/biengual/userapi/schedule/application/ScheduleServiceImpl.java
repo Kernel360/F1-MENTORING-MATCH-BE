@@ -36,7 +36,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     // TODO: 집계와 반영은 같은 트랜잭션으로 봐야하나?
     @Override
     @Transactional
-    @Scheduled(cron = "0 * * * * *")
+    @Scheduled(cron = "00 00 04 * * *")
     public void aggregateContentLevelFeedback() {
         Set<Long> aggregatedContentIdSet = metadataStore.aggregateContentLevelFeedbackHistory();
         contentStore.reflectContentLevel(aggregatedContentIdSet);
