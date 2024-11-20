@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+import static com.biengual.core.constant.RestrictionConstant.CONTENT_LEVEL_DETERMINATION_THRESHOLD;
+import static com.biengual.core.constant.RestrictionConstant.MINIMUM_CONTENT_LEVEL_FEEDBACK_COUNT;
 import static com.biengual.core.response.error.code.CategoryErrorCode.CATEGORY_NOT_FOUND;
 import static com.biengual.core.response.error.code.ContentErrorCode.CONTENT_LEVEL_FEEDBACK_DATA_MART_NOT_FOUND;
 import static com.biengual.core.response.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
@@ -94,16 +96,32 @@ public class ContentStoreImpl implements ContentStore {
 
     // 난이도 계산 로직
     private ContentLevel determineContentLevel(ContentLevelFeedbackDataMart contentLevelFeedbackDataMart) {
+        Long feedbackTotalCount = contentLevelFeedbackDataMart.getFeedbackTotalCount();
+
+        if (feedbackTotalCount < MINIMUM_CONTENT_LEVEL_FEEDBACK_COUNT) {
+            return null;
+        }
+
         Long levelHighCount = contentLevelFeedbackDataMart.getLevelHighCount();
         Long levelMediumCount = contentLevelFeedbackDataMart.getLevelMediumCount();
         Long levelLowCount = contentLevelFeedbackDataMart.getLevelLowCount();
 
-        if (levelHighCount >= levelMediumCount && levelHighCount >= levelLowCount) {
-            return ContentLevel.HIGH;
-        } else if (levelMediumCount >= levelLowCount) {
+        double levelHighRatio = (double) levelHighCount / feedbackTotalCount;
+        double levelMediumRatio = (double) levelMediumCount / feedbackTotalCount;
+        double levelLowRatio = (double) levelLowCount / feedbackTotalCount;
+
+        if (levelMediumRatio > levelHighRatio && levelMediumRatio > levelLowRatio) {
             return ContentLevel.MEDIUM;
-        } else {
+        }
+
+        if (levelHighRatio * CONTENT_LEVEL_DETERMINATION_THRESHOLD >= levelLowRatio) {
+            return ContentLevel.HIGH;
+        }
+
+        if (levelLowRatio * CONTENT_LEVEL_DETERMINATION_THRESHOLD >= levelHighRatio) {
             return ContentLevel.LOW;
         }
+
+        return ContentLevel.MEDIUM;
     }
 }
