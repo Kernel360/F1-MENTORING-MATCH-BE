@@ -1,5 +1,7 @@
 package com.biengual.core.constant;
 
+import java.time.LocalDateTime;
+
 /**
  *  서비스에 사용하는 상수 관리 클래스
  *
@@ -7,4 +9,6 @@ package com.biengual.core.constant;
  */
 public class ServiceConstant {
     public static final String UNKNOWN_CATEGORY_NAME = "Unknown";
+    public static final String CONTENT_LEVEL_FEEDBACK_HISTORY_TABLE = "content_level_feedback_history";
+    public static final LocalDateTime BIENGUAL_SERVICE_START_TIME = LocalDateTime.of(2024, 9, 9, 4, 0);
 }
