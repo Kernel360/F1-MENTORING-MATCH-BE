@@ -1,9 +1,9 @@
 package com.biengual.userapi.oauth2.info;
 
-import lombok.AllArgsConstructor;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class KakaoUserInfo implements OAuth2UserInfo {
@@ -22,13 +22,13 @@ public class KakaoUserInfo implements OAuth2UserInfo {
 	@Override
 	public String getEmail() {
 		LinkedHashMap<String, Object> accountInfo = (LinkedHashMap<String, Object>)kakaoAccount.get("kakao_account");
-		assert accountInfo != null;
 		return String.valueOf(accountInfo.get("email"));
 	}
 
 	@Override
 	public String getUsername() {
-		return String.valueOf(kakaoAccount.get("username"));
+		LinkedHashMap<String, Object> accountInfo = (LinkedHashMap<String, Object>)kakaoAccount.get("kakao_account");
+		return String.valueOf(((LinkedHashMap<String, Object>)accountInfo.get("profile")).get("nickname"));
 	}
 
 	@Override
