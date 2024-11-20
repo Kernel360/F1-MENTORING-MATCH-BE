@@ -33,7 +33,7 @@ public class AggregationMetadataEntity extends BaseEntity {
     private String tableName;
 
     @Column(nullable = false, columnDefinition = "datetime(6)")
-    private LocalDateTime aggregateEndTime;
+    private LocalDateTime nextAggTime;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -44,11 +44,11 @@ public class AggregationMetadataEntity extends BaseEntity {
 
     @Builder
     public AggregationMetadataEntity(
-        Long id, String tableName, LocalDateTime aggregateEndTime, IntervalType intervalType, Integer intervalNumber
+        Long id, String tableName, LocalDateTime nextAggTime, IntervalType intervalType, Integer intervalNumber
     ) {
         this.id = id;
         this.tableName = tableName;
-        this.aggregateEndTime = aggregateEndTime;
+        this.nextAggTime = nextAggTime;
         this.intervalType = intervalType;
         this.intervalNumber = intervalNumber;
     }
@@ -64,8 +64,8 @@ public class AggregationMetadataEntity extends BaseEntity {
         }
     }
 
-    public void updateAggregateEndTime(LocalDateTime aggregateEndTime) {
-        this.aggregateEndTime = aggregateEndTime;
+    public void updateNextAggTime(LocalDateTime nextAggTime) {
+        this.nextAggTime = nextAggTime;
     }
 
     // Internal Method =================================================================================================
@@ -75,7 +75,7 @@ public class AggregationMetadataEntity extends BaseEntity {
     ) {
         return AggregationMetadataEntity.builder()
             .tableName(tableName)
-            .aggregateEndTime(BIENGUAL_SERVICE_START_TIME)
+            .nextAggTime(BIENGUAL_SERVICE_START_TIME)
             .intervalType(intervalType)
             .intervalNumber(intervalNumber)
             .build();
