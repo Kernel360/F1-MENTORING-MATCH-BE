@@ -60,7 +60,6 @@ public class RecommenderInfo {
         }
     }
 
-
     @Builder
     public record VerifiedBookmark(
         Long contentId,
