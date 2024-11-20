@@ -61,7 +61,7 @@ public class ContentPublicController {
         OAuth2UserPrincipal principal
     ) {
         ContentCommand.GetScrapPreview command = contentDtoMapper.doGetScrapPreview(size, principal);
-        ContentInfo.PreviewContents info = contentFacade.getContentsByScrapCount(command);
+        ContentInfo.PreviewContents info = contentService.getContentsByScrapCount(command);
         ContentResponseDto.ScrapPreviewContentsRes response = contentDtoMapper.ofScrapPreviewContentsRes(info);
 
         return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
@@ -96,7 +96,7 @@ public class ContentPublicController {
         ContentCommand.Search command = contentDtoMapper.doSearch(
             page, size, direction, sort, searchWords, principal
         );
-        PaginationInfo<ContentInfo.PreviewContent> info = contentFacade.search(command);
+        PaginationInfo<ContentInfo.PreviewContent> info = contentService.search(command);
         ContentResponseDto.SearchPreviewContentsRes response = contentDtoMapper.ofSearchPreviewContentsRes(info);
 
         return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
@@ -129,7 +129,7 @@ public class ContentPublicController {
     ) {
         ContentCommand.GetReadingView command =
             contentDtoMapper.doGetReadingView(page, size, direction, sort, categoryId, principal);
-        PaginationInfo<ContentInfo.ViewContent> info = contentFacade.getReadingView(command);
+        PaginationInfo<ContentInfo.ViewContent> info = contentService.getViewContents(command);
         ContentResponseDto.ReadingViewContentsRes response = contentDtoMapper.ofReadingViewContentsRes(info);
 
         return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
@@ -162,7 +162,7 @@ public class ContentPublicController {
     ) {
         ContentCommand.GetListeningView command =
             contentDtoMapper.doGetListeningView(page, size, direction, sort, categoryId, principal);
-        PaginationInfo<ContentInfo.ViewContent> info = contentFacade.getListeningView(command);
+        PaginationInfo<ContentInfo.ViewContent> info = contentService.getViewContents(command);
         ContentResponseDto.ListeningViewContentsRes response = contentDtoMapper.ofListeningViewContentsRes(info);
 
         return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
@@ -184,7 +184,7 @@ public class ContentPublicController {
         OAuth2UserPrincipal principal
     ) {
         ContentCommand.GetReadingPreview command = contentDtoMapper.doGetReadingPreview(size, sort, principal);
-        ContentInfo.PreviewContents info = contentFacade.getReadingPreview(command);
+        ContentInfo.PreviewContents info = contentService.getPreviewContents(command);
         ContentResponseDto.ReadingPreviewContentsRes response = contentDtoMapper.ofReadingPreviewContentsRes(info);
 
         return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
@@ -206,7 +206,7 @@ public class ContentPublicController {
         OAuth2UserPrincipal principal
     ) {
         ContentCommand.GetListeningPreview command = contentDtoMapper.doGetListeningPreview(size, sort, principal);
-        ContentInfo.PreviewContents info = contentFacade.getListeningPreview(command);
+        ContentInfo.PreviewContents info = contentService.getPreviewContents(command);
         ContentResponseDto.ListeningPreviewContentsRes response = contentDtoMapper.ofListeningPreviewContentsRes(info);
 
         return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);

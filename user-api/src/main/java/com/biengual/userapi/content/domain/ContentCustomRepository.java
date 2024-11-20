@@ -112,6 +112,7 @@ public class ContentCustomRepository {
                     contentEntity.category.name,
                     contentEntity.hits,
                     contentEntity.videoDuration,
+                    contentEntity.contentLevel,
                     getIsScrappedByUserId(userId),
                     getIsPointRequiredByUserIdAndContent(userId, contentEntity.id, contentEntity.createdAt)
                 )
@@ -270,6 +271,7 @@ public class ContentCustomRepository {
                     contentEntity.category.name,
                     contentEntity.hits,
                     contentEntity.videoDuration,
+                    contentEntity.contentLevel,
                     getIsScrappedByUserId(userId),
                     getIsPointRequiredByUserIdAndContent(userId, contentEntity.id, contentEntity.createdAt)
                 )
@@ -305,6 +307,7 @@ public class ContentCustomRepository {
                     contentEntity.category.name,
                     contentEntity.hits,
                     contentEntity.videoDuration,
+                    contentEntity.contentLevel,
                     getIsScrappedByUserId(userId),
                     getIsPointRequiredByUserIdAndContent(userId, contentEntity.id, contentEntity.createdAt)
                 )
@@ -341,6 +344,7 @@ public class ContentCustomRepository {
                     contentEntity.category.name,
                     contentEntity.hits,
                     contentEntity.videoDuration,
+                    contentEntity.contentLevel,
                     getIsScrappedByUserId(userId),
                     getIsPointRequiredByUserIdAndContent(userId, contentEntity.id, contentEntity.createdAt)
                 )
