@@ -45,6 +45,16 @@ public class PeriodUtil {
         return yearMonth.atEndOfMonth().atTime(23, 59, 59, 999_999);
     }
 
+    public static LocalDateTime getStartOfWeek(LocalDateTime localDateTime) {
+        return localDateTime.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+            .withHour(0).withMinute(0).withSecond(0).withNano(0);
+    }
+
+    public static LocalDateTime getEndOfWeek(LocalDateTime localDateTime) {
+        return localDateTime.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
+            .withHour(23).withMinute(59).withSecond(59).withNano(59);
+    }
+
     public static LocalDate getFewWeeksAgo(LocalDate currentDate, long subtractWeek, DayOfWeek dayOfWeek) {
         return currentDate.minusWeeks(subtractWeek).with(TemporalAdjusters.previousOrSame(dayOfWeek));
     }
