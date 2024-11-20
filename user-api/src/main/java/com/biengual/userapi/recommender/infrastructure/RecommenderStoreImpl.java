@@ -5,10 +5,8 @@ import static com.biengual.core.response.error.code.ContentErrorCode.*;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.time.LocalTime;
 import java.util.List;
-import java.util.Set;
 
 import org.bson.types.ObjectId;
 
@@ -57,38 +55,25 @@ public class RecommenderStoreImpl implements RecommenderStore {
         LocalDate lastWeek =
             PeriodUtil.getFewWeeksAgo(LocalDate.from(LocalDateTime.now()), 1, DayOfWeek.MONDAY);
 
-        LocalDateTime startOfWeek = PeriodUtil.getStartOfWeek(LocalDateTime.from(lastWeek));
-        LocalDateTime endOfWeek = PeriodUtil.getEndOfWeek(LocalDateTime.from(lastWeek));
+        LocalDateTime startOfWeek = PeriodUtil.getStartOfWeek(LocalDateTime.of(lastWeek, LocalTime.MIDNIGHT));
+        LocalDateTime endOfWeek =
+            PeriodUtil.getEndOfWeek(LocalDateTime.of(lastWeek, LocalTime.of(23, 59, 59)));
 
         // TODO : LISTENING 의 경우 문장이 쪼개진 상태로 저장이 되고 문장 자체도 완전한 상태가 아니기 때문에
         // TODO : 여기서 쓰고 싶으면 content create 과정에 추가적인 전처리가 필요함
         List<VerifiedDto.Bookmark> bookmarksOfWeek =
             bookmarkCustomRepository.findPopularBookmarksOfReadingContentsOnWeek(startOfWeek, endOfWeek);
 
-        HashMap<Long, ContentDocument> contentHashMap = this.getContentDocumentMap(bookmarksOfWeek);
-        Set<VerifiedDto.Bookmark> verifiedBookmarks = new HashSet<>();
-
         for (VerifiedDto.Bookmark bookmarkDto : bookmarksOfWeek) {
             Long contentId = bookmarkDto.contentId();
-            contentHashMap.putIfAbsent(contentId, getContentDocument(contentId));
-
-            // 1-3. 수정된 enDetail 적용해서 verifiedBookmarks 에 저장
-            verifiedBookmarks.add(bookmarkDto);
-
-            if (verifiedBookmarks.size() == 5) {
-                break;
-            }
-        }
-
-        for (VerifiedDto.Bookmark bookmarkDto : verifiedBookmarks) {
-            // 2. 번역 내용을 content document 로부터 가져옴
+            // 번역 내용을 content document 로부터 가져옴
             // TODO : TranslateApiClient 로 다시 번역 하는 방식 보다 느리면 차라리 번역을 다시 하는 방식도 고려
-            String koDetail = contentHashMap.get(bookmarkDto.contentId())
+            String koDetail = this.getContentDocument(contentId)
                 .getScripts()
                 .get(Math.toIntExact(bookmarkDto.sentenceIndex()))
                 .getKoScript();
 
-            // 3. Bookmark Recommender 에 저장
+            // Bookmark Recommender 에 저장
             BookmarkRecommenderEntity recommender = BookmarkRecommenderEntity.createdByBookmark(
                 bookmarkDto.contentId(), bookmarkDto.sentenceIndex(),
                 bookmarkDto.enDetail(), koDetail,
@@ -121,16 +106,5 @@ public class RecommenderStoreImpl implements RecommenderStore {
 
         return contentDocumentRepository.findContentDocumentById(new ObjectId(mongoId))
             .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
-    }
-
-    private HashMap<Long, ContentDocument> getContentDocumentMap(List<VerifiedDto.Bookmark> bookmarks) {
-        HashMap<Long, ContentDocument> contentDocuments = new HashMap<>();
-
-        for (VerifiedDto.Bookmark bookmark : bookmarks) {
-            Long contentId = bookmark.contentId();
-            contentDocuments.putIfAbsent(contentId, getContentDocument(contentId));
-        }
-
-        return contentDocuments;
     }
 }

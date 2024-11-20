@@ -28,10 +28,10 @@ public class BookmarkRecommenderEntity {
     @Column(nullable = false, columnDefinition = "bigint")
     private Long sentenceId;
 
-    @Column(columnDefinition = "varchar(255)")
+    @Column(nullable = false, columnDefinition = "varchar(255)")
     private String enDetail;
 
-    @Column(columnDefinition = "varchar(255)")
+    @Column(nullable = false, columnDefinition = "varchar(255)")
     private String koDetail;
 
     @Column(nullable = false, columnDefinition = "DATETIME(6)")

@@ -90,7 +90,7 @@ public class BookmarkCustomRepository {
             )
             .groupBy(bookmarkEntity.scriptIndex, bookmarkEntity.sentenceIndex, bookmarkEntity.detail)
             .orderBy(bookmarkEntity.detail.count().desc())
-            .limit(10)
+            .limit(5)
             .fetch();
     }
 }
