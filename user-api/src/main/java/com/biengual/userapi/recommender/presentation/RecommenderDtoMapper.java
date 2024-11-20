@@ -26,6 +26,8 @@ public interface RecommenderDtoMapper {
     // Response <- Info
     GetPreviewDto.Response ofPreviewRes(RecommenderInfo.PreviewRecommender info);
 
+    GetBookmarkDto.Response ofGetPopularRes(RecommenderInfo.PopularBookmarkRecommender popularBookmarks);
+
     // Entity <-> Info, Info <-> Info
 
 }

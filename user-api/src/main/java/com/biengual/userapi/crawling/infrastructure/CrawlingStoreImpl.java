@@ -37,7 +37,7 @@ import com.biengual.core.enums.ContentType;
 import com.biengual.core.response.error.exception.CommonException;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentCustomRepository;
-import com.biengual.userapi.crawling.application.TranslateService;
+import com.biengual.userapi.crawling.application.TranslateApiClient;
 import com.biengual.userapi.crawling.domain.CrawlingStore;
 import com.biengual.userapi.crawling.presentation.CrawlingResponseDto;
 import com.biengual.userapi.nlp.CategoryClassifier;
@@ -53,7 +53,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 public class CrawlingStoreImpl implements CrawlingStore {
-    private final TranslateService translateService;
+    private final TranslateApiClient translateApiClient;
     private final CategoryClassifier categoryClassifier;
     private final ContentCustomRepository contentCustomRepository;
     private final RestTemplate restTemplate;
@@ -230,7 +230,7 @@ public class CrawlingStoreImpl implements CrawlingStore {
                 scripts.add(
                     YoutubeScript.of(
                         startTime, endtime - startTime,
-                        text, translateService.translate(text, "en", "ko")
+                        text, translateApiClient.translate(text, "en", "ko")
                     )
                 );
 
@@ -401,7 +401,7 @@ public class CrawlingStoreImpl implements CrawlingStore {
             category,
             sentences.stream()
                 .map(sentence -> (Script)CNNScript.of(
-                        sentence, translateService.translate(sentence, "en", "ko")
+                        sentence, translateApiClient.translate(sentence, "en", "ko")
                     )
                 ).toList()
         );

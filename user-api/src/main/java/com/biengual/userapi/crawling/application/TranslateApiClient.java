@@ -9,8 +9,8 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
+import com.biengual.core.annotation.ApiClient;
 import com.biengual.core.response.error.exception.CommonException;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -24,8 +24,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 @Slf4j
-@Service
-public class TranslateService {
+@ApiClient
+public class TranslateApiClient {
 	// Instantiates the OkHttpClient.
 	OkHttpClient client = new OkHttpClient();
 

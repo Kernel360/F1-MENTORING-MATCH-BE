@@ -1,15 +1,17 @@
 package com.biengual.userapi.bookmark.domain;
 
-
 import static com.biengual.core.domain.entity.bookmark.QBookmarkEntity.*;
-import static com.biengual.core.domain.entity.content.QContentEntity.contentEntity;
+import static com.biengual.core.domain.entity.content.QContentEntity.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-import com.querydsl.core.types.Projections;
 import org.springframework.stereotype.Repository;
 
 import com.biengual.core.domain.entity.bookmark.BookmarkEntity;
+import com.biengual.core.enums.ContentType;
+import com.biengual.userapi.recommender.presentation.VerifiedDto;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -64,6 +66,31 @@ public class BookmarkCustomRepository {
             .leftJoin(contentEntity).on(bookmarkEntity.scriptIndex.eq(contentEntity.id))
             .where(bookmarkEntity.userId.eq(userId))
             .orderBy(bookmarkEntity.updatedAt.desc())
+            .fetch();
+    }
+
+    public List<VerifiedDto.Bookmark> findPopularBookmarksOfReadingContentsOnWeek(
+        LocalDateTime startOfWeek, LocalDateTime endOfWeek
+    ) {
+        return queryFactory
+            .select(
+                Projections.constructor(
+                    VerifiedDto.Bookmark.class,
+                    bookmarkEntity.scriptIndex,
+                    bookmarkEntity.sentenceIndex,
+                    bookmarkEntity.detail
+                )
+            )
+            .from(bookmarkEntity)
+            .leftJoin(contentEntity)
+            .on(bookmarkEntity.scriptIndex.eq(contentEntity.id))
+            .where(
+                bookmarkEntity.createdAt.between(startOfWeek, endOfWeek)
+                    .and(contentEntity.contentType.eq(ContentType.READING))
+            )
+            .groupBy(bookmarkEntity.scriptIndex, bookmarkEntity.sentenceIndex, bookmarkEntity.detail)
+            .orderBy(bookmarkEntity.detail.count().desc())
+            .limit(10)
             .fetch();
     }
 }
