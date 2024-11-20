@@ -20,7 +20,9 @@ public enum ContentErrorCode implements ErrorCode {
 	CONTENT_LEVEL_FEEDBACK_HISTORY_ALREADY_EXISTS(HttpStatus.BAD_REQUEST,
 		ContentServiceStatus.CONTENT_LEVEL_FEEDBACK_HISTORY_ALREADY_EXISTS, "이미 제출한 해당 컨텐츠의 난이도 피드백"),
 	UNPAID_RECENT_CONTENT(HttpStatus.FORBIDDEN, ContentServiceStatus.UNPAID_RECENT_CONTENT,
-		"포인트를 지불하지 않은 최신 컨텐츠");
+		"포인트를 지불하지 않은 최신 컨텐츠"),
+	CONTENT_LEVEL_FEEDBACK_DATA_MART_NOT_FOUND(HttpStatus.NOT_FOUND,
+		ContentServiceStatus.CONTENT_LEVEL_FEEDBACK_DATA_MART_NOT_FOUND, "컨텐츠 레벨 피드백 데이터 마트 조회 실패");
 
 	private final HttpStatus httpStatus;
 	private final ServiceStatus serviceStatus;

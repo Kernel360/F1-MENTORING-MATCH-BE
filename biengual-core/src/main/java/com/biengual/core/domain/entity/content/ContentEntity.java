@@ -117,6 +117,10 @@ public class ContentEntity extends BaseEntity {
 		this.numOfQuiz += numOfQuiz;
 	}
 
+	public void updateContentLevel(ContentLevel contentLevel) {
+		this.contentLevel = contentLevel;
+	}
+
 	public boolean isRecentContent() {
 		LocalDateTime createdAt = getCreatedAt();
 		LocalDate recentThreshold = LocalDate.now().minusDays(PERIOD_FOR_POINT_CONTENT_ACCESS);

@@ -11,4 +11,6 @@ public class RestrictionConstant {
     public static final int NUM_OF_EACH_QUIZ = 3;
     public static final int NUM_OF_QUIZ_TYPE = 4;
     public static final int MAX_QUIZ_SIZE = 4;
+    public static final int MINIMUM_CONTENT_LEVEL_FEEDBACK_COUNT = 5;
+    public static final double CONTENT_LEVEL_DETERMINATION_THRESHOLD = 0.85;
 }

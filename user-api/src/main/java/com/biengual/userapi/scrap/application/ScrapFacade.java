@@ -12,10 +12,6 @@ import lombok.RequiredArgsConstructor;
 public class ScrapFacade {
 	private final ScrapService scrapService;
 
-	public ScrapInfo.ViewInfo getAllScraps(Long userId) {
-		return scrapService.getAllScraps(userId);
-	}
-
 	public boolean existsScrap(ScrapCommand.GetByContents command) {
 		return scrapService.existsScrap(command);
 	}

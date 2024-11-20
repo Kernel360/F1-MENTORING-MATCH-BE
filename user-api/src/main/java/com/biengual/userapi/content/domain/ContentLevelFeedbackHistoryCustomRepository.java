@@ -38,6 +38,18 @@ public class ContentLevelFeedbackHistoryCustomRepository {
             .fetch();
     }
 
+    // 해당 컨텐츠에 대해 난이도를 피드백 했다면 ContentLevel을 아니라면 null을 반환하도록 하기 위한 쿼리
+    public ContentLevel findContentLevelByUserIdAndContentId(Long userId, Long contentId) {
+        return queryFactory
+            .select(contentLevelFeedbackHistoryEntity.contentLevel)
+            .from(contentLevelFeedbackHistoryEntity)
+            .where(
+                contentLevelFeedbackHistoryEntity.userId.eq(userId)
+                    .and(contentLevelFeedbackHistoryEntity.contentId.eq(contentId))
+            )
+            .fetchOne();
+    }
+
     // Internal Method =================================================================================================
 
     // ContentLevel 마다 집계하기 위한 조건

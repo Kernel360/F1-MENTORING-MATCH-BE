@@ -5,6 +5,7 @@ import com.biengual.core.domain.document.content.ContentDocument;
 import com.biengual.core.domain.document.content.script.Script;
 import com.biengual.core.domain.entity.bookmark.BookmarkEntity;
 import com.biengual.core.domain.entity.content.ContentEntity;
+import com.biengual.core.enums.ContentLevel;
 import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.response.error.exception.CommonException;
 import com.biengual.core.util.PaginationInfo;
@@ -38,6 +39,7 @@ public class ContentReaderImpl implements ContentReader {
     private final RecentLearningHistoryCustomRepository recentLearningHistoryCustomRepository;
     private final PaymentReader paymentReader;
     private final ContentValidator contentValidator;
+    private final ContentLevelFeedbackHistoryCustomRepository contentLevelFeedbackHistoryCustomRepository;
 
     // 스크랩 많은 순 컨텐츠 프리뷰 조회
     @Override
@@ -139,7 +141,11 @@ public class ContentReaderImpl implements ContentReader {
                     .findLearningRateByUserIdAndContentId(command.userId(), command.contentId())
                     .orElse(ContentInfo.LearningRateInfo.createInitLearningRateInfo());
 
-            return contentDtoMapper.buildDetail(content, isScrapped, learningRateInfo, userScripts);
+            ContentLevel customLevel =
+                contentLevelFeedbackHistoryCustomRepository
+                    .findContentLevelByUserIdAndContentId(command.userId(), command.contentId());
+
+            return contentDtoMapper.buildDetail(content, isScrapped, learningRateInfo, userScripts, customLevel);
         }
 
         return contentDtoMapper.buildDetail(content, ContentInfo.UserScript.toResponse(scripts));

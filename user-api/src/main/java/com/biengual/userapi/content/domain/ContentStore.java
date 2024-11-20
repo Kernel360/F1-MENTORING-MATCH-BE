@@ -1,5 +1,7 @@
 package com.biengual.userapi.content.domain;
 
+import java.util.Set;
+
 /**
  * Content 도메인의 DataProvider 계층의 인터페이스
  *
@@ -13,4 +15,6 @@ public interface ContentStore {
     void increaseHits(Long contentId);
 
     void recordContentLevelFeedbackHistory(ContentCommand.SubmitLevelFeedback command);
+
+    void reflectContentLevel(Set<Long> contentIdSet);
 }

@@ -3,6 +3,7 @@ package com.biengual.userapi.content.presentation;
 import com.biengual.core.domain.document.content.script.Script;
 import com.biengual.core.domain.document.content.script.YoutubeScript;
 import com.biengual.core.domain.entity.content.ContentEntity;
+import com.biengual.core.enums.ContentLevel;
 import com.biengual.core.enums.ContentType;
 import com.biengual.core.util.PaginationInfo;
 import com.biengual.userapi.content.domain.ContentCommand;
@@ -134,6 +135,8 @@ public interface ContentDtoMapper {
 	@Mapping(target = "contentId", source = "content.id")
 	@Mapping(target = "videoUrl", source = "content", qualifiedByName = "toVideoUrl")
 	@Mapping(target = "category", source = "content.category.name")
+	@Mapping(target = "customLevel", ignore = true)
+	@Mapping(target = "calculatedLevel", source = "content.contentLevel")
 	@Mapping(target = "isScrapped", constant = "false")
 	@Mapping(target = "currentLearningRate", ignore = true)
 	@Mapping(target = "completedLearningRate", ignore = true)
@@ -144,13 +147,15 @@ public interface ContentDtoMapper {
 	@Mapping(target = "contentId", source = "content.id")
 	@Mapping(target = "videoUrl", source = "content", qualifiedByName = "toVideoUrl")
 	@Mapping(target = "category", source = "content.category.name")
+	@Mapping(target = "calculatedLevel", source = "content.contentLevel")
 	@Mapping(target = "isScrapped", source = "isScrapped")
 	@Mapping(target = "currentLearningRate", source = "learningRateInfo.currentLearningRate")
 	@Mapping(target = "completedLearningRate", source = "learningRateInfo.completedLearningRate")
 	@Mapping(target = "scriptList", source = "userScripts")
 	@Mapping(target = "videoDurationInSeconds", source = "content.videoDuration")
 	ContentInfo.Detail buildDetail(
-		ContentEntity content, Boolean isScrapped, ContentInfo.LearningRateInfo learningRateInfo, List<ContentInfo.UserScript> userScripts
+		ContentEntity content, Boolean isScrapped, ContentInfo.LearningRateInfo learningRateInfo,
+		List<ContentInfo.UserScript> userScripts, ContentLevel customLevel
 	);
 
 	// Internal Method =================================================================================================
