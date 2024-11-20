@@ -14,9 +14,7 @@ import com.biengual.userapi.metadata.domain.MetadataStore;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 import static com.biengual.core.constant.ServiceConstant.CONTENT_LEVEL_FEEDBACK_HISTORY_TABLE;
 
@@ -30,8 +28,8 @@ public class MetadataStoreImpl implements MetadataStore {
 
     // ContentLevelFeedbackHistory 집계한 후 집계된 ContentId들을 반환
     @Override
-    public List<Long> aggregateContentLevelFeedbackHistory() {
-        List<Long> aggregatedContentIdList = new ArrayList<>();
+    public Set<Long> aggregateContentLevelFeedbackHistory() {
+        Set<Long> aggregatedContentIdList = new HashSet<>();
 
         AggregationMetadataEntity aggregationMetadata =
             this.findAggregationMetadata(CONTENT_LEVEL_FEEDBACK_HISTORY_TABLE);

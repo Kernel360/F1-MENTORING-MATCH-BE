@@ -14,6 +14,7 @@ import com.biengual.userapi.validator.ContentValidator;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 import static com.biengual.core.constant.RestrictionConstant.CONTENT_LEVEL_DETERMINATION_THRESHOLD;
 import static com.biengual.core.constant.RestrictionConstant.MINIMUM_CONTENT_LEVEL_FEEDBACK_COUNT;
@@ -68,8 +69,8 @@ public class ContentStoreImpl implements ContentStore {
 
     // ContentLevelFeedback에 대해 집계된 Content에 컨텐츠 난이도 반영
     @Override
-    public void reflectContentLevel(List<Long> contentIdList) {
-        for (Long contentId : contentIdList) {
+    public void reflectContentLevel(Set<Long> contentIdSet) {
+        for (Long contentId : contentIdSet) {
             ContentEntity content = contentRepository.findById(contentId)
                 .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
 

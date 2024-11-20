@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -36,9 +36,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     // TODO: 집계와 반영은 같은 트랜잭션으로 봐야하나?
     @Override
     @Transactional
-    @Scheduled(cron = "00 00 04 * * *")
+    @Scheduled(cron = "0 * * * * *")
     public void aggregateContentLevelFeedback() {
-        List<Long> aggregatedContentIdList = metadataStore.aggregateContentLevelFeedbackHistory();
-        contentStore.reflectContentLevel(aggregatedContentIdList);
+        Set<Long> aggregatedContentIdSet = metadataStore.aggregateContentLevelFeedbackHistory();
+        contentStore.reflectContentLevel(aggregatedContentIdSet);
     }
 }
