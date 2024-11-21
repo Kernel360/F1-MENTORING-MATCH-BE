@@ -131,16 +131,18 @@ public class RecommenderCustomRepository {
 
     // 유저가 처음 회원 가입을 해서 카테고리 관련 유저 정보가 없을 때 단순히 랜덤 카테고리를 가져오기 위한 쿼리
     public List<Long> findRandomCategories() {
-        List<Long> categories = new ArrayList<>(queryFactory
-            .select(categoryRecommenderEntity.similarCategoryIds)
-            .from(categoryRecommenderEntity)
-            .limit(3)
-            .fetch()
-            .stream()
-            .flatMap(List::stream)
-            .filter(str -> !str.isEmpty())
-            .map(Long::valueOf)
-            .toList());
+        List<Long> categories = new ArrayList<>(
+            queryFactory
+                .select(categoryRecommenderEntity.similarCategoryIds)
+                .from(categoryRecommenderEntity)
+                .limit(3)
+                .fetch()
+                .stream()
+                .flatMap(List::stream)
+                .filter(str -> !str.isEmpty())
+                .map(Long::valueOf)
+                .toList()
+        );
 
         Collections.shuffle(categories);
 
