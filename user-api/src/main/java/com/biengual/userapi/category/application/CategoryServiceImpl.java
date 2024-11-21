@@ -22,6 +22,7 @@ public class CategoryServiceImpl implements CategoryService {
         return CategoryInfo.AllCategories.of(categoryReader.findAllCategories());
     }
 
+    // 컨텐츠 타입에 따른 카테고리 조회
     @Override
     @Transactional(readOnly = true)
     public CategoryInfo.AllCategories getCategoriesByContentType(ContentType contentType) {
