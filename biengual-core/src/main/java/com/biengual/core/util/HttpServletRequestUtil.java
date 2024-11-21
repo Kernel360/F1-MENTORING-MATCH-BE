@@ -14,14 +14,14 @@ public class HttpServletRequestUtil {
 
     // 로깅에 남길 클라이언트 IP를 얻는 메서드
     public static String getClientIp(HttpServletRequest request) {
-        String ip = request.getHeader("X-Forwarded-For");
+        String clientIp = request.getHeader("X-Forwarded-For");
 
-        if (ip != null && !ip.isEmpty()) {
-            ip = ip.split(",")[0].trim();
+        if (clientIp != null && !clientIp.isEmpty()) {
+            clientIp = clientIp.split(",")[0].trim();
         } else {
-            ip = request.getRemoteAddr();
+            clientIp = request.getRemoteAddr();
         }
 
-        return ip;
+        return clientIp;
     }
 }
