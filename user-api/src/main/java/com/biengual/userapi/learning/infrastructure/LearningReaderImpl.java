@@ -23,7 +23,6 @@ public class LearningReaderImpl implements LearningReader {
     private final ContentCustomRepository contentCustomRepository;
     private final RecommenderCustomRepository recommenderCustomRepository;
 
-
     @Override
     public RecommenderInfo.PreviewRecommender findSimilarCategoriesBasedOnLearningHistory(Long userId) {
         // 1. 유저의 관심 높은 카테고리 찾기(관심 카테고리, 최근 많이 학습한 카테고리)
@@ -34,12 +33,18 @@ public class LearningReaderImpl implements LearningReader {
         // 2. recentLearningCategoryIdsInMonth 기반으로 userSelectedCategoryIds 와 병합
         List<Long> interestedCategoryIds =
             this.mergeRecommendedCategories(userSelectedCategoryIds, recentLearningCategoryIdsInMonth);
+        // 2-1. 카테고리 관련 정보가 없을 때를 위한 로직
+        if (interestedCategoryIds.isEmpty()) {
+            interestedCategoryIds = recommenderCustomRepository.findRandomCategories();
+        }
 
         // 3. 위 카테고리를 학습한 유저들의 다른 카테고리 리턴(나는 많이 학습하지 않은)
-        List<Long> similarCategories =  recommenderCustomRepository.findSimilarCategories(interestedCategoryIds);
+        List<Long> similarCategories = recommenderCustomRepository.findSimilarCategories(interestedCategoryIds);
 
         // 4. 각 카테고리 ID 당 조회수, 스크랩수 기준으로 상위 컨텐츠 리턴
-        return RecommenderInfo.PreviewRecommender.of(contentCustomRepository.findCustomizedContentsByCategories(userId, similarCategories));
+        return RecommenderInfo.PreviewRecommender.of(
+            contentCustomRepository.findCustomizedContentsByCategories(userId, similarCategories)
+        );
     }
 
     // Internal Methods ================================================================================================
