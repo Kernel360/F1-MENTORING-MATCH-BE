@@ -1,11 +1,14 @@
 package com.biengual.userapi.category.application;
 
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.biengual.core.enums.ContentType;
 import com.biengual.userapi.category.domain.CategoryInfo;
 import com.biengual.userapi.category.domain.CategoryReader;
 import com.biengual.userapi.category.domain.CategoryService;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,4 +21,9 @@ public class CategoryServiceImpl implements CategoryService {
 	public CategoryInfo.AllCategories getAllCategories() {
 		return CategoryInfo.AllCategories.of(categoryReader.findAllCategories());
 	}
+
+    @Override
+    public CategoryInfo.AllCategories getCategoriesByContentType(ContentType contentType) {
+        return CategoryInfo.AllCategories.of(categoryReader.findCategoriesByContentType(contentType));
+    }
 }
