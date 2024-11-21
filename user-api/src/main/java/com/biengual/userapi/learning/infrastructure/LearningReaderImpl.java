@@ -43,7 +43,8 @@ public class LearningReaderImpl implements LearningReader {
 
         // 4. 각 카테고리 ID 당 조회수, 스크랩수 기준으로 상위 컨텐츠 리턴
         return RecommenderInfo.PreviewRecommender.of(
-            contentCustomRepository.findCustomizedContentsByCategories(userId, similarCategories));
+            contentCustomRepository.findCustomizedContentsByCategories(userId, similarCategories)
+        );
     }
 
     // Internal Methods ================================================================================================
