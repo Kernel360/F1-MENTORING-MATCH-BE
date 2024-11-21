@@ -34,7 +34,7 @@ public class LearningReaderImpl implements LearningReader {
         List<Long> interestedCategoryIds =
             this.mergeRecommendedCategories(userSelectedCategoryIds, recentLearningCategoryIdsInMonth);
         // 2-1. 카테고리 관련 정보가 없을 때를 위한 로직
-        if(interestedCategoryIds.isEmpty()) {
+        if (interestedCategoryIds.isEmpty()) {
             interestedCategoryIds = recommenderCustomRepository.findRandomCategories();
         }
 
