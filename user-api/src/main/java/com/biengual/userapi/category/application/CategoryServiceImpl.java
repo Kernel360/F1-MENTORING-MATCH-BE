@@ -23,6 +23,7 @@ public class CategoryServiceImpl implements CategoryService {
 	}
 
     @Override
+	@Transactional(readOnly = true)
     public CategoryInfo.AllCategories getCategoriesByContentType(ContentType contentType) {
         return CategoryInfo.AllCategories.of(categoryReader.findCategoriesByContentType(contentType));
     }
