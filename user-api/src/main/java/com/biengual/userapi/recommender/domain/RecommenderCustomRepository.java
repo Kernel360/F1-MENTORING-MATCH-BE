@@ -5,6 +5,8 @@ import static com.biengual.core.domain.entity.recommender.QBookmarkRecommenderEn
 import static com.biengual.core.domain.entity.recommender.QCategoryRecommenderEntity.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -125,6 +127,26 @@ public class RecommenderCustomRepository {
         return uniqueSimilarCategoryIds.stream()
             .limit(3)  // 정확히 3개만 반환
             .collect(Collectors.toList());
+    }
+
+    // 유저가 처음 회원 가입을 해서 카테고리 관련 유저 정보가 없을 때 단순히 랜덤 카테고리를 가져오기 위한 쿼리
+    public List<Long> findRandomCategories() {
+        List<Long> categories = new ArrayList<>(
+            queryFactory
+                .select(categoryRecommenderEntity.similarCategoryIds)
+                .from(categoryRecommenderEntity)
+                .limit(3)
+                .fetch()
+                .stream()
+                .flatMap(List::stream)
+                .filter(str -> !str.isEmpty())
+                .map(Long::valueOf)
+                .toList()
+        );
+
+        Collections.shuffle(categories);
+
+        return categories;
     }
 
     // 이번주 인기 북마크 조회
