@@ -22,19 +22,16 @@ public record RestControllerSuccessLogSchema(
     public static RestControllerSuccessLogSchema of(
         String server, String user, Long responseTime, HttpServletRequest request, ApiCustomResponse response
     ) {
-        Object optionalRequestBody = request.getAttribute("requestBody");
-        boolean existsRequestBody = optionalRequestBody.toString().isEmpty();
-
         return RestControllerSuccessLogSchema.builder()
             .server(server)
-            .ip(request.getRemoteAddr())
+            .ip(HttpServletRequestUtil.getClientIp(request))
             .contentType(request.getContentType())
             .userAgent(request.getHeader("User-Agent"))
             .user(user)
             .httpMethod(request.getMethod())
             .uri(request.getRequestURI())
             .params(request.getQueryString())
-            .requestBody(existsRequestBody ? null : optionalRequestBody)
+            .requestBody(HttpServletRequestUtil.getRequestBody(request))
             .code(response.code())
             .message(response.message())
             .responseTime(responseTime)
