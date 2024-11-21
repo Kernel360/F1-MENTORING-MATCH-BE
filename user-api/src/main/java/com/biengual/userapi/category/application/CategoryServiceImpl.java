@@ -13,17 +13,17 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
-	private final CategoryReader categoryReader;
+    private final CategoryReader categoryReader;
 
-	// 모든 카테고리 조회
-	@Override
-	@Transactional(readOnly = true)
-	public CategoryInfo.AllCategories getAllCategories() {
-		return CategoryInfo.AllCategories.of(categoryReader.findAllCategories());
-	}
+    // 모든 카테고리 조회
+    @Override
+    @Transactional(readOnly = true)
+    public CategoryInfo.AllCategories getAllCategories() {
+        return CategoryInfo.AllCategories.of(categoryReader.findAllCategories());
+    }
 
     @Override
-	@Transactional(readOnly = true)
+    @Transactional(readOnly = true)
     public CategoryInfo.AllCategories getCategoriesByContentType(ContentType contentType) {
         return CategoryInfo.AllCategories.of(categoryReader.findCategoriesByContentType(contentType));
     }
