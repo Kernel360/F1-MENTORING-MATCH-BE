@@ -49,7 +49,7 @@ public class UserEntity extends BaseEntity {
     @Column(nullable = false, columnDefinition = "varchar(255)")
     private String username;
 
-    @Column(nullable = false, columnDefinition = "varchar(20)")
+    @Column(nullable = false, columnDefinition = "varchar(12)")
     private String nickname;
 
     @Column(columnDefinition = "varchar(255)")
