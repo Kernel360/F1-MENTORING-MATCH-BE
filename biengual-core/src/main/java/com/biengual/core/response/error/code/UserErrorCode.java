@@ -20,7 +20,11 @@ public enum UserErrorCode implements ErrorCode {
 	),
 	USER_PERMISSION_DENIED(
 		HttpStatus.FORBIDDEN, UserServiceStatus.USER_PERMISSION_DENIED, "잘못된 접근 권한"
-	);
+	),
+	USER_UPDATE_INFO_DENIED(
+		HttpStatus.BAD_REQUEST, UserServiceStatus.USER_UPDATE_INFO_DENIED, "잘못된 유저 정보 업데이트 요청"
+	)
+	;
 
 	private final HttpStatus httpStatus;
 	private final ServiceStatus serviceStatus;

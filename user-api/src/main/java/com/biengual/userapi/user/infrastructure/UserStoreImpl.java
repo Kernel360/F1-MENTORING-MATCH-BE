@@ -17,6 +17,7 @@ import com.biengual.userapi.user.domain.UserCommand;
 import com.biengual.userapi.user.domain.UserCustomRepository;
 import com.biengual.userapi.user.domain.UserRepository;
 import com.biengual.userapi.user.domain.UserStore;
+import com.biengual.userapi.validator.UserValidator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,6 +29,7 @@ public class UserStoreImpl implements UserStore {
     private final UserCategoryRepository userCategoryRepository;
     private final UserCategoryCustomRepository userCategoryCustomRepository;
     private final UserCustomRepository userCustomRepository;
+    private final UserValidator userValidator;
 
     // 본인 정보 수정
     @Override
@@ -35,7 +37,10 @@ public class UserStoreImpl implements UserStore {
         UserEntity user = userRepository.findByIdAndEmail(command.userId(), command.email())
             .orElseThrow(() -> new CommonException(USER_NOT_FOUND));
 
-        user.updateMyInfo(command.nickname(), command.phoneNumber(), command.birth(), command.gender());
+        user.updateMyInfo(
+            userValidator.verifyNicknameLength(command.nickname()),
+            command.phoneNumber(), command.birth(), command.gender()    // TODO : 이 부분 업데이트 기능 추가하면 verify 필요
+        );
         userRepository.save(user);
 
         if (command.categoryIds() != null) {
