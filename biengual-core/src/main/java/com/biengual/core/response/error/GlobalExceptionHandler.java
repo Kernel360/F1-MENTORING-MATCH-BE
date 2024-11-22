@@ -49,6 +49,7 @@ public class GlobalExceptionHandler {
 	// 핸들링하지 않는 Exception 처리 - 실제 Exception 메시지는 로그에만 남도록 함
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Object> handleOtherException(Exception e) {
+		log.error(e.getMessage());
 		return ResponseEntityFactory.toResponseEntity(SERVER_ERROR);
 	}
 }
