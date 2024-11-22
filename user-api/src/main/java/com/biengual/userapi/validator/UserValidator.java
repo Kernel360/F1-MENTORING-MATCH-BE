@@ -17,8 +17,8 @@ import lombok.RequiredArgsConstructor;
 public class UserValidator {
 
     // 유저 정보 업데이트 시 닉네임 길이 검증
-    public String verifyNicknameLength(String nickname){
-        if(nickname.length() > 12){
+    public String verifyNicknameLength(String nickname) {
+        if (nickname.length() < 4 || nickname.length() > 12) {
             throw new CommonException(USER_UPDATE_INFO_DENIED);
         }
         return nickname;
