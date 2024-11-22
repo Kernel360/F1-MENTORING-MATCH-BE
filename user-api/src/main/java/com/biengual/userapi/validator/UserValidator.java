@@ -7,15 +7,12 @@ import java.util.regex.Pattern;
 import com.biengual.core.annotation.Validator;
 import com.biengual.core.response.error.exception.CommonException;
 
-import lombok.RequiredArgsConstructor;
-
 /**
  * User 도메인의 검증을 위한 클래스
  *
  * @author 김영래
  */
 @Validator
-@RequiredArgsConstructor
 public class UserValidator {
 
     public String verifyNicknamePattern(String nickname) {
