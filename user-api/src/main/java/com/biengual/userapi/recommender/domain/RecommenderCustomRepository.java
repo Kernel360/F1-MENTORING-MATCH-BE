@@ -145,10 +145,7 @@ public class RecommenderCustomRepository {
 
         Collections.shuffle(categories);
 
-        return categories
-            .stream()
-            .limit(3)
-            .toList();
+        return categories.subList(0, Math.min(3, categories.size()));
     }
 
     // 이번주 인기 북마크 조회
