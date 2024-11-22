@@ -135,7 +135,6 @@ public class RecommenderCustomRepository {
             queryFactory
                 .select(categoryRecommenderEntity.similarCategoryIds)
                 .from(categoryRecommenderEntity)
-                .limit(3)
                 .fetch()
                 .stream()
                 .flatMap(List::stream)
@@ -146,7 +145,7 @@ public class RecommenderCustomRepository {
 
         Collections.shuffle(categories);
 
-        return categories;
+        return categories.subList(0, Math.min(3, categories.size()));
     }
 
     // 이번주 인기 북마크 조회
