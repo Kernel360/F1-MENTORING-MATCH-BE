@@ -2,6 +2,7 @@ package com.biengual.userapi.bookmark.domain;
 
 import static com.biengual.core.domain.entity.bookmark.QBookmarkEntity.*;
 import static com.biengual.core.domain.entity.content.QContentEntity.*;
+import static com.biengual.core.domain.entity.recommender.QBookmarkRecommenderEntity.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.biengual.core.domain.entity.bookmark.BookmarkEntity;
+import com.biengual.core.domain.entity.recommender.BookmarkRecommenderEntity;
 import com.biengual.core.enums.ContentType;
 import com.biengual.userapi.recommender.domain.RecommenderInfo;
 import com.querydsl.core.types.Projections;
@@ -92,5 +94,21 @@ public class BookmarkCustomRepository {
             .orderBy(bookmarkEntity.detail.count().desc())
             .limit(5)
             .fetch();
+    }
+
+    public boolean isBookmarkAlreadyPresentInLastWeek(
+        LocalDateTime startOfWeek, LocalDateTime endOfWeek, BookmarkRecommenderEntity recommender
+    ) {
+        return queryFactory
+            .from(bookmarkRecommenderEntity)
+            .where(
+                bookmarkRecommenderEntity.startOfWeek.eq(startOfWeek)
+                    .and(bookmarkRecommenderEntity.endOfWeek.eq(endOfWeek))
+            )
+            .where(
+                bookmarkRecommenderEntity.contentId.eq(recommender.getContentId())
+                    .and(bookmarkRecommenderEntity.sentenceId.eq(recommender.getSentenceId()))
+            )
+            .fetchFirst() != null;
     }
 }

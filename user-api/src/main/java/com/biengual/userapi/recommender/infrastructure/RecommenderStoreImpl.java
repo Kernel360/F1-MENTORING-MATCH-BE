@@ -77,7 +77,9 @@ public class RecommenderStoreImpl implements RecommenderStore {
                 info.enDetail(), koDetail,
                 startOfWeek, endOfWeek
             );
-            bookmarkRecommenderRepository.save(recommender);
+            if(!bookmarkCustomRepository.isBookmarkAlreadyPresentInLastWeek(startOfWeek, endOfWeek, recommender)){
+                bookmarkRecommenderRepository.save(recommender);
+            }
         }
     }
 
