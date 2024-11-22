@@ -1,4 +1,5 @@
 <configuration scan="true" scanPeriod="60 seconds">
+    <springProperty scope="context" name="SERVER_NAME" source="spring.profiles.active"/>
     <property name="LOG_PATH" value="logs"/>
     <property name="DEBUG_LOG_PATH" value="debug/%d{yyyy-MM}/debugLog"/>
     <property name="INFO_LOG_PATH" value="info/%d{yyyy-MM}/infoLog"/>
@@ -7,8 +8,8 @@
 
     <property name="LOG_TIMESTAMP" value="%d{yyyy-MM-dd HH:mm:ss}"/>
 
-    <property name="CONSOLE_LOG_PATTERN" value="%green([${LOG_TIMESTAMP}]) %magenta([%thread]) %highlight([%level]) - %msg%n"/>
-    <property name="LOG_PATTERN" value="[${LOG_TIMESTAMP}] [%thread] [%level] - %msg%n"/>
+    <property name="CONSOLE_LOG_PATTERN" value="%green([${LOG_TIMESTAMP}]) %yellow([${SERVER_NAME}]) %magenta([%thread]) %highlight([%level]) - %msg%n"/>
+    <property name="LOG_PATTERN" value="[${LOG_TIMESTAMP}] [${SERVER_NAME}] [%thread] [%level] - %msg%n"/>
 
 
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
