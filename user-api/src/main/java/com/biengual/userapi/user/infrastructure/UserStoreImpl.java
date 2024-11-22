@@ -38,7 +38,7 @@ public class UserStoreImpl implements UserStore {
             .orElseThrow(() -> new CommonException(USER_NOT_FOUND));
 
         user.updateMyInfo(
-            userValidator.verifyNicknameLength(command.nickname()),
+            userValidator.verifyNicknamePattern(command.nickname()),
             command.phoneNumber(), command.birth(), command.gender()    // TODO : 이 부분 업데이트 기능 추가하면 verify 필요
         );
         userRepository.save(user);
