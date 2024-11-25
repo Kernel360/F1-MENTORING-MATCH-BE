@@ -13,7 +13,7 @@ public enum PointErrorCode implements ErrorCode {
         HttpStatus.NOT_FOUND, PointServiceStatus.POINT_NOT_FOUND, "포인트 조회 실패"
     ),
     POINT_NEVER_MINUS(
-        HttpStatus.UNAUTHORIZED, PointServiceStatus.POINT_NEVER_MINUS, "포인트 부족"
+        HttpStatus.FORBIDDEN, PointServiceStatus.POINT_NEVER_MINUS, "포인트 부족"
     )
     ;
 
