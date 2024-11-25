@@ -13,4 +13,6 @@ public class RestrictionConstant {
     public static final int MAX_QUIZ_SIZE = 4;
     public static final int MINIMUM_CONTENT_LEVEL_FEEDBACK_COUNT = 5;
     public static final double CONTENT_LEVEL_DETERMINATION_THRESHOLD = 0.85;
+    public static final int MIN_NICKNAME_SIZE = 4;
+    public static final int MAX_NICKNAME_SIZE = 12;
 }
