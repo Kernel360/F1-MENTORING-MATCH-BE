@@ -32,14 +32,11 @@ public class UserStoreImpl implements UserStore {
     // 본인 정보 수정
     @Override
     public void updateMyInfo(UserCommand.UpdateMyInfo command) {
-
         UserEntity user = userRepository.findByIdAndEmail(command.userId(), command.email())
             .orElseThrow(() -> new CommonException(USER_NOT_FOUND));
 
-        // UserEntity Dirty Checking
-        user.updateMyInfo(
-            command.username(), command.nickname(), command.phoneNumber(), command.birth(), command.gender()
-        );
+        user.updateMyInfo(command.nickname(), command.phoneNumber(), command.birth(), command.gender());
+        userRepository.save(user);
 
         if (command.categoryIds() != null) {
             // user가 이미 관심 카테고리로 등록한 CategoryIds List

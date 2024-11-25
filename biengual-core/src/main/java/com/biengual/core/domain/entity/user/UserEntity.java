@@ -49,7 +49,7 @@ public class UserEntity extends BaseEntity {
     @Column(nullable = false, columnDefinition = "varchar(255)")
     private String username;
 
-    @Column(nullable = false, columnDefinition = "varchar(255)")
+    @Column(nullable = false, columnDefinition = "varchar(12)")
     private String nickname;
 
     @Column(columnDefinition = "varchar(255)")
@@ -129,10 +129,7 @@ public class UserEntity extends BaseEntity {
     }
 
     // 본인 정보 수정
-    public void updateMyInfo(
-        String username, String nickname, String phoneNumber, LocalDate birth, Gender gender
-    ) {
-        this.username = StringUtils.defaultIfBlank(username, this.username);
+    public void updateMyInfo(String nickname, String phoneNumber, LocalDate birth, Gender gender) {
         this.nickname = StringUtils.defaultIfBlank(nickname, this.nickname);
         this.phoneNumber = StringUtils.defaultIfBlank(phoneNumber, this.phoneNumber);
         this.birth = Optional.ofNullable(birth).orElse(this.birth);
