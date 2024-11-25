@@ -1,5 +1,14 @@
 package com.biengual.userapi.content.infrastructure;
 
+import static com.biengual.core.constant.RestrictionConstant.*;
+import static com.biengual.core.response.error.code.ContentErrorCode.*;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import org.bson.types.ObjectId;
+import org.springframework.data.domain.Page;
+
 import com.biengual.core.annotation.DataProvider;
 import com.biengual.core.domain.document.content.ContentDocument;
 import com.biengual.core.domain.document.content.script.Script;
@@ -10,22 +19,21 @@ import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.response.error.exception.CommonException;
 import com.biengual.core.util.PaginationInfo;
 import com.biengual.userapi.bookmark.domain.BookmarkRepository;
-import com.biengual.userapi.content.domain.*;
+import com.biengual.userapi.content.domain.ContentCommand;
+import com.biengual.userapi.content.domain.ContentCustomRepository;
+import com.biengual.userapi.content.domain.ContentDocumentRepository;
+import com.biengual.userapi.content.domain.ContentInfo;
+import com.biengual.userapi.content.domain.ContentLevelFeedbackHistoryCustomRepository;
+import com.biengual.userapi.content.domain.ContentReader;
+import com.biengual.userapi.content.domain.ContentRepository;
+import com.biengual.userapi.content.domain.UserContentBookmarks;
 import com.biengual.userapi.content.presentation.ContentDtoMapper;
 import com.biengual.userapi.learning.domain.RecentLearningHistoryCustomRepository;
 import com.biengual.userapi.payment.domain.PaymentReader;
 import com.biengual.userapi.scrap.domain.ScrapCustomRepository;
 import com.biengual.userapi.validator.ContentValidator;
+
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
-import org.springframework.data.domain.Page;
-
-import java.time.LocalDate;
-import java.util.List;
-
-import static com.biengual.core.constant.RestrictionConstant.PERIOD_FOR_POINT_CONTENT_ACCESS;
-import static com.biengual.core.response.error.code.ContentErrorCode.CONTENT_IS_DEACTIVATED;
-import static com.biengual.core.response.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
 
 @DataProvider
 @RequiredArgsConstructor
@@ -158,6 +166,9 @@ public class ContentReaderImpl implements ContentReader {
 
         if (this.verifyExpiredOfContent(command.contentId())) {
             // access 가 필요한 date인 컨텐츠에 대해 access 가 있으면 true
+            if (command.userId() == null) { // 로그인 필요한 컨텐츠에 대해 비로그인 상태로 접근시 401 에러
+                throw new CommonException(CONTENT_NEED_LOGIN);
+            }
             access = paymentReader.existsPaymentContentHistory(command.userId(), command.contentId());
         }
 

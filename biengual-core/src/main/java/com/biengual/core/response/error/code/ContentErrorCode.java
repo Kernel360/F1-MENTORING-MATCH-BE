@@ -22,7 +22,8 @@ public enum ContentErrorCode implements ErrorCode {
 	UNPAID_RECENT_CONTENT(HttpStatus.FORBIDDEN, ContentServiceStatus.UNPAID_RECENT_CONTENT,
 		"포인트를 지불하지 않은 최신 컨텐츠"),
 	CONTENT_LEVEL_FEEDBACK_DATA_MART_NOT_FOUND(HttpStatus.NOT_FOUND,
-		ContentServiceStatus.CONTENT_LEVEL_FEEDBACK_DATA_MART_NOT_FOUND, "컨텐츠 레벨 피드백 데이터 마트 조회 실패");
+		ContentServiceStatus.CONTENT_LEVEL_FEEDBACK_DATA_MART_NOT_FOUND, "컨텐츠 레벨 피드백 데이터 마트 조회 실패"),
+	CONTENT_NEED_LOGIN(HttpStatus.UNAUTHORIZED, ContentServiceStatus.CONTENT_NEED_LOGIN, "로그인이 필요한 컨텐츠");
 
 	private final HttpStatus httpStatus;
 	private final ServiceStatus serviceStatus;
