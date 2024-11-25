@@ -25,6 +25,11 @@ spring:
       username: ${DB_ROOT_USERNAME}
       password: ${DB_ROOT_PASSWORD}
 
+  elasticsearch:
+    uris: http://localhost:9200
+    username: elastic
+    password: Aq_WgKWhkNn5OGmhO8A9
+
   security:
     oauth2:
       client:

@@ -115,6 +115,8 @@ dependencies {
     // Unirest
     implementation 'com.konghq:unirest-java:3.14.5'
 
+    // Elastic Search
+    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
 }
 
 def querydslDir = "$buildDir/generated/querydsl"
