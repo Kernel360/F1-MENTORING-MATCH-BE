@@ -55,22 +55,31 @@ public class QuestionReaderImpl implements QuestionReader {
         // 랜덤 셔플
         Collections.shuffle(questionDocumentIdsNotCorrected);
 
-        // 정해진 문제 개수만큼 리턴
-        // 만약 정해진 개수보다 맞추지 못한 문제가 적으면 리턴하는 문제 갯수는 MAX_QUIZ_SIZE보다 작음
-        List<QuestionInfo.Detail> questions = new ArrayList<>();
-        for (String questionDocumentId : questionDocumentIdsNotCorrected) {
-            if (questions.size() == MAX_QUIZ_SIZE) {
-                break;
-            }
+        List<ObjectId> notCorrectedQuizObjectIdList = getNotCorrectedQuizObjectIdList(questionDocumentIdsNotCorrected);
 
-            QuestionDocument questionDocument = questionDocumentRepository.findById(new ObjectId(questionDocumentId))
-                .orElseThrow(() -> new CommonException(QUESTION_NOT_FOUND));
-            questions.add(
-                QuestionInfo.Detail.of(questionDocument)
-            );
-        }
+        List<QuestionDocument> NotCorrectedQuestDocumentList =
+            questionDocumentRepository.findByIds(notCorrectedQuizObjectIdList);
 
-        return questions;
+//        // 정해진 문제 개수만큼 리턴
+//        // 만약 정해진 개수보다 맞추지 못한 문제가 적으면 리턴하는 문제 갯수는 MAX_QUIZ_SIZE보다 작음
+//        List<QuestionInfo.Detail> questions = new ArrayList<>();
+//        for (String questionDocumentId : questionDocumentIdsNotCorrected) {
+//            if (questions.size() == MAX_QUIZ_SIZE) {
+//                break;
+//            }
+//
+//            QuestionDocument questionDocument = questionDocumentRepository.findById(new ObjectId(questionDocumentId))
+//                .orElseThrow(() -> new CommonException(QUESTION_NOT_FOUND));
+//            questions.add(
+//                QuestionInfo.Detail.of(questionDocument)
+//            );
+//        }
+//
+//        return questions;
+
+        return NotCorrectedQuestDocumentList.stream()
+            .map(QuestionInfo.Detail::of)
+            .toList();
     }
 
     @Override
@@ -111,5 +120,14 @@ public class QuestionReaderImpl implements QuestionReader {
 
         return contentDocumentRepository.findById(new ObjectId(content.getMongoContentId()))
             .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
+    }
+
+    // 정답을 맞춘 적 없는 Quiz ObjectId들을 얻는 메소드
+    private List<ObjectId> getNotCorrectedQuizObjectIdList(List<String> questionDocumentIdsNotCorrected) {
+        return questionDocumentIdsNotCorrected
+            .subList(0, Math.min(MAX_QUIZ_SIZE, questionDocumentIdsNotCorrected.size()))
+            .stream()
+            .map(ObjectId::new)
+            .toList();
     }
 }
