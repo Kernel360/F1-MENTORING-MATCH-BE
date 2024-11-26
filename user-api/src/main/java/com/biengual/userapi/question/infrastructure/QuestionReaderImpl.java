@@ -49,7 +49,7 @@ public class QuestionReaderImpl implements QuestionReader {
         );
 
         if (questionDocumentIdsNotCorrected.isEmpty()) {
-            throw new CommonException(QUESTION_ALL_CORRECTED);
+            return Collections.emptyList();
         }
 
         // 랜덤 셔플
