@@ -18,9 +18,6 @@ logging:
           jdbc:
             bind: trace
 
-    com:
-      mongodb: debug
-
       # Spring Batch
       springframework:
         batch: DEBUG
