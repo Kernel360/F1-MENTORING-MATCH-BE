@@ -202,6 +202,7 @@ public class ContentCustomRepository {
                     contentEntity.thumbnailUrl,
                     contentEntity.contentType,
                     contentEntity.category.name,
+                    contentEntity.contentLevel,
                     getIsPointRequiredByUserIdAndContent(userId, contentEntity.id, contentEntity.createdAt)
                 )
             )
@@ -230,6 +231,7 @@ public class ContentCustomRepository {
                         contentEntity.thumbnailUrl,
                         contentEntity.contentType,
                         contentEntity.category.name,
+                        contentEntity.contentLevel,
                         getIsPointRequiredByUserIdAndContent(userId, contentEntity.id, contentEntity.createdAt)
                     )
                 )
