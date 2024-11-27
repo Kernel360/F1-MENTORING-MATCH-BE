@@ -18,10 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 
-import java.time.LocalDate;
 import java.util.List;
 
-import static com.biengual.core.constant.RestrictionConstant.PERIOD_FOR_POINT_CONTENT_ACCESS;
 import static com.biengual.core.response.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
 import static com.biengual.core.response.error.code.ContentErrorCode.UNPAID_RECENT_CONTENT;
 
@@ -147,11 +145,14 @@ public class ContentReaderImpl implements ContentReader {
         return contentDtoMapper.buildDetail(content, ContentInfo.UserScript.toResponse(scripts));
     }
 
+    // 학습할 수 있는 content 반환
     @Override
     public ContentEntity findLearnableContent(Long contentId, Long userId) {
         ContentEntity content = this.findContent(contentId);
 
-        contentValidator.verifyLearnableContent(content, userId);
+        if (!contentValidator.verifyLearnableContent(content, userId)) {
+            throw new CommonException(UNPAID_RECENT_CONTENT);
+        }
 
         return content;
     }
