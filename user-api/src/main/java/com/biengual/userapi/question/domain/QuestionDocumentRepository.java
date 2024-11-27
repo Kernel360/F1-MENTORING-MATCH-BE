@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface QuestionDocumentRepository extends MongoRepository<QuestionDocument, ObjectId> {
     @Query("{ '_id' : { $in: ?0 } }")
-    List<QuestionDocument> findByIds(List<ObjectId> ids);
+    List<QuestionInfo.Detail> findByIdIn(List<ObjectId> ids);
 }
