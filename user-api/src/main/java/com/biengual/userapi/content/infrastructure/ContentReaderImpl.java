@@ -123,8 +123,7 @@ public class ContentReaderImpl implements ContentReader {
     // 로그인 여부에 따른 컨텐츠 디테일 조회
     @Override
     public ContentInfo.Detail findActiveContentWithScripts(ContentCommand.GetDetail command) {
-        ContentEntity content = contentRepository.findById(command.contentId())
-            .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
+        ContentEntity content = this.findContent(command.contentId());
 
         if (!content.getContentStatus().equals(ContentStatus.ACTIVATED)) {
             throw new CommonException(CONTENT_IS_DEACTIVATED);
@@ -177,8 +176,7 @@ public class ContentReaderImpl implements ContentReader {
 
     @Override
     public void findContentIsActivated(Long contentId) {
-        ContentEntity content = contentRepository.findById(contentId)
-            .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
+        ContentEntity content = this.findContent(contentId);
         if (content.getContentStatus().equals(ContentStatus.DEACTIVATED)) {
             throw new CommonException(CONTENT_IS_DEACTIVATED);
         }
@@ -186,12 +184,17 @@ public class ContentReaderImpl implements ContentReader {
 
     @Override
     public ContentEntity findLearnableContent(Long contentId, Long userId) {
-        ContentEntity content = contentRepository.findById(contentId)
-            .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
+        ContentEntity content = this.findContent(contentId);
 
         contentValidator.verifyLearnableContent(content, userId);
 
         return content;
+    }
+
+    // contentId로 content 조회
+    @Override
+    public ContentEntity find(Long contentId) {
+        return this.findContent(contentId);
     }
 
     // Internal Methods ================================================================================================
@@ -199,5 +202,11 @@ public class ContentReaderImpl implements ContentReader {
         return LocalDate.now().minusDays(PERIOD_FOR_POINT_CONTENT_ACCESS).isBefore(
             contentCustomRepository.findCreatedAtOfContentById(contentId).toLocalDate()
         );
+    }
+
+    // contentId로 content 조회
+    private ContentEntity findContent(Long contentId) {
+        return contentRepository.findById(contentId)
+            .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
     }
 }

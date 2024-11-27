@@ -14,7 +14,9 @@ public enum PointErrorCode implements ErrorCode {
     ),
     POINT_NEVER_MINUS(
         HttpStatus.FORBIDDEN, PointServiceStatus.POINT_NEVER_MINUS, "포인트 부족"
-    )
+    ),
+    POINTLESS_CONTENT(HttpStatus.BAD_REQUEST,
+        PointServiceStatus.POINTLESS_CONTENT, "포인트 지불이 필요없는 컨텐츠")
     ;
 
     private final HttpStatus httpStatus;

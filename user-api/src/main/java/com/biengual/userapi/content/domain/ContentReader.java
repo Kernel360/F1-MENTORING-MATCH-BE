@@ -34,4 +34,6 @@ public interface ContentReader {
     void findContentIsActivated(Long contentId);
 
     ContentEntity findLearnableContent(Long contentId, Long userId);
+
+    ContentEntity find(Long contentId);
 }
