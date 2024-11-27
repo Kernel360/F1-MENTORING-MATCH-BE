@@ -21,14 +21,16 @@ public class ContentValidator {
     private final ContentLevelFeedbackHistoryRepository contentLevelFeedbackHistoryRepository;
 
     // 해당 컨텐츠가 학습할 수 있는 컨텐츠인지 검증
-    public void verifyLearnableContent(ContentEntity content, Long userId) {
+    public boolean verifyLearnableContent(ContentEntity content, Long userId) {
         if (content.isDeactivated()) {
             throw new CommonException(CONTENT_IS_DEACTIVATED);
         }
 
         if (content.isRecentContent()) {
-            validatePaymentForRecentContent(content.getId(), userId);
+            return validatePaymentForRecentContent(content.getId(), userId);
         }
+
+        return true;
     }
 
     // 이미 해당 컨텐츠에 대해 난이도 피드백을 했는지 검증
@@ -41,9 +43,15 @@ public class ContentValidator {
     // Internal Method =================================================================================================
 
     // 해당 최신 컨텐츠에 대해 포인트를 지불했는지 검증
-    private void validatePaymentForRecentContent(Long contentId, Long userId) {
-        if (!paymentContentHistoryRepository.existsByUserIdAndContentId(userId, contentId)) {
-            throw new CommonException(UNPAID_RECENT_CONTENT);
+    private boolean validatePaymentForRecentContent(Long contentId, Long userId) {
+        if (userId == null) {
+            throw new CommonException(CONTENT_NEED_LOGIN);
         }
+
+        if (!paymentContentHistoryRepository.existsByUserIdAndContentId(userId, contentId)) {
+            return false;
+        }
+
+        return true;
     }
 }
