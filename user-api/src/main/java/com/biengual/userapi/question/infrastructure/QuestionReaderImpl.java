@@ -93,10 +93,12 @@ public class QuestionReaderImpl implements QuestionReader {
         List<String> questionDocumentIdsCorrected =
             questionHistoryCustomRepository.findQuestionsCorrected(questionIds, userId);
 
-        return questionIds
-            .stream()
-            .filter(quizId -> !questionDocumentIdsCorrected.contains(quizId))
-            .toList();
+        return new ArrayList<>(
+            questionIds
+                .stream()
+                .filter(quizId -> !questionDocumentIdsCorrected.contains(quizId))
+                .toList()
+        );
     }
 
     // 정답을 맞춘 적 없는 문제들 중 최대 MAX_QUIZ_SIZE 만큼 랜덤하게 ObjectId들을 얻는 메서드
