@@ -10,7 +10,8 @@ public enum PointServiceStatus implements ServiceStatus {
     // failure
     POINT_NOT_FOUND("U-P-901"),
     POINT_NEVER_MINUS("U-P-902"),
-    POINTLESS_CONTENT("U-P-903")
+    CONTENT_NOT_RECENT("U-P-903"),
+    ALREADY_PAID_FOR_RECENT_CONTENT("U-P-904")
     ;
 
     private final String code;
