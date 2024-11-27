@@ -111,10 +111,6 @@ public class ContentServiceImpl implements ContentService {
     public ContentInfo.Detail getScriptsOfContent(ContentCommand.GetDetail command) {
         ContentInfo.Detail info = contentReader.findActiveContentWithScripts(command);
 
-        if (!pointValidator.verifyContentView(command)) {
-            pointManager.updateAndSavePoint(PointReason.VIEW_RECENT_CONTENT, command.userId());
-            paymentStore.updatePaymentHistory(command.userId(), command.contentId());
-        }
         // TODO: 추후 레디스로 바꿀 예정
         contentStore.increaseHits(command.contentId());
 
