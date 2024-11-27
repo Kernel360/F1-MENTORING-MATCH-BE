@@ -88,6 +88,7 @@ public class SecurityConfig {
                     .requestMatchers("/api/learning/**").hasAnyRole("USER", "DEVELOPER")
                     .requestMatchers("/api/dashboard/**").hasAnyRole("USER", "DEVELOPER")
                     .requestMatchers("/api/recommender/**").hasAnyRole("USER", "DEVELOPER")
+                    .requestMatchers("/api/point/**").hasAnyRole("USER", "DEVELOPER")
 
                     // Can access from ADMIN
                     .requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "DEVELOPER")
