@@ -3,6 +3,7 @@ package com.biengual.userapi.recommender.domain;
 import java.util.List;
 
 import com.biengual.core.domain.entity.recommender.BookmarkRecommenderEntity;
+import com.biengual.core.enums.ContentLevel;
 import com.biengual.core.enums.ContentType;
 
 import lombok.Builder;
@@ -15,6 +16,7 @@ public class RecommenderInfo {
         String thumbnailUrl,   // coverImageUrl
         ContentType contentType,
         String category,
+        ContentLevel calculatedLevel,
         Boolean isPointRequired
     ) {
     }

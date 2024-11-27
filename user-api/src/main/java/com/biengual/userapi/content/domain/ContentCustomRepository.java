@@ -218,6 +218,7 @@ public class ContentCustomRepository {
                     contentEntity.thumbnailUrl,
                     contentEntity.contentType,
                     contentEntity.category.name,
+                    contentEntity.contentLevel,
                     getIsPointRequiredByUserIdAndContent(userId, contentEntity.id, contentEntity.createdAt)
                 )
             )
@@ -246,6 +247,7 @@ public class ContentCustomRepository {
                         contentEntity.thumbnailUrl,
                         contentEntity.contentType,
                         contentEntity.category.name,
+                        contentEntity.contentLevel,
                         getIsPointRequiredByUserIdAndContent(userId, contentEntity.id, contentEntity.createdAt)
                     )
                 )
@@ -593,27 +595,13 @@ public class ContentCustomRepository {
         }
 
         return JPAExpressions
-            .selectOne()
+            .select(paymentContentHistoryEntity)
             .from(paymentContentHistoryEntity)
             .where(
-                validatePaymentHistory(paymentContentHistoryEntity.expiredAt)
-                    .and(paymentContentHistoryEntity.contentId.eq(contentId))
+                    paymentContentHistoryEntity.contentId.eq(contentId)
                     .and(paymentContentHistoryEntity.userId.eq(userId))
             )
             .notExists()
             .and(isWithinFewDays); // createdAt 기준 7일 확인
-    }
-
-    // 컨텐츠 만료 확인 로직
-    private BooleanExpression validatePaymentHistory(DateTimePath<LocalDateTime> expiredAt) {
-        LocalDate today = LocalDate.now();
-
-        return expiredAt.isNotNull()
-            // 연 비교
-            .and(expiredAt.year().goe(today.getYear()))
-            // 월 비교
-            .and(expiredAt.month().goe(today.getMonthValue()))
-            // 일 비교
-            .and(expiredAt.dayOfMonth().gt(today.getDayOfMonth()));
     }
 }
