@@ -125,8 +125,8 @@ public class ContentReaderImpl implements ContentReader {
     public ContentInfo.Detail findActiveContentWithScripts(ContentCommand.GetDetail command) {
         ContentEntity content = this.findContent(command.contentId());
 
-        if (!content.getContentStatus().equals(ContentStatus.ACTIVATED)) {
-            throw new CommonException(CONTENT_IS_DEACTIVATED);
+        if (!contentValidator.verifyLearnableContent(content, command.userId())) {
+            throw new CommonException(UNPAID_RECENT_CONTENT);
         }
 
         ContentDocument contentDocument =
