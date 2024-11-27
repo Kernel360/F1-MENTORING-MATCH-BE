@@ -40,28 +40,21 @@ public class RedissonLockAspect {
 
         RLock lock = redissonClient.getLock(key);
 
-        int attempt = 0;
+        try {
+            boolean lockable =
+                lock.tryLock(distributedLock.waitTime(), distributedLock.leaseTime(), distributedLock.timeUnit());
 
-        while (true) {
-            try {
-                boolean lockable =
-                    lock.tryLock(distributedLock.waitTime(), distributedLock.leaseTime(), distributedLock.timeUnit());
-                if (!lockable) {
-                    attempt++;
-                    if (attempt >= distributedLock.maxRetries()) {
-                        log.error("Redisson Rock 획득 실패: {}", key);
-                        return false;
-                    }
-                    continue;
-                }
+            if (!lockable) {
+                log.error("Redisson Rock 획득 실패: {}", key);
+                return false;
+            }
 
-                return aopForTransaction.proceed(joinPoint);
-            } catch (InterruptedException e) {
-                throw new InterruptedException();
-            } finally {
-                if (lock.isHeldByCurrentThread()) {
-                    lock.unlock();
-                }
+            return aopForTransaction.proceed(joinPoint);
+        } catch (InterruptedException e) {
+            throw new InterruptedException();
+        } finally {
+            if (lock.isHeldByCurrentThread()) {
+                lock.unlock();
             }
         }
     }
