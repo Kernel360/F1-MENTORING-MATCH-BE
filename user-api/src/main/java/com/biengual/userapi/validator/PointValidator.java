@@ -33,9 +33,7 @@ public class PointValidator {
     }
 
     // 포인트 지불이 필요한 최신 컨텐츠인지 검증
-    public boolean verifyPaymentForRecentContent(Long contentId, Long userId) {
-        ContentEntity content = contentReader.find(contentId);
-
+    public boolean  verifyPaymentForRecentContent(ContentEntity content, Long userId) {
         if (content.isDeactivated()) {
             throw new CommonException(CONTENT_IS_DEACTIVATED);
         }
@@ -44,7 +42,7 @@ public class PointValidator {
             throw new CommonException(CONTENT_NOT_RECENT);
         }
 
-        if (paymentContentHistoryRepository.existsByUserIdAndContentId(userId, contentId)) {
+        if (paymentContentHistoryRepository.existsByUserIdAndContentId(userId, content.getId())) {
             throw new CommonException(ALREADY_PAID_FOR_RECENT_CONTENT);
         }
 

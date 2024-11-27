@@ -23,9 +23,9 @@ public class PointServiceImpl implements PointService {
     @Override
     @RedisDistributedLock(key = "#userId + \":\" + #contentId")
     public void payPointsForRecentContent(Long contentId, Long userId) {
-        ContentEntity content = contentReader.find(contentId);
+        ContentEntity content = contentReader.findUnverifiedContent(contentId);
 
-        if (pointValidator.verifyPaymentForRecentContent(content.getId(), userId)) {
+        if (pointValidator.verifyPaymentForRecentContent(content, userId)) {
             pointManager.updateAndSavePoint(PointReason.VIEW_RECENT_CONTENT, userId);
             paymentStore.updatePaymentHistory(userId, contentId);
         }

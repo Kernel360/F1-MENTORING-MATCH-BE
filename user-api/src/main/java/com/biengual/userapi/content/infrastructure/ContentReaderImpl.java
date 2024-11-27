@@ -159,7 +159,7 @@ public class ContentReaderImpl implements ContentReader {
 
     // contentId로 content 조회
     @Override
-    public ContentEntity find(Long contentId) {
+    public ContentEntity findUnverifiedContent(Long contentId) {
         return this.findContent(contentId);
     }
 

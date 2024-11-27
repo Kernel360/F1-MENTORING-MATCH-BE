@@ -31,5 +31,5 @@ public interface ContentReader {
 
     ContentEntity findLearnableContent(Long contentId, Long userId);
 
-    ContentEntity find(Long contentId);
+    ContentEntity findUnverifiedContent(Long contentId);
 }

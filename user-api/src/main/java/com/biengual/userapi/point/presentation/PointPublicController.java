@@ -33,6 +33,9 @@ public class PointPublicController {
         @ApiResponse(responseCode = "200", description = "최신 컨텐츠 포인트 차감 요청 성공", content = {
             @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerVoidReturn.class))
         }),
+        @ApiResponse(responseCode = "400", description = "최신이 아닌 컨텐츠", content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "400", description = "이미 지불된 최신 컨텐츠", content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "403", description = "비활성화 컨텐츠", content = @Content(mediaType = "application/json")),
         @ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
         @ApiResponse(responseCode = "500", description = "서버 에러", content = @Content)
     })
