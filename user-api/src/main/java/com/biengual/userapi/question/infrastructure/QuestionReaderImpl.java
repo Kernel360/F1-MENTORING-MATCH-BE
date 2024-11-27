@@ -37,27 +37,15 @@ public class QuestionReaderImpl implements QuestionReader {
     public List<QuestionInfo.Detail> findQuestionsByContentId(Long contentId, Long userId) {
         List<String> questionIds = this.getContentDocument(contentId).getQuestionIds();
 
-        // 컨텐츠에 포함된 모든 문제 중 맞추지 못한 문제 id
-        List<String> questionDocumentIdsCorrected =
-            questionHistoryCustomRepository.findQuestionsCorrected(questionIds, userId);
+        List<String> incorrectQuestionIds = this.getIncorrectQuestionIds(questionIds, userId);
 
-        List<String> questionDocumentIdsNotCorrected = new ArrayList<>(
-            questionIds
-                .stream()
-                .filter(quizId -> !questionDocumentIdsCorrected.contains(quizId))
-                .toList()
-        );
-
-        if (questionDocumentIdsNotCorrected.isEmpty()) {
+        if (incorrectQuestionIds.isEmpty()) {
             return Collections.emptyList();
         }
 
-        // 랜덤 셔플
-        Collections.shuffle(questionDocumentIdsNotCorrected);
+        List<ObjectId> selectedQuestionIds = this.selectQuestionIds(incorrectQuestionIds);
 
-        List<ObjectId> selectedQuizIds = selectQuizIds(questionDocumentIdsNotCorrected);
-
-        return questionDocumentRepository.findByIdIn(selectedQuizIds);
+        return questionDocumentRepository.findByIdIn(selectedQuestionIds);
     }
 
     @Override
@@ -100,8 +88,21 @@ public class QuestionReaderImpl implements QuestionReader {
             .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
     }
 
-    // 정답을 맞춘 적 없는 Quiz ObjectId들을 얻는 메소드
-    private List<ObjectId> selectQuizIds(List<String> questionDocumentIdsNotCorrected) {
+    // 컨텐츠에 포함된 모든 문제 중 맞추지 못한 문제 id들을 얻는 메서드
+    private List<String> getIncorrectQuestionIds(List<String> questionIds, Long userId) {
+        List<String> questionDocumentIdsCorrected =
+            questionHistoryCustomRepository.findQuestionsCorrected(questionIds, userId);
+
+        return questionIds
+            .stream()
+            .filter(quizId -> !questionDocumentIdsCorrected.contains(quizId))
+            .toList();
+    }
+
+    // 정답을 맞춘 적 없는 문제들 중 최대 MAX_QUIZ_SIZE 만큼 랜덤하게 ObjectId들을 얻는 메서드
+    private List<ObjectId> selectQuestionIds(List<String> questionDocumentIdsNotCorrected) {
+        Collections.shuffle(questionDocumentIdsNotCorrected);
+
         return questionDocumentIdsNotCorrected
             .subList(0, Math.min(MAX_QUIZ_SIZE, questionDocumentIdsNotCorrected.size()))
             .stream()
