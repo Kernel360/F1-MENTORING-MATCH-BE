@@ -1,9 +1,9 @@
 package com.biengual.userapi.content.application;
 
-import com.biengual.core.annotation.RedisDistributedLock;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.biengual.core.annotation.RedisDistributedLock;
 import com.biengual.core.enums.PointReason;
 import com.biengual.core.util.PaginationInfo;
 import com.biengual.userapi.content.domain.ContentCommand;
@@ -31,6 +31,13 @@ public class ContentServiceImpl implements ContentService {
     @Transactional(readOnly = true)
     public PaginationInfo<ContentInfo.PreviewContent> search(ContentCommand.Search command) {
         return contentReader.findPreviewPageBySearch(command);
+    }
+
+    // 검색 조건에 맞는 컨텐츠 프리뷰 페이지 조회(ES)
+    @Override
+    @Transactional(readOnly = true)
+    public PaginationInfo<ContentInfo.PreviewContent> elasticSearch(ContentCommand.Search command) {
+        return contentReader.findPreviewPageByElasticSearch(command);
     }
 
     // 리딩 컨텐츠 프리뷰 페이지 조회
@@ -96,6 +103,17 @@ public class ContentServiceImpl implements ContentService {
         contentReader.findLearnableContent(command.contentId(), command.userId());
 
         contentStore.recordContentLevelFeedbackHistory(command);
+    }
+
+    @Override
+    @Transactional
+    public void initializeOpenSearch() {
+        contentStore.initializeOpenSearch();
+    }
+
+    @Override
+    public void delete() {
+        contentStore.delete();
     }
 
     // 컨텐츠 상태 변경 ACTIVATED <-> DEACTIVATED

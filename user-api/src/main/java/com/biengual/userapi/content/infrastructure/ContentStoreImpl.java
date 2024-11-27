@@ -1,7 +1,17 @@
 package com.biengual.userapi.content.infrastructure;
 
+import static com.biengual.core.constant.RestrictionConstant.*;
+import static com.biengual.core.response.error.code.CategoryErrorCode.*;
+import static com.biengual.core.response.error.code.ContentErrorCode.*;
+
+import java.util.List;
+import java.util.Set;
+
+import org.bson.types.ObjectId;
+
 import com.biengual.core.annotation.DataProvider;
 import com.biengual.core.domain.document.content.ContentDocument;
+import com.biengual.core.domain.document.content.ContentSearchDocument;
 import com.biengual.core.domain.entity.category.CategoryEntity;
 import com.biengual.core.domain.entity.content.ContentEntity;
 import com.biengual.core.domain.entity.content.ContentLevelFeedbackDataMart;
@@ -9,17 +19,17 @@ import com.biengual.core.enums.ContentLevel;
 import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.response.error.exception.CommonException;
 import com.biengual.userapi.category.domain.CategoryRepository;
-import com.biengual.userapi.content.domain.*;
+import com.biengual.userapi.content.domain.ContentCommand;
+import com.biengual.userapi.content.domain.ContentCustomRepository;
+import com.biengual.userapi.content.domain.ContentDocumentRepository;
+import com.biengual.userapi.content.domain.ContentLevelFeedbackDataMartRepository;
+import com.biengual.userapi.content.domain.ContentLevelFeedbackHistoryRepository;
+import com.biengual.userapi.content.domain.ContentRepository;
+import com.biengual.userapi.content.domain.ContentSearchClient;
+import com.biengual.userapi.content.domain.ContentStore;
 import com.biengual.userapi.validator.ContentValidator;
+
 import lombok.RequiredArgsConstructor;
-
-import java.util.Set;
-
-import static com.biengual.core.constant.RestrictionConstant.CONTENT_LEVEL_DETERMINATION_THRESHOLD;
-import static com.biengual.core.constant.RestrictionConstant.MINIMUM_CONTENT_LEVEL_FEEDBACK_COUNT;
-import static com.biengual.core.response.error.code.CategoryErrorCode.CATEGORY_NOT_FOUND;
-import static com.biengual.core.response.error.code.ContentErrorCode.CONTENT_LEVEL_FEEDBACK_DATA_MART_NOT_FOUND;
-import static com.biengual.core.response.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
 
 @DataProvider
 @RequiredArgsConstructor
@@ -31,6 +41,7 @@ public class ContentStoreImpl implements ContentStore {
     private final ContentLevelFeedbackHistoryRepository contentLevelFeedbackHistoryRepository;
     private final ContentLevelFeedbackDataMartRepository contentLevelFeedbackDataMartRepository;
     private final ContentValidator contentValidator;
+    private final ContentSearchClient contentSearchClient;
 
     @Override
     public void createContent(ContentCommand.Create command) {
@@ -83,6 +94,31 @@ public class ContentStoreImpl implements ContentStore {
         }
     }
 
+    @Override
+    public void initializeOpenSearch() {
+        // 인덱스 생성
+        contentSearchClient.createIndexIfNotExists();
+
+        // 컨텐츠 데이터 저장
+        List<ContentEntity> contents = contentRepository.findAll();
+        for (ContentEntity content : contents) {
+            ContentDocument document = contentDocumentRepository.findById(new ObjectId(content.getMongoContentId()))
+                .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
+            contentSearchClient.saveContent(ContentSearchDocument.createdByContents(content, document));
+        }
+    }
+
+    @Override
+    public void delete() {
+        List<Long> contentIds = contentRepository.findAll()
+            .stream()
+            .map(ContentEntity::getId)
+            .toList();
+        for (Long id : contentIds) {
+            contentSearchClient.deleteContent(String.valueOf(id));
+        }
+    }
+
     // Internal Methods=================================================================================================
 
     private CategoryEntity getCategoryEntity(ContentCommand.Create command) {
@@ -106,9 +142,9 @@ public class ContentStoreImpl implements ContentStore {
         Long levelMediumCount = contentLevelFeedbackDataMart.getLevelMediumCount();
         Long levelLowCount = contentLevelFeedbackDataMart.getLevelLowCount();
 
-        double levelHighRatio = (double) levelHighCount / feedbackTotalCount;
-        double levelMediumRatio = (double) levelMediumCount / feedbackTotalCount;
-        double levelLowRatio = (double) levelLowCount / feedbackTotalCount;
+        double levelHighRatio = (double)levelHighCount / feedbackTotalCount;
+        double levelMediumRatio = (double)levelMediumCount / feedbackTotalCount;
+        double levelLowRatio = (double)levelLowCount / feedbackTotalCount;
 
         if (levelMediumRatio > levelHighRatio && levelMediumRatio > levelLowRatio) {
             return ContentLevel.MEDIUM;

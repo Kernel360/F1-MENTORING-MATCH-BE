@@ -1,8 +1,9 @@
 package com.biengual.core.domain.document.content.script;
 
+import org.springframework.data.annotation.TypeAlias;
+
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.data.annotation.TypeAlias;
 
 @Getter
 @Builder

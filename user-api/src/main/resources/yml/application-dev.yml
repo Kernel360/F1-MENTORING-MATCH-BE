@@ -60,3 +60,10 @@ nlp:
 perplexity:
   api-key: ${PERPLEXITY_API_KEY}
   base-url: https://api.perplexity.ai
+
+opensearch:
+  host: ${OPEN_SEARCH_DEV_HOST}
+  port: ${OPEN_SEARCH_PORT}
+  protocol: ${OPEN_SEARCH_HTTPS_PROTOCOL}
+  username: ${OPEN_SEARCH_ROOT_USERNAME}
+  password: ${OPEN_SEARCH_ROOT_PASSWORD}

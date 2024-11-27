@@ -18,17 +18,11 @@ spring:
       password: ${DB_ROOT_PASSWORD}
       username: default
 
-
     mongodb:
       uri: ${MONGO_LOCAL_URI}
       database: admin
       username: ${DB_ROOT_USERNAME}
       password: ${DB_ROOT_PASSWORD}
-
-  elasticsearch:
-    uris: http://localhost:9200
-    username: elastic
-    password: Aq_WgKWhkNn5OGmhO8A9
 
   security:
     oauth2:
@@ -64,3 +58,10 @@ nlp:
 perplexity:
   api-key: ${PERPLEXITY_API_KEY}
   base-url: https://api.perplexity.ai
+
+opensearch:
+  host: ${OPEN_SEARCH_LOCAL_HOST}
+  port: ${OPEN_SEARCH_PORT}
+  protocol: ${OPEN_SEARCH_HTTP_PROTOCOL}
+  username: ${OPEN_SEARCH_ROOT_USERNAME} # OpenSearch 기본 관리자 계정 (보안 플러그인 활성화 시)
+  password: ${OPEN_SEARCH_ROOT_USERNAME} # OpenSearch 기본 비밀번호 (보안 플러그인 활성화 시)

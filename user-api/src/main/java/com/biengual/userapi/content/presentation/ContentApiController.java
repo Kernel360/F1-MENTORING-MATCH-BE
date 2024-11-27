@@ -19,6 +19,7 @@ import com.biengual.core.util.PaginationInfo;
 import com.biengual.userapi.content.application.ContentFacade;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentInfo;
+import com.biengual.userapi.content.domain.ContentService;
 import com.biengual.userapi.content.presentation.swagger.SwaggerContentAdminView;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,6 +42,7 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "Content - private API", description = "컨텐츠 어드민 전용 API")
 public class ContentApiController {
     private final ContentFacade contentFacade;
+    private final ContentService contentService;
     private final ContentDtoMapper contentDtoMapper;
 
     /**
@@ -153,5 +155,32 @@ public class ContentApiController {
         ContentResponseDto.AdminListRes response = contentDtoMapper.ofAdminListRes(info);
 
         return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
+    }
+
+    @PostMapping("/search-initialize")
+    @Operation(summary = "검색 초기 데이터 저장", description = "Open Search 에 검색을 위한 초기 컨텐츠 데이터를 저장합니다")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "컨텐츠 저장 성공", content = {
+            @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerVoidReturn.class))
+        }),
+        @ApiResponse(responseCode = "500", description = "서버 에러", content = @Content)
+    })
+    public ResponseEntity<Object> initializeOpenSearch() {
+        contentService.initializeOpenSearch();
+        return ResponseEntityFactory.toResponseEntity(CONTENT_CREATE_SUCCESS);
+    }
+
+    @PostMapping("/search-delete")
+    @Operation(summary = "검색 데이터 삭제", description = "Open Search  에 검색을 위한 컨텐츠 데이터를 삭제합니다")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "컨텐츠 검색 성공", content = {
+            @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerVoidReturn.class))
+        }),
+        @ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "500", description = "서버 에러", content = @Content)
+    })
+    public ResponseEntity<Object> delete() {
+        contentService.delete();
+        return ResponseEntityFactory.toResponseEntity(CONTENT_CREATE_SUCCESS);
     }
 }

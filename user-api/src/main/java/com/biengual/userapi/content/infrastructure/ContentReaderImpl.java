@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 
 import com.biengual.core.annotation.DataProvider;
 import com.biengual.core.domain.document.content.ContentDocument;
+import com.biengual.core.domain.document.content.ContentSearchDocument;
 import com.biengual.core.domain.document.content.script.Script;
 import com.biengual.core.domain.entity.bookmark.BookmarkEntity;
 import com.biengual.core.domain.entity.content.ContentEntity;
@@ -26,6 +27,7 @@ import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.content.domain.ContentLevelFeedbackHistoryCustomRepository;
 import com.biengual.userapi.content.domain.ContentReader;
 import com.biengual.userapi.content.domain.ContentRepository;
+import com.biengual.userapi.content.domain.ContentSearchClient;
 import com.biengual.userapi.content.domain.UserContentBookmarks;
 import com.biengual.userapi.content.presentation.ContentDtoMapper;
 import com.biengual.userapi.learning.domain.RecentLearningHistoryCustomRepository;
@@ -48,6 +50,7 @@ public class ContentReaderImpl implements ContentReader {
     private final PaymentReader paymentReader;
     private final ContentValidator contentValidator;
     private final ContentLevelFeedbackHistoryCustomRepository contentLevelFeedbackHistoryCustomRepository;
+    private final ContentSearchClient contentSearchClient;
 
     // 스크랩 많은 순 컨텐츠 프리뷰 조회
     @Override
@@ -60,6 +63,19 @@ public class ContentReaderImpl implements ContentReader {
     public PaginationInfo<ContentInfo.PreviewContent> findPreviewPageBySearch(ContentCommand.Search command) {
         Page<ContentInfo.PreviewContent> page =
             contentCustomRepository.findPreviewPageBySearch(command.pageable(), command.keyword(), command.userId());
+
+        return PaginationInfo.from(page);
+    }
+
+    // Elastic Search 검색 프리뷰 페이지 조회
+    @Override
+    public PaginationInfo<ContentInfo.PreviewContent> findPreviewPageByElasticSearch(ContentCommand.Search command) {
+        List<ContentSearchDocument> contentSearchDocuments = contentSearchClient.searchByFields(command.keyword());
+
+        Page<ContentInfo.PreviewContent> page =
+            contentCustomRepository.findPreviewPageByElasticSearch(
+                contentSearchDocuments, command.pageable(), command.userId()
+            );
 
         return PaginationInfo.from(page);
     }

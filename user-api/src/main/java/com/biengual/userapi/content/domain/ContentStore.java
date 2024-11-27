@@ -17,4 +17,8 @@ public interface ContentStore {
     void recordContentLevelFeedbackHistory(ContentCommand.SubmitLevelFeedback command);
 
     void reflectContentLevel(Set<Long> contentIdSet);
+
+    void initializeOpenSearch();
+
+    void delete();
 }

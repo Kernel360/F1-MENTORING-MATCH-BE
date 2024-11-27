@@ -10,6 +10,8 @@ import com.biengual.core.util.PaginationInfo;
 public interface ContentService {
     PaginationInfo<ContentInfo.PreviewContent> search(ContentCommand.Search command);
 
+    PaginationInfo<ContentInfo.PreviewContent> elasticSearch(ContentCommand.Search command);
+
     PaginationInfo<ContentInfo.ViewContent> getViewContents(ContentCommand.GetReadingView command);
 
     PaginationInfo<ContentInfo.ViewContent> getViewContents(ContentCommand.GetListeningView command);
@@ -31,4 +33,8 @@ public interface ContentService {
     PaginationInfo<ContentInfo.Admin> getAdminView(ContentCommand.GetAdminListeningView command);
 
     void submitLevelFeedback(ContentCommand.SubmitLevelFeedback command);
+
+    void initializeOpenSearch();
+
+    void delete();
 }
