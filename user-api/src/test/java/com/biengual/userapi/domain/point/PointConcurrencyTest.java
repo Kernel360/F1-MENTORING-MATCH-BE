@@ -1,10 +1,14 @@
 package com.biengual.userapi.domain.point;
 
+import com.biengual.core.domain.entity.category.CategoryEntity;
+import com.biengual.core.domain.entity.content.ContentEntity;
 import com.biengual.core.domain.entity.pointhistory.PointHistoryEntity;
 import com.biengual.core.domain.entity.user.UserEntity;
 import com.biengual.core.enums.PointReason;
 import com.biengual.userapi.common.util.ExecutorServiceUtil;
+import com.biengual.userapi.content.domain.ContentRepository;
 import com.biengual.userapi.point.domain.PointManager;
+import com.biengual.userapi.point.domain.PointService;
 import com.biengual.userapi.user.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,6 +22,8 @@ import org.springframework.transaction.support.TransactionTemplate;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
+import static com.biengual.userapi.domain.category.CategoryTestFixture.TestCategoryEntity.createCategoryEntity;
+import static com.biengual.userapi.domain.content.ContentTestFixture.TestContentEntity.createContentEntity;
 import static com.biengual.userapi.domain.user.UserTestFixture.TestUserEntity.createUserEntity;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -36,9 +42,13 @@ public class PointConcurrencyTest {
     private Logger log = LoggerFactory.getLogger(PointConcurrencyTest.class);
     private Long initUserId;
     private Long initCurrentPoint;
+    private Long initContentId;
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ContentRepository contentRepository;
 
     @Autowired
     private TestPointHistoryRepository testPointHistoryRepository;
@@ -47,16 +57,33 @@ public class PointConcurrencyTest {
     private PointManager pointManager;
 
     @Autowired
+    private PointService pointService;
+
+    @Autowired
     private TransactionTemplate transactionTemplate;
 
     @BeforeEach
     void init() {
-        UserEntity user = createUserEntity().build().get();
+        UserEntity user = createUserEntity()
+            .currentPoint(1000L)
+            .build()
+            .get();
 
         UserEntity savedUser = userRepository.save(user);
 
         initUserId = savedUser.getId();
         initCurrentPoint = savedUser.getCurrentPoint();
+
+        CategoryEntity category = createCategoryEntity().build().get();
+
+        ContentEntity content = createContentEntity()
+            .category(category)
+            .build()
+            .get();
+
+        ContentEntity savedContent = contentRepository.save(content);
+
+        initContentId = savedContent.getId();
     }
 
     @Test
@@ -111,6 +138,28 @@ public class PointConcurrencyTest {
 
         assertThat(currentPoint.get()).isEqualTo(user.getCurrentPoint());
         assertThat(currentPoint.get()).isEqualTo(pointHistory.getPointBalance());
+    }
+
+    @Test
+    @DisplayName("최신 컨텐츠에 대한 포인트 차감 동시성 테스트")
+    void payPointsForRecentContent_ShouldEnsureConcurrency_WhenCalledSimultaneously() throws InterruptedException {
+        // given
+        int threadCount = 100;
+
+        // when
+        ExecutorServiceUtil.createExecutorService(threadCount, () -> {
+            pointService.payPointsForRecentContent(initContentId, initUserId);
+        });
+
+        // then
+        UserEntity user = userRepository.findById(initUserId).orElseThrow();
+
+        Long currentPoint = user.getCurrentPoint();
+        Long pointAfterPayment = PointReason.VIEW_RECENT_CONTENT.add(initCurrentPoint);
+
+        log.info("User CurrentPoint: {}, Point After Payment: {}", currentPoint, pointAfterPayment);
+
+        assertThat(currentPoint).isEqualTo(pointAfterPayment);
     }
 
     // Internal Method =================================================================================================

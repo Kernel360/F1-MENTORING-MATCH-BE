@@ -1,22 +1,24 @@
 package com.biengual.userapi.validator;
 
-import static com.biengual.core.response.error.code.PointErrorCode.*;
-
-import java.time.LocalDate;
-
 import com.biengual.core.annotation.Validator;
+import com.biengual.core.domain.entity.content.ContentEntity;
 import com.biengual.core.domain.entity.user.UserEntity;
 import com.biengual.core.enums.PointReason;
 import com.biengual.core.response.error.exception.CommonException;
-import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentReader;
-
+import com.biengual.userapi.payment.domain.PaymentContentHistoryRepository;
 import lombok.RequiredArgsConstructor;
+
+import java.time.LocalDate;
+
+import static com.biengual.core.response.error.code.ContentErrorCode.CONTENT_IS_DEACTIVATED;
+import static com.biengual.core.response.error.code.PointErrorCode.*;
 
 @Validator
 @RequiredArgsConstructor
 public class PointValidator {
     private final ContentReader contentReader;
+    private final PaymentContentHistoryRepository paymentContentHistoryRepository;
 
     // 업데이트 전에 포인트가 음수가 되지 않는지 검증
     public void verifyUpdatePoint(Long currentPoint, PointReason reason) {
@@ -30,11 +32,21 @@ public class PointValidator {
         return user.getLastLoginTime().toLocalDate().isBefore(LocalDate.now());
     }
 
-    // 컨텐츠가 유효한지와 포인트가 필요한지 검증
-    public boolean verifyContentView(ContentCommand.GetDetail command) {
-        contentReader.findContentIsActivated(command.contentId());
+    // 포인트 지불이 필요한 최신 컨텐츠인지 검증
+    public boolean  verifyPaymentForRecentContent(ContentEntity content, Long userId) {
+        if (content.isDeactivated()) {
+            throw new CommonException(CONTENT_IS_DEACTIVATED);
+        }
 
-        return contentReader.checkAlreadyReadable(command);
+        if (!content.isRecentContent()) {
+            throw new CommonException(CONTENT_NOT_RECENT);
+        }
+
+        if (paymentContentHistoryRepository.existsByUserIdAndContentId(userId, content.getId())) {
+            throw new CommonException(ALREADY_PAID_FOR_RECENT_CONTENT);
+        }
+
+        return true;
     }
 
     // 미션 성공했는지 검증 - 미션은 F -> T로만 바뀜

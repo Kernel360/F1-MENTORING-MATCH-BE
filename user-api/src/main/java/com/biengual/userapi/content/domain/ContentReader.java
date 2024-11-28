@@ -31,9 +31,7 @@ public interface ContentReader {
 
     ContentInfo.Detail findActiveContentWithScripts(ContentCommand.GetDetail command);
 
-    boolean checkAlreadyReadable(ContentCommand.GetDetail command);
-
-    void findContentIsActivated(Long contentId);
-
     ContentEntity findLearnableContent(Long contentId, Long userId);
+
+    ContentEntity findUnverifiedContent(Long contentId);
 }

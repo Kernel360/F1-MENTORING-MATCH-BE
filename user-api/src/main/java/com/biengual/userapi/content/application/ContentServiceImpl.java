@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.biengual.core.annotation.RedisDistributedLock;
-import com.biengual.core.enums.PointReason;
 import com.biengual.core.util.PaginationInfo;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentInfo;
@@ -129,10 +128,6 @@ public class ContentServiceImpl implements ContentService {
     public ContentInfo.Detail getScriptsOfContent(ContentCommand.GetDetail command) {
         ContentInfo.Detail info = contentReader.findActiveContentWithScripts(command);
 
-        if (!pointValidator.verifyContentView(command)) {
-            pointManager.updateAndSavePoint(PointReason.VIEW_RECENT_CONTENT, command.userId());
-            paymentStore.updatePaymentHistory(command.userId(), command.contentId());
-        }
         // TODO: 추후 레디스로 바꿀 예정
         contentStore.increaseHits(command.contentId());
 
