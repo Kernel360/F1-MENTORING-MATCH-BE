@@ -37,6 +37,9 @@ public interface QuestionDtoMapper {
     // Response <- Info
     QuestionResponseDto.ViewListRes ofViewListRes(QuestionInfo.DetailInfo info);
 
+    @Mapping(target = "questionId", source = "id")
+    QuestionResponseDto.View ofView(QuestionInfo.Detail info);
+
     GetHintDto.Response ofGetHintRes(QuestionInfo.Hint info);
 
     // Entity <-> Info, Info <-> Info
