@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @RequiredArgsConstructor
-public class OpenSearchIndexConfig {
+public class OpenSearchContentConfig {
     private final OpenSearchClient openSearchClient;
 
     /**
