@@ -10,9 +10,6 @@ import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.content.domain.ContentReader;
 import com.biengual.userapi.content.domain.ContentService;
 import com.biengual.userapi.content.domain.ContentStore;
-import com.biengual.userapi.payment.domain.PaymentStore;
-import com.biengual.userapi.point.domain.PointManager;
-import com.biengual.userapi.validator.PointValidator;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,9 +18,6 @@ import lombok.RequiredArgsConstructor;
 public class ContentServiceImpl implements ContentService {
     private final ContentReader contentReader;
     private final ContentStore contentStore;
-    private final PointValidator pointValidator;
-    private final PointManager pointManager;
-    private final PaymentStore paymentStore;
 
     // 검색 조건에 맞는 컨텐츠 프리뷰 페이지 조회
     @Override
