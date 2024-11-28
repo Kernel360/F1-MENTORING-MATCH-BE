@@ -2,9 +2,9 @@ package com.biengual.core.domain.document.content;
 
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.biengual.core.domain.document.content.script.CNNScript;
 import com.biengual.core.domain.entity.content.ContentEntity;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -34,7 +34,7 @@ public class ContentSearchDocument {
         this.categoryName = contentEntity.getCategory().getName();
         this.scripts = contentDocument.getScripts()
             .stream()
-            .map(script -> (CNNScript) CNNScript.of(script.getEnScript(), script.getKoScript()))
+            .map(script -> (CNNScript)CNNScript.of(script.getEnScript(), script.getKoScript()))
             .toList();
     }
 
