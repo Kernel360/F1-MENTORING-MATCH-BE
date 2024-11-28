@@ -1,7 +1,15 @@
 package com.biengual.userapi.content.infrastructure;
 
+import static com.biengual.core.response.error.code.ContentErrorCode.*;
+
+import java.util.List;
+
+import org.bson.types.ObjectId;
+import org.springframework.data.domain.Page;
+
 import com.biengual.core.annotation.DataProvider;
 import com.biengual.core.domain.document.content.ContentDocument;
+import com.biengual.core.domain.document.content.ContentSearchDocument;
 import com.biengual.core.domain.document.content.script.Script;
 import com.biengual.core.domain.entity.bookmark.BookmarkEntity;
 import com.biengual.core.domain.entity.content.ContentEntity;
@@ -9,19 +17,21 @@ import com.biengual.core.enums.ContentLevel;
 import com.biengual.core.response.error.exception.CommonException;
 import com.biengual.core.util.PaginationInfo;
 import com.biengual.userapi.bookmark.domain.BookmarkRepository;
-import com.biengual.userapi.content.domain.*;
+import com.biengual.userapi.content.domain.ContentCommand;
+import com.biengual.userapi.content.domain.ContentCustomRepository;
+import com.biengual.userapi.content.domain.ContentDocumentRepository;
+import com.biengual.userapi.content.domain.ContentInfo;
+import com.biengual.userapi.content.domain.ContentLevelFeedbackHistoryCustomRepository;
+import com.biengual.userapi.content.domain.ContentReader;
+import com.biengual.userapi.content.domain.ContentRepository;
+import com.biengual.userapi.content.domain.ContentSearchRepository;
+import com.biengual.userapi.content.domain.UserContentBookmarks;
 import com.biengual.userapi.content.presentation.ContentDtoMapper;
 import com.biengual.userapi.learning.domain.RecentLearningHistoryCustomRepository;
 import com.biengual.userapi.scrap.domain.ScrapCustomRepository;
 import com.biengual.userapi.validator.ContentValidator;
+
 import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
-import org.springframework.data.domain.Page;
-
-import java.util.List;
-
-import static com.biengual.core.response.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
-import static com.biengual.core.response.error.code.ContentErrorCode.UNPAID_RECENT_CONTENT;
 
 @DataProvider
 @RequiredArgsConstructor
@@ -35,6 +45,7 @@ public class ContentReaderImpl implements ContentReader {
     private final RecentLearningHistoryCustomRepository recentLearningHistoryCustomRepository;
     private final ContentValidator contentValidator;
     private final ContentLevelFeedbackHistoryCustomRepository contentLevelFeedbackHistoryCustomRepository;
+    private final ContentSearchRepository contentSearchRepository;
 
     // 스크랩 많은 순 컨텐츠 프리뷰 조회
     @Override
@@ -47,6 +58,24 @@ public class ContentReaderImpl implements ContentReader {
     public PaginationInfo<ContentInfo.PreviewContent> findPreviewPageBySearch(ContentCommand.Search command) {
         Page<ContentInfo.PreviewContent> page =
             contentCustomRepository.findPreviewPageBySearch(command.pageable(), command.keyword(), command.userId());
+
+        return PaginationInfo.from(page);
+    }
+
+    // Elastic Search 검색 프리뷰 페이지 조회
+    @Override
+    public PaginationInfo<ContentInfo.PreviewContent> findPreviewPageByOpenSearch(ContentCommand.Search command) {
+        List<ContentSearchDocument> contentSearchDocuments = contentSearchRepository.searchByFields(command.keyword());
+
+        if (contentSearchDocuments == null || contentSearchDocuments.isEmpty()) {
+            // 빈 페이지 생성
+            return PaginationInfo.from(Page.empty(command.pageable()));
+        }
+
+        Page<ContentInfo.PreviewContent> page =
+            contentCustomRepository.findPreviewPageByElasticSearch(
+                contentSearchDocuments, command.pageable(), command.userId()
+            );
 
         return PaginationInfo.from(page);
     }

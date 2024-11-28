@@ -1,14 +1,15 @@
 package com.biengual.userapi.content.domain;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 import com.biengual.core.domain.document.content.script.Script;
 import com.biengual.core.domain.entity.content.ContentLevelFeedbackDataMart;
 import com.biengual.core.enums.ContentLevel;
 import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.enums.ContentType;
-import lombok.Builder;
 
-import java.math.BigDecimal;
-import java.util.List;
+import lombok.Builder;
 
 public class ContentInfo {
 
