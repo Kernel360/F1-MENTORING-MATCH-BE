@@ -64,8 +64,11 @@ public class ContentStoreImpl implements ContentStore {
     public void modifyContentStatus(Long contentId) {
         ContentEntity content = contentRepository.findById(contentId)
             .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
+
         content.updateStatus(
-            content.getContentStatus() == ContentStatus.ACTIVATED ? ContentStatus.DEACTIVATED : ContentStatus.ACTIVATED
+            content.getContentStatus() == ContentStatus.ACTIVATED ?
+                this.deactivateContent(contentId) :
+                this.activateContent(contentId)
         );
         contentRepository.save(content);
     }
@@ -131,6 +134,35 @@ public class ContentStoreImpl implements ContentStore {
         }
 
         return categoryRepository.save(command.toCategoryEntity());
+    }
+
+    // 컨텐츠 활성화
+    private ContentStatus activateContent(Long contentId) {
+        contentSearchRepository.saveContent(
+            ContentSearchDocument.createdByContents(
+                this.getContentEntity(contentId),
+                this.getContentDocument(contentId)
+            )
+        );
+        return ContentStatus.ACTIVATED;
+    }
+
+    // 컨텐츠 비활성화
+    private ContentStatus deactivateContent(Long contentId) {
+        contentSearchRepository.deleteContent(String.valueOf(contentId));
+        return ContentStatus.DEACTIVATED;
+    }
+
+    private ContentEntity getContentEntity(Long contentId) {
+        return contentRepository.findById(contentId)
+            .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
+    }
+
+    private ContentDocument getContentDocument(Long contentId) {
+        String documentId = contentCustomRepository.findMongoIdByContentId(contentId);
+
+        return contentDocumentRepository.findContentDocumentById(new ObjectId(documentId))
+            .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
     }
 
     // 난이도 계산 로직
