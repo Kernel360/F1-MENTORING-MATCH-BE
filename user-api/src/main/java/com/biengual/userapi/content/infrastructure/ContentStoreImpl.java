@@ -68,7 +68,7 @@ public class ContentStoreImpl implements ContentStore {
         content.updateStatus(
             content.getContentStatus() == ContentStatus.ACTIVATED ?
                 this.deactivateContent(contentId) :
-                this.activateContent(contentId)
+                this.activateContent(content)
         );
         contentRepository.save(content);
     }
@@ -137,11 +137,11 @@ public class ContentStoreImpl implements ContentStore {
     }
 
     // 컨텐츠 활성화
-    private ContentStatus activateContent(Long contentId) {
+    private ContentStatus activateContent(ContentEntity content) {
         contentSearchRepository.saveContent(
             ContentSearchDocument.createdByContents(
-                this.getContentEntity(contentId),
-                this.getContentDocument(contentId)
+                content,
+                this.getContentDocument(content.getMongoContentId())
             )
         );
         return ContentStatus.ACTIVATED;
@@ -153,14 +153,7 @@ public class ContentStoreImpl implements ContentStore {
         return ContentStatus.DEACTIVATED;
     }
 
-    private ContentEntity getContentEntity(Long contentId) {
-        return contentRepository.findById(contentId)
-            .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
-    }
-
-    private ContentDocument getContentDocument(Long contentId) {
-        String documentId = contentCustomRepository.findMongoIdByContentId(contentId);
-
+    private ContentDocument getContentDocument(String documentId) {
         return contentDocumentRepository.findContentDocumentById(new ObjectId(documentId))
             .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
     }
