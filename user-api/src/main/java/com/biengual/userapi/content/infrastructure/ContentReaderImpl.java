@@ -24,7 +24,7 @@ import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.content.domain.ContentLevelFeedbackHistoryCustomRepository;
 import com.biengual.userapi.content.domain.ContentReader;
 import com.biengual.userapi.content.domain.ContentRepository;
-import com.biengual.userapi.content.domain.ContentSearchClient;
+import com.biengual.userapi.content.domain.ContentSearchRepository;
 import com.biengual.userapi.content.domain.UserContentBookmarks;
 import com.biengual.userapi.content.presentation.ContentDtoMapper;
 import com.biengual.userapi.learning.domain.RecentLearningHistoryCustomRepository;
@@ -45,7 +45,7 @@ public class ContentReaderImpl implements ContentReader {
     private final RecentLearningHistoryCustomRepository recentLearningHistoryCustomRepository;
     private final ContentValidator contentValidator;
     private final ContentLevelFeedbackHistoryCustomRepository contentLevelFeedbackHistoryCustomRepository;
-    private final ContentSearchClient contentSearchClient;
+    private final ContentSearchRepository contentSearchRepository;
 
     // 스크랩 많은 순 컨텐츠 프리뷰 조회
     @Override
@@ -65,7 +65,7 @@ public class ContentReaderImpl implements ContentReader {
     // Elastic Search 검색 프리뷰 페이지 조회
     @Override
     public PaginationInfo<ContentInfo.PreviewContent> findPreviewPageByOpenSearch(ContentCommand.Search command) {
-        List<ContentSearchDocument> contentSearchDocuments = contentSearchClient.searchByFields(command.keyword());
+        List<ContentSearchDocument> contentSearchDocuments = contentSearchRepository.searchByFields(command.keyword());
 
         if (contentSearchDocuments == null || contentSearchDocuments.isEmpty()) {
             // 빈 페이지 생성

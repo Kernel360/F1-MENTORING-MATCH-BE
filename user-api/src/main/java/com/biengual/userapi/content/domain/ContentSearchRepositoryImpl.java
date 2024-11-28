@@ -25,17 +25,17 @@ import org.opensearch.client.opensearch.core.SearchResponse;
 import org.opensearch.client.opensearch.core.search.Hit;
 import org.opensearch.client.opensearch.indices.CreateIndexRequest;
 import org.opensearch.client.opensearch.indices.IndexSettings;
+import org.springframework.stereotype.Repository;
 
-import com.biengual.core.annotation.Client;
 import com.biengual.core.domain.document.content.ContentSearchDocument;
 import com.biengual.core.response.error.exception.CommonException;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 
-@Client
+@Repository
 @RequiredArgsConstructor
-public class ContentSearchClient {
+public class ContentSearchRepositoryImpl implements ContentSearchRepository {
     private final OpenSearchClient openSearchClient;
 
     /**
@@ -103,6 +103,7 @@ public class ContentSearchClient {
      * @param keyword 검색 키워드
      * @return 검색 결과 리스트 (List<ContentSearchDocument>)
      */
+    @Override
     public List<ContentSearchDocument> searchByFields(String keyword) {
         // Fuzzy Query 생성 (제목 검색)
         Query fuzzyQuery = new FuzzyQuery.Builder()
@@ -182,6 +183,7 @@ public class ContentSearchClient {
      *
      * @param document 저장할 ContentSearchDocument 객체
      */
+    @Override
     public void saveContent(ContentSearchDocument document) {
         try {
             // IndexRequest 생성
@@ -209,6 +211,7 @@ public class ContentSearchClient {
      *
      * @param id 삭제할 문서의 ID
      */
+    @Override
     public void deleteContent(String id) {
         try {
             // DeleteRequest 생성

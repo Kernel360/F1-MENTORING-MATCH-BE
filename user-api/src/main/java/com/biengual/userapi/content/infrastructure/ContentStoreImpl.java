@@ -25,7 +25,7 @@ import com.biengual.userapi.content.domain.ContentDocumentRepository;
 import com.biengual.userapi.content.domain.ContentLevelFeedbackDataMartRepository;
 import com.biengual.userapi.content.domain.ContentLevelFeedbackHistoryRepository;
 import com.biengual.userapi.content.domain.ContentRepository;
-import com.biengual.userapi.content.domain.ContentSearchClient;
+import com.biengual.userapi.content.domain.ContentSearchRepository;
 import com.biengual.userapi.content.domain.ContentStore;
 import com.biengual.userapi.validator.ContentValidator;
 
@@ -41,7 +41,7 @@ public class ContentStoreImpl implements ContentStore {
     private final ContentLevelFeedbackHistoryRepository contentLevelFeedbackHistoryRepository;
     private final ContentLevelFeedbackDataMartRepository contentLevelFeedbackDataMartRepository;
     private final ContentValidator contentValidator;
-    private final ContentSearchClient contentSearchClient;
+    private final ContentSearchRepository contentSearchRepository;
 
     @Override
     public void createContent(ContentCommand.Create command) {
@@ -57,7 +57,7 @@ public class ContentStoreImpl implements ContentStore {
 
         // Open Search 에 Content Search Data 저장
         ContentSearchDocument searchDocument = ContentSearchDocument.createdByContents(content, contentDocument);
-        contentSearchClient.saveContent(searchDocument);
+        contentSearchRepository.saveContent(searchDocument);
     }
 
     @Override
@@ -107,7 +107,7 @@ public class ContentStoreImpl implements ContentStore {
         for (ContentEntity content : contents) {
             ContentDocument document = contentDocumentRepository.findById(new ObjectId(content.getMongoContentId()))
                 .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
-            contentSearchClient.saveContent(ContentSearchDocument.createdByContents(content, document));
+            contentSearchRepository.saveContent(ContentSearchDocument.createdByContents(content, document));
         }
     }
 
@@ -118,7 +118,7 @@ public class ContentStoreImpl implements ContentStore {
             .map(ContentEntity::getId)
             .toList();
         for (Long id : contentIds) {
-            contentSearchClient.deleteContent(String.valueOf(id));
+            contentSearchRepository.deleteContent(String.valueOf(id));
         }
     }
 
