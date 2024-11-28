@@ -10,7 +10,7 @@ import com.biengual.core.util.PaginationInfo;
 public interface ContentService {
     PaginationInfo<ContentInfo.PreviewContent> search(ContentCommand.Search command);
 
-    PaginationInfo<ContentInfo.PreviewContent> elasticSearch(ContentCommand.Search command);
+    PaginationInfo<ContentInfo.PreviewContent> openSearch(ContentCommand.Search command);
 
     PaginationInfo<ContentInfo.ViewContent> getViewContents(ContentCommand.GetReadingView command);
 

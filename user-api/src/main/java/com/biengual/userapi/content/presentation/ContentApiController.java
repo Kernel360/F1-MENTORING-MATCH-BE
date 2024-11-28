@@ -157,6 +157,7 @@ public class ContentApiController {
         return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
     }
 
+    // TODO: 일회용 이지만 테스트 용으로 남겨야 할지도?
     @PostMapping("/search-initialize")
     @Operation(summary = "검색 초기 데이터 저장", description = "Open Search 에 검색을 위한 초기 컨텐츠 데이터를 저장합니다")
     @ApiResponses(value = {
@@ -170,6 +171,7 @@ public class ContentApiController {
         return ResponseEntityFactory.toResponseEntity(CONTENT_CREATE_SUCCESS);
     }
 
+    // TODO: 일회용 이지만 테스트 용으로 남겨야 할지도?
     @PostMapping("/search-delete")
     @Operation(summary = "검색 데이터 삭제", description = "Open Search  에 검색을 위한 컨텐츠 데이터를 삭제합니다")
     @ApiResponses(value = {

@@ -12,10 +12,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import lombok.RequiredArgsConstructor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
-@RequiredArgsConstructor
 public class OpenSearchConfig {
 
     @Value("${opensearch.host}")
@@ -35,6 +35,9 @@ public class OpenSearchConfig {
 
     @Bean
     public OpenSearchClient openSearchClient() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
         // 인증 제공자 설정
         BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(
@@ -50,7 +53,7 @@ public class OpenSearchConfig {
             .build();
 
         // OpenSearch 클라이언트 생성 및 반환
-        RestClientTransport transport = new RestClientTransport(restClient, new JacksonJsonpMapper());
+        RestClientTransport transport = new RestClientTransport(restClient, new JacksonJsonpMapper(objectMapper));
         return new OpenSearchClient(transport);
     }
 }

@@ -45,13 +45,19 @@ public class ContentStoreImpl implements ContentStore {
 
     @Override
     public void createContent(ContentCommand.Create command) {
+        // MongoDB 에 Content Script 저장
         ContentDocument contentDocument = command.toDocument();
         contentDocumentRepository.save(contentDocument);
 
         CategoryEntity category = getCategoryEntity(command);
 
+        // MySql 에 Content Info 저장
         ContentEntity content = command.toEntity(contentDocument.getId(), command.contentType(), category);
         contentRepository.save(content);
+
+        // Open Search 에 Content Search Data 저장
+        ContentSearchDocument searchDocument = ContentSearchDocument.createdByContents(content, contentDocument);
+        contentSearchClient.saveContent(searchDocument);
     }
 
     @Override
@@ -96,9 +102,6 @@ public class ContentStoreImpl implements ContentStore {
 
     @Override
     public void initializeOpenSearch() {
-        // 인덱스 생성
-        contentSearchClient.createIndexIfNotExists();
-
         // 컨텐츠 데이터 저장
         List<ContentEntity> contents = contentRepository.findAll();
         for (ContentEntity content : contents) {

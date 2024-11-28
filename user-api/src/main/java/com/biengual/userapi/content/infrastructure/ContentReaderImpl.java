@@ -69,7 +69,7 @@ public class ContentReaderImpl implements ContentReader {
 
     // Elastic Search 검색 프리뷰 페이지 조회
     @Override
-    public PaginationInfo<ContentInfo.PreviewContent> findPreviewPageByElasticSearch(ContentCommand.Search command) {
+    public PaginationInfo<ContentInfo.PreviewContent> findPreviewPageByOpenSearch(ContentCommand.Search command) {
         List<ContentSearchDocument> contentSearchDocuments = contentSearchClient.searchByFields(command.keyword());
 
         Page<ContentInfo.PreviewContent> page =

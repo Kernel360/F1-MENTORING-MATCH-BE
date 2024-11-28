@@ -115,7 +115,7 @@ public class ContentPublicController {
     }
 
     @GetMapping("/accurate-search")
-    @Operation(summary = "컨텐츠 검색", description = "페이지네이션을 적용해 컨텐츠를 검색합니다.")
+    @Operation(summary = "컨텐츠 검색", description = "페이지네이션을 적용해 컨텐츠를 Open Search 를 통해 검색합니다.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "컨텐츠 검색 성공", content = {
             @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerContentSearchPreview.class))
@@ -137,7 +137,7 @@ public class ContentPublicController {
         ContentCommand.Search command = contentDtoMapper.doSearch(
             page, size, Sort.Direction.DESC, "createdAt", searchWords, principal
         );
-        PaginationInfo<ContentInfo.PreviewContent> info = contentService.elasticSearch(command);
+        PaginationInfo<ContentInfo.PreviewContent> info = contentService.openSearch(command);
         ContentResponseDto.SearchPreviewContentsRes response = contentDtoMapper.ofSearchPreviewContentsRes(info);
 
         return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);

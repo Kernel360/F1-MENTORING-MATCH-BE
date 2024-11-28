@@ -1,7 +1,6 @@
 package com.biengual.userapi.content.domain;
 
 import static com.biengual.core.constant.ServiceConstant.*;
-import static com.biengual.core.response.error.code.ContentErrorCode.*;
 import static com.biengual.core.response.error.code.SearchContentErrorCode.*;
 
 import java.io.IOException;
@@ -30,6 +29,7 @@ import com.biengual.core.annotation.Client;
 import com.biengual.core.domain.document.content.ContentSearchDocument;
 import com.biengual.core.response.error.exception.CommonException;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 
 @Client
@@ -40,9 +40,13 @@ public class ContentSearchClient {
     /**
      * 인덱스가 없을 경우 인덱스 초기화
      */
-    public void createIndexIfNotExists() {
+    @PostConstruct
+    public void init() {
+        this.createIndexIfNotExists(openSearchClient);
+    }
+    private void createIndexIfNotExists(OpenSearchClient client) {
         try {
-            boolean exists = openSearchClient.indices().exists(b -> b.index(CONTENT_SEARCH_INDEX_NAME)).value();
+            boolean exists = client.indices().exists(b -> b.index(CONTENT_SEARCH_INDEX_NAME)).value();
             if (!exists) {
                 // Define index settings
                 // TODO: 성능 부족하면 샤드, 레플리카 추가해야 하는지 고려
@@ -70,13 +74,12 @@ public class ContentSearchClient {
                     .mappings(mappings)
                     .build();
 
-                openSearchClient.indices().create(createIndexRequest);
+                client.indices().create(createIndexRequest);
             }
         } catch (Exception e) {
             throw new CommonException(SEARCH_CONTENT_SAVE_FAILED);
         }
     }
-
     /**
      * 키워드로 콘텐츠를 검색합니다.
      *
@@ -84,7 +87,7 @@ public class ContentSearchClient {
      * @return 검색 결과 리스트 (List<ContentSearchDocument>)
      */
     public List<ContentSearchDocument> searchByFields(String keyword) {
-        // multi_match 쿼리 생성 (키워드 검색)
+        // multi_match Query 생성 (키워드 검색)
         Query multiMatchQuery = new MultiMatchQuery.Builder()
             .query(keyword)
             .fields(List.of("title", "scripts.enScript", "scripts.koScript"))
@@ -92,16 +95,23 @@ public class ContentSearchClient {
             .build()
             .toQuery();
 
-        // term 쿼리 생성 (카테고리 정확히 매칭)
+        // term Query 생성 (카테고리 정확히 매칭)
         Query termQuery = new TermQuery.Builder()
             .field("categoryName")
             .value(FieldValue.of(keyword))
             .build()
             .toQuery();
 
-        // bool 쿼리 생성 (조건 결합)
+        // bool Query 생성 (조건 결합)
         Query boolQuery = new BoolQuery.Builder()
-            .must(multiMatchQuery, termQuery)
+            .should(
+                new BoolQuery.Builder()
+                    .must(termQuery)
+                    .build()
+                    .toQuery(),
+                multiMatchQuery
+            )
+            .minimumShouldMatch("1")
             .build()
             .toQuery();
 
@@ -116,7 +126,7 @@ public class ContentSearchClient {
         try {
             response = openSearchClient.search(searchRequest, ContentSearchDocument.class);
         } catch (IOException e) {
-            throw new CommonException(CONTENT_NOT_FOUND);
+            throw new CommonException(OPEN_SEARCH_SERVER_ERROR);
         }
 
         // 결과 처리 및 반환

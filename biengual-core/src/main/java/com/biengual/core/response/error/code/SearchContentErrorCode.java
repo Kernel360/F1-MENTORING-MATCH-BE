@@ -18,7 +18,12 @@ public enum SearchContentErrorCode implements ErrorCode {
         HttpStatus.INTERNAL_SERVER_ERROR,
         SearchContentServiceStatus.SEARCH_CONTENT_DELETE_FAILED,
         "OpenSearch 컨텐츠 삭제 실패"
-    )    ;
+    ),
+    OPEN_SEARCH_SERVER_ERROR(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        SearchContentServiceStatus.OPEN_SEARCH_SERVER_ERROR,
+        "OpenSearch 검색 에러"
+    );
 
     private final HttpStatus httpStatus;
     private final ServiceStatus serviceStatus;

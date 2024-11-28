@@ -36,8 +36,8 @@ public class ContentServiceImpl implements ContentService {
     // 검색 조건에 맞는 컨텐츠 프리뷰 페이지 조회(ES)
     @Override
     @Transactional(readOnly = true)
-    public PaginationInfo<ContentInfo.PreviewContent> elasticSearch(ContentCommand.Search command) {
-        return contentReader.findPreviewPageByElasticSearch(command);
+    public PaginationInfo<ContentInfo.PreviewContent> openSearch(ContentCommand.Search command) {
+        return contentReader.findPreviewPageByOpenSearch(command);
     }
 
     // 리딩 컨텐츠 프리뷰 페이지 조회
