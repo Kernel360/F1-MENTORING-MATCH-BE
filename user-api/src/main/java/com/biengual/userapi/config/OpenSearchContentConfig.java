@@ -42,13 +42,13 @@ public class OpenSearchContentConfig {
                         .analyzer("nori_analyzer", na -> na
                             .custom(c -> c
                                 .tokenizer("nori_tokenizer")
-                                .filter("nori_part_of_speech", "lowercase")
+                                .filter("nori_part_of_speech", "lowercase", "stop")
                             )
                         )
                         .analyzer("custom_analyzer", ca -> ca
                             .custom(c -> c
                                 .tokenizer("standard")
-                                .filter("lowercase")
+                                .filter("lowercase", "stop", "asciifolding")
                             )
                         )
                     )
@@ -58,7 +58,7 @@ public class OpenSearchContentConfig {
                 TypeMapping mappings = new TypeMapping.Builder()
                     .properties("id", p -> p.keyword(k -> k.index(false)))
                     .properties("title", p -> p.text(t -> t.analyzer("custom_analyzer")))
-                    .properties("categoryName", p -> p.text(t -> t.analyzer("custom_analyzer")))
+                    .properties("categoryName", p -> p.keyword(k -> k.normalizer("lowercase")))
                     .properties("scripts", p -> p.nested(n -> n
                         .properties("enScript", sp -> sp.text(t -> t.analyzer("custom_analyzer")))
                         .properties("koScript", sp -> sp.text(t -> t.analyzer("nori_analyzer")))
