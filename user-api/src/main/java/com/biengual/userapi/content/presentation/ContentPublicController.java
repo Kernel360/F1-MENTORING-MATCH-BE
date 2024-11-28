@@ -120,7 +120,7 @@ public class ContentPublicController {
         @ApiResponse(responseCode = "200", description = "컨텐츠 검색 성공", content = {
             @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerContentSearchPreview.class))
         }),
-        @ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "404", description = "OpenSearch 검색 실패", content = @Content(mediaType = "application/json")),
         @ApiResponse(responseCode = "500", description = "서버 에러", content = @Content)
     })
     @Parameters({

@@ -164,7 +164,7 @@ public class ContentApiController {
         @ApiResponse(responseCode = "200", description = "컨텐츠 저장 성공", content = {
             @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerVoidReturn.class))
         }),
-        @ApiResponse(responseCode = "500", description = "서버 에러", content = @Content)
+        @ApiResponse(responseCode = "500", description = "서버 에러 | OpenSearch 컨텐츠 저장 실패", content = @Content)
     })
     public ResponseEntity<Object> initializeOpenSearch() {
         contentService.initializeOpenSearch();
@@ -179,7 +179,7 @@ public class ContentApiController {
             @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerVoidReturn.class))
         }),
         @ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
-        @ApiResponse(responseCode = "500", description = "서버 에러", content = @Content)
+        @ApiResponse(responseCode = "500", description = "서버 에러 | OpenSearch 컨텐츠 삭제 실패", content = @Content)
     })
     public ResponseEntity<Object> delete() {
         contentService.delete();

@@ -20,9 +20,9 @@ public enum SearchContentErrorCode implements ErrorCode {
         "OpenSearch 컨텐츠 삭제 실패"
     ),
     OPEN_SEARCH_SERVER_ERROR(
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        HttpStatus.NOT_FOUND,
         SearchContentServiceStatus.OPEN_SEARCH_SERVER_ERROR,
-        "OpenSearch 검색 에러"
+        "OpenSearch 검색 실패"
     );
 
     private final HttpStatus httpStatus;
