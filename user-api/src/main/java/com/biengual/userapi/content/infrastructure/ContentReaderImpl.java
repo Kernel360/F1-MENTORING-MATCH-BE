@@ -67,6 +67,11 @@ public class ContentReaderImpl implements ContentReader {
     public PaginationInfo<ContentInfo.PreviewContent> findPreviewPageByOpenSearch(ContentCommand.Search command) {
         List<ContentSearchDocument> contentSearchDocuments = contentSearchClient.searchByFields(command.keyword());
 
+        if (contentSearchDocuments == null || contentSearchDocuments.isEmpty()) {
+            // 빈 페이지 생성
+            return PaginationInfo.from(Page.empty(command.pageable()));
+        }
+
         Page<ContentInfo.PreviewContent> page =
             contentCustomRepository.findPreviewPageByElasticSearch(
                 contentSearchDocuments, command.pageable(), command.userId()

@@ -12,7 +12,8 @@ import org.opensearch.client.opensearch._types.FieldValue;
 import org.opensearch.client.opensearch._types.Time;
 import org.opensearch.client.opensearch._types.mapping.TypeMapping;
 import org.opensearch.client.opensearch._types.query_dsl.BoolQuery;
-import org.opensearch.client.opensearch._types.query_dsl.MultiMatchQuery;
+import org.opensearch.client.opensearch._types.query_dsl.FuzzyQuery;
+import org.opensearch.client.opensearch._types.query_dsl.NestedQuery;
 import org.opensearch.client.opensearch._types.query_dsl.Query;
 import org.opensearch.client.opensearch._types.query_dsl.TermQuery;
 import org.opensearch.client.opensearch.core.DeleteRequest;
@@ -44,6 +45,7 @@ public class ContentSearchClient {
     public void init() {
         this.createIndexIfNotExists(openSearchClient);
     }
+
     private void createIndexIfNotExists(OpenSearchClient client) {
         try {
             boolean exists = client.indices().exists(b -> b.index(CONTENT_SEARCH_INDEX_NAME)).value();
@@ -54,16 +56,30 @@ public class ContentSearchClient {
                     .numberOfShards("1") // Set number of shards
                     .numberOfReplicas("1") // Set number of replicas
                     .refreshInterval(new Time.Builder().time("30s").build())
+                    .analysis(a -> a
+                        .analyzer("nori_analyzer", na -> na
+                            .custom(c -> c
+                                .tokenizer("nori_tokenizer")
+                                .filter("nori_part_of_speech", "lowercase")
+                            )
+                        )
+                        .analyzer("custom_analyzer", ca -> ca
+                            .custom(c -> c
+                                .tokenizer("standard")
+                                .filter("lowercase")
+                            )
+                        )
+                    )
                     .build();
 
                 // Define index mappings
                 TypeMapping mappings = new TypeMapping.Builder()
-                    .properties("id", p -> p.keyword(k -> k.index(false))) // id field: not indexed
-                    .properties("title", p -> p.text(t -> t)) // title field: text type
-                    .properties("categoryName", p -> p.text(t -> t)) // categoryName field: text type
-                    .properties("scripts", p -> p.nested(n -> n // scripts field: nested type
-                        .properties("enScript", sp -> sp.text(t -> t)) // enScript field: text type
-                        .properties("koScript", sp -> sp.text(t -> t)) // koScript field: text type
+                    .properties("id", p -> p.keyword(k -> k.index(false)))
+                    .properties("title", p -> p.text(t -> t.analyzer("custom_analyzer")))
+                    .properties("categoryName", p -> p.text(t -> t.analyzer("custom_analyzer")))
+                    .properties("scripts", p -> p.nested(n -> n
+                        .properties("enScript", sp -> sp.text(t -> t.analyzer("custom_analyzer")))
+                        .properties("koScript", sp -> sp.text(t -> t.analyzer("nori_analyzer")))
                     ))
                     .build();
 
@@ -80,6 +96,7 @@ public class ContentSearchClient {
             throw new CommonException(SEARCH_CONTENT_SAVE_FAILED);
         }
     }
+
     /**
      * 키워드로 콘텐츠를 검색합니다.
      *
@@ -87,11 +104,35 @@ public class ContentSearchClient {
      * @return 검색 결과 리스트 (List<ContentSearchDocument>)
      */
     public List<ContentSearchDocument> searchByFields(String keyword) {
-        // multi_match Query 생성 (키워드 검색)
-        Query multiMatchQuery = new MultiMatchQuery.Builder()
-            .query(keyword)
-            .fields(List.of("title", "scripts.enScript", "scripts.koScript"))
-            .fuzziness("AUTO") // 오타 허용
+        // Fuzzy Query 생성 (제목 검색)
+        Query fuzzyQuery = new FuzzyQuery.Builder()
+            .field("title")
+            .value(FieldValue.of(keyword))
+            .fuzziness("AUTO")
+            .build()
+            .toQuery();
+
+        // Nested Query 생성 (스크립트 검색)
+        Query nestedQuery = new NestedQuery.Builder()
+            .path("scripts")
+            .query(q -> q
+                .bool(b -> b
+                    .should(
+                        new FuzzyQuery.Builder()
+                            .field("scripts.enScript")
+                            .value(FieldValue.of(keyword))
+                            .fuzziness("AUTO")
+                            .build()
+                            .toQuery(),
+                        new FuzzyQuery.Builder()
+                            .field("scripts.koScript")
+                            .value(FieldValue.of(keyword))
+                            .fuzziness("AUTO")
+                            .build()
+                            .toQuery()
+                    )
+                )
+            )
             .build()
             .toQuery();
 
@@ -99,17 +140,16 @@ public class ContentSearchClient {
         Query termQuery = new TermQuery.Builder()
             .field("categoryName")
             .value(FieldValue.of(keyword))
+            .caseInsensitive(true)
             .build()
             .toQuery();
 
         // bool Query 생성 (조건 결합)
         Query boolQuery = new BoolQuery.Builder()
             .should(
-                new BoolQuery.Builder()
-                    .must(termQuery)
-                    .build()
-                    .toQuery(),
-                multiMatchQuery
+                termQuery,
+                fuzzyQuery,
+                nestedQuery
             )
             .minimumShouldMatch("1")
             .build()
