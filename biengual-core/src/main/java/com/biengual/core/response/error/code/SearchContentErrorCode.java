@@ -19,9 +19,9 @@ public enum SearchContentErrorCode implements ErrorCode {
         SearchContentServiceStatus.SEARCH_CONTENT_DELETE_FAILED,
         "OpenSearch 컨텐츠 삭제 실패"
     ),
-    OPEN_SEARCH_SERVER_ERROR(
+    OPEN_SEARCH_FAILED(
         HttpStatus.NOT_FOUND,
-        SearchContentServiceStatus.OPEN_SEARCH_SERVER_ERROR,
+        SearchContentServiceStatus.OPEN_SEARCH_FAILED,
         "OpenSearch 검색 실패"
     );
 

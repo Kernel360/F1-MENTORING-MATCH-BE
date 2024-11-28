@@ -103,7 +103,7 @@ public class ContentSearchRepositoryImpl implements ContentSearchRepository {
         try {
             response = openSearchClient.search(searchRequest, ContentSearchDocument.class);
         } catch (IOException e) {
-            throw new CommonException(OPEN_SEARCH_SERVER_ERROR);
+            throw new CommonException(OPEN_SEARCH_FAILED);
         }
 
         // 결과 처리 및 반환
