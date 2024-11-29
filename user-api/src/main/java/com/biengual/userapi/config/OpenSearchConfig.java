@@ -1,7 +1,5 @@
 package com.biengual.userapi.config;
 
-import java.util.concurrent.TimeUnit;
-
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -49,20 +47,9 @@ public class OpenSearchConfig {
 
         // RestClient 빌더에 인증 제공자 추가
         RestClient restClient = RestClient.builder(new HttpHost(host, port, protocol))
-            .setHttpClientConfigCallback(httpAsyncClientBuilder ->
+            .setHttpClientConfigCallback(
                 httpAsyncClientBuilder
-                    .setDefaultCredentialsProvider(credentialsProvider)
-                    .setConnectionTimeToLive(5, TimeUnit.MINUTES)
-                    .setKeepAliveStrategy(
-                        (response, context) -> TimeUnit.MINUTES.toMillis(5)
-                    )
-            )
-            .setRequestConfigCallback(requestConfigBuilder ->
-                requestConfigBuilder
-                    .setSocketTimeout(60000)
-                    .setConnectTimeout(5000)
-                    .setConnectionRequestTimeout(0)
-            )
+                    -> httpAsyncClientBuilder.setDefaultCredentialsProvider(credentialsProvider))
             .build();
 
         // OpenSearch 클라이언트 생성 및 반환
