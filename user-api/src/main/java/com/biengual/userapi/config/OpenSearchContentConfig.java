@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
 
 import com.biengual.core.response.error.exception.CommonException;
 
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -25,7 +24,6 @@ public class OpenSearchContentConfig {
     /**
      * 인덱스가 없을 경우 인덱스 초기화
      */
-    @PostConstruct
     public void init() {
         this.createIndexIfNotExists(openSearchClient);
     }
