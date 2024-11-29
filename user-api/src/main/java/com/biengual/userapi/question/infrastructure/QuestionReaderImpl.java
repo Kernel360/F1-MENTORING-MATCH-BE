@@ -43,7 +43,7 @@ public class QuestionReaderImpl implements QuestionReader {
             return Collections.emptyList();
         }
 
-        List<ObjectId> selectedQuestionIds = this.selectQuestionIds(incorrectQuestionIds);
+        List<ObjectId> selectedQuestionIds = this.selectQuestionObjectIds(incorrectQuestionIds);
 
         return questionDocumentRepository.findByIdIn(selectedQuestionIds);
     }
@@ -52,10 +52,13 @@ public class QuestionReaderImpl implements QuestionReader {
     public List<QuestionInfo.Detail> findCorrectedQuestionsByContentId(Long contentId, Long userId) {
         List<String> questionIds = this.getContentDocument(contentId).getQuestionIds();
 
-        return questionHistoryCustomRepository.findQuestionsCorrected(questionIds, userId)
-            .stream()
-            .map(questionId -> QuestionInfo.Detail.of(this.findQuestionByQuestionId(questionId)))
-            .toList();
+        List<ObjectId> correctQuestionObjectIds = this.getCorrectQuestionObjectIds(questionIds, userId);
+
+        if (correctQuestionObjectIds.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        return questionDocumentRepository.findByIdIn(correctQuestionObjectIds);
     }
 
     @Override
@@ -102,11 +105,22 @@ public class QuestionReaderImpl implements QuestionReader {
     }
 
     // 정답을 맞춘 적 없는 문제들 중 최대 MAX_QUIZ_SIZE 만큼 랜덤하게 ObjectId들을 얻는 메서드
-    private List<ObjectId> selectQuestionIds(List<String> questionDocumentIdsNotCorrected) {
+    private List<ObjectId> selectQuestionObjectIds(List<String> questionDocumentIdsNotCorrected) {
         Collections.shuffle(questionDocumentIdsNotCorrected);
 
         return questionDocumentIdsNotCorrected
             .subList(0, Math.min(MAX_QUIZ_SIZE, questionDocumentIdsNotCorrected.size()))
+            .stream()
+            .map(ObjectId::new)
+            .toList();
+    }
+
+    // 정답을 맞춘 문제 ObjectId들을 얻는 메서드
+    private List<ObjectId> getCorrectQuestionObjectIds(List<String> questionIds, Long userId) {
+        List<String> questionDocumentIdsCorrected =
+            questionHistoryCustomRepository.findQuestionsCorrected(questionIds, userId);
+
+        return questionDocumentIdsCorrected
             .stream()
             .map(ObjectId::new)
             .toList();

@@ -12,18 +12,10 @@ public class QuestionInfo {
     @Builder
     public record Detail(
         String question,
-        String questionId,
+        String id,
         List<String> examples,
         QuestionType type
     ) {
-        public static Detail of(QuestionDocument questionDocument) {
-            return QuestionInfo.Detail.builder()
-                .question(questionDocument.getQuestion())
-                .questionId(questionDocument.getId().toString())
-                .examples(questionDocument.getExamples())
-                .type(questionDocument.getType())
-                .build();
-        }
     }
 
     @Builder
