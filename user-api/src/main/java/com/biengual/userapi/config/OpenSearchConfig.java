@@ -1,5 +1,7 @@
 package com.biengual.userapi.config;
 
+import java.util.concurrent.TimeUnit;
+
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
@@ -15,6 +17,9 @@ import org.springframework.context.annotation.Configuration;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Configuration
 public class OpenSearchConfig {
 
@@ -47,9 +52,20 @@ public class OpenSearchConfig {
 
         // RestClient 빌더에 인증 제공자 추가
         RestClient restClient = RestClient.builder(new HttpHost(host, port, protocol))
-            .setHttpClientConfigCallback(
+            .setHttpClientConfigCallback(httpAsyncClientBuilder ->
                 httpAsyncClientBuilder
-                    -> httpAsyncClientBuilder.setDefaultCredentialsProvider(credentialsProvider))
+                    .setDefaultCredentialsProvider(credentialsProvider)
+                    .setConnectionTimeToLive(5, TimeUnit.MINUTES)
+                    .setKeepAliveStrategy(
+                        (response, context) -> TimeUnit.MINUTES.toMillis(5)
+                    )
+            )
+            .setRequestConfigCallback(requestConfigBuilder ->
+                requestConfigBuilder
+                    .setSocketTimeout(60000)
+                    .setConnectTimeout(5000)
+                    .setConnectionRequestTimeout(0)
+            )
             .build();
 
         // OpenSearch 클라이언트 생성 및 반환
