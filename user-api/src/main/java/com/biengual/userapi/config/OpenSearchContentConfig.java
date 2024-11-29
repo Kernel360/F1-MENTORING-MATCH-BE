@@ -14,7 +14,9 @@ import com.biengual.core.response.error.exception.CommonException;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Configuration
 @RequiredArgsConstructor
 public class OpenSearchContentConfig {
@@ -75,6 +77,7 @@ public class OpenSearchContentConfig {
                 client.indices().create(createIndexRequest);
             }
         } catch (Exception e) {
+            log.error(e.getMessage(), e);
             throw new CommonException(SEARCH_CONTENT_SAVE_FAILED);
         }
     }
