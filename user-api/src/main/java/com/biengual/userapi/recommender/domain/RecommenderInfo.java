@@ -36,7 +36,8 @@ public class RecommenderInfo {
     public record PopularBookmark(
         String enDetail,
         String koDetail,
-        Long contentId
+        Long contentId,
+        ContentType contentType
     ) {
         public static PopularBookmark of(BookmarkRecommenderEntity bookmarkRecommender) {
             return PopularBookmark.builder()

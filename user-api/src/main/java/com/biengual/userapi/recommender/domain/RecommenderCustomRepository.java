@@ -1,5 +1,6 @@
 package com.biengual.userapi.recommender.domain;
 
+import static com.biengual.core.domain.entity.content.QContentEntity.contentEntity;
 import static com.biengual.core.domain.entity.learning.QCategoryLearningHistoryEntity.*;
 import static com.biengual.core.domain.entity.recommender.QBookmarkRecommenderEntity.*;
 import static com.biengual.core.domain.entity.recommender.QCategoryRecommenderEntity.*;
@@ -164,10 +165,13 @@ public class RecommenderCustomRepository {
                     RecommenderInfo.PopularBookmark.class,
                     bookmarkRecommenderEntity.enDetail,
                     bookmarkRecommenderEntity.koDetail,
-                    bookmarkRecommenderEntity.contentId
+                    bookmarkRecommenderEntity.contentId,
+                    contentEntity.contentType
                 )
             )
             .from(bookmarkRecommenderEntity)
+            .join(contentEntity)
+            .on(bookmarkRecommenderEntity.contentId.eq(contentEntity.id))
             .where(
                 bookmarkRecommenderEntity.startOfWeek.eq(startOfWeek)
                     .and(bookmarkRecommenderEntity.endOfWeek.eq(endOfWeek))
