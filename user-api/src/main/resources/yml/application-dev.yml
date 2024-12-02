@@ -63,7 +63,7 @@ perplexity:
 
 opensearch:
   host: ${OPEN_SEARCH_DEV_HOST}
-  port: ${OPEN_SEARCH_PORT}
+  port: ${OPEN_SEARCH_AWS_PORT}
   protocol: ${OPEN_SEARCH_HTTPS_PROTOCOL}
   username: ${OPEN_SEARCH_ROOT_USERNAME}
   password: ${OPEN_SEARCH_ROOT_PASSWORD}
