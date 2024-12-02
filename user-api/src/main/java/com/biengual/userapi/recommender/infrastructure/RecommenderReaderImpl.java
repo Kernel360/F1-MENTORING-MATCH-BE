@@ -23,8 +23,8 @@ public class RecommenderReaderImpl implements RecommenderReader {
         LocalDate lastWeek =
             PeriodUtil.getFewWeeksAgo(LocalDate.from(LocalDateTime.now()), 1, DayOfWeek.MONDAY);
 
-        LocalDateTime startOfWeek = PeriodUtil.getStartOfWeek(LocalDateTime.from(lastWeek));
-        LocalDateTime endOfWeek = PeriodUtil.getEndOfWeek(LocalDateTime.from(lastWeek));
+        LocalDateTime startOfWeek = PeriodUtil.getStartOfWeek(lastWeek);
+        LocalDateTime endOfWeek = PeriodUtil.getEndOfWeek(lastWeek);
 
         return recommenderCustomRepository.findPopularBookmarks(startOfWeek, endOfWeek);
     }

@@ -53,9 +53,8 @@ public class RecommenderStoreImpl implements RecommenderStore {
         LocalDate lastWeek =
             PeriodUtil.getFewWeeksAgo(LocalDate.from(LocalDateTime.now()), 1, DayOfWeek.MONDAY);
 
-        LocalDateTime startOfWeek = PeriodUtil.getStartOfWeek(LocalDateTime.of(lastWeek, LocalTime.MIDNIGHT));
-        LocalDateTime endOfWeek =
-            PeriodUtil.getEndOfWeek(LocalDateTime.of(lastWeek, LocalTime.of(23, 59, 59)));
+        LocalDateTime startOfWeek = PeriodUtil.getStartOfWeek(lastWeek);
+        LocalDateTime endOfWeek = PeriodUtil.getEndOfWeek(lastWeek);
 
         // TODO : LISTENING 의 경우 문장이 쪼개진 상태로 저장이 되고 문장 자체도 완전한 상태가 아니기 때문에
         // TODO : 여기서 쓰고 싶으면 content create 과정에 추가적인 전처리가 필요함

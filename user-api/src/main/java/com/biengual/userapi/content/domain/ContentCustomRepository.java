@@ -264,6 +264,27 @@ public class ContentCustomRepository {
         return previews;
     }
 
+    // 추천 카테고리가 하나도 없을 때 조회수 순으로 9개 조회
+    public List<RecommenderInfo.Preview> findContentsOrderByHits(Long userId) {
+        return queryFactory
+            .select(
+                Projections.constructor(
+                    RecommenderInfo.Preview.class,
+                    contentEntity.id,
+                    contentEntity.title,
+                    contentEntity.thumbnailUrl,
+                    contentEntity.contentType,
+                    contentEntity.category.name,
+                    contentEntity.contentLevel,
+                    getIsPointRequiredByUserIdAndContent(userId, contentEntity.id, contentEntity.createdAt)
+                )
+            )
+            .from(contentEntity)
+            .orderBy(contentEntity.hits.desc())
+            .limit(9)
+            .fetch();
+    }
+
     // Internal Method =================================================================================================
 
     // TODO: Predicate를 사용하지 않는 경우에는 Override? 아니면 null로 입력?
