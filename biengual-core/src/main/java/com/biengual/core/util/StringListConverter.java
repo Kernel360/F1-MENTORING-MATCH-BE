@@ -1,5 +1,6 @@
 package com.biengual.core.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,6 +18,10 @@ public class StringListConverter implements AttributeConverter<List<String>, Str
 
     @Override
     public List<String> convertToEntityAttribute(String dbData) {
+        if (dbData.isEmpty()) {
+            return new ArrayList<>();
+        }
+
         return Arrays.asList(dbData.split(DELIMITER));
     }
 }

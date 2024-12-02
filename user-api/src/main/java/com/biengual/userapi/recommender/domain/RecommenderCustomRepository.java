@@ -94,7 +94,13 @@ public class RecommenderCustomRepository {
 
         // 각 categoryId에 대해 similarCategoryIds 중 첫 번째로 categoryId와 다른 값을 선택
         for (Long categoryId : categoryIds) {
-            similarCategoryIdsList.get(categoryIds.indexOf(categoryId))
+            List<String> similarCategoryIds = similarCategoryIdsList.get(categoryIds.indexOf(categoryId));
+
+            if (similarCategoryIds.isEmpty()) {
+                continue;
+            }
+
+            similarCategoryIds
                 .stream()
                 .map(Long::valueOf)  // String -> Long 변환
                 .filter(similarId -> !categoryIds.contains(similarId))  // categoryId와 다른 값 선택
@@ -125,8 +131,8 @@ public class RecommenderCustomRepository {
 
         // Set을 List로 변환하고 정확히 3개의 결과만 반환
         return uniqueSimilarCategoryIds.stream()
-            .limit(3)  // 정확히 3개만 반환
-            .collect(Collectors.toList());
+            .limit(Math.min(uniqueSimilarCategoryIds.size(), 3))  // 정확히 3개만 반환
+            .toList();
     }
 
     // 유저가 처음 회원 가입을 해서 카테고리 관련 유저 정보가 없을 때 단순히 랜덤 카테고리를 가져오기 위한 쿼리

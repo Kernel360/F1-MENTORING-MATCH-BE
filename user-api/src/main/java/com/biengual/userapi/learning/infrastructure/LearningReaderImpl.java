@@ -1,9 +1,6 @@
 package com.biengual.userapi.learning.infrastructure;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import com.biengual.core.annotation.DataProvider;
 import com.biengual.userapi.content.domain.ContentCustomRepository;
@@ -23,6 +20,7 @@ public class LearningReaderImpl implements LearningReader {
     private final ContentCustomRepository contentCustomRepository;
     private final RecommenderCustomRepository recommenderCustomRepository;
 
+    // TODO: 카테고리 기반 추천 알고리즘 로직 개선할 것
     @Override
     public RecommenderInfo.PreviewRecommender findSimilarCategoriesBasedOnLearningHistory(Long userId) {
         // 1. 유저의 관심 높은 카테고리 찾기(관심 카테고리, 최근 많이 학습한 카테고리)
@@ -41,7 +39,14 @@ public class LearningReaderImpl implements LearningReader {
         // 3. 위 카테고리를 학습한 유저들의 다른 카테고리 리턴(나는 많이 학습하지 않은)
         List<Long> similarCategories = recommenderCustomRepository.findSimilarCategories(interestedCategoryIds);
 
-        // 4. 각 카테고리 ID 당 조회수, 스크랩수 기준으로 상위 컨텐츠 리턴
+        // 4.유사 카테고리들이 없는 경우 조회수 순으로 컨텐츠 반환
+        if (similarCategories.isEmpty()) {
+            return RecommenderInfo.PreviewRecommender.of(
+                contentCustomRepository.findContentsOrderByHits(userId)
+            );
+        }
+
+        // 5. 각 카테고리 ID 당 조회수, 스크랩수 기준으로 상위 컨텐츠 리턴
         return RecommenderInfo.PreviewRecommender.of(
             contentCustomRepository.findCustomizedContentsByCategories(userId, similarCategories)
         );
