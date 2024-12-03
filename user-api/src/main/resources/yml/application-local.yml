@@ -61,7 +61,7 @@ perplexity:
 
 opensearch:
   host: ${OPEN_SEARCH_LOCAL_HOST}
-  port: ${OPEN_SEARCH_PORT}
+  port: ${OPEN_SEARCH_LOCAL_PORT}
   protocol: ${OPEN_SEARCH_HTTP_PROTOCOL}
   username: ${OPEN_SEARCH_ROOT_USERNAME} # OpenSearch 기본 관리자 계정 (보안 플러그인 활성화 시)
   password: ${OPEN_SEARCH_ROOT_USERNAME} # OpenSearch 기본 비밀번호 (보안 플러그인 활성화 시)

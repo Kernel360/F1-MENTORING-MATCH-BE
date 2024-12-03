@@ -12,8 +12,11 @@ import org.springframework.context.annotation.Configuration;
 
 import com.biengual.core.response.error.exception.CommonException;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Configuration
 @RequiredArgsConstructor
 public class OpenSearchContentConfig {
@@ -22,6 +25,7 @@ public class OpenSearchContentConfig {
     /**
      * 인덱스가 없을 경우 인덱스 초기화
      */
+    @PostConstruct
     public void init() {
         this.createIndexIfNotExists(openSearchClient);
     }
@@ -34,7 +38,7 @@ public class OpenSearchContentConfig {
                 // TODO: 성능 부족하면 샤드, 레플리카 추가해야 하는지 고려
                 IndexSettings settings = new IndexSettings.Builder()
                     .numberOfShards("1") // Set number of shards
-                    .numberOfReplicas("1") // Set number of replicas
+                    .numberOfReplicas("0") // Set number of replicas
                     .refreshInterval(new Time.Builder().time("30s").build())
                     .analysis(a -> a
                         .analyzer("nori_analyzer", na -> na
@@ -73,6 +77,7 @@ public class OpenSearchContentConfig {
                 client.indices().create(createIndexRequest);
             }
         } catch (Exception e) {
+            log.error(e.getMessage(), e);
             throw new CommonException(SEARCH_CONTENT_SAVE_FAILED);
         }
     }
