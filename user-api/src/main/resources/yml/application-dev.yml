@@ -67,3 +67,4 @@ opensearch:
   protocol: ${OPEN_SEARCH_HTTPS_PROTOCOL}
   username: ${OPEN_SEARCH_ROOT_USERNAME}
   password: ${OPEN_SEARCH_ROOT_PASSWORD}
+  index: ${OPEN_SEARCH_DEV_INDEX}

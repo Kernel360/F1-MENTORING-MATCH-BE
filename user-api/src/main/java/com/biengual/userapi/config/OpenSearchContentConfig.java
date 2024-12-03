@@ -1,6 +1,5 @@
 package com.biengual.userapi.config;
 
-import static com.biengual.core.constant.ServiceConstant.*;
 import static com.biengual.core.response.error.code.SearchContentErrorCode.*;
 
 import org.opensearch.client.opensearch.OpenSearchClient;
@@ -8,6 +7,7 @@ import org.opensearch.client.opensearch._types.Time;
 import org.opensearch.client.opensearch._types.mapping.TypeMapping;
 import org.opensearch.client.opensearch.indices.CreateIndexRequest;
 import org.opensearch.client.opensearch.indices.IndexSettings;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 import com.biengual.core.response.error.exception.CommonException;
@@ -22,6 +22,9 @@ import lombok.extern.slf4j.Slf4j;
 public class OpenSearchContentConfig {
     private final OpenSearchClient openSearchClient;
 
+    @Value("${opensearch.index}")
+    private String index;
+
     /**
      * 인덱스가 없을 경우 인덱스 초기화
      */
@@ -32,7 +35,7 @@ public class OpenSearchContentConfig {
 
     private void createIndexIfNotExists(OpenSearchClient client) {
         try {
-            boolean exists = client.indices().exists(b -> b.index(CONTENT_SEARCH_INDEX_NAME)).value();
+            boolean exists = client.indices().exists(b -> b.index(index)).value();
             if (!exists) {
                 // Define index settings
                 // TODO: 성능 부족하면 샤드, 레플리카 추가해야 하는지 고려
@@ -69,7 +72,7 @@ public class OpenSearchContentConfig {
 
                 // Create the index with settings and mappings
                 CreateIndexRequest createIndexRequest = new CreateIndexRequest.Builder()
-                    .index(CONTENT_SEARCH_INDEX_NAME)
+                    .index(index)
                     .settings(settings)
                     .mappings(mappings)
                     .build();
