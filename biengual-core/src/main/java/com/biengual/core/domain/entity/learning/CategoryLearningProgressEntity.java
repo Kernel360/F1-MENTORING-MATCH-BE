@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "category_learning_progress")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CategoryLearningProgress {
+public class CategoryLearningProgressEntity {
     @EmbeddedId
     private CategoryLearningProgressId categoryLearningProgressId;
 
