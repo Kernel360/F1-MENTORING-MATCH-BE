@@ -11,8 +11,7 @@ public class GetPopularSentenceDto {
     public record Bookmark(
         String enDetail,
         String koDetail,
-        Long contentId,
-        ContentType contentType
+        Long contentId
     ) {
     }
 

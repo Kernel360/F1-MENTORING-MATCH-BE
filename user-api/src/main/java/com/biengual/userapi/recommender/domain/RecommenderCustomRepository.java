@@ -165,13 +165,10 @@ public class RecommenderCustomRepository {
                     RecommenderInfo.PopularBookmark.class,
                     bookmarkRecommenderEntity.enDetail,
                     bookmarkRecommenderEntity.koDetail,
-                    bookmarkRecommenderEntity.contentId,
-                    contentEntity.contentType
+                    bookmarkRecommenderEntity.contentId
                 )
             )
             .from(bookmarkRecommenderEntity)
-            .join(contentEntity)
-            .on(bookmarkRecommenderEntity.contentId.eq(contentEntity.id))
             .where(
                 bookmarkRecommenderEntity.startOfWeek.eq(startOfWeek)
                     .and(bookmarkRecommenderEntity.endOfWeek.eq(endOfWeek))
