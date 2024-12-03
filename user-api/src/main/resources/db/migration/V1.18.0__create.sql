@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `user_category_progress`
+CREATE TABLE IF NOT EXISTS `category_learning_progress`
 (
     `user_id`                  BIGINT NOT NULL,
     `category_id`              BIGINT NOT NULL,
