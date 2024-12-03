@@ -2,8 +2,6 @@ package com.biengual.userapi.content.domain;
 
 import java.util.List;
 
-import com.biengual.core.domain.entity.content.ContentLevelFeedbackHistoryEntity;
-import com.biengual.core.enums.ContentLevel;
 import org.bson.types.ObjectId;
 import org.springframework.data.domain.Pageable;
 
@@ -11,6 +9,8 @@ import com.biengual.core.domain.document.content.ContentDocument;
 import com.biengual.core.domain.document.content.script.Script;
 import com.biengual.core.domain.entity.category.CategoryEntity;
 import com.biengual.core.domain.entity.content.ContentEntity;
+import com.biengual.core.domain.entity.content.ContentLevelFeedbackHistoryEntity;
+import com.biengual.core.enums.ContentLevel;
 import com.biengual.core.enums.ContentType;
 
 import lombok.Builder;

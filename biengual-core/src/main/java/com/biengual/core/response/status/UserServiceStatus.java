@@ -16,7 +16,8 @@ public enum UserServiceStatus implements ServiceStatus{
 	USER_NOT_FOUND("U-U-901"),
 	USER_FAIL_DEACTIVATE("U-U-902"),
 	USER_FAIL_SUSPEND("U-U-903"),
-	USER_PERMISSION_DENIED("U-U-904");
+	USER_PERMISSION_DENIED("U-U-904")
+	;
 
 	private final String code;
 

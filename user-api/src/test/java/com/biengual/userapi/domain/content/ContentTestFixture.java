@@ -2,6 +2,7 @@ package com.biengual.userapi.domain.content;
 
 import com.biengual.core.domain.entity.category.CategoryEntity;
 import com.biengual.core.domain.entity.content.ContentEntity;
+import com.biengual.core.enums.ContentLevel;
 import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.enums.ContentType;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,6 +38,8 @@ public class ContentTestFixture {
         private @Builder.Default String mongoContentId = "mongoObjectId";
         private @Builder.Default CategoryEntity category = null;
         private @Builder.Default Integer numOfQuiz = 0;
+        private @Builder.Default Integer videoDuration = null;
+        private @Builder.Default ContentLevel contentLevel = null;
         private @Builder.Default LocalDateTime createdAt = LocalDateTime.now();
         private @Builder.Default LocalDateTime updatedAt = LocalDateTime.now();
 

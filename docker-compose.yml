@@ -46,3 +46,36 @@ services:
     networks:
       - echall-network
 
+  # OpenSearch 서비스 (노드 1)
+  opensearch-node1:
+    image: opensearchproject/opensearch:2.17.0
+    container_name: echall-opensearch-node1
+    environment:
+      - discovery.type=single-node # 단일 노드 설정
+      - bootstrap.memory_lock=true # 메모리 잠금 활성화
+      - plugins.security.disabled=true # username, password 필요 X
+      - OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m # JVM 메모리 설정 (512MB)
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=${OPEN_SEARCH_ROOT_PASSWORD}
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./data/opensearch-data:/usr/share/opensearch/data # OpenSearch 데이터 저장소
+    ports:
+      - "9200:9200" # REST API 포트 매핑
+      - "9600:9600" # 내부 모니터링 포트 매핑
+    networks:
+      - echall-network
+
+  # OpenSearch Dashboards 서비스 (UI)
+  opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:2.17.0
+    container_name: echall-opensearch-dashboards
+    environment:
+      - OPENSEARCH_HOSTS=http://opensearch-node1:9200
+      - DISABLE_SECURITY_DASHBOARDS_PLUGIN=true # username, password 필요 X
+    ports:
+      - "5601:5601" # Dashboards UI 포트 매핑
+    networks:
+      - echall-network

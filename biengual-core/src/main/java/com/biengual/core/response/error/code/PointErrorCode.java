@@ -13,8 +13,11 @@ public enum PointErrorCode implements ErrorCode {
         HttpStatus.NOT_FOUND, PointServiceStatus.POINT_NOT_FOUND, "포인트 조회 실패"
     ),
     POINT_NEVER_MINUS(
-        HttpStatus.METHOD_NOT_ALLOWED, PointServiceStatus.POINT_NEVER_MINUS, "포인트 부족"
-    )
+        HttpStatus.FORBIDDEN, PointServiceStatus.POINT_NEVER_MINUS, "포인트 부족"
+    ),
+    CONTENT_NOT_RECENT(HttpStatus.BAD_REQUEST, PointServiceStatus.CONTENT_NOT_RECENT, "최신이 아닌 컨텐츠"),
+    ALREADY_PAID_FOR_RECENT_CONTENT(HttpStatus.BAD_REQUEST, PointServiceStatus.ALREADY_PAID_FOR_RECENT_CONTENT,
+        "이미 지불된 최신 컨텐츠")
     ;
 
     private final HttpStatus httpStatus;

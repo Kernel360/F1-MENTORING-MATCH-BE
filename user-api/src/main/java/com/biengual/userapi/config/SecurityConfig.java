@@ -75,6 +75,7 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.GET, "/api/categories/type/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/contents/details/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/user/status").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/recommender/bookmark").permitAll()
 
                     // Can access from USER
                     .requestMatchers("/api/bookmark/**").hasAnyRole("USER", "DEVELOPER")
@@ -88,6 +89,7 @@ public class SecurityConfig {
                     .requestMatchers("/api/learning/**").hasAnyRole("USER", "DEVELOPER")
                     .requestMatchers("/api/dashboard/**").hasAnyRole("USER", "DEVELOPER")
                     .requestMatchers("/api/recommender/**").hasAnyRole("USER", "DEVELOPER")
+                    .requestMatchers("/api/point/**").hasAnyRole("USER", "DEVELOPER")
 
                     // Can access from ADMIN
                     .requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "DEVELOPER")

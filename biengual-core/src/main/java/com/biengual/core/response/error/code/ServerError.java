@@ -1,9 +1,11 @@
 package com.biengual.core.response.error.code;
 
+import org.springframework.http.HttpStatus;
+
 import com.biengual.core.response.status.ServerServiceStatus;
 import com.biengual.core.response.status.ServiceStatus;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 
 // TODO: Core의 Util에서 발생한 예외를 위한 ErrorCode 여기 있는게 맞는지?
 @RequiredArgsConstructor

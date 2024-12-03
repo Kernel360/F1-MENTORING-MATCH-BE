@@ -82,7 +82,6 @@ public class ContentEntity extends BaseEntity {
 	@Column(columnDefinition = "smallint")
 	private Integer videoDuration;
 
-	@Column(nullable = false)
 	@Enumerated(EnumType.STRING)
 	private ContentLevel contentLevel;
 

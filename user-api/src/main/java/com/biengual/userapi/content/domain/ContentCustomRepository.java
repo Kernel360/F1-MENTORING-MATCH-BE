@@ -21,6 +21,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
+import com.biengual.core.domain.document.content.ContentSearchDocument;
 import com.biengual.core.domain.entity.content.QContentEntity;
 import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.enums.ContentType;
@@ -139,6 +140,21 @@ public class ContentCustomRepository {
         return findPreviewPage(pageable, predicate, userId);
     }
 
+    public Page<ContentInfo.PreviewContent> findPreviewPageByElasticSearch(
+        List<ContentSearchDocument> searchContents, Pageable pageable, Long userId
+    ) {
+        // 1. Elasticsearch 결과에서 ID 추출
+        List<Long> ids = searchContents.stream()
+            .map(content -> Long.parseLong(content.getId()))
+            .toList();
+
+        // 2. BooleanExpression 생성
+        BooleanExpression predicate = getPredicateFromElasticsearchResults(ids);
+
+        // 3. 기존 페이징 로직 호출
+        return findSearchPreviewPage(pageable, predicate, userId, ids);
+    }
+
     // 컨텐츠 프리뷰 페이지 조회하기 위한 쿼리
     public Page<ContentInfo.ViewContent> findViewPageByContentTypeAndCategoryId(
         Pageable pageable, ContentType contentType, Long categoryId, Long userId
@@ -202,6 +218,7 @@ public class ContentCustomRepository {
                     contentEntity.thumbnailUrl,
                     contentEntity.contentType,
                     contentEntity.category.name,
+                    contentEntity.contentLevel,
                     getIsPointRequiredByUserIdAndContent(userId, contentEntity.id, contentEntity.createdAt)
                 )
             )
@@ -230,6 +247,7 @@ public class ContentCustomRepository {
                         contentEntity.thumbnailUrl,
                         contentEntity.contentType,
                         contentEntity.category.name,
+                        contentEntity.contentLevel,
                         getIsPointRequiredByUserIdAndContent(userId, contentEntity.id, contentEntity.createdAt)
                     )
                 )
@@ -244,6 +262,27 @@ public class ContentCustomRepository {
         }
 
         return previews;
+    }
+
+    // 추천 카테고리가 하나도 없을 때 조회수 순으로 9개 조회
+    public List<RecommenderInfo.Preview> findContentsOrderByHits(Long userId) {
+        return queryFactory
+            .select(
+                Projections.constructor(
+                    RecommenderInfo.Preview.class,
+                    contentEntity.id,
+                    contentEntity.title,
+                    contentEntity.thumbnailUrl,
+                    contentEntity.contentType,
+                    contentEntity.category.name,
+                    contentEntity.contentLevel,
+                    getIsPointRequiredByUserIdAndContent(userId, contentEntity.id, contentEntity.createdAt)
+                )
+            )
+            .from(contentEntity)
+            .orderBy(contentEntity.hits.desc())
+            .limit(9)
+            .fetch();
     }
 
     // Internal Method =================================================================================================
@@ -280,6 +319,58 @@ public class ContentCustomRepository {
             .where(predicate);
 
         return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchOne);
+    }
+
+    private Page<ContentInfo.PreviewContent> findSearchPreviewPage(
+        Pageable pageable, Predicate predicate, Long userId, List<Long> elasticIds
+    ) {
+        // Elasticsearch ID 순서에 따라 정렬 조건 생성
+        OrderSpecifier<Integer> sortOrder = getElasticsearchSortOrder(elasticIds);
+
+        // 데이터 조회
+        List<ContentInfo.PreviewContent> contents = queryFactory
+            .select(
+                Projections.constructor(
+                    ContentInfo.PreviewContent.class,
+                    contentEntity.id,
+                    contentEntity.title,
+                    contentEntity.thumbnailUrl,
+                    contentEntity.contentType,
+                    contentEntity.preScripts,
+                    contentEntity.category.name,
+                    contentEntity.hits,
+                    contentEntity.videoDuration,
+                    contentEntity.contentLevel,
+                    getIsScrappedByUserId(userId),
+                    getIsPointRequiredByUserIdAndContent(userId, contentEntity.id, contentEntity.createdAt)
+                )
+            )
+            .from(contentEntity)
+            .where(predicate)
+            .orderBy(sortOrder) // Elasticsearch ID 순서로 정렬
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .fetch();
+
+        // 카운트 쿼리
+        JPAQuery<Long> countQuery = queryFactory
+            .select(contentEntity.id.count())
+            .from(contentEntity)
+            .where(predicate);
+
+        return PageableExecutionUtils.getPage(contents, pageable, countQuery::fetchOne);
+    }
+
+    private OrderSpecifier<Integer> getElasticsearchSortOrder(List<Long> elasticIds) {
+        // Elasticsearch ID 순서에 따라 정렬 조건 생성
+        CaseBuilder.Cases<Integer, NumberExpression<Integer>> sortOrder = new CaseBuilder()
+            .when(contentEntity.id.eq(elasticIds.get(0))).then(0);
+
+        for (int i = 1; i < elasticIds.size(); i++) {
+            sortOrder = sortOrder.when(contentEntity.id.eq(elasticIds.get(i))).then(i);
+        }
+
+        return sortOrder.otherwise(Integer.MAX_VALUE).asc(); // 나머지 항목은 마지막으로 정렬
     }
 
     // TODO: Predicate를 사용하지 않는 경우에는 Override? 아니면 null로 입력?
@@ -378,6 +469,23 @@ public class ContentCustomRepository {
             .orElse(null);
 
         return baseExpression.and(searchExpression);
+    }
+
+    // Elastic Search Predicate
+    private BooleanExpression getPredicateFromElasticsearchResults(List<Long> ids) {
+        // Elasticsearch 결과가 없으면 null 반환 (조건 없음)
+        if (ids.isEmpty()) {
+            return null;
+        }
+
+        // ID 리스트를 기반으로 BooleanExpression 생성
+        BooleanExpression idPredicate = contentEntity.id.in(ids);
+
+        // contentEntity.status가 ACTIVATED인 조건 추가
+        BooleanExpression statusPredicate = contentEntity.contentStatus.eq(ContentStatus.ACTIVATED);
+
+        // 두 조건 결합
+        return idPredicate.and(statusPredicate);
     }
 
     // 컨텐츠 뷰 Predicate
@@ -508,27 +616,13 @@ public class ContentCustomRepository {
         }
 
         return JPAExpressions
-            .selectOne()
+            .select(paymentContentHistoryEntity)
             .from(paymentContentHistoryEntity)
             .where(
-                validatePaymentHistory(paymentContentHistoryEntity.expiredAt)
-                    .and(paymentContentHistoryEntity.contentId.eq(contentId))
+                    paymentContentHistoryEntity.contentId.eq(contentId)
                     .and(paymentContentHistoryEntity.userId.eq(userId))
             )
             .notExists()
             .and(isWithinFewDays); // createdAt 기준 7일 확인
-    }
-
-    // 컨텐츠 만료 확인 로직
-    private BooleanExpression validatePaymentHistory(DateTimePath<LocalDateTime> expiredAt) {
-        LocalDate today = LocalDate.now();
-
-        return expiredAt.isNotNull()
-            // 연 비교
-            .and(expiredAt.year().goe(today.getYear()))
-            // 월 비교
-            .and(expiredAt.month().goe(today.getMonthValue()))
-            // 일 비교
-            .and(expiredAt.dayOfMonth().gt(today.getDayOfMonth()));
     }
 }

@@ -15,6 +15,8 @@ public interface ContentReader {
 
     PaginationInfo<ContentInfo.PreviewContent> findPreviewPageBySearch(ContentCommand.Search command);
 
+    PaginationInfo<ContentInfo.PreviewContent> findPreviewPageByOpenSearch(ContentCommand.Search command);
+
     PaginationInfo<ContentInfo.ViewContent> findReadingViewPage(ContentCommand.GetReadingView command);
 
     PaginationInfo<ContentInfo.ViewContent> findListeningViewPage(ContentCommand.GetListeningView command);
@@ -29,9 +31,7 @@ public interface ContentReader {
 
     ContentInfo.Detail findActiveContentWithScripts(ContentCommand.GetDetail command);
 
-    boolean checkAlreadyReadable(ContentCommand.GetDetail command);
-
-    void findContentIsActivated(Long contentId);
-
     ContentEntity findLearnableContent(Long contentId, Long userId);
+
+    ContentEntity findUnverifiedContent(Long contentId);
 }

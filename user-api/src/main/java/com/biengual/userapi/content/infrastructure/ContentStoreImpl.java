@@ -1,7 +1,17 @@
 package com.biengual.userapi.content.infrastructure;
 
+import static com.biengual.core.constant.RestrictionConstant.*;
+import static com.biengual.core.response.error.code.CategoryErrorCode.*;
+import static com.biengual.core.response.error.code.ContentErrorCode.*;
+
+import java.util.List;
+import java.util.Set;
+
+import org.bson.types.ObjectId;
+
 import com.biengual.core.annotation.DataProvider;
 import com.biengual.core.domain.document.content.ContentDocument;
+import com.biengual.core.domain.document.content.ContentSearchDocument;
 import com.biengual.core.domain.entity.category.CategoryEntity;
 import com.biengual.core.domain.entity.content.ContentEntity;
 import com.biengual.core.domain.entity.content.ContentLevelFeedbackDataMart;
@@ -9,17 +19,17 @@ import com.biengual.core.enums.ContentLevel;
 import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.response.error.exception.CommonException;
 import com.biengual.userapi.category.domain.CategoryRepository;
-import com.biengual.userapi.content.domain.*;
+import com.biengual.userapi.content.domain.ContentCommand;
+import com.biengual.userapi.content.domain.ContentCustomRepository;
+import com.biengual.userapi.content.domain.ContentDocumentRepository;
+import com.biengual.userapi.content.domain.ContentLevelFeedbackDataMartRepository;
+import com.biengual.userapi.content.domain.ContentLevelFeedbackHistoryRepository;
+import com.biengual.userapi.content.domain.ContentRepository;
+import com.biengual.userapi.content.domain.ContentSearchRepository;
+import com.biengual.userapi.content.domain.ContentStore;
 import com.biengual.userapi.validator.ContentValidator;
+
 import lombok.RequiredArgsConstructor;
-
-import java.util.Set;
-
-import static com.biengual.core.constant.RestrictionConstant.CONTENT_LEVEL_DETERMINATION_THRESHOLD;
-import static com.biengual.core.constant.RestrictionConstant.MINIMUM_CONTENT_LEVEL_FEEDBACK_COUNT;
-import static com.biengual.core.response.error.code.CategoryErrorCode.CATEGORY_NOT_FOUND;
-import static com.biengual.core.response.error.code.ContentErrorCode.CONTENT_LEVEL_FEEDBACK_DATA_MART_NOT_FOUND;
-import static com.biengual.core.response.error.code.ContentErrorCode.CONTENT_NOT_FOUND;
 
 @DataProvider
 @RequiredArgsConstructor
@@ -31,24 +41,34 @@ public class ContentStoreImpl implements ContentStore {
     private final ContentLevelFeedbackHistoryRepository contentLevelFeedbackHistoryRepository;
     private final ContentLevelFeedbackDataMartRepository contentLevelFeedbackDataMartRepository;
     private final ContentValidator contentValidator;
+    private final ContentSearchRepository contentSearchRepository;
 
     @Override
     public void createContent(ContentCommand.Create command) {
+        // MongoDB 에 Content Script 저장
         ContentDocument contentDocument = command.toDocument();
         contentDocumentRepository.save(contentDocument);
 
         CategoryEntity category = getCategoryEntity(command);
 
+        // MySql 에 Content Info 저장
         ContentEntity content = command.toEntity(contentDocument.getId(), command.contentType(), category);
         contentRepository.save(content);
+
+        // Open Search 에 Content Search Data 저장
+        ContentSearchDocument searchDocument = ContentSearchDocument.createdByContents(content, contentDocument);
+        contentSearchRepository.saveContent(searchDocument);
     }
 
     @Override
     public void modifyContentStatus(Long contentId) {
         ContentEntity content = contentRepository.findById(contentId)
             .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
+
         content.updateStatus(
-            content.getContentStatus() == ContentStatus.ACTIVATED ? ContentStatus.DEACTIVATED : ContentStatus.ACTIVATED
+            content.getContentStatus() == ContentStatus.ACTIVATED ?
+                this.deactivateContent(contentId) :
+                this.activateContent(content)
         );
         contentRepository.save(content);
     }
@@ -83,6 +103,28 @@ public class ContentStoreImpl implements ContentStore {
         }
     }
 
+    @Override
+    public void initializeOpenSearch() {
+        // 컨텐츠 데이터 저장
+        List<ContentEntity> contents = contentRepository.findAll();
+        for (ContentEntity content : contents) {
+            ContentDocument document = contentDocumentRepository.findById(new ObjectId(content.getMongoContentId()))
+                .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
+            contentSearchRepository.saveContent(ContentSearchDocument.createdByContents(content, document));
+        }
+    }
+
+    @Override
+    public void delete() {
+        List<Long> contentIds = contentRepository.findAll()
+            .stream()
+            .map(ContentEntity::getId)
+            .toList();
+        for (Long id : contentIds) {
+            contentSearchRepository.deleteContent(String.valueOf(id));
+        }
+    }
+
     // Internal Methods=================================================================================================
 
     private CategoryEntity getCategoryEntity(ContentCommand.Create command) {
@@ -92,6 +134,28 @@ public class ContentStoreImpl implements ContentStore {
         }
 
         return categoryRepository.save(command.toCategoryEntity());
+    }
+
+    // 컨텐츠 활성화
+    private ContentStatus activateContent(ContentEntity content) {
+        contentSearchRepository.saveContent(
+            ContentSearchDocument.createdByContents(
+                content,
+                this.getContentDocument(content.getMongoContentId())
+            )
+        );
+        return ContentStatus.ACTIVATED;
+    }
+
+    // 컨텐츠 비활성화
+    private ContentStatus deactivateContent(Long contentId) {
+        contentSearchRepository.deleteContent(String.valueOf(contentId));
+        return ContentStatus.DEACTIVATED;
+    }
+
+    private ContentDocument getContentDocument(String documentId) {
+        return contentDocumentRepository.findContentDocumentById(new ObjectId(documentId))
+            .orElseThrow(() -> new CommonException(CONTENT_NOT_FOUND));
     }
 
     // 난이도 계산 로직
@@ -106,9 +170,9 @@ public class ContentStoreImpl implements ContentStore {
         Long levelMediumCount = contentLevelFeedbackDataMart.getLevelMediumCount();
         Long levelLowCount = contentLevelFeedbackDataMart.getLevelLowCount();
 
-        double levelHighRatio = (double) levelHighCount / feedbackTotalCount;
-        double levelMediumRatio = (double) levelMediumCount / feedbackTotalCount;
-        double levelLowRatio = (double) levelLowCount / feedbackTotalCount;
+        double levelHighRatio = (double)levelHighCount / feedbackTotalCount;
+        double levelMediumRatio = (double)levelMediumCount / feedbackTotalCount;
+        double levelLowRatio = (double)levelLowCount / feedbackTotalCount;
 
         if (levelMediumRatio > levelHighRatio && levelMediumRatio > levelLowRatio) {
             return ContentLevel.MEDIUM;

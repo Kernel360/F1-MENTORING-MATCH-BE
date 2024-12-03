@@ -1,5 +1,20 @@
 package com.biengual.userapi.content.presentation;
 
+import static com.biengual.core.constant.BadRequestMessageConstant.*;
+import static com.biengual.core.response.success.ContentSuccessCode.*;
+
+import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.biengual.core.response.ResponseEntityFactory;
 import com.biengual.core.swagger.SwaggerVoidReturn;
 import com.biengual.core.util.PaginationInfo;
@@ -7,8 +22,15 @@ import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.content.domain.ContentService;
 import com.biengual.userapi.content.presentation.dto.SubmitLevelFeedbackDto;
-import com.biengual.userapi.content.presentation.swagger.*;
+import com.biengual.userapi.content.presentation.swagger.SwaggerContentDetail;
+import com.biengual.userapi.content.presentation.swagger.SwaggerContentListeningPreview;
+import com.biengual.userapi.content.presentation.swagger.SwaggerContentListeningView;
+import com.biengual.userapi.content.presentation.swagger.SwaggerContentReadingPreview;
+import com.biengual.userapi.content.presentation.swagger.SwaggerContentReadingView;
+import com.biengual.userapi.content.presentation.swagger.SwaggerContentScrapPreview;
+import com.biengual.userapi.content.presentation.swagger.SwaggerContentSearchPreview;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -20,15 +42,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import static com.biengual.core.constant.BadRequestMessageConstant.BLANK_CONTENT_KEYWORD_ERROR_MESSAGE;
-import static com.biengual.core.response.success.ContentSuccessCode.CONTENT_LEVEL_FEEDBACK_SUBMIT_SUCCESS;
-import static com.biengual.core.response.success.ContentSuccessCode.CONTENT_VIEW_SUCCESS;
 
 @Validated
 @RestController
@@ -67,6 +80,7 @@ public class ContentPublicController {
 
     // TODO: 검색 키워드 개수와는 별개로 입력 받을 수 있는 글자 수는 정해야줘야 할 것 같습니다.
     // TODO: Get 요청의 공통 컨벤션은 requestBody가 없기에 keyword를 requestParam으로 옮겼고, 이렇게 쓰인다면 프론트 분들에게 공유드려야 합니다.
+    @Deprecated
     @GetMapping("/search")
     @Operation(summary = "컨텐츠 검색", description = "페이지네이션을 적용해 컨텐츠를 검색합니다.")
     @ApiResponses(value = {
@@ -95,6 +109,35 @@ public class ContentPublicController {
             page, size, direction, sort, searchWords, principal
         );
         PaginationInfo<ContentInfo.PreviewContent> info = contentService.search(command);
+        ContentResponseDto.SearchPreviewContentsRes response = contentDtoMapper.ofSearchPreviewContentsRes(info);
+
+        return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
+    }
+
+    @GetMapping("/accurate-search")
+    @Operation(summary = "컨텐츠 검색", description = "페이지네이션을 적용해 컨텐츠를 Open Search 를 통해 검색합니다.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "컨텐츠 검색 성공", content = {
+            @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerContentSearchPreview.class))
+        }),
+        @ApiResponse(responseCode = "404", description = "OpenSearch 검색 실패", content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "500", description = "서버 에러", content = @Content)
+    })
+    @Parameters({
+        @Parameter(name = "page", description = "페이지 번호 (1부터 시작) / default: 1", in = ParameterIn.QUERY, schema = @Schema(type = "integer", defaultValue = "1")),
+        @Parameter(name = "size", description = "페이지당 데이터 수 / default: 10", in = ParameterIn.QUERY, schema = @Schema(type = "integer", defaultValue = "10")),
+    })
+    public ResponseEntity<Object> accurateSearchContents(
+        @RequestParam(required = false, defaultValue = "1") Integer page,
+        @RequestParam(required = false, defaultValue = "10") Integer size,
+        @NotBlank(message = BLANK_CONTENT_KEYWORD_ERROR_MESSAGE) @RequestParam String searchWords,
+        @AuthenticationPrincipal
+        OAuth2UserPrincipal principal
+    ) {
+        ContentCommand.Search command = contentDtoMapper.doSearch(
+            page, size, Sort.Direction.DESC, "createdAt", searchWords, principal
+        );
+        PaginationInfo<ContentInfo.PreviewContent> info = contentService.openSearch(command);
         ContentResponseDto.SearchPreviewContentsRes response = contentDtoMapper.ofSearchPreviewContentsRes(info);
 
         return ResponseEntityFactory.toResponseEntity(CONTENT_VIEW_SUCCESS, response);
