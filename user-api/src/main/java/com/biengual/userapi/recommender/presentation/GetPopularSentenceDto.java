@@ -1,9 +1,8 @@
 package com.biengual.userapi.recommender.presentation;
 
-import java.util.List;
-
-import com.biengual.core.enums.ContentType;
 import lombok.Builder;
+
+import java.util.List;
 
 public class GetPopularSentenceDto {
 

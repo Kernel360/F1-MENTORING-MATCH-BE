@@ -1,6 +1,5 @@
 package com.biengual.userapi.recommender.domain;
 
-import static com.biengual.core.domain.entity.content.QContentEntity.contentEntity;
 import static com.biengual.core.domain.entity.learning.QCategoryLearningHistoryEntity.*;
 import static com.biengual.core.domain.entity.recommender.QBookmarkRecommenderEntity.*;
 import static com.biengual.core.domain.entity.recommender.QCategoryRecommenderEntity.*;
