@@ -121,6 +121,12 @@ dependencies {
 
     // OpenSearch REST Client (필수)
     implementation 'org.opensearch.client:opensearch-rest-client:2.17.0'
+
+    // LocalStack
+    implementation 'org.testcontainers:localstack:1.16.3'
+
+    // AWS SDK
+    implementation 'software.amazon.awssdk:s3:2.17.100'
 }
 
 def querydslDir = "$buildDir/generated/querydsl"
