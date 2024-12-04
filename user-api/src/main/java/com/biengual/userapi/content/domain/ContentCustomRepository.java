@@ -285,6 +285,17 @@ public class ContentCustomRepository {
             .fetch();
     }
 
+    // 최대 limit 만큼 카테고리에 해당하는 Content Id를 조회수 순으로 조회하는 쿼리
+    public List<Long> findPopularContentIdsInCategoryIdsWithLimit(List<Long> categoryIds, int limit) {
+        return queryFactory
+            .select(contentEntity.id)
+            .from(contentEntity)
+            .where(contentEntity.category.id.in(categoryIds))
+            .orderBy(contentEntity.hits.desc())
+            .limit(limit)
+            .fetch();
+    }
+
     // Internal Method =================================================================================================
 
     // TODO: Predicate를 사용하지 않는 경우에는 Override? 아니면 null로 입력?

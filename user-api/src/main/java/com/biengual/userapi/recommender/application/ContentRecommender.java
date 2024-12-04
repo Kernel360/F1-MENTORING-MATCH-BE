@@ -1,10 +1,12 @@
 package com.biengual.userapi.recommender.application;
 
 import com.biengual.userapi.category.domain.CategoryRepository;
+import com.biengual.userapi.content.domain.ContentCustomRepository;
 import com.biengual.userapi.learning.domain.RecentLearningHistoryCustomRepository;
 import com.biengual.userapi.recommender.domain.CategoryLearningProgressCustomRepository;
 import com.biengual.userapi.recommender.domain.RecommenderInfo;
 import com.biengual.userapi.recommender.domain.RecommenderReader;
+import com.biengual.userapi.user.domain.UserCategoryCustomRepository;
 import com.biengual.userapi.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -26,8 +28,10 @@ public class ContentRecommender {
     private final UserRepository userRepository;
     private final CategoryLearningProgressCustomRepository categoryLearningProgressCustomRepository;
     private final RecentLearningHistoryCustomRepository recentLearningHistoryCustomRepository;
+    private final UserCategoryCustomRepository userCategoryCustomRepository;
+    private final ContentCustomRepository contentCustomRepository;
 
-    public void recommend(Long userId) {
+    public List<Long> recommend(Long userId) {
         long categoryCount = categoryRepository.count();
         long userCount = userRepository.count();
         boolean hasLearning = categoryLearningProgressCustomRepository.existsByUserId(userId);
@@ -68,6 +72,28 @@ public class ContentRecommender {
                     .findRecommendedContentIdsTop9(similarUserList, learningCompletionContentIdList)
             );
         }
+
+        if (recommendedContentIdList.size() == 9) {
+            return recommendedContentIdList;
+        }
+
+        int requiredContentCount = 9 - recommendedContentIdList.size();
+
+        List<Long> targetUserCategoryIdList = userCategoryCustomRepository.findAllMyRegisteredCategoryId(userId);
+
+        if (targetUserCategoryIdList.size() >= 1) {
+            List<Long> popularContentIdList =
+                contentCustomRepository
+                    .findPopularContentIdsInCategoryIdsWithLimit(targetUserCategoryIdList, requiredContentCount);
+
+            recommendedContentIdList.addAll(popularContentIdList);
+        }
+
+        if (recommendedContentIdList.size() == 9) {
+            return recommendedContentIdList;
+        }
+
+        return recommendedContentIdList;
     }
 
     // Internal Method =================================================================================================
