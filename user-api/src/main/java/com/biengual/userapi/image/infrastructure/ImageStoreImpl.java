@@ -29,6 +29,7 @@ import com.biengual.userapi.image.domain.ImageStore;
 import lombok.RequiredArgsConstructor;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 
 @DataProvider
 @RequiredArgsConstructor
@@ -78,7 +79,9 @@ public class ImageStoreImpl implements ImageStore {
                 .bucket(bucketName)
                 .key(key)
                 .cacheControl("max-age=7200")
-                .contentType("image/webp"),
+                .contentType("image/webp")
+                .acl(ObjectCannedACL.PUBLIC_READ)
+            ,
             RequestBody.fromBytes(resizedImage)
         );
     }
