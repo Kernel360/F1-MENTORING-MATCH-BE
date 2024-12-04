@@ -111,6 +111,33 @@ public class RecentLearningHistoryCustomRepository {
             .fetch();
     }
 
+    // 자신이 학습 완료했던 Content Id를 조회하는 쿼리
+    public List<Long> findLearningCompletionContentIdsByUserId(Long userId) {
+        return queryFactory
+            .select(recentLearningHistoryEntity.contentId)
+            .from(recentLearningHistoryEntity)
+            .where(
+                recentLearningHistoryEntity.userId.eq(userId)
+                    .and(recentLearningHistoryEntity.completedLearningRate.goe(80))
+            )
+            .fetch();
+    }
+
+    // 추천할 Content Id를 최대 9개 조회하는 쿼리
+    public List<Long> findRecommendedContentIdsTop9(List<Long> userIds, List<Long> contentIds) {
+        return queryFactory
+            .select(recentLearningHistoryEntity.contentId)
+            .from(recentLearningHistoryEntity)
+            .where(
+                recentLearningHistoryEntity.userId.in(userIds)
+                    .and(recentLearningHistoryEntity.contentId.notIn(contentIds))
+            )
+            .orderBy(recentLearningHistoryEntity.completedLearningRate.desc(),
+                recentLearningHistoryEntity.currentLearningRate.desc())
+            .limit(9)
+            .fetch();
+    }
+
     // Internal Methods ================================================================================================
     // isScrapped를 col로 받기 위한 확인하는 쿼리, 비로그인 상태 시 false 리턴
     private Expression<?> getIsScrappedByUserId(Long userId) {

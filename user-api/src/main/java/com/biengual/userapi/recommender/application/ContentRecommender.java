@@ -1,6 +1,7 @@
 package com.biengual.userapi.recommender.application;
 
 import com.biengual.userapi.category.domain.CategoryRepository;
+import com.biengual.userapi.learning.domain.RecentLearningHistoryCustomRepository;
 import com.biengual.userapi.recommender.domain.CategoryLearningProgressCustomRepository;
 import com.biengual.userapi.recommender.domain.RecommenderInfo;
 import com.biengual.userapi.recommender.domain.RecommenderReader;
@@ -8,16 +9,15 @@ import com.biengual.userapi.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 // TODO: CategoryLearningProgress 벡터화 역할을 누가 가져갈 것인가?
 // TODO: Cosine Similarity 계산 역할은 누가 가져갈 것인가?
 // TODO: 어떤 조건에 어떤 Recommender를 사용할 것인가?
 // TODO: 캐싱을 할 것인가?
 // TODO: 학습할 때 업데이트는 어떻게 할 것인가?
+// TODO: 추천 컨텐츠 결과가 9개 미만이면 어떻게 할 것 인가?
+// TODO: 자신이 학습 완료한 컨텐츠는 무조건 추천하지 않을 것인가?
 @Component
 @RequiredArgsConstructor
 public class ContentRecommender {
@@ -25,11 +25,14 @@ public class ContentRecommender {
     private final CategoryRepository categoryRepository;
     private final UserRepository userRepository;
     private final CategoryLearningProgressCustomRepository categoryLearningProgressCustomRepository;
+    private final RecentLearningHistoryCustomRepository recentLearningHistoryCustomRepository;
 
     public void recommend(Long userId) {
         long categoryCount = categoryRepository.count();
         long userCount = userRepository.count();
         boolean hasLearning = categoryLearningProgressCustomRepository.existsByUserId(userId);
+
+        List<Long> recommendedContentIdList = new ArrayList<>();
 
         if (categoryCount >= 2 && userCount >= 5 && hasLearning) {
             RecommenderInfo.ContentRecommenderMetric contentRecommenderMetric =
@@ -56,6 +59,14 @@ public class ContentRecommender {
                 .stream()
                 .map(Map.Entry::getKey)
                 .toList();
+
+            List<Long> learningCompletionContentIdList =
+                recentLearningHistoryCustomRepository.findLearningCompletionContentIdsByUserId(userId);
+
+            recommendedContentIdList.addAll(
+                recentLearningHistoryCustomRepository
+                    .findRecommendedContentIdsTop9(similarUserList, learningCompletionContentIdList)
+            );
         }
     }
 
