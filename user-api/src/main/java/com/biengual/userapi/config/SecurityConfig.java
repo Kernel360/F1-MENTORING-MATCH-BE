@@ -102,6 +102,7 @@ public class SecurityConfig {
                     .requestMatchers("/api/token").hasRole("DEVELOPER")
                     .requestMatchers("/swagger-ui/**").hasRole("DEVELOPER")
                     .requestMatchers("/api-info/**").hasRole("DEVELOPER")
+                    .requestMatchers("/api/s3-test/**").hasRole("DEVELOPER")
 
                     // Can access form Authenticated
                     .requestMatchers(HttpMethod.POST, "/api/user/logout").authenticated()

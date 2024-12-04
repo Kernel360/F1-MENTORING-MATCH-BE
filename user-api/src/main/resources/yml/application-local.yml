@@ -68,8 +68,10 @@ opensearch:
   index: ${OPEN_SEARCH_LOCAL_INDEX}
 
 localstack:
-  access-key: "biengual-local-s3-access"
-  secret-key: "biengual-local-s3-secret"
+  access-key : ${LOCAL_TEST_KEY}
+  secret-key : ${LOCAL_TEST_KEY}
+  bucket-name : ${LOCAL_STACK_BUCKET_NAME}
 cloud:
   aws:
-    endpoint: localhost:4566
+    endpoint: http://s3.localhost.localstack.cloud:4566
+    # 동작하지 않는다면 http://localhost:4566 사용 및 LocalStackConfig 수정 필요

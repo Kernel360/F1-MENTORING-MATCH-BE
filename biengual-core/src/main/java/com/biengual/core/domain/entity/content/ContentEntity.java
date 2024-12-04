@@ -7,12 +7,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-import com.biengual.core.enums.ContentLevel;
 import org.hibernate.annotations.DynamicUpdate;
 
 import com.biengual.core.domain.document.content.script.Script;
 import com.biengual.core.domain.entity.BaseEntity;
 import com.biengual.core.domain.entity.category.CategoryEntity;
+import com.biengual.core.enums.ContentLevel;
 import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.enums.ContentType;
 

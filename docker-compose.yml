@@ -91,8 +91,8 @@ services:
       - DEBUG=1
       - DATA_DIR=/data/localstack/data
       - DOCKER_HOST=unix:///var/run/docker.sock
-      - AWS_ACCESS_KEY_ID=test
-      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_ACCESS_KEY_ID=${LOCAL_TEST_KEY}
+      - AWS_SECRET_ACCESS_KEY=${LOCAL_TEST_KEY}
       - AWS_DEFAULT_REGION=us-east-1
     volumes:
       - ./data/localstack:/data/localstack
