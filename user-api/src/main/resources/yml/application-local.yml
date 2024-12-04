@@ -76,3 +76,5 @@ cloud:
     s3:
       bucket: ${LOCAL_STACK_BUCKET_NAME}
     # 동작하지 않는다면 http://localhost:4566 사용 및 LocalStackConfig 수정 필요
+    cloudfront:
+      domain: no-cdn
