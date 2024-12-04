@@ -14,6 +14,8 @@ import java.nio.file.StandardCopyOption;
 
 import javax.imageio.ImageIO;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import com.biengual.core.annotation.DataProvider;
 import com.biengual.core.response.error.exception.CommonException;
 import com.biengual.userapi.content.domain.ContentCustomRepository;
@@ -26,25 +28,27 @@ import software.amazon.awssdk.services.s3.S3Client;
 @DataProvider
 @RequiredArgsConstructor
 public class S3StoreImpl implements S3Store {
+    @Value("${localstack.bucket-name}")
+    private String bucketName;
+
     private final S3Client s3Client;
     private final ContentCustomRepository contentCustomRepository;
 
     @Override
-    public void putImageToS3(String bucket, Long contentId) {
+    public void putImageToS3(Long contentId) {
         String thumbnailUrl = contentCustomRepository.findThumbnailUrlById(contentId);
         Path tempFile = null;
         try {
             URL url = new URL(thumbnailUrl);
             tempFile = Files.createTempFile("temp", ".webp");
             Files.copy(url.openStream(), tempFile, StandardCopyOption.REPLACE_EXISTING);
-            this.uploadToS3(bucket, contentId, tempFile);
+            this.uploadToS3(bucketName, contentId, tempFile);
             Files.delete(tempFile);
 
         } catch (IOException e) {
             throw new CommonException(S3_STORE_FAILURE);
         }
     }
-
 
     // Internal Methods ================================================================================================
     private void uploadToS3(String bucket, Long contentId, Path tempFile) {
