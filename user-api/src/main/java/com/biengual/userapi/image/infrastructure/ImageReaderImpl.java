@@ -35,7 +35,7 @@ public class ImageReaderImpl implements ImageReader {
             return s3Client.utilities().getUrl(getUrlRequest).toString();
         }
 
-        return URI.create("https://" + cloudfrontDomain).resolve(key).toString();
+        return URI.create(cloudfrontDomain).resolve(key).toString();
     }
 
     // Internal Methods ================================================================================================
