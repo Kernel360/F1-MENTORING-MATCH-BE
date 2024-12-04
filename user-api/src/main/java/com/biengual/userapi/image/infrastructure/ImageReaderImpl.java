@@ -25,7 +25,7 @@ public class ImageReaderImpl implements ImageReader {
     private String activeProfile;
 
     @Override
-    public String getImageFromS3(Long contentId) {
+    public String getImage(Long contentId) {
         String key = this.generateKey(contentId);
         if (activeProfile.equals("local")) {  // Local 은 CDN 사용 X
             GetUrlRequest getUrlRequest = GetUrlRequest.builder()

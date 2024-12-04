@@ -43,7 +43,7 @@ public class ImageStoreImpl implements ImageStore {
     private final ContentCustomRepository contentCustomRepository;
 
     @Override
-    public void saveImageToS3(Long contentId) {
+    public void saveImage(Long contentId) {
         String thumbnailUrl = contentCustomRepository.findThumbnailUrlById(contentId);
         Path tempFile = null;
         try {
@@ -62,8 +62,8 @@ public class ImageStoreImpl implements ImageStore {
     public void saveAllImagesToS3() {
         List<ContentEntity> contents = contentRepository.findAll();
         for(ContentEntity content : contents) {
-            this.saveImageToS3(content.getId());
-            content.updateS3Url(imageReader.getImageFromS3(content.getId()));
+            this.saveImage(content.getId());
+            content.updateS3Url(imageReader.getImage(content.getId()));
         }
     }
 

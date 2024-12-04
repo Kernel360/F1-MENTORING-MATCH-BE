@@ -18,13 +18,13 @@ public class ImageServiceImpl implements ImageService {
     @Override
     @Transactional
     public void save(Long contentId) {
-        imageStore.saveImageToS3(contentId);
+        imageStore.saveImage(contentId);
     }
 
     @Override
     @Transactional(readOnly = true)
     public String getImage(Long contentId) {
-        return imageReader.getImageFromS3(contentId);
+        return imageReader.getImage(contentId);
     }
 
     // TODO: PROD 적용 후 삭제 예정

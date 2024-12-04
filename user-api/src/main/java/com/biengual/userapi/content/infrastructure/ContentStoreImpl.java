@@ -60,8 +60,8 @@ public class ContentStoreImpl implements ContentStore {
         contentRepository.save(content);
 
         // S3 에 프리뷰 를 위한 리사이징 이미지 저장
-        imageStore.saveImageToS3(content.getId());
-        content.updateS3Url(imageReader.getImageFromS3(content.getId()));
+        imageStore.saveImage(content.getId());
+        content.updateS3Url(imageReader.getImage(content.getId()));
 
         // Open Search 에 Content Search Data 저장
         ContentSearchDocument searchDocument = ContentSearchDocument.createdByContents(content, contentDocument);
