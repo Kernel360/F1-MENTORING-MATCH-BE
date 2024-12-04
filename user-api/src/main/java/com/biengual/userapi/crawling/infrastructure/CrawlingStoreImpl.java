@@ -309,7 +309,7 @@ public class CrawlingStoreImpl implements CrawlingStore {
             }
         }
 
-        return thumbnailInfo.get("url").asText();
+         return thumbnailInfo.get("url").asText();
     }
 
     private String getUrl(String videoId) {
@@ -351,7 +351,6 @@ public class CrawlingStoreImpl implements CrawlingStore {
     }
 
     // READING - CNN
-
     public CrawlingResponseDto.ContentDetailRes fetchArticle(String url) {
         Document doc = null;
         try {
@@ -369,6 +368,10 @@ public class CrawlingStoreImpl implements CrawlingStore {
 
         // 이미지 URL 추출
         Elements images = doc.select("img.image__dam-img[src]");
+        if(images.isEmpty()){
+            throw new CommonException(CRAWLING_JSOUP_FAILURE);
+        }
+
         String imgUrl = "%s.jpg".formatted(
             images.get(0).attr("src")
                 .split(".jpg")[0]

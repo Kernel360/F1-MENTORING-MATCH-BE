@@ -46,7 +46,6 @@ public class S3StoreImpl implements S3Store {
             Files.copy(url.openStream(), tempFile, StandardCopyOption.REPLACE_EXISTING);
             this.uploadToS3(contentId, tempFile);
             Files.delete(tempFile);
-
         } catch (IOException e) {
             throw new CommonException(S3_STORE_FAILURE);
         }

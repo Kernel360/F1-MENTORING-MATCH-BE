@@ -26,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/s3-test")
 @RequiredArgsConstructor
-@Tag(name = "S3 - 어드민 test API", description = "S3 어드민 테스트 용 API")
+@Tag(name = "S3 - private test API", description = "S3 어드민 테스트 용 API - 연결 X")
 public class S3ApiController {
     private final S3Service s3Service;
 

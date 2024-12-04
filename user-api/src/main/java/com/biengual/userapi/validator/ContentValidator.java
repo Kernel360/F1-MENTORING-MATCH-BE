@@ -1,13 +1,14 @@
 package com.biengual.userapi.validator;
 
+import static com.biengual.core.response.error.code.ContentErrorCode.*;
+
 import com.biengual.core.annotation.Validator;
 import com.biengual.core.domain.entity.content.ContentEntity;
 import com.biengual.core.response.error.exception.CommonException;
 import com.biengual.userapi.content.domain.ContentLevelFeedbackHistoryRepository;
 import com.biengual.userapi.payment.domain.PaymentContentHistoryRepository;
-import lombok.RequiredArgsConstructor;
 
-import static com.biengual.core.response.error.code.ContentErrorCode.*;
+import lombok.RequiredArgsConstructor;
 
 /**
  * Content 도메인의 검증을 위한 클래스

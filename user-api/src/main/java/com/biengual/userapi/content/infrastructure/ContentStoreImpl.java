@@ -27,6 +27,7 @@ import com.biengual.userapi.content.domain.ContentLevelFeedbackHistoryRepository
 import com.biengual.userapi.content.domain.ContentRepository;
 import com.biengual.userapi.content.domain.ContentSearchRepository;
 import com.biengual.userapi.content.domain.ContentStore;
+import com.biengual.userapi.s3.domain.S3Store;
 import com.biengual.userapi.validator.ContentValidator;
 
 import lombok.RequiredArgsConstructor;
@@ -42,6 +43,7 @@ public class ContentStoreImpl implements ContentStore {
     private final ContentLevelFeedbackDataMartRepository contentLevelFeedbackDataMartRepository;
     private final ContentValidator contentValidator;
     private final ContentSearchRepository contentSearchRepository;
+    private final S3Store s3Store;
 
     @Override
     public void createContent(ContentCommand.Create command) {
@@ -54,6 +56,9 @@ public class ContentStoreImpl implements ContentStore {
         // MySql 에 Content Info 저장
         ContentEntity content = command.toEntity(contentDocument.getId(), command.contentType(), category);
         contentRepository.save(content);
+
+        // S3 에 프리뷰 를 위한 리사이징 이미지 저장
+        s3Store.saveImageToS3(content.getId());
 
         // Open Search 에 Content Search Data 저장
         ContentSearchDocument searchDocument = ContentSearchDocument.createdByContents(content, contentDocument);
