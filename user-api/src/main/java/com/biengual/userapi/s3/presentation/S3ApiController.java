@@ -71,7 +71,7 @@ public class S3ApiController {
 
     // TODO: PROD 까지 적용 되면 관련 메서드 모두 삭제 예정
     @PostMapping("/save-all-content")
-    @Operation(summary = "S3 데이터 저장 테스트", description = "S3 데이터 저장 테스트")
+    @Operation(summary = "기존 컨텐츠 이미지 S3 데이터 저장 - 일회용", description = "S3 데이터 저장 테스트")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "S3 데이터 저장 성공",
             content = {

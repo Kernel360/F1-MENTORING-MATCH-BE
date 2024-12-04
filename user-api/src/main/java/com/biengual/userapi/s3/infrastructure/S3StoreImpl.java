@@ -19,8 +19,11 @@ import javax.imageio.ImageIO;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.biengual.core.annotation.DataProvider;
+import com.biengual.core.domain.entity.content.ContentEntity;
 import com.biengual.core.response.error.exception.CommonException;
 import com.biengual.userapi.content.domain.ContentCustomRepository;
+import com.biengual.userapi.content.domain.ContentRepository;
+import com.biengual.userapi.s3.domain.S3Reader;
 import com.biengual.userapi.s3.domain.S3Store;
 
 import lombok.RequiredArgsConstructor;
@@ -34,6 +37,8 @@ public class S3StoreImpl implements S3Store {
     private String bucketName;
 
     private final S3Client s3Client;
+    private final S3Reader s3Reader;      // TODO: 삭제 예정
+    private final ContentRepository contentRepository;
     private final ContentCustomRepository contentCustomRepository;
 
     @Override
@@ -51,11 +56,13 @@ public class S3StoreImpl implements S3Store {
         }
     }
 
+    // TODO: PROD 까지 적용 후 관련 메서드 모두 삭제 예정
     @Override
     public void saveAllImagesToS3() {
-        List<Long> contentIds = contentCustomRepository.findAllContentId();
-        for(Long contentId : contentIds) {
-            this.saveImageToS3(contentId);
+        List<ContentEntity> contents = contentRepository.findAll();
+        for(ContentEntity content : contents) {
+            this.saveImageToS3(content.getId());
+            content.updateS3Url(s3Reader.getImageFromS3(content.getId()));
         }
     }
 
