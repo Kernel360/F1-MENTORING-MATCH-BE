@@ -65,10 +65,11 @@ opensearch:
   protocol: ${OPEN_SEARCH_HTTP_PROTOCOL}
   username: ${OPEN_SEARCH_ROOT_USERNAME} # OpenSearch 기본 관리자 계정 (보안 플러그인 활성화 시)
   password: ${OPEN_SEARCH_ROOT_USERNAME} # OpenSearch 기본 비밀번호 (보안 플러그인 활성화 시)
+  index: ${OPEN_SEARCH_LOCAL_INDEX}
 
 localstack:
-  access-key : "biengual-local-s3-access"
-  secret-key : "biengual-local-s3-secret"
+  access-key: "biengual-local-s3-access"
+  secret-key: "biengual-local-s3-secret"
 cloud:
   aws:
     endpoint: localhost:4566
