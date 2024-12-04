@@ -109,7 +109,7 @@ public class CrawlingStoreImpl implements CrawlingStore {
             .imgUrl(getThumbnailUrl(snippetNode.path("thumbnails")))
             .category(category)
             .contentType(ContentType.LISTENING)
-            .videoDuration((int) duration.getSeconds())
+            .videoDuration((int)duration.getSeconds())
             .script(scripts)
             .build();
     }
@@ -309,7 +309,7 @@ public class CrawlingStoreImpl implements CrawlingStore {
             }
         }
 
-         return thumbnailInfo.get("url").asText();
+        return thumbnailInfo.get("url").asText();
     }
 
     private String getUrl(String videoId) {
@@ -368,7 +368,7 @@ public class CrawlingStoreImpl implements CrawlingStore {
 
         // 이미지 URL 추출
         Elements images = doc.select("img.image__dam-img[src]");
-        if(images.isEmpty()){
+        if (images.isEmpty()) {
             throw new CommonException(CRAWLING_JSOUP_FAILURE);
         }
 
