@@ -33,7 +33,7 @@ public class S3ApiController {
     @PostMapping("/post")
     @Operation(summary = "S3 데이터 저장 테스트", description = "S3 데이터 저장 테스트")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "S3 데이터 저장 성공",
+        @ApiResponse(responseCode = "201", description = "S3 데이터 저장 성공",
             content = {
                 @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerVoidReturn.class))
             }
