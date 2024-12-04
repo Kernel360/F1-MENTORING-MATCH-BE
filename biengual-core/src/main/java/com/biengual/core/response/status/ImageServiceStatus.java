@@ -3,14 +3,14 @@ package com.biengual.core.response.status;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public enum S3ServiceStatus implements ServiceStatus {
+public enum ImageServiceStatus implements ServiceStatus {
     // success
-    S3_STORE_SUCCESS("U-S3-001"),
-    S3_READ_SUCCESS("U-S3-002"),
+    IMAGE_STORE_SUCCESS("U-I-001"),
+    IMAGE_READ_SUCCESS("U-I-002"),
 
     // failure
-    S3_STORE_FAILURE("U-S3-901"),
-    S3_READ_FAILURE("U-S3-902");
+    IMAGE_STORE_FAILURE("U-I-901"),
+    IMAGE_READ_FAILURE("U-I-902");
 
     private final String code;
 

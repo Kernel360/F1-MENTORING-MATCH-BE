@@ -1,6 +1,6 @@
-package com.biengual.userapi.s3.domain;
+package com.biengual.userapi.image.domain;
 
-public interface S3Store {
+public interface ImageStore {
     void saveImageToS3(Long contentId);
 
     void saveAllImagesToS3();

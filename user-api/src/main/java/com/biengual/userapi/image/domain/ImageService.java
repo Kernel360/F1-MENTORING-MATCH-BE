@@ -1,6 +1,6 @@
-package com.biengual.userapi.s3.domain;
+package com.biengual.userapi.image.domain;
 
-public interface S3Service {
+public interface ImageService {
     void saveToS3(Long contentId);
 
     String getImageFromS3(Long contentId);

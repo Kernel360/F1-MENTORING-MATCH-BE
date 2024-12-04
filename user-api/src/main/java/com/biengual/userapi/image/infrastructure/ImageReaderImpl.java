@@ -1,4 +1,4 @@
-package com.biengual.userapi.s3.infrastructure;
+package com.biengual.userapi.image.infrastructure;
 
 import static com.biengual.core.constant.ServiceConstant.*;
 
@@ -7,7 +7,7 @@ import java.net.URI;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.biengual.core.annotation.DataProvider;
-import com.biengual.userapi.s3.domain.S3Reader;
+import com.biengual.userapi.image.domain.ImageReader;
 
 import lombok.RequiredArgsConstructor;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -15,7 +15,7 @@ import software.amazon.awssdk.services.s3.model.GetUrlRequest;
 
 @DataProvider
 @RequiredArgsConstructor
-public class S3ReaderImpl implements S3Reader {
+public class ImageReaderImpl implements ImageReader {
     private final S3Client s3Client;
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;

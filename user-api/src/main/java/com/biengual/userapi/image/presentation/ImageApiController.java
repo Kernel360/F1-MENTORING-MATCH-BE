@@ -1,6 +1,6 @@
-package com.biengual.userapi.s3.presentation;
+package com.biengual.userapi.image.presentation;
 
-import static com.biengual.core.response.success.S3SuccessCode.*;
+import static com.biengual.core.response.success.ImageSuccessCode.*;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.biengual.core.response.ResponseEntityFactory;
 import com.biengual.core.swagger.SwaggerStringReturn;
 import com.biengual.core.swagger.SwaggerVoidReturn;
-import com.biengual.userapi.s3.domain.S3Service;
+import com.biengual.userapi.image.domain.ImageService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -27,8 +27,8 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/s3-test")
 @RequiredArgsConstructor
 @Tag(name = "S3 - private test API", description = "S3 어드민 테스트 용 API - 연결 X")
-public class S3ApiController {
-    private final S3Service s3Service;
+public class ImageApiController {
+    private final ImageService imageService;
 
     @PostMapping("/post")
     @Operation(summary = "S3 데이터 저장 테스트", description = "S3 데이터 저장 테스트")
@@ -45,8 +45,8 @@ public class S3ApiController {
         @RequestParam
         Long contentId
     ) {
-        s3Service.saveToS3(contentId);
-        return ResponseEntityFactory.toResponseEntity(S3_STORE_SUCCESS);
+        imageService.saveToS3(contentId);
+        return ResponseEntityFactory.toResponseEntity(IMAGE_STORE_SUCCESS);
     }
 
     @GetMapping("/get/{contentId}")
@@ -64,8 +64,8 @@ public class S3ApiController {
         @PathVariable
         Long contentId
     ) {
-        String imageUrlFromS3 = s3Service.getImageFromS3(contentId);
-        return ResponseEntityFactory.toResponseEntity(S3_READ_SUCCESS, imageUrlFromS3);
+        String imageUrlFromS3 = imageService.getImageFromS3(contentId);
+        return ResponseEntityFactory.toResponseEntity(IMAGE_READ_SUCCESS, imageUrlFromS3);
     }
 
 
@@ -82,8 +82,8 @@ public class S3ApiController {
         @ApiResponse(responseCode = "500", description = "서버 에러", content = @Content(mediaType = "application/json"))
     })
     public ResponseEntity<Object> saveAllImageToS3() {
-        s3Service.saveAllToS3();
-        return ResponseEntityFactory.toResponseEntity(S3_STORE_SUCCESS);
+        imageService.saveAllToS3();
+        return ResponseEntityFactory.toResponseEntity(IMAGE_STORE_SUCCESS);
     }
 }
 
