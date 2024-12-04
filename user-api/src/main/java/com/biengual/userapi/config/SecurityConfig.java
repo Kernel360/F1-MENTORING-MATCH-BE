@@ -70,6 +70,7 @@ public class SecurityConfig {
                     // Can access form ANONYMOUS
                     .requestMatchers(HttpMethod.GET, "/api/contents/view/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/contents/search/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/contents/accurate-search/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/contents/preview/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/categories/all").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/categories/type/**").permitAll()
