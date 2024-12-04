@@ -79,3 +79,23 @@ services:
       - "5601:5601" # Dashboards UI 포트 매핑
     networks:
       - echall-network
+
+  # LocalStack - S3 로컬 테스트
+  localstack:
+    image: localstack/localstack:latest
+    container_name: echall-localstack
+    ports:
+      - "4566:4566"
+    environment:
+      - SERVICES=s3
+      - DEBUG=1
+      - DATA_DIR=/data/localstack/data
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      - AWS_ACCESS_KEY_ID=${LOCAL_TEST_KEY}
+      - AWS_SECRET_ACCESS_KEY=${LOCAL_TEST_KEY}
+      - AWS_DEFAULT_REGION=us-east-1
+    volumes:
+      - ./data/localstack:/data/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - echall-network

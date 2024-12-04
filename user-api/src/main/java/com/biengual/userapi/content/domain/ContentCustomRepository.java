@@ -75,6 +75,14 @@ public class ContentCustomRepository {
             .fetchFirst() != null;
     }
 
+    public String findThumbnailUrlById(Long contentId) {
+        return queryFactory
+            .select(contentEntity.thumbnailUrl)
+            .from(contentEntity)
+            .where(contentEntity.id.eq(contentId))
+            .fetchOne();
+    }
+
     // 상세 조회에 따른 조회수 + 1 을 위하 쿼리
     public void increaseHitsByContentId(Long contentId) {
         queryFactory
@@ -107,7 +115,7 @@ public class ContentCustomRepository {
                     ContentInfo.PreviewContent.class,
                     contentEntity.id,
                     contentEntity.title,
-                    contentEntity.thumbnailUrl,
+                    contentEntity.s3Url,
                     contentEntity.contentType,
                     contentEntity.preScripts,
                     contentEntity.category.name,
@@ -215,7 +223,7 @@ public class ContentCustomRepository {
                     RecommenderInfo.Preview.class,
                     contentEntity.id,
                     contentEntity.title,
-                    contentEntity.thumbnailUrl,
+                    contentEntity.s3Url,
                     contentEntity.contentType,
                     contentEntity.category.name,
                     contentEntity.contentLevel,
@@ -244,7 +252,7 @@ public class ContentCustomRepository {
                         RecommenderInfo.Preview.class,
                         contentEntity.id,
                         contentEntity.title,
-                        contentEntity.thumbnailUrl,
+                        contentEntity.s3Url,
                         contentEntity.contentType,
                         contentEntity.category.name,
                         contentEntity.contentLevel,
@@ -272,7 +280,7 @@ public class ContentCustomRepository {
                     RecommenderInfo.Preview.class,
                     contentEntity.id,
                     contentEntity.title,
-                    contentEntity.thumbnailUrl,
+                    contentEntity.s3Url,
                     contentEntity.contentType,
                     contentEntity.category.name,
                     contentEntity.contentLevel,
@@ -296,7 +304,7 @@ public class ContentCustomRepository {
                     ContentInfo.PreviewContent.class,
                     contentEntity.id,
                     contentEntity.title,
-                    contentEntity.thumbnailUrl,
+                    contentEntity.s3Url,
                     contentEntity.contentType,
                     contentEntity.preScripts,
                     contentEntity.category.name,
@@ -334,7 +342,7 @@ public class ContentCustomRepository {
                     ContentInfo.PreviewContent.class,
                     contentEntity.id,
                     contentEntity.title,
-                    contentEntity.thumbnailUrl,
+                    contentEntity.s3Url,
                     contentEntity.contentType,
                     contentEntity.preScripts,
                     contentEntity.category.name,
@@ -421,7 +429,7 @@ public class ContentCustomRepository {
                     ContentInfo.PreviewContent.class,
                     contentEntity.id,
                     contentEntity.title,
-                    contentEntity.thumbnailUrl,
+                    contentEntity.s3Url,
                     contentEntity.contentType,
                     contentEntity.preScripts,
                     contentEntity.category.name,
@@ -619,7 +627,7 @@ public class ContentCustomRepository {
             .select(paymentContentHistoryEntity)
             .from(paymentContentHistoryEntity)
             .where(
-                    paymentContentHistoryEntity.contentId.eq(contentId)
+                paymentContentHistoryEntity.contentId.eq(contentId)
                     .and(paymentContentHistoryEntity.userId.eq(userId))
             )
             .notExists()

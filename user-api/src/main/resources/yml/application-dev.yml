@@ -68,3 +68,17 @@ opensearch:
   username: ${OPEN_SEARCH_ROOT_USERNAME}
   password: ${OPEN_SEARCH_ROOT_PASSWORD}
   index: ${OPEN_SEARCH_DEV_INDEX}
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${S3_DEV_ACCESS_KEY}
+      secret-key: ${S3_DEV_PRIVATE_KEY}
+    region:
+      static: ${S3_DEV_REGION}
+    stack:
+      auto: false
+    s3:
+      bucket: ${S3_DEV_BUCKET_NAME}
+    cloudfront:
+      domain: ${CDN_DOMAIN_NAME}
