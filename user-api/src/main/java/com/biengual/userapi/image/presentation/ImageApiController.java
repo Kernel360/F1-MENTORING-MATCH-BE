@@ -23,6 +23,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
+// TODO: PROD 연결 완료 및 테스트 후에는 LocalStack 용 API 이므로 Profile 설정할 것
 @RestController
 @RequestMapping("/api/s3-test")
 @RequiredArgsConstructor
