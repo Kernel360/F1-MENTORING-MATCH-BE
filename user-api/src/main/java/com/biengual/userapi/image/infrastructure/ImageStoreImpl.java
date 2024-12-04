@@ -73,9 +73,11 @@ public class ImageStoreImpl implements ImageStore {
 
         // S3 업로드
         String key = this.generateKey(contentId);
+
         s3Client.putObject(builder -> builder
                 .bucket(bucketName)
                 .key(key)
+                .cacheControl("max-age=7200")
                 .contentType("image/webp"),
             RequestBody.fromBytes(resizedImage)
         );
