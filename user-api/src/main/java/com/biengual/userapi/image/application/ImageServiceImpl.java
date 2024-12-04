@@ -17,16 +17,17 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     @Transactional
-    public void saveToS3(Long contentId) {
+    public void save(Long contentId) {
         imageStore.saveImageToS3(contentId);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public String getImageFromS3(Long contentId) {
+    public String getImage(Long contentId) {
         return imageReader.getImageFromS3(contentId);
     }
 
+    // TODO: PROD 적용 후 삭제 예정
     @Override
     @Transactional
     public void saveAllToS3() {

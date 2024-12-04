@@ -45,7 +45,7 @@ public class ImageApiController {
         @RequestParam
         Long contentId
     ) {
-        imageService.saveToS3(contentId);
+        imageService.save(contentId);
         return ResponseEntityFactory.toResponseEntity(IMAGE_STORE_SUCCESS);
     }
 
@@ -64,7 +64,7 @@ public class ImageApiController {
         @PathVariable
         Long contentId
     ) {
-        String imageUrlFromS3 = imageService.getImageFromS3(contentId);
+        String imageUrlFromS3 = imageService.getImage(contentId);
         return ResponseEntityFactory.toResponseEntity(IMAGE_READ_SUCCESS, imageUrlFromS3);
     }
 
