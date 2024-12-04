@@ -34,13 +34,12 @@ import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 @DataProvider
 @RequiredArgsConstructor
 public class ImageStoreImpl implements ImageStore {
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucketName;
-
     private final S3Client s3Client;
     private final ImageReader imageReader;      // TODO: 삭제 예정
     private final ContentRepository contentRepository;
     private final ContentCustomRepository contentCustomRepository;
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucketName;
 
     @Override
     public void saveImage(Long contentId) {
@@ -61,7 +60,7 @@ public class ImageStoreImpl implements ImageStore {
     @Override
     public void saveAllImagesToS3() {
         List<ContentEntity> contents = contentRepository.findAll();
-        for(ContentEntity content : contents) {
+        for (ContentEntity content : contents) {
             this.saveImage(content.getId());
             content.updateS3Url(imageReader.getImage(content.getId()));
         }
@@ -100,7 +99,8 @@ public class ImageStoreImpl implements ImageStore {
         // 원본 크기 및 비율 계산
         int originalWidth = originalImage.getWidth();
         int originalHeight = originalImage.getHeight();
-        double scale = Math.min((double)IMAGE_RESIZED_SIZE / originalWidth, (double)IMAGE_RESIZED_SIZE / originalHeight);
+        double scale = Math.min((double)IMAGE_RESIZED_SIZE / originalWidth,
+            (double)IMAGE_RESIZED_SIZE / originalHeight);
         int targetWidth = (int)(originalWidth * scale);
         int targetHeight = (int)(originalHeight * scale);
 
@@ -136,6 +136,6 @@ public class ImageStoreImpl implements ImageStore {
     }
 
     private String generateKey(Long contentId) {
-        return "content-" + contentId + "/size-" + IMAGE_RESIZED_SIZE + ".webp";
+        return "content" + "/content-" + contentId + "/size-" + IMAGE_RESIZED_SIZE + ".webp";
     }
 }

@@ -40,6 +40,6 @@ public class ImageReaderImpl implements ImageReader {
 
     // Internal Methods ================================================================================================
     private String generateKey(Long contentId) {
-        return "content-" + contentId + "/size-" + IMAGE_RESIZED_SIZE + ".webp";
+        return "content" + "/content-" + contentId + "/size-" + IMAGE_RESIZED_SIZE + ".webp";
     }
 }
