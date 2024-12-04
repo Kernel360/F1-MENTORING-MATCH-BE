@@ -130,6 +130,9 @@ dependencies {
 
     // WebP
     implementation 'org.sejda.imageio:webp-imageio:0.1.6'
+
+    // S3
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 }
 
 def querydslDir = "$buildDir/generated/querydsl"

@@ -17,7 +17,7 @@ import software.amazon.awssdk.services.s3.model.S3Exception;
 public class LocalStackImageConfig {
     private final S3Client s3Client;
 
-    @Value("${localstack.bucket-name}")
+    @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
 
     @PostConstruct

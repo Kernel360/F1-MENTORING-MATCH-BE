@@ -28,7 +28,7 @@ import software.amazon.awssdk.services.s3.S3Client;
 @DataProvider
 @RequiredArgsConstructor
 public class S3StoreImpl implements S3Store {
-    @Value("${localstack.bucket-name}")
+    @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
 
     private final S3Client s3Client;
@@ -42,7 +42,7 @@ public class S3StoreImpl implements S3Store {
             URL url = new URL(thumbnailUrl);
             tempFile = Files.createTempFile("temp", ".webp");
             Files.copy(url.openStream(), tempFile, StandardCopyOption.REPLACE_EXISTING);
-            this.uploadToS3(bucketName, contentId, tempFile);
+            this.uploadToS3(contentId, tempFile);
             Files.delete(tempFile);
 
         } catch (IOException e) {
@@ -51,7 +51,7 @@ public class S3StoreImpl implements S3Store {
     }
 
     // Internal Methods ================================================================================================
-    private void uploadToS3(String bucket, Long contentId, Path tempFile) {
+    private void uploadToS3(Long contentId, Path tempFile) {
         int[] sizes = {360, 480};
         for (int maxSize : sizes) {
             // 비율에 맞게 변환된 이미지 생성
@@ -60,7 +60,7 @@ public class S3StoreImpl implements S3Store {
             // S3 업로드
             String key = this.generateKey(contentId, maxSize); // maxSize로 구분
             s3Client.putObject(builder -> builder
-                    .bucket(bucket)
+                    .bucket(bucketName)
                     .key(key)
                     .contentType("image/webp"),
                 RequestBody.fromBytes(resizedImage)
