@@ -18,12 +18,18 @@ public class S3ServiceImpl implements S3Service {
     @Override
     @Transactional
     public void saveToS3(Long contentId) {
-        s3Store.putImageToS3(contentId);
+        s3Store.saveImageToS3(contentId);
     }
 
     @Override
     @Transactional(readOnly = true)
     public String getImageFromS3(Long contentId) {
-        return s3Reader.getImageFromS3(contentId, 480);
+        return s3Reader.getImageFromS3(contentId);
+    }
+
+    @Override
+    @Transactional
+    public void saveAllToS3() {
+        s3Store.saveAllImagesToS3();
     }
 }

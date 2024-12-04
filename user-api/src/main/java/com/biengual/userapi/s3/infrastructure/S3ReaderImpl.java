@@ -1,5 +1,7 @@
 package com.biengual.userapi.s3.infrastructure;
 
+import static com.biengual.core.constant.ServiceConstant.*;
+
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -14,21 +16,18 @@ import software.amazon.awssdk.services.s3.model.GetUrlRequest;
 @DataProvider
 @RequiredArgsConstructor
 public class S3ReaderImpl implements S3Reader {
+    private final S3Client s3Client;
     @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
     @Value("${cloud.aws.cloudfront.domain}")
     private String cloudfrontDomain;
-
     @Value("${spring.profiles.active:}")
     private String activeProfile;
 
-    private final S3Client s3Client;
-
     @Override
-    public String getImageFromS3(Long contentId, int size) {
-        String key = this.generateKey(contentId, size);
-
-        if(activeProfile.equals("local")){  // Local 은 CDN 사용 X
+    public String getImageFromS3(Long contentId) {
+        String key = this.generateKey(contentId);
+        if (activeProfile.equals("local")) {  // Local 은 CDN 사용 X
             GetUrlRequest getUrlRequest = GetUrlRequest.builder()
                 .bucket(bucketName)
                 .key(key)
@@ -40,7 +39,7 @@ public class S3ReaderImpl implements S3Reader {
     }
 
     // Internal Methods ================================================================================================
-    private String generateKey(Long contentId, int size) {
-        return "content-" + contentId + "/size-" + size + ".webp";
+    private String generateKey(Long contentId) {
+        return "content-" + contentId + "/size-" + IMAGE_RESIZED_SIZE + ".webp";
     }
 }

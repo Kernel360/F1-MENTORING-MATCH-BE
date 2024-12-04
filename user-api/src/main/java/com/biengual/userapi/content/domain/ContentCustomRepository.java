@@ -83,6 +83,13 @@ public class ContentCustomRepository {
             .fetchOne();
     }
 
+    public List<Long> findAllContentId(){
+        return queryFactory
+            .select(contentEntity.id)
+            .from(contentEntity)
+            .fetch();
+    }
+
     // 상세 조회에 따른 조회수 + 1 을 위하 쿼리
     public void increaseHitsByContentId(Long contentId) {
         queryFactory

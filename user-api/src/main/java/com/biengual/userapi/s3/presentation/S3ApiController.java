@@ -26,11 +26,11 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/s3-test")
 @RequiredArgsConstructor
-@Tag(name = "S3 - test API", description = "S3 테스트용 API")
-public class S3TestController {
+@Tag(name = "S3 - 어드민 test API", description = "S3 어드민 테스트 용 API")
+public class S3ApiController {
     private final S3Service s3Service;
 
-    @PostMapping("/put")
+    @PostMapping("/post")
     @Operation(summary = "S3 데이터 저장 테스트", description = "S3 데이터 저장 테스트")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "S3 데이터 저장 성공",
@@ -41,7 +41,7 @@ public class S3TestController {
         @ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
         @ApiResponse(responseCode = "500", description = "서버 에러", content = @Content(mediaType = "application/json"))
     })
-    public ResponseEntity<Object> saveImageToLocalStack(
+    public ResponseEntity<Object> saveImageToS3(
         @RequestParam
         Long contentId
     ) {
@@ -60,12 +60,30 @@ public class S3TestController {
         @ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
         @ApiResponse(responseCode = "500", description = "서버 에러", content = @Content(mediaType = "application/json"))
     })
-    public ResponseEntity<Object> getImageToLocalStack(
+    public ResponseEntity<Object> getImageToS3(
         @PathVariable
         Long contentId
     ) {
         String imageUrlFromS3 = s3Service.getImageFromS3(contentId);
         return ResponseEntityFactory.toResponseEntity(S3_READ_SUCCESS, imageUrlFromS3);
+    }
+
+
+    // TODO: PROD 까지 적용 되면 관련 메서드 모두 삭제 예정
+    @PostMapping("/save-all-content")
+    @Operation(summary = "S3 데이터 저장 테스트", description = "S3 데이터 저장 테스트")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "S3 데이터 저장 성공",
+            content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerVoidReturn.class))
+            }
+        ),
+        @ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "500", description = "서버 에러", content = @Content(mediaType = "application/json"))
+    })
+    public ResponseEntity<Object> saveAllImageToS3() {
+        s3Service.saveAllToS3();
+        return ResponseEntityFactory.toResponseEntity(S3_STORE_SUCCESS);
     }
 }
 

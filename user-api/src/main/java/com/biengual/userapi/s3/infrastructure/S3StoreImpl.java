@@ -1,5 +1,6 @@
 package com.biengual.userapi.s3.infrastructure;
 
+import static com.biengual.core.constant.ServiceConstant.*;
 import static com.biengual.core.response.error.code.S3ErrorCode.*;
 
 import java.awt.*;
@@ -11,6 +12,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -35,7 +37,7 @@ public class S3StoreImpl implements S3Store {
     private final ContentCustomRepository contentCustomRepository;
 
     @Override
-    public void putImageToS3(Long contentId) {
+    public void saveImageToS3(Long contentId) {
         String thumbnailUrl = contentCustomRepository.findThumbnailUrlById(contentId);
         Path tempFile = null;
         try {
@@ -50,25 +52,31 @@ public class S3StoreImpl implements S3Store {
         }
     }
 
-    // Internal Methods ================================================================================================
-    private void uploadToS3(Long contentId, Path tempFile) {
-        int[] sizes = {360, 480};
-        for (int maxSize : sizes) {
-            // 비율에 맞게 변환된 이미지 생성
-            byte[] resizedImage = this.convertAndResizeImage(tempFile.toFile(), maxSize);
-
-            // S3 업로드
-            String key = this.generateKey(contentId, maxSize); // maxSize로 구분
-            s3Client.putObject(builder -> builder
-                    .bucket(bucketName)
-                    .key(key)
-                    .contentType("image/webp"),
-                RequestBody.fromBytes(resizedImage)
-            );
+    @Override
+    public void saveAllImagesToS3() {
+        List<Long> contentIds = contentCustomRepository.findAllContentId();
+        for(Long contentId : contentIds) {
+            this.saveImageToS3(contentId);
         }
     }
 
-    private byte[] convertAndResizeImage(File inputFile, int maxSize) {
+    // Internal Methods ================================================================================================
+    private void uploadToS3(Long contentId, Path tempFile) {
+        // 비율에 맞게 변환된 이미지 생성
+        byte[] resizedImage = this.convertAndResizeImage(tempFile.toFile());
+
+        // S3 업로드
+        String key = this.generateKey(contentId);
+        s3Client.putObject(builder -> builder
+                .bucket(bucketName)
+                .key(key)
+                .contentType("image/webp"),
+            RequestBody.fromBytes(resizedImage)
+        );
+
+    }
+
+    private byte[] convertAndResizeImage(File inputFile) {
         BufferedImage originalImage = null;
         try {
             originalImage = ImageIO.read(inputFile);
@@ -82,7 +90,7 @@ public class S3StoreImpl implements S3Store {
         // 원본 크기 및 비율 계산
         int originalWidth = originalImage.getWidth();
         int originalHeight = originalImage.getHeight();
-        double scale = Math.min((double)maxSize / originalWidth, (double)maxSize / originalHeight);
+        double scale = Math.min((double)IMAGE_RESIZED_SIZE / originalWidth, (double)IMAGE_RESIZED_SIZE / originalHeight);
         int targetWidth = (int)(originalWidth * scale);
         int targetHeight = (int)(originalHeight * scale);
 
@@ -117,7 +125,7 @@ public class S3StoreImpl implements S3Store {
         return resizedImage;
     }
 
-    private String generateKey(Long contentId, int size) {
-        return "content-" + contentId + "/size-" + size + ".webp";
+    private String generateKey(Long contentId) {
+        return "content-" + contentId + "/size-" + IMAGE_RESIZED_SIZE + ".webp";
     }
 }
