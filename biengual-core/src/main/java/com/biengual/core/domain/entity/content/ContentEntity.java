@@ -57,6 +57,9 @@ public class ContentEntity extends BaseEntity {
 	@Column(columnDefinition = "varchar(255)")
 	private String thumbnailUrl;
 
+	@Column(columnDefinition = "varchar(255)")
+	private String s3Url;
+
 	@Size(max = 255)
 	@Column(nullable = false, columnDefinition = "varchar(255)")
 	private String preScripts;
@@ -145,5 +148,9 @@ public class ContentEntity extends BaseEntity {
 			content = content.substring(0, content.length() - 1);
 		}
 		return (content.length() > maxLength) ? content.substring(0, maxLength) : content;
+	}
+
+	public void updateS3Url(String s3Url) {
+		this.s3Url = s3Url;
 	}
 }

@@ -72,7 +72,6 @@ public class S3StoreImpl implements S3Store {
                 .contentType("image/webp"),
             RequestBody.fromBytes(resizedImage)
         );
-
     }
 
     private byte[] convertAndResizeImage(File inputFile) {
