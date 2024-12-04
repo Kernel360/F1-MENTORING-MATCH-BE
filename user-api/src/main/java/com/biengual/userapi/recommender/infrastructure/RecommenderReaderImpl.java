@@ -10,7 +10,6 @@ import java.util.Map;
 import com.biengual.core.annotation.DataProvider;
 import com.biengual.core.domain.entity.learning.CategoryLearningProgressEntity;
 import com.biengual.core.util.PeriodUtil;
-import com.biengual.userapi.category.domain.CategoryRepository;
 import com.biengual.userapi.recommender.domain.CategoryLearningProgressRepository;
 import com.biengual.userapi.recommender.domain.RecommenderCustomRepository;
 import com.biengual.userapi.recommender.domain.RecommenderInfo;
@@ -37,7 +36,7 @@ public class RecommenderReaderImpl implements RecommenderReader {
 
     // 컨텐츠 추천에 사용할 벡터를 찾는 메서드
     @Override
-    public RecommenderInfo.ContentRecommenderVector findContentRecommenderVector(int vectorSize) {
+    public RecommenderInfo.ContentRecommenderMetric findContentRecommenderVector(int vectorSize) {
         List<CategoryLearningProgressEntity> categoryLearningProgressList = categoryLearningProgressRepository.findAll();
 
         Map<Long, Long[]> vectorMap = new HashMap<>();
@@ -58,6 +57,6 @@ public class RecommenderReaderImpl implements RecommenderReader {
             vectorMap.put(userId, vector);
         }
 
-        return RecommenderInfo.ContentRecommenderVector.of(vectorMap);
+        return RecommenderInfo.ContentRecommenderMetric.of(vectorMap);
     }
 }

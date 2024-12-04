@@ -68,11 +68,11 @@ public class RecommenderInfo {
     }
 
     @Builder
-    public record ContentRecommenderVector(
+    public record ContentRecommenderMetric(
        Map<Long, Long[]> vectorMap
     ) {
-        public static ContentRecommenderVector of(Map<Long, Long[]> vectorMap) {
-            return ContentRecommenderVector.builder()
+        public static ContentRecommenderMetric of(Map<Long, Long[]> vectorMap) {
+            return ContentRecommenderMetric.builder()
                 .vectorMap(vectorMap)
                 .build();
         }
