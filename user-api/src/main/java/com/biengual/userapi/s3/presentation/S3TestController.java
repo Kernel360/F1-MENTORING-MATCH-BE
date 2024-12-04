@@ -1,6 +1,6 @@
 package com.biengual.userapi.s3.presentation;
 
-import static com.biengual.core.response.success.ContentSuccessCode.*;
+import static com.biengual.core.response.success.S3SuccessCode.*;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.biengual.core.response.ResponseEntityFactory;
+import com.biengual.core.swagger.SwaggerStringReturn;
 import com.biengual.core.swagger.SwaggerVoidReturn;
 import com.biengual.userapi.s3.domain.S3Service;
 
@@ -45,7 +46,7 @@ public class S3TestController {
         Long contentId
     ) {
         s3Service.saveToS3(contentId);
-        return ResponseEntityFactory.toResponseEntity(CONTENT_CREATE_SUCCESS);
+        return ResponseEntityFactory.toResponseEntity(S3_STORE_SUCCESS);
     }
 
     @GetMapping("/get/{contentId}")
@@ -53,7 +54,7 @@ public class S3TestController {
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "S3 데이터 조회 성공",
             content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerVoidReturn.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerStringReturn.class))
             }
         ),
         @ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
@@ -64,7 +65,7 @@ public class S3TestController {
         Long contentId
     ) {
         String imageUrlFromS3 = s3Service.getImageFromS3(contentId);
-        return ResponseEntityFactory.toResponseEntity(CONTENT_CREATE_SUCCESS, imageUrlFromS3);
+        return ResponseEntityFactory.toResponseEntity(S3_READ_SUCCESS, imageUrlFromS3);
     }
 }
 
