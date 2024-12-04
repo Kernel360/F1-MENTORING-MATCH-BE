@@ -81,17 +81,20 @@ public class ContentRecommender {
 
         List<Long> targetUserCategoryIdList = userCategoryCustomRepository.findAllMyRegisteredCategoryId(userId);
 
-        if (targetUserCategoryIdList.size() >= 1) {
-            List<Long> popularContentIdList =
+        if (!targetUserCategoryIdList.isEmpty()) {
+            recommendedContentIdList.addAll(
                 contentCustomRepository
-                    .findPopularContentIdsInCategoryIdsWithLimit(targetUserCategoryIdList, requiredContentCount);
-
-            recommendedContentIdList.addAll(popularContentIdList);
+                    .findPopularContentIdsInCategoryIdsWithLimit(targetUserCategoryIdList, requiredContentCount)
+            );
         }
 
         if (recommendedContentIdList.size() == 9) {
             return recommendedContentIdList;
         }
+
+        requiredContentCount = 9 - recommendedContentIdList.size();
+
+        recommendedContentIdList.addAll(contentCustomRepository.findPopularContentIdsWithLimit(requiredContentCount));
 
         return recommendedContentIdList;
     }

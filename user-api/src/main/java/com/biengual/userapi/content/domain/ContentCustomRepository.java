@@ -285,12 +285,22 @@ public class ContentCustomRepository {
             .fetch();
     }
 
-    // 최대 limit 만큼 카테고리에 해당하는 Content Id를 조회수 순으로 조회하는 쿼리
+    // 입력 Category를 가지는 Content Id를 조회수 순으로 최대 limit 만큼 조회하는 쿼리
     public List<Long> findPopularContentIdsInCategoryIdsWithLimit(List<Long> categoryIds, int limit) {
         return queryFactory
             .select(contentEntity.id)
             .from(contentEntity)
             .where(contentEntity.category.id.in(categoryIds))
+            .orderBy(contentEntity.hits.desc())
+            .limit(limit)
+            .fetch();
+    }
+
+    // Content Id를 조회수 순으로 최대 limit 만큼 조회하는 쿼리
+    public List<Long> findPopularContentIdsWithLimit(int limit) {
+        return queryFactory
+            .select(contentEntity.id)
+            .from(contentEntity)
             .orderBy(contentEntity.hits.desc())
             .limit(limit)
             .fetch();
