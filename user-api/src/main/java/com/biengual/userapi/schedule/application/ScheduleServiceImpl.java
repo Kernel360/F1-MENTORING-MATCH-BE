@@ -51,7 +51,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      */
     @Override
     @Transactional
-    @Scheduled(cron = "03 00 00 * * MON")
+    @Scheduled(cron = "00 00 00 * * MON")
     public void scheduleUpdateLastWeekPopularBookmark() {
         recommenderStore.createLastWeekBookmarkRecommender();
     }
