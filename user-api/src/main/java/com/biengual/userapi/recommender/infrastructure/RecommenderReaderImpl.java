@@ -1,12 +1,5 @@
 package com.biengual.userapi.recommender.infrastructure;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.biengual.core.annotation.DataProvider;
 import com.biengual.core.domain.entity.learning.CategoryLearningProgressEntity;
 import com.biengual.core.util.PeriodUtil;
@@ -15,8 +8,15 @@ import com.biengual.userapi.recommender.domain.CategoryLearningProgressRepositor
 import com.biengual.userapi.recommender.domain.RecommenderCustomRepository;
 import com.biengual.userapi.recommender.domain.RecommenderInfo;
 import com.biengual.userapi.recommender.domain.RecommenderReader;
-
 import lombok.RequiredArgsConstructor;
+
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @DataProvider
 @RequiredArgsConstructor
@@ -63,7 +63,7 @@ public class RecommenderReaderImpl implements RecommenderReader {
     }
 
     @Override
-    public RecommenderInfo.PreviewRecommender findContents(Long userId, List<Long> contentIds) {
+    public RecommenderInfo.PreviewRecommender findContents(Long userId, Set<Long> contentIds) {
         return RecommenderInfo.PreviewRecommender
             .of(contentCustomRepository.findRecommendedContentsIn(userId, contentIds));
     }

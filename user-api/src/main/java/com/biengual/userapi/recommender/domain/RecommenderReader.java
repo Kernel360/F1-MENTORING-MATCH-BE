@@ -1,6 +1,7 @@
 package com.biengual.userapi.recommender.domain;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Recommender 도메인의 DataProvider 계층의 인터페이스
@@ -12,5 +13,5 @@ public interface RecommenderReader {
 
     RecommenderInfo.ContentRecommenderMetric findContentRecommenderVector(int vectorSize);
 
-    RecommenderInfo.PreviewRecommender findContents(Long userId, List<Long> contentIds);
+    RecommenderInfo.PreviewRecommender findContents(Long userId, Set<Long> contentIds);
 }

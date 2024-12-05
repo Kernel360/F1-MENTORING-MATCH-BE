@@ -1,17 +1,15 @@
 package com.biengual.userapi.recommender.application;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.biengual.userapi.learning.domain.LearningReader;
 import com.biengual.userapi.recommender.domain.RecommenderInfo;
 import com.biengual.userapi.recommender.domain.RecommenderReader;
 import com.biengual.userapi.recommender.domain.RecommenderService;
 import com.biengual.userapi.recommender.domain.RecommenderStore;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +45,7 @@ public class RecommenderServiceImpl implements RecommenderService {
 
     @Override
     public RecommenderInfo.PreviewRecommender getNewRecommendedContentsByCategory(Long userId) {
-        List<Long> recommendedContentIdList = contentRecommender.recommend(userId);
+        Set<Long> recommendedContentIdList = contentRecommender.recommend(userId);
 
         return recommenderReader.findContents(userId, recommendedContentIdList);
     }

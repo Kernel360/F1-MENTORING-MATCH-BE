@@ -23,6 +23,7 @@ import java.util.*;
 // TODO: 자신이 학습 완료한 컨텐츠는 무조건 추천하지 않을 것인가?
 // TODO: ContentStatus의 ACTIVATED 검증을 어디서 할 것인가?
 // TODO: 추후 디버깅용 로그 삭제 필요
+// TODO: 추천 순서를 유지할 것인가?
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -35,12 +36,12 @@ public class ContentRecommender {
     private final UserCategoryCustomRepository userCategoryCustomRepository;
     private final ContentCustomRepository contentCustomRepository;
 
-    public List<Long> recommend(Long userId) {
+    public Set<Long> recommend(Long userId) {
         long categoryCount = categoryRepository.count();
         long userCount = userRepository.count();
         boolean hasLearning = categoryLearningProgressCustomRepository.existsByUserId(userId);
 
-        List<Long> recommendedContentIdList = new ArrayList<>();
+        Set<Long> recommendedContentIdSet = new HashSet<>();
 
         if (categoryCount >= 2 && userCount >= 5 && hasLearning) {
             log.info("첫 번째 추천");
@@ -73,40 +74,40 @@ public class ContentRecommender {
             List<Long> learningCompletionContentIdList =
                 recentLearningHistoryCustomRepository.findLearningCompletionContentIdsByUserId(userId);
 
-            recommendedContentIdList.addAll(
+            recommendedContentIdSet.addAll(
                 recentLearningHistoryCustomRepository
                     .findRecommendedContentIdsTop9(similarUserList, learningCompletionContentIdList)
             );
         }
 
-        if (recommendedContentIdList.size() == 9) {
-            return recommendedContentIdList;
+        if (recommendedContentIdSet.size() == 9) {
+            return recommendedContentIdSet;
         }
 
-        int requiredContentCount = 9 - recommendedContentIdList.size();
+        int requiredContentCount = 9 - recommendedContentIdSet.size();
 
         List<Long> targetUserCategoryIdList = userCategoryCustomRepository.findAllMyRegisteredCategoryId(userId);
 
         if (!targetUserCategoryIdList.isEmpty()) {
             log.info("두 번째 추천");
 
-            recommendedContentIdList.addAll(
+            recommendedContentIdSet.addAll(
                 contentCustomRepository
                     .findPopularContentIdsInCategoryIdsWithLimit(targetUserCategoryIdList, requiredContentCount)
             );
         }
 
-        if (recommendedContentIdList.size() == 9) {
-            return recommendedContentIdList;
+        if (recommendedContentIdSet.size() == 9) {
+            return recommendedContentIdSet;
         }
 
-        requiredContentCount = 9 - recommendedContentIdList.size();
+        requiredContentCount = 9 - recommendedContentIdSet.size();
 
         log.info("세 번째 추천");
 
-        recommendedContentIdList.addAll(contentCustomRepository.findPopularContentIdsWithLimit(requiredContentCount));
+        recommendedContentIdSet.addAll(contentCustomRepository.findPopularContentIdsWithLimit(requiredContentCount));
 
-        return recommendedContentIdList;
+        return recommendedContentIdSet;
     }
 
     // Internal Method =================================================================================================
