@@ -10,6 +10,7 @@ import java.util.Map;
 import com.biengual.core.annotation.DataProvider;
 import com.biengual.core.domain.entity.learning.CategoryLearningProgressEntity;
 import com.biengual.core.util.PeriodUtil;
+import com.biengual.userapi.content.domain.ContentCustomRepository;
 import com.biengual.userapi.recommender.domain.CategoryLearningProgressRepository;
 import com.biengual.userapi.recommender.domain.RecommenderCustomRepository;
 import com.biengual.userapi.recommender.domain.RecommenderInfo;
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class RecommenderReaderImpl implements RecommenderReader {
     private final RecommenderCustomRepository recommenderCustomRepository;
     private final CategoryLearningProgressRepository categoryLearningProgressRepository;
+    private final ContentCustomRepository contentCustomRepository;
 
     @Override
     public List<RecommenderInfo.PopularBookmark> findPopularBookmarks() {
@@ -58,5 +60,11 @@ public class RecommenderReaderImpl implements RecommenderReader {
         }
 
         return RecommenderInfo.ContentRecommenderMetric.of(vectorMap);
+    }
+
+    @Override
+    public RecommenderInfo.PreviewRecommender findContents(Long userId, List<Long> contentIds) {
+        return RecommenderInfo.PreviewRecommender
+            .of(contentCustomRepository.findRecommendedContentsIn(userId, contentIds));
     }
 }

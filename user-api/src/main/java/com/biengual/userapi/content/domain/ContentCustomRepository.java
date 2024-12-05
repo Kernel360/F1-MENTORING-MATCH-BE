@@ -306,6 +306,27 @@ public class ContentCustomRepository {
             .fetch();
     }
 
+    // TODO: dev pull 받고 thumbnailUrl을 s3Url로 리턴하도록 수정 필요
+    // 추천된 Content 조회하는 쿼리
+    public List<RecommenderInfo.Preview> findRecommendedContentsIn(Long userId, List<Long> contentIds) {
+        return queryFactory
+            .select(
+                Projections.constructor(
+                    RecommenderInfo.Preview.class,
+                    contentEntity.id,
+                    contentEntity.title,
+                    contentEntity.thumbnailUrl,
+                    contentEntity.contentType,
+                    contentEntity.category.name,
+                    contentEntity.contentLevel,
+                    getIsPointRequiredByUserIdAndContent(userId, contentEntity.id, contentEntity.createdAt)
+                )
+            )
+            .from(contentEntity)
+            .where(contentEntity.id.in(contentIds))
+            .fetch();
+    }
+
     // Internal Method =================================================================================================
 
     // TODO: Predicate를 사용하지 않는 경우에는 Override? 아니면 null로 입력?

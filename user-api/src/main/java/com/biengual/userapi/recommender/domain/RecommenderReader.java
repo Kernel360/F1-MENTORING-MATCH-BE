@@ -11,4 +11,6 @@ public interface RecommenderReader {
     List<RecommenderInfo.PopularBookmark> findPopularBookmarks();
 
     RecommenderInfo.ContentRecommenderMetric findContentRecommenderVector(int vectorSize);
+
+    RecommenderInfo.PreviewRecommender findContents(Long userId, List<Long> contentIds);
 }

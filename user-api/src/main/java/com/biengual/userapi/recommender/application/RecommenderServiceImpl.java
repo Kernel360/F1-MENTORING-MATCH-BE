@@ -11,12 +11,15 @@ import com.biengual.userapi.recommender.domain.RecommenderStore;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class RecommenderServiceImpl implements RecommenderService {
     private final LearningReader learningReader;
     private final RecommenderStore recommenderStore;
     private final RecommenderReader recommenderReader;
+    private final ContentRecommender contentRecommender;
 
     @Override
     @Transactional(readOnly = true)
@@ -40,5 +43,12 @@ public class RecommenderServiceImpl implements RecommenderService {
     @Transactional
     public void updatePopularBookmarks() {
         recommenderStore.createLastWeekBookmarkRecommender();
+    }
+
+    @Override
+    public RecommenderInfo.PreviewRecommender getNewRecommendedContentsByCategory(Long userId) {
+        List<Long> recommendedContentIdList = contentRecommender.recommend(userId);
+
+        return recommenderReader.findContents(userId, recommendedContentIdList);
     }
 }

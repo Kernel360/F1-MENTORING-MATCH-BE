@@ -9,6 +9,7 @@ import com.biengual.userapi.recommender.domain.RecommenderReader;
 import com.biengual.userapi.user.domain.UserCategoryCustomRepository;
 import com.biengual.userapi.user.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -20,6 +21,9 @@ import java.util.*;
 // TODO: 학습할 때 업데이트는 어떻게 할 것인가?
 // TODO: 추천 컨텐츠 결과가 9개 미만이면 어떻게 할 것 인가?
 // TODO: 자신이 학습 완료한 컨텐츠는 무조건 추천하지 않을 것인가?
+// TODO: ContentStatus의 ACTIVATED 검증을 어디서 할 것인가?
+// TODO: 추후 디버깅용 로그 삭제 필요
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class ContentRecommender {
@@ -39,6 +43,8 @@ public class ContentRecommender {
         List<Long> recommendedContentIdList = new ArrayList<>();
 
         if (categoryCount >= 2 && userCount >= 5 && hasLearning) {
+            log.info("첫 번째 추천");
+
             RecommenderInfo.ContentRecommenderMetric contentRecommenderMetric =
                 getContentRecommenderVector((int) categoryCount + 1);
 
@@ -82,6 +88,8 @@ public class ContentRecommender {
         List<Long> targetUserCategoryIdList = userCategoryCustomRepository.findAllMyRegisteredCategoryId(userId);
 
         if (!targetUserCategoryIdList.isEmpty()) {
+            log.info("두 번째 추천");
+
             recommendedContentIdList.addAll(
                 contentCustomRepository
                     .findPopularContentIdsInCategoryIdsWithLimit(targetUserCategoryIdList, requiredContentCount)
@@ -93,6 +101,8 @@ public class ContentRecommender {
         }
 
         requiredContentCount = 9 - recommendedContentIdList.size();
+
+        log.info("세 번째 추천");
 
         recommendedContentIdList.addAll(contentCustomRepository.findPopularContentIdsWithLimit(requiredContentCount));
 
