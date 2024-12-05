@@ -100,7 +100,7 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.17.0'
 
     // Batch
-    implementation 'org.springframework.boot:spring-boot-starter-batch'
+    //implementation 'org.springframework.boot:spring-boot-starter-batch'
 
     // Stanford CoreNLP
     implementation 'edu.stanford.nlp:stanford-corenlp:4.5.5'
