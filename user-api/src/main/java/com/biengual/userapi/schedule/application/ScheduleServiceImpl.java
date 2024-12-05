@@ -1,16 +1,19 @@
 package com.biengual.userapi.schedule.application;
 
-import com.biengual.userapi.content.domain.ContentStore;
-import com.biengual.userapi.metadata.domain.MetadataStore;
-import com.biengual.userapi.mission.domain.MissionStore;
-import com.biengual.userapi.missionhistory.domain.MissionHistoryStore;
-import com.biengual.userapi.schedule.domain.ScheduleService;
-import lombok.RequiredArgsConstructor;
+import java.util.Set;
+
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
+import com.biengual.userapi.content.domain.ContentStore;
+import com.biengual.userapi.metadata.domain.MetadataStore;
+import com.biengual.userapi.mission.domain.MissionStore;
+import com.biengual.userapi.missionhistory.domain.MissionHistoryStore;
+import com.biengual.userapi.recommender.domain.RecommenderStore;
+import com.biengual.userapi.schedule.domain.ScheduleService;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +22,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final MissionHistoryStore missionHistoryStore;
     private final MetadataStore metadataStore;
     private final ContentStore contentStore;
+    private final RecommenderStore recommenderStore;
 
     /**
      * 미션 리셋 : 04:00 기준
@@ -40,5 +44,15 @@ public class ScheduleServiceImpl implements ScheduleService {
     public void aggregateContentLevelFeedback() {
         Set<Long> aggregatedContentIdSet = metadataStore.aggregateContentLevelFeedbackHistory();
         contentStore.reflectContentLevel(aggregatedContentIdSet);
+    }
+
+    /**
+     * 북마크 추천 시스템 업데이트 : 매주 월요일 00시 03분
+     */
+    @Override
+    @Transactional
+    @Scheduled(cron = "03 00 00 * * MON")
+    public void scheduleUpdateLastWeekPopularBookmark() {
+        recommenderStore.createLastWeekBookmarkRecommender();
     }
 }
