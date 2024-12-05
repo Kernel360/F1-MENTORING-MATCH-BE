@@ -1,7 +1,6 @@
 package com.biengual.userapi.recommender.domain;
 
 import java.util.List;
-import java.util.Map;
 
 import com.biengual.core.domain.entity.recommender.BookmarkRecommenderEntity;
 import com.biengual.core.enums.ContentLevel;
@@ -65,16 +64,5 @@ public class RecommenderInfo {
         Long sentenceIndex,
         String enDetail
     ) {
-    }
-
-    @Builder
-    public record ContentRecommenderMetric(
-       Map<Long, Long[]> vectorMap
-    ) {
-        public static ContentRecommenderMetric of(Map<Long, Long[]> vectorMap) {
-            return ContentRecommenderMetric.builder()
-                .vectorMap(vectorMap)
-                .build();
-        }
     }
 }

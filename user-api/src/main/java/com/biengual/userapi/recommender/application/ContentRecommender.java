@@ -1,118 +1,129 @@
 package com.biengual.userapi.recommender.application;
 
+import com.biengual.core.domain.entity.learning.CategoryLearningProgressEntity;
 import com.biengual.userapi.category.domain.CategoryRepository;
 import com.biengual.userapi.content.domain.ContentCustomRepository;
 import com.biengual.userapi.learning.domain.RecentLearningHistoryCustomRepository;
-import com.biengual.userapi.recommender.domain.CategoryLearningProgressCustomRepository;
-import com.biengual.userapi.recommender.domain.RecommenderInfo;
-import com.biengual.userapi.recommender.domain.RecommenderReader;
+import com.biengual.userapi.recommender.domain.CategoryLearningProgressRepository;
 import com.biengual.userapi.user.domain.UserCategoryCustomRepository;
-import com.biengual.userapi.user.domain.UserRepository;
+import com.biengual.userapi.validator.RecommenderValidator;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
-// TODO: CategoryLearningProgress 벡터화 역할을 누가 가져갈 것인가?
-// TODO: Cosine Similarity 계산 역할은 누가 가져갈 것인가?
-// TODO: 어떤 조건에 어떤 Recommender를 사용할 것인가?
+import static com.biengual.core.constant.RestrictionConstant.SIMILAR_USER_THRESHOLD_FOR_FIRST_CONTENT_RECOMMENDATION;
+
 // TODO: 캐싱을 할 것인가?
 // TODO: 학습할 때 업데이트는 어떻게 할 것인가?
-// TODO: 추천 컨텐츠 결과가 9개 미만이면 어떻게 할 것 인가?
-// TODO: 자신이 학습 완료한 컨텐츠는 무조건 추천하지 않을 것인가?
-// TODO: ContentStatus의 ACTIVATED 검증을 어디서 할 것인가?
-// TODO: 추후 디버깅용 로그 삭제 필요
-// TODO: 추천 순서를 유지할 것인가?
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class ContentRecommender {
-    private final RecommenderReader recommenderReader;
     private final CategoryRepository categoryRepository;
-    private final UserRepository userRepository;
-    private final CategoryLearningProgressCustomRepository categoryLearningProgressCustomRepository;
+    private final CategoryLearningProgressRepository categoryLearningProgressRepository;
     private final RecentLearningHistoryCustomRepository recentLearningHistoryCustomRepository;
     private final UserCategoryCustomRepository userCategoryCustomRepository;
     private final ContentCustomRepository contentCustomRepository;
+    private final RecommenderValidator recommenderValidator;
 
-    public Set<Long> recommend(Long userId) {
+    // 첫 번째 컨텐츠 추천
+    public List<Long> recommendBasedOnSimilarUsers(Long userId, int limit) {
+        if (!recommenderValidator.verifyFirstContentRecommendationCondition(userId)) {
+            return Collections.emptyList();
+        }
+
         long categoryCount = categoryRepository.count();
-        long userCount = userRepository.count();
-        boolean hasLearning = categoryLearningProgressCustomRepository.existsByUserId(userId);
 
-        Set<Long> recommendedContentIdSet = new HashSet<>();
+        Map<Long, Long[]> vectorMap = this.calculateContentRecommenderVector((int) (categoryCount + 1));
+        Long[] targetUserVector = vectorMap.get(userId);
 
-        if (categoryCount >= 2 && userCount >= 5 && hasLearning) {
-            log.info("첫 번째 추천");
+        Map<Long, Double> similarityMap = this.calculateSimilarityMap(userId, vectorMap, targetUserVector);
 
-            RecommenderInfo.ContentRecommenderMetric contentRecommenderMetric =
-                getContentRecommenderVector((int) categoryCount + 1);
+        List<Long> similarUserList = this.findMostSimilarUserList(similarityMap);
 
-            Map<Long, Double> similarityMap = new HashMap<>();
-            Map<Long, Long[]> vectorMap = contentRecommenderMetric.vectorMap();
+        List<Long> learningCompletionContentIdList =
+            recentLearningHistoryCustomRepository.findLearningCompletionContentIdsByUserId(userId);
 
-            Long[] targetUserVector = vectorMap.get(userId);
+        return recentLearningHistoryCustomRepository
+            .findRecommendedContentIdsWithLimit(similarUserList, learningCompletionContentIdList, limit);
+    }
 
-            for (Map.Entry<Long, Long[]> entry : vectorMap.entrySet()) {
-
-                if (Objects.equals(entry.getKey(), userId)) continue;
-
-                double similarity = calculateCosineSimilarity(targetUserVector, entry.getValue());
-
-                similarityMap.put(entry.getKey(), similarity);
-            }
-
-            List<Long> similarUserList = similarityMap.entrySet().stream()
-                .sorted((entry1, entry2) -> Double.compare(entry2.getValue(), entry1.getValue()))
-                .limit(2)
-                .toList()
-                .stream()
-                .map(Map.Entry::getKey)
-                .toList();
-
-            List<Long> learningCompletionContentIdList =
-                recentLearningHistoryCustomRepository.findLearningCompletionContentIdsByUserId(userId);
-
-            recommendedContentIdSet.addAll(
-                recentLearningHistoryCustomRepository
-                    .findRecommendedContentIdsTop9(similarUserList, learningCompletionContentIdList)
-            );
-        }
-
-        if (recommendedContentIdSet.size() == 9) {
-            return recommendedContentIdSet;
-        }
-
-        int requiredContentCount = 9 - recommendedContentIdSet.size();
-
+    // 두 번째 컨텐츠 추천
+    public List<Long> recommendBasedOnUserCategory(Long userId, int limit) {
         List<Long> targetUserCategoryIdList = userCategoryCustomRepository.findAllMyRegisteredCategoryId(userId);
 
-        if (!targetUserCategoryIdList.isEmpty()) {
-            log.info("두 번째 추천");
-
-            recommendedContentIdSet.addAll(
-                contentCustomRepository
-                    .findPopularContentIdsInCategoryIdsWithLimit(targetUserCategoryIdList, requiredContentCount)
-            );
+        if (!recommenderValidator.verifySecondContentRecommendationCondition(targetUserCategoryIdList)) {
+            return Collections.emptyList();
         }
 
-        if (recommendedContentIdSet.size() == 9) {
-            return recommendedContentIdSet;
-        }
+        return contentCustomRepository
+            .findPopularContentIdsInCategoryIdsWithLimit(targetUserCategoryIdList, limit);
+    }
 
-        requiredContentCount = 9 - recommendedContentIdSet.size();
-
-        log.info("세 번째 추천");
-
-        recommendedContentIdSet.addAll(contentCustomRepository.findPopularContentIdsWithLimit(requiredContentCount));
-
-        return recommendedContentIdSet;
+    // 세 번째 컨텐츠 추천
+    public List<Long> recommendBasedOnPopularity(int limit) {
+        return contentCustomRepository.findPopularContentIdsWithLimit(limit);
     }
 
     // Internal Method =================================================================================================
-    private RecommenderInfo.ContentRecommenderMetric getContentRecommenderVector(int vectorSize) {
-        return recommenderReader.findContentRecommenderVector(vectorSize);
+
+    // 컨텐츠 추천의 코사인 유사도에 사용할 벡터 계산
+    private Map<Long, Long[]> calculateContentRecommenderVector(int vectorSize) {
+        List<CategoryLearningProgressEntity> categoryLearningProgressList = categoryLearningProgressRepository.findAll();
+
+        Map<Long, Long[]> vectorMap = new HashMap<>();
+
+        for (CategoryLearningProgressEntity categoryLearningProgress : categoryLearningProgressList) {
+            Long userId = categoryLearningProgress.getCategoryLearningProgressId().getUserId();
+            Long categoryId = categoryLearningProgress.getCategoryLearningProgressId().getCategoryId();
+            Long totalLearningCount = categoryLearningProgress.getTotalLearningCount();
+            Long completedLearningCount = categoryLearningProgress.getCompletedLearningCount();
+
+            Long[] vector = vectorMap.computeIfAbsent(userId, k -> this.initializeVector(vectorSize));
+
+            this.updateVector(vector, categoryId, totalLearningCount, completedLearningCount, vectorSize);
+        }
+
+        return vectorMap;
+    }
+
+    // 초기화된 벡터 생성
+    private Long[] initializeVector(int vectorSize) {
+        Long[] vector = new Long[vectorSize];
+        Arrays.fill(vector, 0L); // 기본값 0으로 초기화
+        return vector;
+    }
+
+    // 벡터 업데이트
+    private void updateVector(
+        Long[] vector, Long categoryId, Long totalLearningCount, Long completedLearningCount, int vectorSize
+    ) {
+        int index = Math.toIntExact(categoryId);
+        vector[index] = totalLearningCount;
+        vector[vectorSize - 1] += completedLearningCount;
+    }
+
+    // 타겟 유저의 다른 모든 유저에 대한 유사도 Map 계산
+    private Map<Long, Double> calculateSimilarityMap(Long userId, Map<Long, Long[]> vectorMap, Long[] targetUserVector) {
+        Map<Long, Double> similarityMap = new HashMap<>();
+
+        for (Map.Entry<Long, Long[]> entry : vectorMap.entrySet()) {
+
+            if (Objects.equals(entry.getKey(), userId)) continue;
+
+            double similarity = this.calculateCosineSimilarity(targetUserVector, entry.getValue());
+            similarityMap.put(entry.getKey(), similarity);
+        }
+        return similarityMap;
+    }
+
+    // 가장 유사도가 높은 N명의 User Id를 추출
+    private List<Long> findMostSimilarUserList(Map<Long, Double> similarityMap) {
+        return similarityMap.entrySet().stream()
+            .sorted((entry1, entry2) -> Double.compare(entry2.getValue(), entry1.getValue()))
+            .limit(SIMILAR_USER_THRESHOLD_FOR_FIRST_CONTENT_RECOMMENDATION)
+            .map(Map.Entry::getKey)
+            .toList();
     }
 
     // 두 벡터간 코사인 유사도 계산

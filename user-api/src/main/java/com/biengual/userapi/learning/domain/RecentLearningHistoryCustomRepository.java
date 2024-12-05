@@ -9,6 +9,7 @@ import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
 
+import com.biengual.core.enums.ContentStatus;
 import org.springframework.stereotype.Repository;
 
 import com.biengual.core.util.PeriodUtil;
@@ -123,18 +124,21 @@ public class RecentLearningHistoryCustomRepository {
             .fetch();
     }
 
-    // 추천할 Content Id를 최대 9개 조회하는 쿼리
-    public List<Long> findRecommendedContentIdsTop9(List<Long> userIds, List<Long> contentIds) {
+    // 추천할 Content Id를 최대 limit만큼 조회하는 쿼리
+    public List<Long> findRecommendedContentIdsWithLimit(List<Long> userIds, List<Long> contentIds, int limit) {
         return queryFactory
             .select(recentLearningHistoryEntity.contentId)
             .from(recentLearningHistoryEntity)
+            .join(contentEntity)
+            .on(recentLearningHistoryEntity.contentId.eq(contentEntity.id))
             .where(
                 recentLearningHistoryEntity.userId.in(userIds)
                     .and(recentLearningHistoryEntity.contentId.notIn(contentIds))
+                    .and(contentEntity.contentStatus.eq(ContentStatus.ACTIVATED))
             )
             .orderBy(recentLearningHistoryEntity.completedLearningRate.desc(),
                 recentLearningHistoryEntity.currentLearningRate.desc())
-            .limit(9)
+            .limit(limit)
             .fetch();
     }
 

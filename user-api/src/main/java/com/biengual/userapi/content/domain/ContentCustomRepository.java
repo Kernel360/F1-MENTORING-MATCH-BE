@@ -273,7 +273,10 @@ public class ContentCustomRepository {
         return queryFactory
             .select(contentEntity.id)
             .from(contentEntity)
-            .where(contentEntity.category.id.in(categoryIds))
+            .where(
+                contentEntity.category.id.in(categoryIds)
+                    .and(contentEntity.contentStatus.eq(ContentStatus.ACTIVATED))
+            )
             .orderBy(contentEntity.hits.desc())
             .limit(limit)
             .fetch();
@@ -284,6 +287,7 @@ public class ContentCustomRepository {
         return queryFactory
             .select(contentEntity.id)
             .from(contentEntity)
+            .where(contentEntity.contentStatus.eq(ContentStatus.ACTIVATED))
             .orderBy(contentEntity.hits.desc())
             .limit(limit)
             .fetch();
@@ -307,6 +311,7 @@ public class ContentCustomRepository {
             )
             .from(contentEntity)
             .where(contentEntity.id.in(contentIds))
+            .orderBy(contentEntity.id.desc())
             .fetch();
     }
 

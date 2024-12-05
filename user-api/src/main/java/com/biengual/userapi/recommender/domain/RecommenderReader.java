@@ -11,7 +11,5 @@ import java.util.Set;
 public interface RecommenderReader {
     List<RecommenderInfo.PopularBookmark> findPopularBookmarks();
 
-    RecommenderInfo.ContentRecommenderMetric findContentRecommenderVector(int vectorSize);
-
     RecommenderInfo.PreviewRecommender findContents(Long userId, Set<Long> contentIds);
 }
