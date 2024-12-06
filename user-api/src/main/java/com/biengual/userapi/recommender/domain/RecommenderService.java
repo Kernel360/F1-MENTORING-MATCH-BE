@@ -8,6 +8,4 @@ public interface RecommenderService {
     RecommenderInfo.PopularBookmarkRecommender getPopularBookmarks();
 
     void updatePopularBookmarks();
-
-    RecommenderInfo.PreviewRecommender getNewRecommendedContentsByCategory(Long userId);
 }

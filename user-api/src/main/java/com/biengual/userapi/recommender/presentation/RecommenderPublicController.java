@@ -52,27 +52,6 @@ public class RecommenderPublicController {
         return ResponseEntityFactory.toResponseEntity(RECOMMENDER_CATEGORY_VIEW_SUCCESS, response);
     }
 
-    @GetMapping("/category/v2")
-    @Operation(summary = "카테고리 기반 추천 컨텐츠 조회", description = "카테고리 학습 기록을 이용해 추천된 컨텐츠를 조회합니다.")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "카테고리 기반 추천 컨텐츠 조회 성공",
-            content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerCategoryRecommender.class))
-            }
-        ),
-        @ApiResponse(responseCode = "404", description = "유저 조회 실패", content = @Content(mediaType = "application/json")),
-        @ApiResponse(responseCode = "500", description = "서버 에러", content = @Content(mediaType = "application/json"))
-    })
-    public ResponseEntity<Object> getNewRecommendedContentsByCategory(
-        @AuthenticationPrincipal
-        OAuth2UserPrincipal principal
-    ) {
-        RecommenderInfo.PreviewRecommender info =
-            recommenderService.getNewRecommendedContentsByCategory(principal.getId());
-        GetPreviewDto.Response response = recommenderDtoMapper.ofPreviewRes(info);
-        return ResponseEntityFactory.toResponseEntity(RECOMMENDER_CATEGORY_VIEW_SUCCESS, response);
-    }
-
     @GetMapping("/bookmark")
     @Operation(summary = "많이 저장된 북마크 문장 조회", description = "메인 페이지에서 북마크 많이 한 문장을 조회힙니다")
     @ApiResponses(value = {
