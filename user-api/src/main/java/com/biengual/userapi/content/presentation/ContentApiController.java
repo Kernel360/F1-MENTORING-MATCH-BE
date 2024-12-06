@@ -21,7 +21,6 @@ import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.content.domain.ContentService;
 import com.biengual.userapi.content.presentation.swagger.SwaggerContentAdminView;
-import com.biengual.userapi.schedule.domain.ScheduleService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -45,8 +44,6 @@ public class ContentApiController {
     private final ContentFacade contentFacade;
     private final ContentService contentService;
     private final ContentDtoMapper contentDtoMapper;
-
-    private final ScheduleService scheduleService; // TODO: 코드 완성 후 삭제
 
     /**
      * 컨텐츠 등록
