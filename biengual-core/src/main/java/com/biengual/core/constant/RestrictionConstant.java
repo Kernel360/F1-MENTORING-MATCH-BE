@@ -19,4 +19,5 @@ public class RestrictionConstant {
     public static final int MIN_USER_COUNT_FOR_FIRST_CONTENT_RECOMMENDATION = 5;
     public static final int SIMILAR_USER_THRESHOLD_FOR_FIRST_CONTENT_RECOMMENDATION = 2;
     public static final int MAX_RECOMMENDED_CONTENT_COUNT = 9;
+    public static final int LEARNING_COMPLETION_RATE_THRESHOLD = 80;
 }

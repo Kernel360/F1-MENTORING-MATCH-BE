@@ -1,5 +1,6 @@
 package com.biengual.userapi.learning.domain;
 
+import static com.biengual.core.constant.RestrictionConstant.LEARNING_COMPLETION_RATE_THRESHOLD;
 import static com.biengual.core.domain.entity.content.QContentEntity.*;
 import static com.biengual.core.domain.entity.learning.QRecentLearningHistoryEntity.*;
 import static com.biengual.core.domain.entity.scrap.QScrapEntity.*;
@@ -119,7 +120,7 @@ public class RecentLearningHistoryCustomRepository {
             .from(recentLearningHistoryEntity)
             .where(
                 recentLearningHistoryEntity.userId.eq(userId)
-                    .and(recentLearningHistoryEntity.completedLearningRate.goe(80))
+                    .and(recentLearningHistoryEntity.completedLearningRate.goe(LEARNING_COMPLETION_RATE_THRESHOLD))
             )
             .fetch();
     }
