@@ -213,7 +213,6 @@ public class ContentCustomRepository {
             .fetch();
     }
 
-    // TODO: dev pull 받고 thumbnailUrl을 s3Url로 리턴하도록 수정 필요
     // 추천된 Content 조회하는 쿼리
     public List<RecommenderInfo.Preview> findRecommendedContentsIn(Long userId, Set<Long> contentIds) {
         return queryFactory
@@ -222,7 +221,7 @@ public class ContentCustomRepository {
                     RecommenderInfo.Preview.class,
                     contentEntity.id,
                     contentEntity.title,
-                    contentEntity.thumbnailUrl,
+                    contentEntity.s3Url,
                     contentEntity.contentType,
                     contentEntity.category.name,
                     contentEntity.contentLevel,
