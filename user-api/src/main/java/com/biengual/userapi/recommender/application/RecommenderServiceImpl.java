@@ -26,12 +26,6 @@ public class RecommenderServiceImpl implements RecommenderService {
     }
 
     @Override
-    @Transactional
-    public void updateCategoryRecommender() {
-        recommenderStore.createAndUpdateCategoryRecommender();
-    }
-
-    @Override
     @Transactional(readOnly = true)
     public RecommenderInfo.PopularBookmarkRecommender getPopularBookmarks() {
         return RecommenderInfo.PopularBookmarkRecommender.of(recommenderReader.findPopularBookmarks());
