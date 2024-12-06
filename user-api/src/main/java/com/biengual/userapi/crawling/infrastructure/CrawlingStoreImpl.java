@@ -37,29 +37,18 @@ public class CrawlingStoreImpl implements CrawlingStore {
     // TODO: 추후 클린 코드로 변경해볼 것
     @Override
     public ContentCommand.Create getYoutubeDetail(ContentCommand.CrawlingContent command) {
-        // Extract the video ID from the URL
-        String videoId = this.extractVideoId(command.url());
-
         // Check Already Stored In DB
-        crawlingValidator.verifyCrawling(videoId);
+        crawlingValidator.verifyCrawling(command.url());
 
         // Create an HTTP entity with headers
-        ResponseEntity<String> response = youtubeApiClient.getYoutubeInfo(videoId);
+        ResponseEntity<String> response = youtubeApiClient.getYoutubeInfo(this.extractVideoId(command.url()));
 
-        JsonNode snippetNode = null;
-        JsonNode contentDetailsNode = null;
-        String category = null;
-
-        try {
-            snippetNode = youtubeApiClient.getSnippetNode(response.getBody()).path("snippet");
-            contentDetailsNode = youtubeApiClient.getSnippetNode(response.getBody()).path("contentDetails");
-            category = youtubeApiClient.getCategoryName(snippetNode.path("categoryId").asText());
-        } catch (Exception e) {
-            throw new CommonException(CRAWLING_JSOUP_FAILURE);
-        }
+        JsonNode snippetNode = youtubeApiClient.getSnippetNode(response.getBody()).path("snippet");
+        JsonNode contentDetailsNode = youtubeApiClient.getSnippetNode(response.getBody()).path("contentDetails");
+        String category = youtubeApiClient.getCategoryName(snippetNode.path("categoryId").asText());
 
         Duration duration = Duration.parse(contentDetailsNode.path("duration").asText());
-        if (duration.compareTo(Duration.ofMinutes(8)) > 0) {
+        if (!crawlingValidator.verifyCrawlingYoutubeDuration(duration)) {
             throw new CommonException(CRAWLING_OUT_OF_BOUNDS);
         }
 

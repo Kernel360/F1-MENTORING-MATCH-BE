@@ -73,24 +73,6 @@ public class ContentApiController {
         return ResponseEntityFactory.toResponseEntity(CONTENT_CREATE_SUCCESS);
     }
 
-    // TODO: 코드 완성 후 삭제
-    @PostMapping("/crate-test")
-    @Operation(summary = "어드민 - 컨텐츠 등록", description = "어드민 회원이 컨텐츠를 새로 등록합니다.")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "201", description = "컨텐츠 생성 성공",
-            content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerVoidReturn.class))}
-        ),
-        @ApiResponse(responseCode = "400", description = "크롤링 불가능한 길이 영상", content = @Content(mediaType = "application/json")),
-        @ApiResponse(responseCode = "406", description = "크롤링 Selenium, JSOUP 에러", content = @Content(mediaType = "application/json")),
-        @ApiResponse(responseCode = "409", description = "번역기 | Jackson | S3 에러", content = @Content(mediaType = "application/json")),
-        @ApiResponse(responseCode = "500", description = "서버 에러", content = @Content(mediaType = "application/json"))
-    })
-    public ResponseEntity<Object> createTest() {
-        scheduleService.scheduleCrawling();
-        return ResponseEntityFactory.toResponseEntity(CONTENT_CREATE_SUCCESS);
-    }
-
     /**
      * 컨텐츠 활성화, 비활성화
      */

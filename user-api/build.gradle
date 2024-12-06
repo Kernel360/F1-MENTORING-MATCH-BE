@@ -133,6 +133,9 @@ dependencies {
 
     // S3
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+    // RSS
+    implementation 'com.rometools:rome:1.18.0';
 }
 
 def querydslDir = "$buildDir/generated/querydsl"

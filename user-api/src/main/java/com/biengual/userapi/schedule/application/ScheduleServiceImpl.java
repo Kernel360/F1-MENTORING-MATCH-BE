@@ -67,7 +67,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     @Transactional
-    // @Scheduled(cron = "00 00 04 * * *")
+    @Scheduled(cron = "00 00 04 * * *")
     public void scheduleCrawling() {
         // 1. 크롤링 할 컨텐츠 확인
         List<ContentCommand.CrawlingContent> commands = crawlingReader.getDailyUrlsForCrawling();
