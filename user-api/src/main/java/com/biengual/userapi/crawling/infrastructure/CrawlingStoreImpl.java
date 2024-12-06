@@ -27,9 +27,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.biengual.core.annotation.DataProvider;
 import com.biengual.core.domain.document.content.script.CNNScript;
 import com.biengual.core.domain.document.content.script.Script;
 import com.biengual.core.domain.document.content.script.YoutubeScript;
@@ -50,7 +50,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Service
+@DataProvider
 @RequiredArgsConstructor
 public class CrawlingStoreImpl implements CrawlingStore {
     private final TranslateApiClient translateApiClient;

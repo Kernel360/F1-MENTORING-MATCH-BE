@@ -1,12 +1,18 @@
 package com.biengual.userapi.schedule.application;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.biengual.core.enums.ContentType;
+import com.biengual.userapi.content.domain.ContentCommand;
+import com.biengual.userapi.content.domain.ContentReader;
 import com.biengual.userapi.content.domain.ContentStore;
+import com.biengual.userapi.crawling.domain.CrawlingReader;
+import com.biengual.userapi.crawling.domain.CrawlingStore;
 import com.biengual.userapi.metadata.domain.MetadataStore;
 import com.biengual.userapi.mission.domain.MissionStore;
 import com.biengual.userapi.missionhistory.domain.MissionHistoryStore;
@@ -22,7 +28,10 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final MissionHistoryStore missionHistoryStore;
     private final MetadataStore metadataStore;
     private final ContentStore contentStore;
+    private final CrawlingStore crawlingStore;
+    private final ContentReader contentReader;
     private final RecommenderStore recommenderStore;
+    private final CrawlingReader crawlingReader;
 
     /**
      * 미션 리셋 : 04:00 기준
@@ -54,5 +63,24 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Scheduled(cron = "00 00 00 * * MON")
     public void scheduleUpdateLastWeekPopularBookmark() {
         recommenderStore.createLastWeekBookmarkRecommender();
+    }
+
+    @Override
+    @Transactional
+    // @Scheduled(cron = "00 00 04 * * *")
+    public void scheduleCrawling() {
+        // 1. 크롤링 할 컨텐츠 확인
+        List<ContentCommand.CrawlingContent> commands = crawlingReader.getDailyUrlsForCrawling();
+
+        for (ContentCommand.CrawlingContent command : commands) {
+            // 2. 해당 url 에 대해 컨텐츠 타입에 따른 크롤링
+            ContentCommand.Create createContentCommand =
+                command.contentType().equals(ContentType.READING) ?
+                    crawlingStore.getCNNDetail(command) :
+                    crawlingStore.getYoutubeDetail(command);
+
+            // 3. Content 저장
+            contentStore.createContent(createContentCommand);
+        }
     }
 }

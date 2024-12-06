@@ -12,4 +12,6 @@ public interface ScheduleService {
     void aggregateContentLevelFeedback();
 
     void scheduleUpdateLastWeekPopularBookmark();
+
+    void scheduleCrawling();
 }

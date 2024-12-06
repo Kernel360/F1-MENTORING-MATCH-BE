@@ -17,6 +17,7 @@ import lombok.Builder;
 
 public class ContentCommand {
 
+	@Builder
 	public record CrawlingContent(
 		String url,
 		ContentType contentType
