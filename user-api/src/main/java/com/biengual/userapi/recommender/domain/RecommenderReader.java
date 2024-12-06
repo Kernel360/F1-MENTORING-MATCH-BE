@@ -12,4 +12,6 @@ public interface RecommenderReader {
     List<RecommenderInfo.PopularBookmark> findPopularBookmarks();
 
     RecommenderInfo.PreviewRecommender findContents(Long userId, Set<Long> contentIds);
+
+    Set<Long> findRecommendedContentIdSet(Long userId);
 }
