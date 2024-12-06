@@ -117,7 +117,7 @@ public class ContentApiController {
         @RequestParam(required = false, defaultValue = "createdAt") String sort,
         @RequestParam(required = false, defaultValue = "DESC") Sort.Direction direction,
         @RequestParam(required = false) Long categoryId
-        ) {
+    ) {
         ContentCommand.GetAdminReadingView command =
             contentDtoMapper.doGetAdminReadingView(page, size, direction, sort, categoryId);
         PaginationInfo<ContentInfo.Admin> info = contentFacade.getAdminReadingView(command);
