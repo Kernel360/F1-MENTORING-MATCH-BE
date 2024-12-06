@@ -14,8 +14,6 @@ import java.util.*;
 
 import static com.biengual.core.constant.RestrictionConstant.SIMILAR_USER_THRESHOLD_FOR_FIRST_CONTENT_RECOMMENDATION;
 
-// TODO: 캐싱을 할 것인가?
-// TODO: 학습할 때 업데이트는 어떻게 할 것인가?
 @Component
 @RequiredArgsConstructor
 public class ContentRecommender {
