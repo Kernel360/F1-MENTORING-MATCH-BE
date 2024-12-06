@@ -56,12 +56,7 @@ public class CrawlingReaderImpl implements CrawlingReader {
             String href = links.get(i).attr("href");
             String url = CNNBASEURL + href;
             if (!href.isEmpty() && !crawlingValidator.verifyCrawlingUrlAlreadyExists(url)) {
-                commands.add(
-                    ContentCommand.CrawlingContent.builder()
-                        .url(url)
-                        .contentType(ContentType.READING)
-                        .build()
-                );
+                commands.add(ContentCommand.CrawlingContent.of(url, ContentType.READING));
             }
         }
 
@@ -75,12 +70,7 @@ public class CrawlingReaderImpl implements CrawlingReader {
 
         commands.addAll(
             tempUrls.stream()
-                .map(url -> ContentCommand.CrawlingContent
-                    .builder()
-                    .url(url)
-                    .contentType(ContentType.LISTENING)
-                    .build()
-                )
+                .map(url -> ContentCommand.CrawlingContent.of(url, ContentType.LISTENING))
                 .toList()
         );
 
