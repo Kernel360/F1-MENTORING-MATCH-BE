@@ -24,6 +24,9 @@ public class CategoryLearningProgressEntity {
     @Column(nullable = false, columnDefinition = "bigint")
     private Long totalLearningCount;
 
+    // TODO: RecentLearningHistoryEntity의 completedLearning 과는 의미가 다른 completedLearning 이라
+    //  RecentLearningHistoryEntity의 completedLearning 네이밍을 변경해야 헷갈리지 않을 것 같습니다.
+    // 학습 완료 기준을 충족하는 학습량
     @Column(nullable = false, columnDefinition = "bigint")
     private Long completedLearningCount;
 
