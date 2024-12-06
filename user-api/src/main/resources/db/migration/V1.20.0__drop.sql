@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS `point_data_mart`;

@@ -74,7 +74,7 @@ public class RecentLearningHistoryCustomRepository {
                     DashboardInfo.RecentLearning.class,
                     contentEntity.id,
                     contentEntity.title,
-                    contentEntity.thumbnailUrl,
+                    contentEntity.s3Url,
                     contentEntity.contentType,
                     contentEntity.preScripts,
                     contentEntity.category.name,

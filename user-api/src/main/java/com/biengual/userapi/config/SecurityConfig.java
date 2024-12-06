@@ -70,11 +70,13 @@ public class SecurityConfig {
                     // Can access form ANONYMOUS
                     .requestMatchers(HttpMethod.GET, "/api/contents/view/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/contents/search/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/contents/accurate-search/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/contents/preview/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/categories/all").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/categories/type/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/contents/details/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/user/status").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/api/recommender/bookmark").permitAll()
 
                     // Can access from USER
                     .requestMatchers("/api/bookmark/**").hasAnyRole("USER", "DEVELOPER")
@@ -101,6 +103,7 @@ public class SecurityConfig {
                     .requestMatchers("/api/token").hasRole("DEVELOPER")
                     .requestMatchers("/swagger-ui/**").hasRole("DEVELOPER")
                     .requestMatchers("/api-info/**").hasRole("DEVELOPER")
+                    .requestMatchers("/api/s3-test/**").hasRole("DEVELOPER")
 
                     // Can access form Authenticated
                     .requestMatchers(HttpMethod.POST, "/api/user/logout").authenticated()

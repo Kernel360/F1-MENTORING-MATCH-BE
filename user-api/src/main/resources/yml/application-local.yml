@@ -61,7 +61,20 @@ perplexity:
 
 opensearch:
   host: ${OPEN_SEARCH_LOCAL_HOST}
-  port: ${OPEN_SEARCH_PORT}
+  port: ${OPEN_SEARCH_LOCAL_PORT}
   protocol: ${OPEN_SEARCH_HTTP_PROTOCOL}
   username: ${OPEN_SEARCH_ROOT_USERNAME} # OpenSearch 기본 관리자 계정 (보안 플러그인 활성화 시)
   password: ${OPEN_SEARCH_ROOT_USERNAME} # OpenSearch 기본 비밀번호 (보안 플러그인 활성화 시)
+  index: ${OPEN_SEARCH_LOCAL_INDEX}
+
+localstack:
+  access-key : ${LOCAL_TEST_KEY}
+  secret-key : ${LOCAL_TEST_KEY}
+cloud:
+  aws:
+    endpoint: http://s3.localhost.localstack.cloud:4566
+    s3:
+      bucket: ${LOCAL_STACK_BUCKET_NAME}
+    # 동작하지 않는다면 http://localhost:4566 사용 및 LocalStackConfig 수정 필요
+    cloudfront:
+      domain: no-cdn

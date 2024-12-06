@@ -1,6 +1,5 @@
 package com.biengual.userapi.config;
 
-import static com.biengual.core.constant.ServiceConstant.*;
 import static com.biengual.core.response.error.code.SearchContentErrorCode.*;
 
 import org.opensearch.client.opensearch.OpenSearchClient;
@@ -8,33 +7,41 @@ import org.opensearch.client.opensearch._types.Time;
 import org.opensearch.client.opensearch._types.mapping.TypeMapping;
 import org.opensearch.client.opensearch.indices.CreateIndexRequest;
 import org.opensearch.client.opensearch.indices.IndexSettings;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 import com.biengual.core.response.error.exception.CommonException;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Configuration
 @RequiredArgsConstructor
 public class OpenSearchContentConfig {
     private final OpenSearchClient openSearchClient;
 
+    @Value("${opensearch.index}")
+    private String index;
+
     /**
      * 인덱스가 없을 경우 인덱스 초기화
      */
+    @PostConstruct
     public void init() {
         this.createIndexIfNotExists(openSearchClient);
     }
 
     private void createIndexIfNotExists(OpenSearchClient client) {
         try {
-            boolean exists = client.indices().exists(b -> b.index(CONTENT_SEARCH_INDEX_NAME)).value();
+            boolean exists = client.indices().exists(b -> b.index(index)).value();
             if (!exists) {
                 // Define index settings
                 // TODO: 성능 부족하면 샤드, 레플리카 추가해야 하는지 고려
                 IndexSettings settings = new IndexSettings.Builder()
                     .numberOfShards("1") // Set number of shards
-                    .numberOfReplicas("1") // Set number of replicas
+                    .numberOfReplicas("0") // Set number of replicas
                     .refreshInterval(new Time.Builder().time("30s").build())
                     .analysis(a -> a
                         .analyzer("nori_analyzer", na -> na
@@ -65,7 +72,7 @@ public class OpenSearchContentConfig {
 
                 // Create the index with settings and mappings
                 CreateIndexRequest createIndexRequest = new CreateIndexRequest.Builder()
-                    .index(CONTENT_SEARCH_INDEX_NAME)
+                    .index(index)
                     .settings(settings)
                     .mappings(mappings)
                     .build();
@@ -73,6 +80,7 @@ public class OpenSearchContentConfig {
                 client.indices().create(createIndexRequest);
             }
         } catch (Exception e) {
+            log.error(e.getMessage(), e);
             throw new CommonException(SEARCH_CONTENT_SAVE_FAILED);
         }
     }

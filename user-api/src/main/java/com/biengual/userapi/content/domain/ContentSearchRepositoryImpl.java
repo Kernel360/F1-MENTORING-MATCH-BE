@@ -1,6 +1,5 @@
 package com.biengual.userapi.content.domain;
 
-import static com.biengual.core.constant.ServiceConstant.*;
 import static com.biengual.core.response.error.code.SearchContentErrorCode.*;
 
 import java.io.IOException;
@@ -21,6 +20,7 @@ import org.opensearch.client.opensearch.core.IndexResponse;
 import org.opensearch.client.opensearch.core.SearchRequest;
 import org.opensearch.client.opensearch.core.SearchResponse;
 import org.opensearch.client.opensearch.core.search.Hit;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import com.biengual.core.domain.document.content.ContentSearchDocument;
@@ -32,6 +32,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ContentSearchRepositoryImpl implements ContentSearchRepository {
     private final OpenSearchClient openSearchClient;
+
+    @Value("${opensearch.index}")
+    private String index;
 
     /**
      * 키워드로 콘텐츠를 검색합니다.
@@ -94,7 +97,7 @@ public class ContentSearchRepositoryImpl implements ContentSearchRepository {
 
         // SearchRequest 생성
         SearchRequest searchRequest = new SearchRequest.Builder()
-            .index(CONTENT_SEARCH_INDEX_NAME) // 인덱스 이름 설정
+            .index(index) // 인덱스 이름 설정
             .query(boolQuery)       // bool 쿼리 추가
             .build();
 
@@ -124,7 +127,7 @@ public class ContentSearchRepositoryImpl implements ContentSearchRepository {
         try {
             // IndexRequest 생성
             IndexRequest<ContentSearchDocument> indexRequest = new IndexRequest.Builder<ContentSearchDocument>()
-                .index(CONTENT_SEARCH_INDEX_NAME) // 인덱스 이름 설정
+                .index(index) // 인덱스 이름 설정
                 .id(document.getId())  // 문서 ID 설정
                 .document(document)    // 저장할 문서 설정
                 .build();
@@ -152,7 +155,7 @@ public class ContentSearchRepositoryImpl implements ContentSearchRepository {
         try {
             // DeleteRequest 생성
             DeleteRequest deleteRequest = new DeleteRequest.Builder()
-                .index(CONTENT_SEARCH_INDEX_NAME) // 인덱스 이름 설정
+                .index(index) // 인덱스 이름 설정
                 .id(id)        // 삭제할 문서 ID 설정
                 .build();
 

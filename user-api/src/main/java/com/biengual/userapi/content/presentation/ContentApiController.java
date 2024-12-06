@@ -57,7 +57,7 @@ public class ContentApiController {
         ),
         @ApiResponse(responseCode = "400", description = "크롤링 불가능한 길이 영상", content = @Content(mediaType = "application/json")),
         @ApiResponse(responseCode = "406", description = "크롤링 Selenium, JSOUP 에러", content = @Content(mediaType = "application/json")),
-        @ApiResponse(responseCode = "409", description = "번역기 혹은 Jackson 에러", content = @Content(mediaType = "application/json")),
+        @ApiResponse(responseCode = "409", description = "번역기 | Jackson | S3 에러", content = @Content(mediaType = "application/json")),
         @ApiResponse(responseCode = "500", description = "서버 에러", content = @Content(mediaType = "application/json"))
     })
     public ResponseEntity<Object> createContent(
@@ -117,7 +117,7 @@ public class ContentApiController {
         @RequestParam(required = false, defaultValue = "createdAt") String sort,
         @RequestParam(required = false, defaultValue = "DESC") Sort.Direction direction,
         @RequestParam(required = false) Long categoryId
-        ) {
+    ) {
         ContentCommand.GetAdminReadingView command =
             contentDtoMapper.doGetAdminReadingView(page, size, direction, sort, categoryId);
         PaginationInfo<ContentInfo.Admin> info = contentFacade.getAdminReadingView(command);
