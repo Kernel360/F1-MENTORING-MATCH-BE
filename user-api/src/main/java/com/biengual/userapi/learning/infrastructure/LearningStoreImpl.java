@@ -58,5 +58,6 @@ public class LearningStoreImpl implements LearningStore {
                 .orElseGet(() -> command.toCategoryLearningProgressEntity(categoryLearningProgressId));
 
         categoryLearningProgress.updateProgress(command.learningRate());
+        categoryLearningProgressRepository.save(categoryLearningProgress);
     }
 }
