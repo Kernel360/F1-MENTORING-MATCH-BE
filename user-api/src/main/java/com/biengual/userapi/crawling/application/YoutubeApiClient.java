@@ -12,7 +12,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.client.RestTemplate;
 
 import com.biengual.core.annotation.ApiClient;
@@ -36,11 +35,13 @@ public class YoutubeApiClient {
         // Create the request URL for the transcript service
         String url = this.getVideoUrl(videoId);
 
+        // Add API key to the URL
+        String urlWithApiKey = url + (url.contains("?") ? "&" : "?") + "key=" + YOUTUBE_API_KEY;
+
         // Set up headers with your API key
-        HttpHeaders headers = this.getHttpHeaders();
+        HttpHeaders headers = new HttpHeaders();
 
-        return restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(headers), String.class);
-
+        return restTemplate.exchange(urlWithApiKey, HttpMethod.GET, new HttpEntity<>(headers), String.class);
     }
 
     // 스니펫 노드 추출
@@ -101,15 +102,6 @@ public class YoutubeApiClient {
     private String getVideoUrl(String videoId) {
         return "https://www.googleapis.com/youtube/v3/videos?id=" + videoId +
             "&part=snippet, contentDetails" + "&key=" + YOUTUBE_API_KEY;
-    }
-
-    private HttpHeaders getHttpHeaders() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(
-            "Cookie", "access_token=" +
-                SecurityContextHolder.getContext().getAuthentication().getCredentials()
-        );
-        return headers;
     }
 
     private JsonNode getJsonNodeOfUrl(String url) {

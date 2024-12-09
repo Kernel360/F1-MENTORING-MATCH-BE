@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.biengual.core.enums.ContentType;
 import com.biengual.userapi.content.domain.ContentCommand;
-import com.biengual.userapi.content.domain.ContentReader;
 import com.biengual.userapi.content.domain.ContentStore;
 import com.biengual.userapi.crawling.domain.CrawlingReader;
 import com.biengual.userapi.crawling.domain.CrawlingStore;
@@ -29,7 +28,6 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final MetadataStore metadataStore;
     private final ContentStore contentStore;
     private final CrawlingStore crawlingStore;
-    private final ContentReader contentReader;
     private final RecommenderStore recommenderStore;
     private final CrawlingReader crawlingReader;
 
