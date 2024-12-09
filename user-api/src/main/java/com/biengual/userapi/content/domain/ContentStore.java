@@ -8,7 +8,7 @@ import java.util.Set;
  * @author 문찬욱
  */
 public interface ContentStore {
-    void createContent(ContentCommand.Create command);
+    Long createContent(ContentCommand.Create command);
 
     void modifyContentStatus(Long contentId);
 

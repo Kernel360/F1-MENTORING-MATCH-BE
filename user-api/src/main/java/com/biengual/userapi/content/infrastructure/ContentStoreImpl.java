@@ -48,7 +48,7 @@ public class ContentStoreImpl implements ContentStore {
     private final ImageReader imageReader;
 
     @Override
-    public void createContent(ContentCommand.Create command) {
+    public Long createContent(ContentCommand.Create command) {
         // MongoDB 에 Content Script 저장
         ContentDocument contentDocument = command.toDocument();
         contentDocumentRepository.save(contentDocument);
@@ -57,7 +57,7 @@ public class ContentStoreImpl implements ContentStore {
 
         // MySql 에 Content Info 저장
         ContentEntity content = command.toEntity(contentDocument.getId(), command.contentType(), category);
-        contentRepository.save(content);
+        ContentEntity savedContent = contentRepository.save(content);
 
         // S3 에 프리뷰 를 위한 리사이징 이미지 저장
         imageStore.saveImage(content.getId());
@@ -66,6 +66,8 @@ public class ContentStoreImpl implements ContentStore {
         // Open Search 에 Content Search Data 저장
         ContentSearchDocument searchDocument = ContentSearchDocument.createdByContents(content, contentDocument);
         contentSearchRepository.saveContent(searchDocument);
+
+        return savedContent.getId();
     }
 
     @Override
