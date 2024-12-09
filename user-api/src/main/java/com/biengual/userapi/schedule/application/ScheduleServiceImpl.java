@@ -15,6 +15,7 @@ import com.biengual.userapi.crawling.domain.CrawlingStore;
 import com.biengual.userapi.metadata.domain.MetadataStore;
 import com.biengual.userapi.mission.domain.MissionStore;
 import com.biengual.userapi.missionhistory.domain.MissionHistoryStore;
+import com.biengual.userapi.question.domain.QuestionStore;
 import com.biengual.userapi.recommender.domain.RecommenderStore;
 import com.biengual.userapi.schedule.domain.ScheduleService;
 
@@ -30,6 +31,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final CrawlingStore crawlingStore;
     private final RecommenderStore recommenderStore;
     private final CrawlingReader crawlingReader;
+    private final QuestionStore questionStore;
 
     /**
      * 미션 리셋 : 04:00 기준
@@ -78,7 +80,10 @@ public class ScheduleServiceImpl implements ScheduleService {
                     crawlingStore.getYoutubeDetail(command);
 
             // 3. Content 저장
-            contentStore.createContent(createContentCommand);
+            Long contentId = contentStore.createContent(createContentCommand);
+
+            // 4. Question 생성 및 저장
+            questionStore.createQuestion(contentId);
         }
     }
 }
