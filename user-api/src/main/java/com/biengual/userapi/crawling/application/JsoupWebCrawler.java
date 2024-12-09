@@ -47,11 +47,8 @@ public class JsoupWebCrawler {
             throw new CommonException(CRAWLING_JSOUP_FAILURE);
         }
 
-        String imgUrl = "%s.jpg".formatted(
-            images.get(0).attr("src")
-                .split(".jpg")[0]
-        );
-        int preWidth = this.getWidthOfImage(images.get(0));
+        String imgUrl = null;
+        int preWidth = 0;
 
         for (Element image : images) {
             if (preWidth < this.getWidthOfImage(image)) {
