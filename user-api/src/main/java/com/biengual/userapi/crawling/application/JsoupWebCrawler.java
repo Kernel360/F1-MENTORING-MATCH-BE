@@ -52,10 +52,7 @@ public class JsoupWebCrawler {
 
         for (Element image : images) {
             if (preWidth < this.getWidthOfImage(image)) {
-                imgUrl = "%s.jpg".formatted(
-                    image.attr("src")
-                        .split(".jpg")[0]
-                );
+                imgUrl = image.attr("src");
                 preWidth = this.getWidthOfImage(image);
             }
         }
@@ -84,11 +81,15 @@ public class JsoupWebCrawler {
 
     // Internal Methods ================================================================================================
     private int getWidthOfImage(Element imginfo) {
-        return Integer.parseInt(
-            imginfo.attr("src")
-                .split("w_")[1]
-                .split(",c")[0]
-        );
+        String src = imginfo.attr("src");
+        if (src.contains("w_") && src.contains(",c")) {
+            return Integer.parseInt(
+                imginfo.attr("src")
+                    .split("w_")[1]
+                    .split(",c")[0]
+            );
+        }
+        return 0;
     }
 
     private List<String> splitIntoSentences(String text) {

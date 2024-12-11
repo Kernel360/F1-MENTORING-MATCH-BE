@@ -7,7 +7,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.biengual.core.enums.ContentType;
 import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentStore;
 import com.biengual.userapi.crawling.domain.CrawlingReader;
@@ -65,8 +64,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         recommenderStore.createLastWeekBookmarkRecommender();
     }
 
+    // 크롤링, 문제 생성이 하나의 컨텐츠에 대해 실패해도 나머지 컨텐츠들을 동작하도록 트랜잭션 분리
+    // 크롤링이 성공하고 문제 생성이 실패해도 컨텐츠 자체는 저장하도록 분리
     @Override
-    @Transactional
     @Scheduled(cron = "00 00 04 * * *")
     public void scheduleCrawling() {
         // 1. 크롤링 할 컨텐츠 확인
@@ -74,16 +74,18 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         for (ContentCommand.CrawlingContent command : commands) {
             // 2. 해당 url 에 대해 컨텐츠 타입에 따른 크롤링
-            ContentCommand.Create createContentCommand =
-                command.contentType().equals(ContentType.READING) ?
-                    crawlingStore.getCNNDetail(command) :
-                    crawlingStore.getYoutubeDetail(command);
+            ContentCommand.Create createCommand = crawlingStore.crawlingScheduledContent(command);
 
             // 3. Content 저장
-            Long contentId = contentStore.createContent(createContentCommand);
+            Long contentId = null;
+            if(createCommand != null) {
+                contentId = contentStore.createContent(createCommand);
+            }
 
             // 4. Question 생성 및 저장
-            questionStore.createQuestion(contentId);
+            if(contentId != null) {
+                questionStore.createQuestion(contentId);
+            }
         }
     }
 }
