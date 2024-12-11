@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.bson.types.ObjectId;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.biengual.core.annotation.DataProvider;
 import com.biengual.core.domain.document.content.ContentDocument;
@@ -48,6 +49,7 @@ public class ContentStoreImpl implements ContentStore {
     private final ImageReader imageReader;
 
     @Override
+    @Transactional
     public Long createContent(ContentCommand.Create command) {
         // MongoDB 에 Content Script 저장
         ContentDocument contentDocument = command.toDocument();

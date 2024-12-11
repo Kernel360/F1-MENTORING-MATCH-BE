@@ -54,9 +54,11 @@ public class CrawlingReaderImpl implements CrawlingReader {
         Elements links = elements.get(0).select("a");
         for (int i = 1; i < links.size(); ++i) {
             String href = links.get(i).attr("href");
-            String url = CNNBASEURL + href;
-            if (!href.isEmpty() && !crawlingValidator.verifyCrawlingUrlAlreadyExists(url)) {
-                commands.add(ContentCommand.CrawlingContent.of(url, ContentType.READING));
+            if (links.get(i).attr("data-link-type").equals("article")) {    // article 타입인 cnn 만 크롤링
+                String url = CNNBASEURL + href;
+                if (!href.isEmpty() && !crawlingValidator.verifyCrawlingUrlAlreadyExists(url)) {
+                    commands.add(ContentCommand.CrawlingContent.of(url, ContentType.READING));
+                }
             }
         }
 

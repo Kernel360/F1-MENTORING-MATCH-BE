@@ -21,6 +21,7 @@ import com.biengual.userapi.content.domain.ContentCommand;
 import com.biengual.userapi.content.domain.ContentInfo;
 import com.biengual.userapi.content.domain.ContentService;
 import com.biengual.userapi.content.presentation.swagger.SwaggerContentAdminView;
+import com.biengual.userapi.schedule.domain.ScheduleService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -44,6 +45,20 @@ public class ContentApiController {
     private final ContentFacade contentFacade;
     private final ContentService contentService;
     private final ContentDtoMapper contentDtoMapper;
+    private final ScheduleService scheduleService;
+
+    @PostMapping("/test-schedule-crawling")
+    @Operation(summary = "어드민 - 크롤링 스케줄 테스트", description = "어드민이 스케줄링된 크롤러 동작 테스트용 API (연결할 필요 없음)")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "201", description = "컨텐츠 생성 성공",
+            content = {
+                @Content(mediaType = "application/json", schema = @Schema(implementation = SwaggerVoidReturn.class))}
+        ),
+    })
+    public ResponseEntity<Object> testScheduleCrawling() {
+        scheduleService.scheduleCrawling();
+        return ResponseEntityFactory.toResponseEntity(CONTENT_CREATE_SUCCESS);
+    }
 
     /**
      * 컨텐츠 등록

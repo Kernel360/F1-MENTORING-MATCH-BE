@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.bson.types.ObjectId;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.biengual.core.annotation.DataProvider;
 import com.biengual.core.domain.document.content.ContentDocument;
@@ -43,6 +44,7 @@ public class QuestionStoreImpl implements QuestionStore {
 
     // 문제 생성 메소드
     @Override
+    @Transactional
     public void createQuestion(Long contentId) {
         ContentDocument document = this.getContentDocument(contentId);
         List<String> scripts = document.getScripts()

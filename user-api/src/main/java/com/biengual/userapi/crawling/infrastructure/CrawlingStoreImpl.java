@@ -6,12 +6,14 @@ import java.time.Duration;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.biengual.core.annotation.DataProvider;
 import com.biengual.core.domain.document.content.script.Script;
 import com.biengual.core.enums.ContentType;
 import com.biengual.core.response.error.exception.CommonException;
 import com.biengual.userapi.content.domain.ContentCommand;
+import com.biengual.userapi.content.domain.ContentStore;
 import com.biengual.userapi.crawling.application.JsoupWebCrawler;
 import com.biengual.userapi.crawling.application.SeleniumWebCrawler;
 import com.biengual.userapi.crawling.application.YoutubeApiClient;
@@ -89,8 +91,24 @@ public class CrawlingStoreImpl implements CrawlingStore {
             .build();
     }
 
-    // Internal Methods ------------------------------------------------------------------------------------------------
+    @Override
+    @Transactional
+    public ContentCommand.Create crawlingScheduledContent(ContentCommand.CrawlingContent command) {
+        ContentCommand.Create createContentCommand = null;
+        try {
+            createContentCommand =
+                command.contentType().equals(ContentType.READING) ?
+                    this.getCNNDetail(command) :
+                    this.getYoutubeDetail(command);
+        } catch (Exception e) {
+            log.error("{} : Crawling failed", command.url(), e);
+            return null;
+        }
 
+        return createContentCommand;
+    }
+
+    // Internal Methods ------------------------------------------------------------------------------------------------
     // 동영상 id 추출
     private String extractVideoId(String youtubeUrl) {
         // Logic to extract video ID from URL
