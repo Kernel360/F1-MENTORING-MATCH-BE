@@ -28,6 +28,9 @@ public class CrawlingValidator {
     }
 
     public boolean verifyCrawlingYoutubeDuration(Duration duration) {
-        return duration.compareTo(Duration.ofMinutes(MAX_YOUTUBE_DURATION)) <= 0;
+        boolean minComp = duration.compareTo(Duration.ofMinutes(MIN_YOUTUBE_DURATION)) > 0;
+        boolean maxComp = duration.compareTo(Duration.ofMinutes(MAX_YOUTUBE_DURATION)) <= 0;
+
+        return minComp && maxComp;
     }
 }
