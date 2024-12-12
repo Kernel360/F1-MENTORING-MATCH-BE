@@ -1,5 +1,16 @@
 package com.biengual.userapi.recommender.application;
 
+import static com.biengual.core.constant.RestrictionConstant.*;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import org.springframework.stereotype.Component;
+
 import com.biengual.core.domain.entity.learning.CategoryLearningProgressEntity;
 import com.biengual.userapi.category.domain.CategoryRepository;
 import com.biengual.userapi.content.domain.ContentCustomRepository;
@@ -7,12 +18,8 @@ import com.biengual.userapi.learning.domain.RecentLearningHistoryCustomRepositor
 import com.biengual.userapi.recommender.domain.CategoryLearningProgressRepository;
 import com.biengual.userapi.user.domain.UserCategoryCustomRepository;
 import com.biengual.userapi.validator.RecommenderValidator;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-
-import java.util.*;
-
-import static com.biengual.core.constant.RestrictionConstant.SIMILAR_USER_THRESHOLD_FOR_FIRST_CONTENT_RECOMMENDATION;
 
 @Component
 @RequiredArgsConstructor
@@ -97,7 +104,7 @@ public class ContentRecommender {
         Long[] vector, Long categoryId, Long totalLearningCount, Long completedLearningCount, int vectorSize
     ) {
         int index = Math.toIntExact(categoryId);
-        vector[index] = totalLearningCount;
+        vector[index - 1] = totalLearningCount;
         vector[vectorSize - 1] += completedLearningCount;
     }
 
