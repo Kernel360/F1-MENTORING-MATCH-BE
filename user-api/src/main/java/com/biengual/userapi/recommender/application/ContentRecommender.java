@@ -39,7 +39,7 @@ public class ContentRecommender {
 
         long categoryCount = categoryRepository.count();
 
-        Map<Long, Long[]> vectorMap = this.calculateContentRecommenderVector((int) (categoryCount + 1));
+        Map<Long, Long[]> vectorMap = this.calculateContentRecommenderVector((int)(categoryCount + 1));
         Long[] targetUserVector = vectorMap.get(userId);
 
         Map<Long, Double> similarityMap = this.calculateSimilarityMap(userId, vectorMap, targetUserVector);
@@ -94,7 +94,7 @@ public class ContentRecommender {
 
     // 초기화된 벡터 생성
     private Long[] initializeVector(int vectorSize) {
-        Long[] vector = new Long[vectorSize];
+        Long[] vector = new Long[vectorSize * 2];
         Arrays.fill(vector, 0L); // 기본값 0으로 초기화
         return vector;
     }
@@ -109,12 +109,14 @@ public class ContentRecommender {
     }
 
     // 타겟 유저의 다른 모든 유저에 대한 유사도 Map 계산
-    private Map<Long, Double> calculateSimilarityMap(Long userId, Map<Long, Long[]> vectorMap, Long[] targetUserVector) {
+    private Map<Long, Double> calculateSimilarityMap(Long userId, Map<Long, Long[]> vectorMap,
+        Long[] targetUserVector) {
         Map<Long, Double> similarityMap = new HashMap<>();
 
         for (Map.Entry<Long, Long[]> entry : vectorMap.entrySet()) {
 
-            if (Objects.equals(entry.getKey(), userId)) continue;
+            if (Objects.equals(entry.getKey(), userId))
+                continue;
 
             double similarity = this.calculateCosineSimilarity(targetUserVector, entry.getValue());
             similarityMap.put(entry.getKey(), similarity);
