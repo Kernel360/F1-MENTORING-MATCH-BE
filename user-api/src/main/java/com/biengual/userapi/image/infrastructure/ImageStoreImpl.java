@@ -90,10 +90,10 @@ public class ImageStoreImpl implements ImageStore {
         try {
             originalImage = ImageIO.read(inputFile);
             if (originalImage == null) {
-                throw new IOException("Failed to read image file");
+                throw new CommonException(IMAGE_READ_FAILURE);
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CommonException(IMAGE_FILE_READ_FAILURE);
         }
 
         // 원본 크기 및 비율 계산
@@ -120,7 +120,7 @@ public class ImageStoreImpl implements ImageStore {
         try {
             ImageIO.write(resizedImage, "webp", baos);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CommonException(IMAGE_FILE_WRITE_FAILURE);
         }
 
         return baos.toByteArray();

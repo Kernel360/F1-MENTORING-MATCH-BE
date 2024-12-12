@@ -14,6 +14,12 @@ public enum ImageErrorCode implements ErrorCode {
     ),
     IMAGE_READ_FAILURE(
         HttpStatus.NOT_FOUND, ImageServiceStatus.IMAGE_READ_FAILURE, "S3 이미지 조회 실패"
+    ),
+    IMAGE_FILE_READ_FAILURE(
+        HttpStatus.CONFLICT, ImageServiceStatus.IMAGE_FILE_READ_FAILURE, "원본 이미지 읽기 실패"
+    ),
+    IMAGE_FILE_WRITE_FAILURE(
+        HttpStatus.CONFLICT, ImageServiceStatus.IMAGE_FILE_WRITE_FAILURE, "변환 이미지 쓰기 실패"
     );
     private final HttpStatus httpStatus;
     private final ServiceStatus serviceStatus;

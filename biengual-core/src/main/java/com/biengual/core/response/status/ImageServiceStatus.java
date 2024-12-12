@@ -10,7 +10,9 @@ public enum ImageServiceStatus implements ServiceStatus {
 
     // failure
     IMAGE_STORE_FAILURE("U-I-901"),
-    IMAGE_READ_FAILURE("U-I-902");
+    IMAGE_READ_FAILURE("U-I-902"),
+    IMAGE_FILE_READ_FAILURE("U-I-903"),
+    IMAGE_FILE_WRITE_FAILURE("U-I-904");
 
     private final String code;
 
