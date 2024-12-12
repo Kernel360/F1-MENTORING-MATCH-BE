@@ -81,4 +81,4 @@ cloud:
     s3:
       bucket: ${S3_DEV_BUCKET_NAME}
     cloudfront:
-      domain: ${CDN_DOMAIN_NAME}
+      domain: ${CDN_DEV_DOMAIN_NAME}
