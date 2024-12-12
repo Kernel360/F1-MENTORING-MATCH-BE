@@ -7,8 +7,10 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.biengual.core.enums.ContentStatus;
 import com.biengual.core.enums.ContentType;
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.RequiredArgsConstructor;
@@ -43,7 +45,16 @@ public class CategoryCustomRepository {
             )
             .from(categoryEntity)
             .join(contentEntity).on(contentEntity.category.eq(categoryEntity))
-            .where(contentEntity.contentType.eq(contentType))
+            .where(
+                JPAExpressions.selectOne()
+                    .from(contentEntity)
+                    .where(
+                        contentEntity.category.eq(categoryEntity)
+                            .and(contentEntity.contentType.eq(contentType))
+                            .and(contentEntity.contentStatus.eq(ContentStatus.ACTIVATED))
+                    )
+                    .exists()
+            )
             .distinct()
             .fetch();
     }
