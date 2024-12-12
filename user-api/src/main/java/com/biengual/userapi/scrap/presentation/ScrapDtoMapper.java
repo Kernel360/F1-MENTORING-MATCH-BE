@@ -1,10 +1,14 @@
 package com.biengual.userapi.scrap.presentation;
 
-import com.biengual.core.enums.ContentStatus;
-import org.mapstruct.*;
+import org.mapstruct.InjectionStrategy;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+import org.mapstruct.ReportingPolicy;
 
 import com.biengual.core.domain.entity.content.ContentEntity;
 import com.biengual.core.domain.entity.scrap.ScrapEntity;
+import com.biengual.core.enums.ContentStatus;
 import com.biengual.userapi.oauth2.info.OAuth2UserPrincipal;
 import com.biengual.userapi.scrap.domain.ScrapCommand;
 import com.biengual.userapi.scrap.domain.ScrapInfo;
@@ -48,7 +52,7 @@ public interface ScrapDtoMapper {
 	@Mapping(target = "title", source = "content.title")
 	@Mapping(target = "contentType", source = "content.contentType")
 	@Mapping(target = "preScripts", source = "content.preScripts")
-	@Mapping(target = "thumbnailUrl", source = "content.thumbnailUrl")
+	@Mapping(target = "thumbnailUrl", source = "content.s3Url")
 	@Mapping(target = "category", source = "content.category.name")
 	@Mapping(target = "videoDurationInSeconds", source = "content.videoDuration")
 	@Mapping(target = "calculatedLevel", source = "content.contentLevel")

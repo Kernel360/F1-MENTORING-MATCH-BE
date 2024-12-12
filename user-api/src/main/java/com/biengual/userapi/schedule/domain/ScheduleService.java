@@ -10,4 +10,8 @@ public interface ScheduleService {
     void scheduleResetMission();
 
     void aggregateContentLevelFeedback();
+
+    void scheduleUpdateLastWeekPopularBookmark();
+
+    void scheduleCrawling();
 }
