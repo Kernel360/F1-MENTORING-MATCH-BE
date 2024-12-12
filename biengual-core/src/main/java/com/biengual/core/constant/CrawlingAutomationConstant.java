@@ -5,6 +5,7 @@ package com.biengual.core.constant;
  * @author 김영래
  */
 public class CrawlingAutomationConstant {
+    public static final int MIN_YOUTUBE_DURATION = 2;
     public static final int MAX_YOUTUBE_DURATION = 10;
 
     public static final String CNNBASEURL = "https://edition.cnn.com";  // CNN
