@@ -41,6 +41,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 
 @Validated
@@ -130,7 +131,9 @@ public class ContentPublicController {
     public ResponseEntity<Object> accurateSearchContents(
         @RequestParam(required = false, defaultValue = "1") Integer page,
         @RequestParam(required = false, defaultValue = "10") Integer size,
-        @NotBlank(message = BLANK_CONTENT_KEYWORD_ERROR_MESSAGE) @RequestParam String searchWords,
+        @NotBlank(message = BLANK_CONTENT_KEYWORD_ERROR_MESSAGE)
+        @Size(max = 200, message =CONTENT_KEYWORD_MAX_SIZE)
+        @RequestParam String searchWords,
         @AuthenticationPrincipal
         OAuth2UserPrincipal principal
     ) {
