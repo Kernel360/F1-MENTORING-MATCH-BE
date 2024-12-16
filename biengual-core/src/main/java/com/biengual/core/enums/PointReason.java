@@ -4,15 +4,13 @@ import lombok.Getter;
 
 @Getter
 public enum PointReason {
-    // TODO: 로직 모두 확인되면 포인트 값 수정해야 함
-
     // +
     FIRST_SIGN_UP(100L),
-    DAILY_QUIZ(7L),
-    DAILY_MISSION(8L),
-    DAILY_CONTENT(9L),
+    DAILY_QUIZ(5L),
+    DAILY_MISSION(5L),
+    DAILY_CONTENT(5L),
     FIRST_DAILY_LOG_IN(10L),
-    QUIZ_CORRECT_ANSWER(5L),    // 일단 확정
+    QUIZ_CORRECT_ANSWER(5L),
 
     // -
     VIEW_RECENT_CONTENT(-10L),
