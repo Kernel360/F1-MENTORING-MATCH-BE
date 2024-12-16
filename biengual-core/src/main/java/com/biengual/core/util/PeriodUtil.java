@@ -1,8 +1,6 @@
 package com.biengual.core.util;
 
-import com.biengual.core.domain.entity.metadata.AggregationMetadataEntity;
-import com.biengual.core.enums.IntervalType;
-import com.biengual.core.response.error.exception.CommonException;
+import static com.biengual.core.response.error.code.ServerError.*;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -12,7 +10,9 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayDeque;
 import java.util.Queue;
 
-import static com.biengual.core.response.error.code.ServerError.INTERVAL_TYPE_IS_INVALID;
+import com.biengual.core.domain.entity.metadata.AggregationMetadataEntity;
+import com.biengual.core.enums.IntervalType;
+import com.biengual.core.response.error.exception.CommonException;
 
 /**
  * 쿼리에 사용하는 날짜별 조회를 위한 Util 클래스
@@ -54,7 +54,7 @@ public class PeriodUtil {
     public static LocalDateTime getEndOfWeek(LocalDate localDate) {
         return localDate.atStartOfDay()
             .with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
-            .withHour(23).withMinute(59).withSecond(59).withNano(999_999_999);
+            .withHour(23).withMinute(59).withSecond(59);
     }
 
     public static LocalDate getFewWeeksAgo(LocalDate currentDate, long subtractWeek, DayOfWeek dayOfWeek) {
