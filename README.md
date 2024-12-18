@@ -72,9 +72,11 @@ CNN기사와 유튜브 영상 콘텐츠의 관심있는 주제 콘텐츠 학습
     - 마이페이지: 자신의 정보를 볼 수 있습니다.
 
 ## ERD
-- [ERD](https://dbdiagram.io/d/Mentoring-66debf32bc6a4b5bb5a1afe5)
+- [ERD](httpsdbdiagram.iodCopy-of-LMS-670dcf7397a66db9a3f9b8c4)
     - MySQL : 전반적인 데이터 저장
     - Mongo : 스크립트 및 문제 관련 내용 저장
+    - Redis : 캐시
+    ![Copy of LMS (1)](https://github.com/user-attachments/assets/dbd6171e-58d8-4969-a3c6-3459e6a79a12)
 
 ## 기술 스택
  - Java
