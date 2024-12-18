@@ -8,6 +8,7 @@ import java.net.URI;
 import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -29,7 +30,9 @@ import com.rometools.rome.io.SyndFeedInput;
 import com.rometools.rome.io.XmlReader;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @DataProvider
 @RequiredArgsConstructor
 public class CrawlingReaderImpl implements CrawlingReader {
@@ -64,11 +67,16 @@ public class CrawlingReaderImpl implements CrawlingReader {
 
         // 1-2. Youtube 채널 동영상 링크
         // 채널 별로 매일 1개 씩 크롤링
+        List<String> channelIds = Arrays.asList(IDOFTEDED, IDOFVOX, IDOFLIVENOGGIN, IDOFSCISHOW);
         List<String> tempUrls = new ArrayList<>();
-        tempUrls.add(this.getVideoUrls(IDOFTEDED));
-        tempUrls.add(this.getVideoUrls(IDOFVOX));
-        tempUrls.add(this.getVideoUrls(IDOFLIVENOGGIN));
-        tempUrls.add(this.getVideoUrls(IDOFSCISHOW));
+
+        for (String channelId : channelIds) {
+            try {
+                tempUrls.add(this.getVideoUrls(channelId));
+            } catch (Exception e) {
+                log.info("Channel Id : {} 에 대해 업데이트 할 컨텐츠 없음", channelId);
+            }
+        }
 
         commands.addAll(
             tempUrls.stream()
