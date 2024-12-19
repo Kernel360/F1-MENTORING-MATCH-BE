@@ -1,6 +1,7 @@
 # <img src="https://github.com/user-attachments/assets/d0d20a88-bb21-45fe-8071-9dba686115a3" alt="biengual-favicon" width="30" height="30"> Biengual
-- 영어 학습 플랫폼 [웹사이트](https://biengual.store)
+- 영어 학습 플랫폼 : https://biengual.store
 - '2개국어능통자'라는 Bilingual이라는 단어에서 착안하여, 홀로 영어공부학습을 시도하는 사람들에게 '2가지' 학습방법(리스닝,리딩)을 통해 '영어능통자'가 되기 위한 여정을 함께하는 영어학습플랫폼
+- 프론트 Github : https://github.com/Kernel360/F2-BIENGUAL-FE
 
 ## 🎯 기획의도
 
