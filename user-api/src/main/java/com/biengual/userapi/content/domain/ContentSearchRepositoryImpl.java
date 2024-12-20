@@ -97,8 +97,9 @@ public class ContentSearchRepositoryImpl implements ContentSearchRepository {
 
         // SearchRequest 생성
         SearchRequest searchRequest = new SearchRequest.Builder()
-            .index(index) // 인덱스 이름 설정
+            .index(index)           // 인덱스 이름 설정
             .query(boolQuery)       // bool 쿼리 추가
+            .timeout("10s")   // OpenSearch 과부하 방지 타임 아웃
             .build();
 
         // 요청 실행 및 응답 처리

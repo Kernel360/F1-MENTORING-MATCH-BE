@@ -38,10 +38,9 @@ public class OpenSearchContentConfig {
             boolean exists = client.indices().exists(b -> b.index(index)).value();
             if (!exists) {
                 // Define index settings
-                // TODO: 성능 부족하면 샤드, 레플리카 추가해야 하는지 고려
                 IndexSettings settings = new IndexSettings.Builder()
-                    .numberOfShards("1") // Set number of shards
-                    .numberOfReplicas("0") // Set number of replicas
+                    .numberOfShards("3")
+                    .numberOfReplicas("1")
                     .refreshInterval(new Time.Builder().time("30s").build())
                     .analysis(a -> a
                         .analyzer("nori_analyzer", na -> na
