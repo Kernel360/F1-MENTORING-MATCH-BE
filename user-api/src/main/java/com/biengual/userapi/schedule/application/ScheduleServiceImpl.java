@@ -66,8 +66,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     // 크롤링, 문제 생성이 하나의 컨텐츠에 대해 실패해도 나머지 컨텐츠들을 동작하도록 트랜잭션 분리
     // 크롤링이 성공하고 문제 생성이 실패해도 컨텐츠 자체는 저장하도록 분리
+    @Deprecated
     @Override
-    @Scheduled(cron = "00 00 04 * * *")
+    // @Scheduled(cron = "00 00 04 * * *")
     public void scheduleCrawling() {
         // 1. 크롤링 할 컨텐츠 확인
         List<ContentCommand.CrawlingContent> commands = crawlingReader.getDailyUrlsForCrawling();
