@@ -1,14 +1,16 @@
 package com.biengual.userapi.recommender.domain;
 
-import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import static com.biengual.core.domain.entity.recommender.QBookmarkRecommenderEntity.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.biengual.core.domain.entity.recommender.QBookmarkRecommenderEntity.bookmarkRecommenderEntity;
+import org.springframework.stereotype.Repository;
+
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+
+import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor

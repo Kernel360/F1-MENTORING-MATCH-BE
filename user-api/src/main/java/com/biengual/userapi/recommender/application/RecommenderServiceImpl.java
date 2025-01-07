@@ -1,14 +1,17 @@
 package com.biengual.userapi.recommender.application;
 
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.biengual.userapi.recommender.domain.RecommenderInfo;
 import com.biengual.userapi.recommender.domain.RecommenderReader;
 import com.biengual.userapi.recommender.domain.RecommenderService;
 import com.biengual.userapi.recommender.domain.RecommenderStore;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +31,11 @@ public class RecommenderServiceImpl implements RecommenderService {
     @Override
     @Transactional(readOnly = true)
     public RecommenderInfo.PopularBookmarkRecommender getPopularBookmarks() {
-        return RecommenderInfo.PopularBookmarkRecommender.of(recommenderReader.findPopularBookmarks());
+        List<RecommenderInfo.PopularBookmark> popularBookmarks = recommenderReader.findPopularBookmarks();
+        if(popularBookmarks.isEmpty()) {
+            popularBookmarks = recommenderReader.findTotalPopularBookmarks();
+        }
+        return RecommenderInfo.PopularBookmarkRecommender.of(popularBookmarks);
     }
 
     @Override
