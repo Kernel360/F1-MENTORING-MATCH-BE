@@ -107,8 +107,8 @@ dependencies {
     implementation 'edu.stanford.nlp:stanford-corenlp:4.5.5:models'
 
     // Word2Vec
-    implementation 'org.deeplearning4j:deeplearning4j-nlp:1.0.0-M2.1'
-    implementation 'org.nd4j:nd4j-native-platform:1.0.0-M2.1'
+//    implementation 'org.deeplearning4j:deeplearning4j-nlp:1.0.0-M2.1'
+//    implementation 'org.nd4j:nd4j-native-platform:1.0.0-M2.1'
 
     // Perplexity AI
     implementation 'com.theokanning.openai-gpt3-java:service:0.18.2'
