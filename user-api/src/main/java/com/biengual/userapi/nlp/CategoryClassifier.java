@@ -1,13 +1,8 @@
 package com.biengual.userapi.nlp;
 
-import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Set;
-
-import static com.biengual.core.constant.ServiceConstant.UNKNOWN_CATEGORY_NAME;
+import lombok.RequiredArgsConstructor;
 
 /**
  * category 분류기
@@ -16,10 +11,11 @@ import static com.biengual.core.constant.ServiceConstant.UNKNOWN_CATEGORY_NAME;
  *
  * @author 문찬욱
  */
+@Deprecated
 @Component
 @RequiredArgsConstructor
 public class CategoryClassifier {
-    private final NLPAnalyzer nlpAnalyzer;
+    /*private final NLPAnalyzer nlpAnalyzer;
 
     private static final List<String> CATEGORY_POS_TAGS = List.of("NN");
 
@@ -78,5 +74,5 @@ public class CategoryClassifier {
         categoryCustomDictionary.replace(category);
 
         return category.substring(0, 1).toUpperCase() + category.substring(1).toLowerCase();
-    }
+    }*/
 }
