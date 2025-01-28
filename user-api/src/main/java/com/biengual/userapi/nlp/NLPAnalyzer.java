@@ -1,18 +1,8 @@
 package com.biengual.userapi.nlp;
 
-import edu.stanford.nlp.ling.CoreAnnotations;
-import edu.stanford.nlp.ling.CoreLabel;
-import edu.stanford.nlp.pipeline.Annotation;
-import edu.stanford.nlp.pipeline.StanfordCoreNLP;
-import edu.stanford.nlp.util.CoreMap;
-import lombok.RequiredArgsConstructor;
-import org.deeplearning4j.models.word2vec.Word2Vec;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import lombok.RequiredArgsConstructor;
 
 /**
  * NLP 분석기
@@ -22,10 +12,11 @@ import java.util.Set;
  *
  * @author 문찬욱
  */
+@Deprecated
 @Component
 @RequiredArgsConstructor
 public class NLPAnalyzer {
-    private final StanfordCoreNLP pipeline;
+    /*private final StanfordCoreNLP pipeline;
     private final Word2Vec word2Vec;
 
     private static final List<String> SENTENCE_POS_TAGS = List.of("NN", "VB");
@@ -131,5 +122,5 @@ public class NLPAnalyzer {
         }
 
         return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
-    }
+    }*/
 }
